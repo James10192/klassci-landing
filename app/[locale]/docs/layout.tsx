@@ -2,6 +2,7 @@ import { DocsLayout } from "fumadocs-ui/layouts/docs";
 import Image from "next/image";
 import type { ReactNode } from "react";
 
+import { HashScroll } from "@/components/docs/hash-scroll";
 import { source } from "@/lib/source";
 
 interface LayoutProps {
@@ -42,6 +43,7 @@ export default async function Layout({ children, params }: LayoutProps) {
         defaultOpenLevel: 1,
       }}
     >
+      <HashScroll />
       {children}
     </DocsLayout>
   );

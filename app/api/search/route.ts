@@ -6,15 +6,25 @@ import type { StructuredData } from "fumadocs-core/mdx-plugins";
 // default. Requires page.data.structuredData (wired via remarkStructure in
 // source.config.ts).
 //
-// pageToIndexFn drops paragraph fragments shorter than 12 chars before
-// indexing — `remarkStructure` turns each table cell into its own content
-// node, so cells like "1ère année" / "L1" / "BTS" leak into the spotlight
-// as standalone results when a user searches "anne". Filtering them at
-// index time keeps the SearchDialog focused on real prose.
-//
-// Headings stay untouched (different array on StructuredData), so section
-// titles still surface even when short.
+// pageToIndexFn drops paragraph fragments that don't look like real prose
+// before indexing. remarkStructure splits Markdown tables into one content
+// node per cell — short labels like "BTS Première Année" (a table cell)
+// would otherwise flood the spotlight with seven near-identical entries on
+// a search like "anne". We keep:
+//   - any content over MIN_PROSE_LENGTH (long enough to be real text)
+//   - shorter content only if it ends with terminal punctuation (.!?:)
+// Headings stay untouched on a separate array, so section titles are
+// always indexed regardless of length.
 const MIN_CONTENT_LENGTH = 12;
+const MIN_PROSE_LENGTH = 50;
+const TERMINAL_PUNCTUATION = /[.!?:]\s*$/;
+
+function isMeaningfulProse(text: string): boolean {
+  const trimmed = text.trim();
+  if (trimmed.length < MIN_CONTENT_LENGTH) return false;
+  if (trimmed.length >= MIN_PROSE_LENGTH) return true;
+  return TERMINAL_PUNCTUATION.test(trimmed);
+}
 
 interface IndexablePage {
   title: string;
@@ -35,8 +45,8 @@ export const { GET } = createFromSource(
       keywords: data.keywords,
       structuredData: {
         headings: data.structuredData.headings,
-        contents: data.structuredData.contents.filter(
-          (content) => content.content.trim().length >= MIN_CONTENT_LENGTH,
+        contents: data.structuredData.contents.filter((content) =>
+          isMeaningfulProse(content.content),
         ),
       },
     };
