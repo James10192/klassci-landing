@@ -149,17 +149,6 @@ export function Testimonials() {
           );
         })}
       </div>
-
-      <style jsx>{`
-        @media (prefers-reduced-motion: reduce) {
-          article {
-            transition: none !important;
-          }
-          article:hover {
-            transform: none !important;
-          }
-        }
-      `}</style>
     </section>
   );
 }
