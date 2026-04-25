@@ -52,6 +52,15 @@ const nextConfig = {
     ];
   },
 
+
+  async redirects() {
+    // Old top-level URLs redirect to the new MDX-based locations under /docs.
+    // Preserves SEO + backlinks from the legacy klassci.com Laravel pages.
+    return [
+      { source: "/api-reference", destination: "/docs/api-reference", permanent: true },
+      { source: "/changelog", destination: "/docs/changelog", permanent: true },
+    ];
+  },
 };
 
 export default withNextIntl(withMDX(nextConfig));
