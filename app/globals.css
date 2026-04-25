@@ -13,8 +13,11 @@
 :root {
   --fd-primary: 213 96% 41%;        /* #0453cb in HSL */
   --fd-primary-foreground: 0 0% 100%;
-  --fd-accent: 27 91% 54%;          /* #f58220 in HSL */
-  --fd-accent-foreground: 0 0% 100%;
+  /* --fd-accent is the SUBTLE hover/active bg (sidebar item, search row, etc.).
+     Brand orange #f58220 lives on `--brand-orange` for ponctual CTAs — it was
+     too saturated here and made highlighted text unreadable. */
+  --fd-accent: 213 30% 93%;         /* very pale blue-grey */
+  --fd-accent-foreground: 213 96% 30%; /* darker brand blue for emphasis */
   --fd-background: 39 23% 96%;      /* #f6f4f0 — KLASSCI beige */
   --fd-foreground: 0 0% 10%;        /* #1a1a1a */
   --fd-muted: 36 16% 91%;           /* #edeae4 — bg-alt */
@@ -33,8 +36,9 @@
 html.dark {
   --fd-primary: 213 84% 62%;        /* #4b8af0 */
   --fd-primary-foreground: 0 0% 4%;
-  --fd-accent: 25 100% 65%;         /* #ff9d4a */
-  --fd-accent-foreground: 0 0% 4%;
+  /* See light-mode comment above. Slightly elevated grey vs --fd-background. */
+  --fd-accent: 218 12% 22%;         /* #2f343d — distinct from bg #1a1d23 */
+  --fd-accent-foreground: 213 84% 75%; /* lighter brand blue */
   --fd-background: 220 12% 12%;     /* #1a1d23 */
   --fd-foreground: 213 18% 88%;     /* #dce0e5 */
   --fd-muted: 220 11% 14%;          /* #21252b */
@@ -276,16 +280,6 @@ html.dark .gradient-text {
 .marquee-fade::after {
   right: 0;
   background: linear-gradient(270deg, var(--bg), transparent);
-}
-
-/* Fumadocs SearchDialog (Cmd+K): the highlighted row gets bg-fd-accent
-   (brand orange) + text-fd-accent-foreground. The title inherits correctly
-   but the description has its own .text-fd-muted-foreground which keeps it
-   grey on orange = unreadable. Force muted text inside any active/selected
-   container to inherit its parent's foreground. */
-[aria-selected="true"] .text-fd-muted-foreground,
-[data-active="true"] .text-fd-muted-foreground {
-  color: inherit;
 }
 
 /* Reduce motion preference */
