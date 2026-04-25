@@ -347,29 +347,170 @@ If the modal shows **"Aucun parcours trouvé"** as in the screenshot, no parcour
   **If your institution only runs BTS**, you can ignore the SYSTÈME LMD section of the sidebar entirely. The course catalogue (steps 5.1 through 5.3) is all you need.
 </Callout>
 
-## Step 6: configure tuition fees
+## Step 6: configure fees
 
-The accounting module is central to your cash flow. Go to `Comptabilité → Frais → Configurer`.
+Financial setup lives in the **Comptabilité** module. The intended owner is the institution's bursar, but the super-administrator has full access too — handy for closing out the initial setup before the finance team is on board.
 
-First, define the **fee categories** (under `Comptabilité → Frais → Catégories`):
+The fee architecture rests on three objects:
 
-- Enrollment fees
-- Tuition fees
-- Exam fees
-- Library fees
-- Course-pack fees
-- Uniform fees
-- and so on
+1. **Fee category** — the catalogue (Tuition, Enrollment, Cantine, Transport…) with one binary decision: *mandatory* (every enrolled student must pay it) or *optional* (the student chooses whether to subscribe).
+2. **Per-class configuration** — for each mandatory category, you set the exact amounts for every `filière × study level` pair (the Ivorian system also splits students by AFFECTÉS / RÉAFFECTÉS / NON AFFECTÉS — government-affectation tiers).
+3. **Optional service formulas with assignments** — for optional categories, you create formulas (e.g., Repas complet, Plat de résistance) and target eligible students (everyone, by filière, by level, or by specific class).
 
-Each category can be mandatory or optional. Mandatory categories are automatically expected when a student enrolls.
+### 6.1 — The Comptabilité module in the sidebar
 
-Next, under `Comptabilité → Frais → Configurer`, create **variants**: for each `(filière, level, category)` combination, set the expected amount. You can manage this interactively via the artisan command:
+In the sidebar, find the **GESTION FINANCIÈRE** section and open the **Comptabilité** dropdown.
 
-```bash
-php artisan klassci:fees:configure
-```
+![Sidebar with the GESTION FINANCIÈRE section and the Comptabilité dropdown open showing Gestion des Frais, Configuration Frais, Liste des Paiements, Suivi par Catégorie, Relances](/img/docs/superadmin/onboarding/23-sidebar-comptabilite.png)
 
-The command walks you through generating every subscription without duplicates, archiving inactive ones, and fixing unique-constraint violations.
+Five entries in total. For initial setup, only the first two matter: **Gestion des Frais** (the catalogue) and **Configuration Frais** (the per-class matrix). The other three (Liste des Paiements, Suivi par Catégorie, Relances) are for the bursar's day-to-day work.
+
+### 6.2 — Overview: Gestion des Frais
+
+Click **Gestion des Frais**. The page gives you the complete catalogue state at a glance.
+
+![Gestion des Frais page with blue banner, 4 KPIs and 3 tabs Frais Académiques / Services Optionnels / Frais Administratifs, plus 3 category cards](/img/docs/superadmin/onboarding/24-frais-overview.png)
+
+The blue banner exposes 4 indicators (total categories, mandatory fees, optional services, active categories) and three global actions in the top right:
+
+- **🌐 Services Optionnels** — direct shortcut to optional-formulas management (step 6.5)
+- **⚙️ Configuration par Classe** — shortcut to the mandatory-amounts matrix (step 6.4)
+- **+ Nouvelle catégorie** — the button we'll use right now
+
+Below the banner, three tabs visually split the catalogue:
+
+- **Frais Académiques** — enrollment and tuition fees, mandatory by filière + level
+- **Services Optionnels** — à-la-carte services (cantine, transport, accommodation)
+- **Frais Administratifs** — paperwork, certificates, special files
+
+Each category card exposes its configuration status ("Configuré par classe" with a `3/28` counter when the matrix isn't done, "Service configuré" for an active optional service), an OBLIGATOIRE or SERVICE GLOBAL badge, and three action buttons: eye (view), pencil (edit category), 🎓 or 🌐 (shortcut to the business config — per-class for mandatory, formulas for optional).
+
+### 6.3 — Create a fee category
+
+Click **+ Nouvelle catégorie**. The full-page form opens, split into four sections.
+
+![Nouvelle Catégorie de Frais form with sections Informations principales, Configuration financière, Personnalisation visuelle](/img/docs/superadmin/onboarding/25-categorie-form-top.png)
+
+#### Main information
+
+- **Nom de la catégorie** *(required)* — `Frais de scolarité`, `Cantine`, `Transport`. Shows up on report cards, exports, and in the student portal.
+- **Code unique** *(required)* — automatically uppercased (`SCOLARITE`, `CANTINE`, `TRANSPORT`). Used as the stable technical identifier in imports/exports and artisan commands.
+- **Description détaillée** *(optional)* — free-form paragraph.
+
+#### Financial configuration
+
+- **Montant par défaut (FCFA)** *(required)* — indicative amount. Refined per class (step 6.4) for mandatory fees, or per formula (step 6.5) for optional ones.
+- **Délai de paiement** (jours, default 30) — number of days after enrollment before the student is flagged as overdue. After that, the Relances module picks them up as a debtor.
+
+#### Visual personalisation
+
+- **Icône** (FontAwesome class) — for example `fas fa-money-bill`, `fas fa-utensils`, `fas fa-bus`. Renders on dashboards and cards.
+- **Couleur thématique** — to visually distinguish categories.
+
+#### Advanced configuration — the most important decision
+
+![Bottom of the form with Configuration avancée section containing the Frais obligatoire toggle, plus suggested category examples (Transport, Cantine, Hébergement, Matériel)](/img/docs/superadmin/onboarding/26-categorie-form-bottom.png)
+
+A single checkbox, but it changes everything:
+
+- **Frais obligatoire checked** — every enrolled student must pay it, regardless of choice. An amount must be configured for EVERY class (filière × level), or students in unconfigured classes will simply not be billed. This is what step 6.4 takes care of.
+- **Frais obligatoire unchecked** — the category becomes an *optional service*. You no longer set per-class amounts; instead you define **formulas** (step 6.5) that eligible students can choose to subscribe to or not.
+
+The pre-filled examples at the bottom (Transport with stop-based variants, Cantine with menu-based variants, etc.) give you a sense of the typical granularity. Click **Créer la catégorie**. You're back on the list with your new entry.
+
+### 6.4 — Configure mandatory amounts (per-class matrix)
+
+For every category flagged *mandatory*, the system expects an amount on every class. Three entry points to the matrix page:
+
+1. The **⚙️ Configuration par Classe** button in the Gestion des Frais header
+2. The **🎓** button on a mandatory category's card (direct shortcut)
+3. Sidebar → **Comptabilité → Configuration Frais**
+
+![Sidebar with the Configuration Frais entry highlighted under the Comptabilité dropdown](/img/docs/superadmin/onboarding/27-sidebar-config-frais.png)
+
+#### The Configuration des Frais par Classe page
+
+![Configuration des Frais par Classe page with a 28-card grid showing OBLIGATOIRES and OPTIONNELS counters, Complet or Non configuré badges, and a Configurer les Frais button per card](/img/docs/superadmin/onboarding/28-config-par-classe.png)
+
+The page lays out **every class in the institution** as cards (28 here). Each card exposes:
+
+- The class's full name (`BATIMENT - BTS 1ere ANNEE`, `Communication & Marketing - Licence 1ère année`…)
+- Filière and study level as a breadcrumb
+- Number of students already enrolled
+- An **OBLIGATOIRES** counter (e.g., `2/2` = all configured, `0/2` = nothing yet) and an **OPTIONNELS** counter (display only — no input here)
+- A completion percentage with a **Complet** (green) or **Non configuré** (red) badge
+- A blue **Configurer les Frais** button
+
+Cards at `100% Complet` (green border) are ready; cards at `0% Non configuré` (red border) still need input.
+
+Click **Configurer les Frais** on any incomplete class.
+
+#### The input modal: the Ivorian MESRS system
+
+![Configuration des Frais modal for BATIMENT BTS 2e année with a Frais de scolarité OBLIGATOIRE section and three columns Affectés Réaffectés Non affectés in FCFA, plus copy buttons and an Échéance field](/img/docs/superadmin/onboarding/29-modal-config-frais.png)
+
+The modal lists **every mandatory fee** you created in step 6.3, and for each one you enter **three amounts** — one per government-affectation status:
+
+- **AFFECTÉS** — students assigned to your institution by the MESRS, with possible state subsidy
+- **RÉAFFECTÉS** — students whose subsidy is preserved after a reassignment
+- **NON AFFECTÉS** — students paying the full price, without subsidy
+
+Three buttons — **Copier Affectés / Copier Réaffectés / Copier Non Aff.** — duplicate one column's amount to the other two with a single click. Useful when your institution doesn't host MESRS-funded students and bills the same amount to everyone.
+
+The **Échéance (jours après inscription)** field overrides the category's default delay for THIS class only. Leave it blank to use the default.
+
+<Callout>
+  **Côte d'Ivoire-specific.** The MESRS (Ministère de l'Enseignement Supérieur et de la Recherche Scientifique) affectation system distributes high-school graduates across institutions and partially subsidises their studies. If your institution doesn't host subsidised students, just enter the same amount in all three columns (one click on **Copier Non Aff.** after filling that column will do).
+</Callout>
+
+Click **Enregistrer**. The modal closes and the class card updates: counter to `1/2` or `2/2`, percentage recomputed, badge flips to green when everything is filled in.
+
+### 6.5 — Configure optional fees (à-la-carte services)
+
+For *non-mandatory* categories (cantine, transport, activities…), the setup follows a different model: you define **formulas** within the category, then **assign** each formula to eligible students.
+
+Two entry points:
+
+1. The **🌐 Services Optionnels** button in the Gestion des Frais header
+2. The **+ Frais Optionnels** button in the Configuration des Frais par Classe header
+
+#### The Frais Optionnels page
+
+![Frais Optionnels page with category CANTINE and 4 formulas: Repas complet 455 000, Plat de résistance 300 000, Repat complet plus 555 000, ENtre plat desser 300 000, plus an Ajouter une formule button](/img/docs/superadmin/onboarding/30-frais-optionnels.png)
+
+Every optional category renders as a section with its list of **FORMULES DISPONIBLES**. In the example, CANTINE exposes 4 formulas with their annual prices in F CFA. Each formula row has three buttons on the right: ✏️ edit, 👥 assign, 🗑 delete.
+
+#### Add a formula
+
+At the bottom of each category, the **+ Ajouter une formule** button reveals an inline mini-form with three fields: **Nom de la formule** (`Arrêt Centre-ville`, `Repas complet`), **Montant (F CFA)** annual, **Description** (optional). Click **+ Ajouter** on the right to commit.
+
+#### Target eligible students with Assignments
+
+A formula with no assignment is offered to nobody. Click the **👥** button (people icon — the middle one of the three actions) on the formula's row.
+
+![Assignations modal with four assignment-type options: Tous les étudiants selected by default, Par filière, Par niveau, Par classe, and the Assignations actuelles area](/img/docs/superadmin/onboarding/31-assignations-modal.png)
+
+The **Assignations** modal exposes four targeting types, from broadest to most specific:
+
+- **Tous les étudiants** — the formula is offered to everyone, no filter.
+- **Par filière** — restriction to one or more filières (BATIMENT, Communication & Marketing, INFORMATIQUE…).
+  ![Modal with Par filière selected, revealing a Choisir les filières area with chips for every available filière](/img/docs/superadmin/onboarding/32-assignations-filiere.png)
+- **Par niveau** — restriction by study level (BTS 1ere ANNEE, BTS 2e année, Licence 1ère année, Licence 2ème année).
+  ![Modal with Par niveau selected and chips for each available level](/img/docs/superadmin/onboarding/33-assignations-niveau.png)
+- **Par classe** — combination of filière + level (the most restrictive). Ticking BATIMENT + BTS 1ere ANNEE = only the students enrolled in that exact class.
+  ![Modal with Par classe selected, chips for filières AND levels to pick, with BATIMENT and BTS 1ere ANNEE highlighted](/img/docs/superadmin/onboarding/34-assignations-classe.png)
+
+For each selected type, chips appear so you can tick the values you want. The **ASSIGNATIONS ACTUELLES** area at the bottom of the modal lists the active chips — each chip has a `×` to remove it individually.
+
+Three buttons at the bottom:
+
+- **🗑 Tout supprimer** — clears every assignment (the formula becomes invisible to students).
+- **× Fermer** — close without saving.
+- **💾 Sauvegarder** — persist the changes.
+
+<Callout type="warn">
+  **A formula with no assignment is invisible.** If you create a formula but never open the Assignations modal, no student will be able to subscribe. Always check there's at least one chip in **ASSIGNATIONS ACTUELLES** before closing.
+</Callout>
 
 ## Step 7: create staff accounts
 
