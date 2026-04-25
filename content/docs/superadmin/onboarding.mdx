@@ -438,17 +438,24 @@ Le **nom d'utilisateur** suit un préfixe par rôle (`coord.prenom.nom`, `prof.p
   **Attention aux permissions enseignant.** Si vous activez les modules `notes_evaluations`, `presences` et `emploi_temps` au niveau du tenant, pensez à les attribuer également au rôle `enseignant` dans Spatie Permission. Sinon, les enseignants verront une sidebar vide. Le toggle module ne suffit pas — il faut aussi la permission métier.
 </Callout>
 
-## Étape 8 : valider la configuration et lancer
+## Étape 8 : dry run avant la mise en service
 
-Avant de communiquer l'URL aux étudiants, faites une dernière vérification :
+Cette étape **ne teste pas KLASSCI** — elle teste **votre paramétrage**. Vous venez de saisir des dizaines de filières, niveaux, classes, montants MESRS, permissions par rôle. Un montant par défaut oublié, une permission enseignant manquante, une classe sans frais configurés peut affecter des centaines d'inscriptions réelles dès la rentrée. Vingt minutes de validation avec un étudiant test révèlent ce qui aurait dégénéré sur 200 dossiers.
 
-1. Connectez-vous avec le compte super-administrateur sur l'URL de votre établissement (`https://votre-ecole.klassci.com`).
-2. Vérifiez que la sidebar affiche bien tous les modules attendus.
-3. Créez un étudiant test (`Étudiants → Nouvel étudiant`) et inscrivez-le dans une classe.
-4. Vérifiez que la situation financière de cet étudiant test affiche les frais attendus.
-5. Connectez-vous avec un compte enseignant test et vérifiez que la saisie des notes fonctionne.
+### Procédure (~20 min)
 
-Vous êtes prêt. Communiquez l'URL et les identifiants à votre équipe administrative et démarrez les inscriptions.
+1. **Vérifier la sidebar du super-admin** — connecté à `https://votre-ecole.klassci.com`, tous les modules activés au niveau du tenant doivent apparaître. Une entrée manquante = un module désactivé par erreur ou une permission incomplète.
+2. **Créer un étudiant test** — `Étudiants → Nouvel étudiant`. Inscrivez-le dans une classe. Vérifiez que la classe accepte l'inscription (capacité non atteinte, année courante, filière active).
+3. **Vérifier sa situation financière** — la fiche de l'étudiant test doit afficher exactement les **frais obligatoires de sa classe**, avec les 3 montants MESRS si applicable. Si elle est vide ou affiche `0 FCFA`, votre matrice de frais est incomplète pour cette classe.
+4. **Tester la saisie de notes côté enseignant** — connectez-vous avec un compte enseignant test, ouvrez sa classe, vérifiez que la saisie de notes est accessible. Une sidebar vide chez l'enseignant = permissions manquantes pour le rôle (cf. callout étape 7).
+5. **Tester l'envoi d'email d'activation** — recréez un compte personnel test. L'email d'activation doit arriver. Si non, vérifiez la config SMTP du tenant.
+6. **Nettoyer** — supprimez l'étudiant test et le compte personnel test une fois la validation passée.
+
+Si les 5 vérifications passent, votre tenant est **prêt pour la production**. Communiquez l'URL et les identifiants à votre équipe administrative et démarrez les inscriptions réelles.
+
+<Callout>
+  **Pourquoi ce dry run.** Chaque tenant KLASSCI tourne sur sa propre instance Laravel, sa propre base MySQL et sa propre config (SMTP, stockage, paiements). Le cœur applicatif est éprouvé en production sur d'autres établissements, mais votre instance spécifique a son propre contexte. Une heure de validation contrôlée vaut mieux qu'une rentrée chaotique. C'est un standard SaaS — Stripe, Salesforce, Shopify imposent tous un go-live checklist équivalent.
+</Callout>
 
 ## Que faire ensuite
 

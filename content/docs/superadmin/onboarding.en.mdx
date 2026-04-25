@@ -438,17 +438,24 @@ On **first sign-in**, the member is forced to change their password. Passwords e
   **Watch the faculty permissions.** If you enable the `notes_evaluations`, `presences`, and `emploi_temps` modules at the tenant level, remember to grant them to the `enseignant` role in Spatie Permission too. Otherwise, faculty members will see an empty sidebar. Toggling the module isn't enough — the business permission has to be granted as well.
 </Callout>
 
-## Step 8: validate the configuration and launch
+## Step 8: dry run before going live
 
-Before sending the URL to your students, run a final check:
+This step **isn't testing KLASSCI** — it's testing **your configuration**. You've just entered dozens of filières, levels, classes, MESRS amounts, and per-role permissions. A forgotten default amount, a missing faculty permission, or a class with no fees configured can affect hundreds of real enrollments at the start of the year. Twenty minutes of validation with a test student catches what would otherwise hit 200 student records.
 
-1. Sign in as super-administrator at your institution's URL (`https://your-school.klassci.com`).
-2. Confirm that the sidebar shows every expected module.
-3. Create a test student (`Étudiants → Nouvel étudiant`) and enroll them in a class.
-4. Confirm that the test student's financial standing shows the expected fees.
-5. Sign in as a test faculty account and confirm grade entry works.
+### Procedure (~20 min)
 
-You're ready. Send the URL and credentials to your administrative team and start enrolling students.
+1. **Verify the super-admin sidebar** — signed in at `https://your-school.klassci.com`, every module activated at the tenant level should appear. A missing entry means a module disabled by mistake or an incomplete permission.
+2. **Create a test student** — `Étudiants → Nouvel étudiant`. Enroll them in a class. Confirm the class accepts the enrollment (capacity not full, current academic year, active filière).
+3. **Verify the financial standing** — the test student's record should display exactly the **mandatory fees of the class**, with the 3 MESRS amounts when applicable. If it's empty or shows `0 FCFA`, your fee matrix is incomplete for that class.
+4. **Test grade entry on the faculty side** — sign in as a test faculty account, open the class, confirm grade entry is accessible. An empty sidebar on faculty = missing permissions for the role (see step 7 callout).
+5. **Test activation email delivery** — re-run a test personnel account creation. The activation email should arrive. If not, check the tenant's SMTP config.
+6. **Clean up** — delete the test student and the test personnel account once validation passes.
+
+If all 5 checks pass, your tenant is **production-ready**. Send the URL and credentials to your administrative team and start enrolling real students.
+
+<Callout>
+  **Why this dry run.** Every KLASSCI tenant runs on its own Laravel instance, its own MySQL database, and its own config (SMTP, storage, payments). The application core is battle-tested in production on other institutions, but your specific instance has its own context. One hour of controlled validation beats a chaotic start of the year. It's a SaaS standard — Stripe, Salesforce, Shopify all impose an equivalent go-live checklist.
+</Callout>
 
 ## What's next
 
