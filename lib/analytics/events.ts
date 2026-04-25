@@ -5,6 +5,7 @@ export type AnalyticsEventMap = {
   cta_click: {
     location:
       | "nav"
+      | "nav_docs"
       | "hero_primary"
       | "hero_secondary"
       | "letter"

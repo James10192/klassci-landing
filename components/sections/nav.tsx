@@ -1,6 +1,6 @@
 "use client";
 
-import { Menu, X } from "lucide-react";
+import { BookOpen, Menu, X } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
 
@@ -21,6 +21,9 @@ export function Nav() {
   const locale = useLocale() as "fr" | "en";
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  // localePrefix is 'as-needed' — FR (default) is unprefixed, EN gets /en/...
+  const docsHref = locale === "fr" ? "/docs" : `/${locale}/docs`;
+
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
     return () => {
@@ -32,6 +35,10 @@ export function Nav() {
 
   const handleContactClick = useCallback(() => {
     track("cta_click", { location: "nav", locale });
+  }, [locale]);
+
+  const handleDocsClick = useCallback(() => {
+    track("cta_click", { location: "nav_docs", locale });
   }, [locale]);
 
   return (
@@ -54,6 +61,15 @@ export function Nav() {
                 {t(link.key)}
               </a>
             ))}
+            <a
+              href={docsHref}
+              onClick={handleDocsClick}
+              aria-label={t("docsAria")}
+              className="inline-flex items-center gap-1.5 px-3 py-2 text-[0.875rem] font-medium text-text-secondary hover:text-text transition-colors"
+            >
+              <BookOpen className="h-4 w-4" aria-hidden />
+              {t("docs")}
+            </a>
           </div>
 
           <div className="flex items-center gap-2">
@@ -70,11 +86,11 @@ export function Nav() {
               {t("contact")}
             </a>
 
-            {/* Mobile hamburger */}
+            {/* Mobile hamburger — h-10 w-10 = 40px, closer to the 44px iOS guideline */}
             <button
               type="button"
               onClick={() => setMobileOpen((v) => !v)}
-              className="md:hidden inline-flex items-center justify-center h-9 w-9 rounded border border-border text-text"
+              className="md:hidden inline-flex items-center justify-center h-10 w-10 rounded border border-border text-text"
               aria-label={mobileOpen ? t("menuClose") : t("menuOpen")}
               aria-expanded={mobileOpen}
             >
@@ -91,7 +107,7 @@ export function Nav() {
       {/* Mobile fullscreen menu */}
       {mobileOpen && (
         <div
-          className="md:hidden fixed inset-0 z-[99] bg-bg flex flex-col items-center justify-center gap-8 pt-16"
+          className="md:hidden fixed inset-0 z-[99] bg-bg flex flex-col items-center justify-center gap-7 pt-16"
           role="dialog"
           aria-modal="true"
         >
@@ -105,6 +121,17 @@ export function Nav() {
               {t(link.key)}
             </a>
           ))}
+          <a
+            href={docsHref}
+            onClick={() => {
+              handleDocsClick();
+              closeMobile();
+            }}
+            className="inline-flex items-center gap-3 font-serif font-light text-[1.75rem] text-text hover:text-accent transition-colors"
+          >
+            <BookOpen className="h-6 w-6" aria-hidden />
+            {t("docs")}
+          </a>
           <a
             href="#contact"
             onClick={() => {
