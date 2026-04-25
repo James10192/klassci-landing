@@ -28,7 +28,7 @@ Identité civile de l'étudiant : nom, prénom(s), genre, date et lieu de naissa
 L'**email** et la **photo** sont optionnels. L'email sert à l'envoi des identifiants une fois l'inscription validée — sans email, KLASSCI affichera les identifiants dans une modale à imprimer.
 
 <Callout>
-  **Matricule.** La saisie est manuelle. Avant d'enregistrer, cliquez sur **<Icon name="eye" /> Vérifier** : KLASSCI s'assure que ce matricule n'existe pas déjà dans le tenant. Si votre établissement utilise une convention dédiée (par exemple `MESBTP25-0001`), respectez-la pour faciliter les exports et les imports comptables.
+  **Matricule.** La saisie est manuelle. Avant d'enregistrer, cliquez sur **<Icon name="search" /> Vérifier** : KLASSCI interroge l'API et affiche un badge inline « Matricule disponible » ou « Matricule déjà utilisé ». Si votre établissement utilise une convention dédiée (par exemple `MESBTP25-0001`), respectez-la pour faciliter les exports et les imports comptables.
 </Callout>
 
 ## 2 — Informations académiques (sélection de classe)
@@ -74,7 +74,7 @@ Section repliable. Une inscription peut avoir zéro, un ou plusieurs parents/tut
 Pour chaque parent : **nom**, **prénom(s)**, **téléphone** (les trois deviennent obligatoires si la section est remplie), puis email, profession, relation (Père / Mère / Tuteur / Autre) et adresse en optionnel.
 
 <Callout>
-  **Sélectionner un parent existant.** Si le parent a déjà été enregistré pour une fratrie, cochez **<Icon name="eye" /> Sélectionner un parent existant** en haut de la fiche. Recherchez par nom ou téléphone — KLASSCI rattache le parent existant sans créer de doublon dans la base de contacts.
+  **Sélectionner un parent existant.** Si le parent a déjà été enregistré pour une fratrie, cochez **<Icon name="search" /> Sélectionner un parent existant** en haut de la fiche. Une liste déroulante (avec recherche au clavier intégrée) affiche tous les parents enregistrés au format `Nom Prénoms - Téléphone`. Cliquez celui à rattacher — KLASSCI évite ainsi le doublon de contact.
 </Callout>
 
 Le bouton **+ Ajouter un autre parent / tuteur** ouvre une seconde fiche identique. Le bouton rouge **<Icon name="x" /> Supprimer** retire un parent.
@@ -179,7 +179,7 @@ Champs requis :
 
 - **Montant payé** (FCFA) — peut être partiel.
 - **Catégorie de frais** — combo affichant les frais obligatoires de l'inscription. Une fois la catégorie choisie, KLASSCI affiche le **Montant maximum autorisé** pour vous éviter de saisir un trop-perçu.
-- **Mode de paiement** — Espèces, Wave, Orange Money, MTN MoMo, Chèque, Virement bancaire.
+- **Mode de paiement** — quatre choix : **Espèces**, **Chèque**, **Virement** ou **Mobile Money** (Wave / Orange Money / MTN MoMo regroupés sous Mobile Money — précisez l'opérateur dans la **Référence du paiement**).
 - **Date du paiement** — pré-remplie au jour courant.
 - **Référence du paiement** *(optionnel)* — numéro de chèque, ID transaction Wave / OM / MoMo, référence virement.
 - **Observations** *(optionnel)* — note libre visible dans l'historique.
@@ -205,13 +205,17 @@ Cliquez **<Icon name="check" /> Valider** dans le bandeau. Le modal de confirmat
 
 ![Modal Validation définitive avec liste des éléments figés](/img/docs/secretaire/inscription/24-modal-validation-definitive.png)
 
-KLASSCI rappelle les éléments qui seront **figés** pour les profils non super-administrateur :
+Le modal rappelle qu'une fois l'inscription Active, **filière, niveau d'études et classe ne pourront plus être modifiés** :
 
 - **Filière**
 - **Niveau d'études**
 - **Classe**
 
 Une **observation libre** peut être ajoutée — elle reste visible dans l'historique de l'inscription.
+
+<Callout>
+  **Exception super-administrateur.** Le message du modal est universel, mais en pratique le super-administrateur garde la main sur ces trois champs depuis le formulaire **Modifier** même après activation (cf. tableau profils ci-dessous).
+</Callout>
 
 Confirmez avec **<Icon name="check" /> Valider définitivement**. Deux choses se produisent simultanément :
 
@@ -235,7 +239,7 @@ Le bandeau bleu reprend :
 - **Identité** (nom complet, classe, filière, niveau, année courante).
 - **Badges** : système (LMD / BTS), matricule, statut d'inscription, nationalité.
 - **Compteurs** : Inscriptions / Présence / Absences / Payé (FCFA).
-- **Actions** : Modifier / Documents / Retour.
+- **Actions** : Modifier / Documents (dropdown) / Retour / **<Icon name="trash" /> Supprimer** (visible uniquement avec la permission `delete_students`, typiquement super-administrateur).
 
 <Callout>
   **Pourquoi la fiche peut paraître vide même validée.** En tout début d'année, les onglets Académique / Présences / Finances ne contiennent rien parce que rien n'a encore eu lieu : aucune note saisie, aucune séance, peut-être pas encore de paiement complémentaire. C'est normal — la fiche se remplit progressivement.
@@ -263,17 +267,47 @@ Taux global de présence et historique des absences / retards (renseignés via l
 
 ### Finances
 
-KPIs financiers détaillés, **Détail par frais**, et bouton **<Icon name="plus-circle" /> Enregistrer un paiement** pour saisir un nouveau versement à tout moment.
+KPIs financiers détaillés (Total attendu / Total payé / Solde restant) avec barre de progression, suivis du **Détail par frais** ligne par ligne (chaque ligne avec un bouton **Payer** ciblé sur sa catégorie).
 
 ![Onglet Finances avec Total attendu / Payé / Solde restant et boutons Payer par ligne](/img/docs/secretaire/inscription/18-onglet-finances.png)
 
-Les boutons **<Icon name="file-text" /> Situation financière** (toast) et **<Icon name="file-text" /> PDF Situation** (téléchargement) permettent d'éditer le relevé pour la famille.
+Trois boutons d'action sont disponibles sous la barre de progression :
+
+- **<Icon name="file-text" /> Situation Financière** *(vert)* — ouvre une **page web** (pas un toast) qui restitue le relevé complet : hero KPIs, informations de l'étudiant, détail des frais souscrits, paiements validés, reliquats reportés et solde restant. Affichage à l'écran, prêt à imprimer ou à partager via le bouton **<Icon name="file-text" /> Imprimer**.
+
+  ![Aperçu web Situation Financière — hero KPIs et informations étudiant](/img/docs/secretaire/inscription/38-situation-financiere-apercu.png)
+
+- **<Icon name="file-text" /> PDF Situation** *(rouge)* — télécharge la même situation au format **PDF A4 portrait**, mise en page formelle (en-tête établissement, dates d'émission, signature directeur, watermark), à transmettre à la famille.
+
+  ![PDF Situation Financière — A4 portrait avec en-tête établissement et signature](/img/docs/secretaire/inscription/39-pdf-situation-financiere.png)
+
+- **<Icon name="plus-circle" /> Enregistrer un paiement** *(bleu)* — visible **uniquement si un solde reste dû**. Ouvre la modale d'enregistrement d'un nouveau paiement directement depuis la fiche étudiant, sans repasser par la fiche d'inscription.
+
+<Callout>
+  **Aucun de ces boutons ne modifie quoi que ce soit côté étudiant.** *Situation Financière* et *PDF Situation* sont des restitutions en lecture seule — utiles pour répondre à une demande de relevé sans saisir une nouvelle ligne. Pour modifier un paiement existant ou en annuler un, passez par le module Comptabilité.
+</Callout>
 
 ### Profil
 
-Informations personnelles complètes et zone **Compte utilisateur** : nom d'utilisateur, email de connexion, dernière connexion, date de création du compte, et bouton **<Icon name="settings" /> Réinitialiser le mot de passe** (envoie un nouveau mot de passe temporaire par email ou affiche-le dans une modale).
+Informations personnelles complètes et zone **Compte utilisateur** : nom d'utilisateur, email de connexion, dernière connexion, date de création du compte, et bouton **<Icon name="settings" /> Réinitialiser le mot de passe**.
 
 ![Onglet Profil avec section Compte utilisateur Active](/img/docs/secretaire/inscription/19-onglet-profil.png)
+
+#### Réinitialiser le mot de passe — comportement réel
+
+Cliquez **<Icon name="settings" /> Réinitialiser le mot de passe** dans la zone *Compte utilisateur*. Un dialogue de confirmation s'affiche et **prévisualise** le mot de passe par défaut qui sera appliqué.
+
+![Dialogue de confirmation indiquant Le nouveau mot de passe sera : Bonjour@2025](/img/docs/secretaire/inscription/40-confirm-mot-de-passe.png)
+
+Format observé : `Bonjour@AAAA` où *AAAA* est l'**année calendaire au moment du reset** (par exemple `Bonjour@2025` si vous réinitialisez en 2025, `Bonjour@2026` si en 2026 — le format suit l'horloge serveur, pas l'année universitaire).
+
+Confirmez **OK**. Un toast vert affiche la confirmation : « Mot de passe réinitialisé à *Bonjour@AAAA* avec succès. L'étudiant devra changer son mot de passe à la première connexion. »
+
+![Toast Mot de passe réinitialisé à Bonjour@2025 avec succès](/img/docs/secretaire/inscription/41-toast-mot-de-passe-reinitialise.png)
+
+<Callout type="warn">
+  **Aucun email n'est envoyé.** Le mot de passe par défaut s'affiche **uniquement à l'écran**, dans le dialogue de confirmation puis dans le toast. Communiquez-le verbalement à l'étudiant ou via un canal sécurisé. Comme le format est prédictible, ne laissez pas un compte avec ce mot de passe par défaut traîner — au premier login, KLASSCI exige le changement.
+</Callout>
 
 ### Documents
 
@@ -347,7 +381,7 @@ Bouton **<Icon name="plus" /> Ajouter**. Une modale recherche les étudiants dé
 
 ![Modale Ajouter — recherche par nom, matricule, téléphone](/img/docs/secretaire/inscription/35-modal-ajouter-vide.png)
 
-Tapez quelques caractères, KLASSCI affiche les résultats avec leur classe actuelle. Cochez plusieurs étudiants en une fois.
+Tapez quelques caractères : KLASSCI cherche **parmi les étudiants inscrits pour l'année courante mais pas (encore) dans cette classe**. Les résultats affichent leur classe actuelle. Cochez plusieurs étudiants en une fois.
 
 ![Modale Ajouter — 2 étudiants cochés (OUEDRAOGO MARCEL et TRAORE Issouf)](/img/docs/secretaire/inscription/36-modal-ajouter-rempli.png)
 
@@ -414,7 +448,7 @@ Vue centrale de gestion des inscriptions en attente. Accès depuis le bouton **<
 - Associer ou valider un paiement
 - Annuler l'inscription
 
-**Validation en lot** : cochez plusieurs inscriptions, puis utilisez l'action de validation groupée. KLASSCI tente de valider chacune ; les inscriptions sans paiement validé sont ignorées avec la raison « pas de paiement validé ».
+**Actions en lot** (cochez plusieurs lignes) : **Valider**, **Annuler**, **Exporter**. La validation en lot tente chaque inscription ; sont ignorées celles **sans paiement** *et* celles avec un paiement **encore en attente de validation** — les deux cas remontent dans le récapitulatif avec leur raison.
 
 C'est la page la plus utile en début d'année : vous y voyez d'un coup d'œil ce qu'il reste à finaliser, et vous pouvez piocher les inscriptions par état pour les traiter en série.
 
@@ -422,7 +456,7 @@ C'est la page la plus utile en début d'année : vous y voyez d'un coup d'œil c
 
 ### Réinscription année suivante
 
-Ne créez **pas** une nouvelle inscription complète pour un étudiant existant. Utilisez **Étudiants → Réinscriptions** : KLASSCI reporte le profil et les parents, et ne demande que la nouvelle classe et le paiement initial. Le matricule reste le même.
+Ne créez **pas** une nouvelle inscription complète pour un étudiant existant. Utilisez **Étudiants → Réinscriptions** : le formulaire repart de la fiche étudiant existante, le matricule est conservé, et seules les données académiques de la nouvelle année (classe, statut MESRS, frais, paiement initial) restent à saisir. Les détails varient selon le paramétrage de votre tenant.
 
 ### Inscription « sous réserve »
 
@@ -430,10 +464,10 @@ Si le dossier est incomplet (pièce manquante, paiement frais d'étude attendu),
 
 ### Étudiant en bourse ou paiement différé
 
-La validation définitive **exige toujours au moins un paiement validé** — pas d'exception. Pour un étudiant boursier ou qui paie à la rentrée, deux options :
+La validation définitive **exige toujours au moins un paiement validé** — pas d'exception, et il n'existe pas de mode de paiement « Bourse » dans le combo. Pour un étudiant boursier ou qui paie à la rentrée, deux chemins concrets :
 
 - **Attendre le versement réel** : laissez l'inscription en **Prospect** jusqu'au paiement effectif, puis suivez le flot normal (étape 1 + étape 2).
-- **Anticiper avec un paiement Bourse** : créez un paiement avec **Mode = Bourse** au montant attendu et cochez « Valider directement ». L'inscription devient validable. À ajuster lorsque l'État verse réellement.
+- **Anticiper en saisissant le versement attendu** : si l'établissement matérialise la bourse en versement (ex: avance au caissier, virement État reçu d'avance), enregistrez le paiement avec **Mode = Espèces** (pour un encaissement physique) ou **Mode = Virement** (pour un transfert reçu), avec la **Référence** précisant la nature (« Bourse MESRS période X »). Cochez « Valider directement le paiement ». L'inscription devient validable.
 
 ### Annulation avant validation
 

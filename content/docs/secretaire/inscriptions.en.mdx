@@ -28,7 +28,7 @@ Civil identity of the student: surname, given name(s), gender, date and place of
 **Email** and **photo** are optional. The email is used to deliver login credentials once the enrollment is validated — without one, KLASSCI shows the credentials in a printable modal at validation time.
 
 <Callout>
-  **Matricule.** Entered manually. Before saving, click **<Icon name="eye" /> Verify**: KLASSCI checks that this matricule does not already exist in the tenant. If your school uses a dedicated convention (for example `MESBTP25-0001`), keep to it — it makes exports and accounting imports much smoother.
+  **Matricule.** Entered manually. Before saving, click **<Icon name="search" /> Verify**: KLASSCI calls the API and shows an inline badge « Matricule available » or « Matricule already in use ». If your school uses a dedicated convention (for example `MESBTP25-0001`), keep to it — it makes exports and accounting imports much smoother.
 </Callout>
 
 ## 2 — Academic information (class selection)
@@ -74,7 +74,7 @@ Collapsible section. An enrollment can have zero, one, or several parents/guardi
 Per parent: **surname**, **given name(s)**, **phone** (all three become required if the section is filled), then email, profession, relationship (Father / Mother / Guardian / Other), and address are optional.
 
 <Callout>
-  **Pick an existing parent.** If the parent is already in KLASSCI for a sibling, tick **<Icon name="eye" /> Select an existing parent** at the top of the parent card. Search by name or phone — KLASSCI links the existing parent without creating a duplicate contact.
+  **Pick an existing parent.** If the parent is already in KLASSCI for a sibling, tick **<Icon name="search" /> Select an existing parent** at the top of the parent card. A dropdown (with built-in keyboard search) lists every saved parent in the format `Surname Given names - Phone`. Click the one to attach — no duplicate contact gets created.
 </Callout>
 
 The **+ Add another parent / guardian** button opens a second identical card. The red **<Icon name="x" /> Remove** button drops a parent.
@@ -179,7 +179,7 @@ Required fields:
 
 - **Amount paid** (FCFA) — partial payments are fine.
 - **Fee category** — combo showing the mandatory fees on this enrollment. Once a category is picked, KLASSCI shows the **Maximum allowed amount** so you do not over-collect by accident.
-- **Payment method** — Cash, Wave, Orange Money, MTN MoMo, Cheque, Bank transfer.
+- **Payment method** — four options: **Cash**, **Cheque**, **Bank transfer**, or **Mobile Money** (Wave / Orange Money / MTN MoMo are grouped under Mobile Money — record the operator in the **Payment reference** field).
 - **Payment date** — pre-filled with today.
 - **Payment reference** *(optional)* — cheque number, Wave / OM / MoMo transaction ID, transfer reference.
 - **Notes** *(optional)* — free comment kept in the history.
@@ -205,13 +205,17 @@ Click **<Icon name="check" /> Validate** in the action bar. The confirmation mod
 
 ![Final validation modal with the list of frozen fields](/img/docs/secretaire/inscription/24-modal-validation-definitive.png)
 
-KLASSCI lists the items that will be **frozen** for non super-administrator profiles:
+The modal reminds that once the enrollment is Active, **track, study level and class can no longer be modified**:
 
 - **Track**
 - **Study level**
 - **Class**
 
 A **free-form note** can be added — it stays visible in the enrollment history.
+
+<Callout>
+  **Super-administrator exception.** The modal message is universal, but in practice the super-administrator keeps the ability to edit those three fields from the **Edit** form even after activation (see the profile table below).
+</Callout>
 
 Confirm with **<Icon name="check" /> Validate definitively**. Two things happen at once:
 
@@ -235,7 +239,7 @@ The blue header shows:
 - **Identity** (full name, class, track, level, current year).
 - **Badges**: system (LMD / BTS), matricule, enrollment status, nationality.
 - **Counters**: Enrollments / Attendance / Absences / Paid (FCFA).
-- **Actions**: Edit / Documents / Back.
+- **Actions**: Edit / Documents (dropdown) / Back / **<Icon name="trash" /> Delete** (visible only with the `delete_students` permission, typically super-administrator).
 
 <Callout>
   **Why the record can look empty even when validated.** Right at the start of the year, the Academic / Attendance / Finances tabs are empty because nothing has happened yet: no grades entered, no class held, possibly no follow-up payment. That is normal — the record fills in over time.
@@ -263,17 +267,47 @@ Overall attendance rate and the absence / lateness history (filled by the *Atten
 
 ### Finances
 
-Detailed financial KPIs, **Detail by fee**, and a **<Icon name="plus-circle" /> Record a payment** button to capture a new payment any time.
+Detailed financial KPIs (Total expected / Total paid / Remaining balance) with a progress bar, followed by the **Detail by fee** row by row (each row with a **Pay** button scoped to its category).
 
 ![Finances tab with Total expected / Paid / Remaining and Pay buttons per row](/img/docs/secretaire/inscription/18-onglet-finances.png)
 
-The **<Icon name="file-text" /> Financial situation** (toast) and **<Icon name="file-text" /> PDF Statement** (download) buttons let you produce the family-facing statement.
+Three action buttons sit under the progress bar:
+
+- **<Icon name="file-text" /> Financial Situation** *(green)* — opens a **full web page** (not a toast) that lays out the complete statement: hero KPIs, student information, subscribed fees breakdown, validated payments, carried-over balances and remaining due. On-screen view, ready to print or share via the **<Icon name="file-text" /> Print** button.
+
+  ![Web preview of Financial Situation — hero KPIs and student information](/img/docs/secretaire/inscription/38-situation-financiere-apercu.png)
+
+- **<Icon name="file-text" /> PDF Statement** *(red)* — downloads the same situation as a **portrait A4 PDF**, with a formal layout (school header, issue dates, director signature, watermark), to hand over to the family.
+
+  ![Financial Statement PDF — A4 portrait with school header and signature](/img/docs/secretaire/inscription/39-pdf-situation-financiere.png)
+
+- **<Icon name="plus-circle" /> Record a payment** *(blue)* — visible **only when a balance is still due**. Opens the new-payment modal directly from the student record, with no need to go back to the enrollment record.
+
+<Callout>
+  **None of these buttons changes anything on the student side.** *Financial Situation* and *PDF Statement* are read-only restitutions — useful to answer a statement request without recording a new line. To modify or void an existing payment, go through the Accounting module.
+</Callout>
 
 ### Profile
 
-Full personal information and a **User account** zone: username, login email, last login, account creation date, and a **<Icon name="settings" /> Reset password** button (sends a fresh temporary password by email or shows it in a modal).
+Full personal information and a **User account** zone: username, login email, last login, account creation date, and a **<Icon name="settings" /> Reset password** button.
 
 ![Profile tab with Active User account section](/img/docs/secretaire/inscription/19-onglet-profil.png)
+
+#### Reset password — actual behaviour
+
+Click **<Icon name="settings" /> Reset password** in the *User account* zone. A confirmation dialog opens and **previews** the default password that will be applied.
+
+![Confirmation dialog showing The new password will be Bonjour@2025](/img/docs/secretaire/inscription/40-confirm-mot-de-passe.png)
+
+Observed format: `Bonjour@YYYY` where *YYYY* is the **calendar year at the time of the reset** (for example `Bonjour@2025` if you reset in 2025, `Bonjour@2026` if in 2026 — the format follows the server clock, not the academic year).
+
+Confirm with **OK**. A green toast confirms: « Password reset to *Bonjour@YYYY* successfully. The student will have to change their password at first login. »
+
+![Toast Password reset to Bonjour@2025 successfully](/img/docs/secretaire/inscription/41-toast-mot-de-passe-reinitialise.png)
+
+<Callout type="warn">
+  **No email is sent.** The default password is shown **on screen only**, first in the confirmation dialog and then in the toast. Hand it over to the student verbally or through a secure channel. Since the format is predictable, do not leave an account sitting on this default — at first login, KLASSCI forces the change.
+</Callout>
 
 ### Documents
 
@@ -347,7 +381,7 @@ Three buttons to the right of the list:
 
 ![Add modal — search by name, matricule, phone](/img/docs/secretaire/inscription/35-modal-ajouter-vide.png)
 
-Type a few characters, KLASSCI shows the matches with their current class. Tick several students at once.
+Type a few characters: KLASSCI searches **among students enrolled for the current year but not (yet) in this class**. Results show their current class. Tick several students at once.
 
 ![Add modal — 2 students checked (OUEDRAOGO MARCEL and TRAORE Issouf)](/img/docs/secretaire/inscription/36-modal-ajouter-rempli.png)
 
@@ -414,7 +448,7 @@ Central view for managing pending enrollments. Reached from the **<Icon name="se
 - Associate or validate a payment
 - Cancel the enrollment
 
-**Bulk validation**: tick several enrollments and use the bulk-validate action. KLASSCI tries to validate each one; enrollments without a validated payment are skipped with reason « no validated payment ».
+**Bulk actions** (tick several rows): **Validate**, **Cancel**, **Export**. The bulk validate attempts each enrollment; the ones **without a payment** *and* the ones whose payment is **still pending validation** are skipped — both cases show up in the recap with their reason.
 
 This is the single most useful page at the start of the year: you see at a glance what is left to finalise, and you can pick enrollments by state to batch-process them.
 
@@ -422,7 +456,7 @@ This is the single most useful page at the start of the year: you see at a glanc
 
 ### Re-enrollment for the next year
 
-Do **not** create a brand-new enrollment for an existing student. Use **Students → Re-enrollments**: KLASSCI carries the profile and the parents over and only asks for the new class and the initial payment. The matricule stays the same.
+Do **not** create a brand-new enrollment for an existing student. Use **Students → Re-enrollments**: the form starts from the existing student record, the matricule is preserved, and only the new academic year's data (class, MESRS status, fees, initial payment) needs to be entered. Exact details depend on your tenant configuration.
 
 ### « Conditional » enrollment
 
@@ -430,10 +464,10 @@ If the file is incomplete (missing document, study fee not yet paid), save the e
 
 ### Scholarship student or deferred payment
 
-Final validation **always requires at least one validated payment** — no exception. For a scholarship student or someone paying at term start, two options:
+Final validation **always requires at least one validated payment** — no exception, and there is no « Bourse » payment method in the combo. For a scholarship student or someone paying at term start, two practical paths:
 
 - **Wait for the actual transfer**: leave the enrollment in **Prospect** until the payment lands, then run the regular flow (step 1 + step 2).
-- **Anticipate with a Bourse payment**: create a payment with **Method = Bourse** at the expected amount and tick « Validate immediately ». The enrollment becomes validable. Adjust later when the State actually transfers.
+- **Record the expected payment up front**: if your school materialises the scholarship as an actual payment (cash advance, State transfer received early), record the payment with **Method = Cash** (for a physical receipt) or **Method = Bank transfer** (for a wire), with the **Reference** describing it (« MESRS scholarship period X »). Tick « Validate the payment immediately ». The enrollment becomes validable.
 
 ### Cancellation before validation
 
