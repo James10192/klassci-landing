@@ -189,7 +189,7 @@ Retourne le coefficient, le volume horaire, le cycle de la matière, et la liste
 
 Liste des classes accessibles.
 
-Retourne les classes filtrées par rôle. Inclut le nombre d'étudiants inscrits (`workflow_step = etudiant_cree` uniquement).
+Retourne les classes filtrées par rôle. Inclut le nombre d'étudiants inscrits (uniquement les inscriptions au statut **Active**, c'est-à-dire ayant atteint la dernière étape du workflow).
 
 ### `GET /api/lms/classes/{id}`
 
@@ -201,7 +201,7 @@ Retourne les caractéristiques de la classe, son effectif réel, ses places rest
 
 Étudiants inscrits dans une classe.
 
-Retourne uniquement les étudiants avec `workflow_step = etudiant_cree` (inscriptions validées). Les pré-inscriptions et brouillons ne sont jamais exposés.
+Retourne uniquement les étudiants dont l'inscription est **Active** (workflow validé). Les inscriptions encore au stade **Prospect** ou **En validation** ne sont jamais exposées.
 
 L'utilisateur doit avoir une permission de lecture sur la classe ciblée (vérifié via Policy).
 

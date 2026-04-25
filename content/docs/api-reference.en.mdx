@@ -189,7 +189,7 @@ Returns the coefficient, hours volume, course cycle, and the list of assessments
 
 Accessible classes.
 
-Returns classes filtered by role. Includes the count of enrolled students (`workflow_step = etudiant_cree` only).
+Returns classes filtered by role. Includes the count of enrolled students (only enrollments at **Active** status, i.e. those that have reached the final workflow step).
 
 ### `GET /api/lms/classes/{id}`
 
@@ -201,7 +201,7 @@ Returns the class's properties, real headcount, remaining seats, courses, and sc
 
 Students enrolled in a class.
 
-Returns only students with `workflow_step = etudiant_cree` (validated enrollments). Pre-enrollments and drafts are never exposed.
+Returns only students whose enrollment is **Active** (workflow validated). Enrollments still at **Prospect** or **In review** stages are never exposed.
 
 The caller must have read permission on the target class (checked via Policy).
 

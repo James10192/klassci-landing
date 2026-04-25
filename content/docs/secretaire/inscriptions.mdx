@@ -1,126 +1,348 @@
 ---
-title: Secrétaire — gérer les inscriptions
-description: Workflow d'inscription en 4 étapes, validation, ré-inscription, annulation, exports et erreurs fréquentes.
+title: Secrétaire — créer une nouvelle inscription
+description: Du formulaire à la validation définitive — le parcours complet pour transformer un prospect en étudiant actif KLASSCI.
 ---
 
-## Vue d'ensemble du workflow
+Une inscription dans KLASSCI suit trois temps :
 
-Une inscription dans KLASSCI suit un cycle en 4 étapes, modélisé par le champ `workflow_step` :
+1. **Saisir** la fiche d'inscription (étudiant, classe, statut MESRS, parents, frais).
+2. **Valider** (avec ou sans paiement) pour activer le compte étudiant.
+3. **Délivrer** les documents officiels (certificat de scolarité, attestation de fréquentation).
 
-1. **`pre_inscrit`** — l'étudiant a fourni ses informations mais le paiement initial n'a pas encore été validé. Aucune classe n'est encore attribuée.
-2. **`pre_inscrit_paye`** — le paiement initial est validé. L'étudiant attend l'attribution d'une classe par l'administration.
-3. **`affecte`** — la classe est attribuée. L'étudiant est en attente de validation finale.
-4. **`etudiant_cree`** — l'inscription est validée définitivement. L'étudiant est compté dans les effectifs et peut accéder à son espace.
+Cette page couvre les trois temps en détail, dans l'ordre où vous les rencontrez à l'écran.
 
-Cette séparation existe pour éviter qu'un étudiant qui a juste rempli un formulaire (sans payer) ne soit considéré comme inscrit dans les statistiques. Toutes les pages KPI filtrent par défaut sur `workflow_step = etudiant_cree`.
+## Où commencer
+
+Dans la barre latérale, dépliez **Étudiants** puis cliquez sur **Nouvelle Inscription**.
+
+![Sidebar Étudiants avec Nouvelle Inscription sélectionné](/img/docs/secretaire/inscription/01-sidebar-nouvelle-inscription.png)
+
+L'écran s'ouvre sur un formulaire à cinq sections. Le rail vertical numéroté (1 à 5) sur le côté droit indique votre progression dans le formulaire.
+
+## 1 — Informations personnelles
+
+Identité civile de l'étudiant : nom, prénom(s), genre, date et lieu de naissance, nationalité, téléphone, ville, commune.
+
+![Formulaire — informations personnelles avec champ matricule en saisie manuelle](/img/docs/secretaire/inscription/02-form-info-personnelles.png)
+
+L'**email** et la **photo** sont optionnels. L'email sert à l'envoi des identifiants une fois l'inscription validée — si vous ne le renseignez pas, KLASSCI affichera les identifiants dans une modale à imprimer.
 
 <Callout>
-  **Règle d'or.** Tant que `workflow_step != etudiant_cree`, l'étudiant n'est PAS officiellement inscrit, même si son `status` vaut `active`. Les rapports d'effectifs, le calcul des places restantes et les tableaux de bord respectent cette règle.
+  **Matricule.** La saisie est manuelle. Avant d'enregistrer, cliquez sur **<Icon name="eye" /> Vérifier** : KLASSCI s'assure que ce matricule n'existe pas déjà dans le tenant. Si votre établissement utilise une convention dédiée (par exemple `MESBTP25-0001`), respectez-la pour faciliter les exports et les imports comptables.
 </Callout>
 
-## Créer une nouvelle inscription
+## 2 — Informations académiques (sélection de classe)
 
-### Cas général : étudiant qui paie immédiatement
+Toute l'affectation académique se fait via la classe. La filière, le niveau d'étude et l'année universitaire en sont déduits automatiquement.
 
-Allez dans `Étudiants → Inscriptions → Nouvelle inscription`. Le formulaire est divisé en sections logiques :
+![Section Informations académiques avec bouton Sélectionner](/img/docs/secretaire/inscription/03-bouton-selectionner-classe.png)
 
-1. **Informations étudiant** — nom, prénoms, date de naissance, sexe, nationalité, téléphone, email
-2. **Adresse et contact d'urgence**
-3. **Cursus antérieur** — diplôme obtenu, établissement d'origine, année
-4. **Affectation académique** — filière, niveau, classe (Select2 avec recherche)
-5. **Frais et paiement initial** — sélection des frais à acquitter, mode de paiement, montant
+Cliquez sur le bouton bleu **<Icon name="plus" /> Sélectionner**. Une modale liste les classes ouvertes pour l'année courante.
 
-Lorsque vous sélectionnez une classe, KLASSCI vérifie en temps réel les places disponibles via un appel AJAX vers `GET /esbtp/classes/{id}/available-places`. L'affichage utilise des seuils colorés :
+![Modale de sélection de classe avec filtres et taux d'occupation](/img/docs/secretaire/inscription/04-modal-selection-classe.png)
 
-| Couleur | Seuil | Message |
-| --- | --- | --- |
-| Vert | > 30 % | « Places disponibles : X / Y » |
-| Orange | 10 % à 30 % | « Places limitées : X / Y » |
-| Orange foncé | < 10 % | « Presque complet : X / Y » |
-| Rouge | 0 | « Classe pleine » + bouton de soumission désactivé |
+Trois colonnes vous aident à choisir : **CLASSE**, **FILIÈRE**, **NIVEAU**. La colonne **PLACES** affiche le ratio inscrits / capacité avec un code couleur :
 
-Si la classe est pleine, le bouton « Valider l'inscription » est automatiquement grisé et un message d'erreur explicite apparaît au-dessus du formulaire. L'étudiant doit choisir une autre classe ou attendre une place.
+- **Vert** — places largement disponibles
+- **Orange** — capacité presque atteinte
+- **Rouge** — classe pleine
 
-### Cas particulier : pré-inscription sans paiement immédiat
+Filtrez par filière (combo en haut à gauche) ou recherchez par nom de classe / filière / niveau (combo en haut à droite). Cliquez **Sélectionner** sur la ligne souhaitée — la modale se ferme et la classe est rattachée à l'inscription.
 
-Si l'étudiant n'a pas encore les fonds pour payer son inscription, vous pouvez l'enregistrer en **pré-inscription** depuis `Étudiants → Pré-inscriptions → Nouvelle pré-inscription`. Le formulaire est plus court (informations essentielles seulement, pas d'affectation de classe).
+L'**Année universitaire** est pré-remplie avec l'année courante du tenant. Vous pouvez la changer si vous saisissez une inscription rétroactive ou anticipée.
 
-Plus tard, quand l'étudiant paie, retrouvez sa pré-inscription dans la liste, cliquez sur « Compléter l'inscription » et finalisez le dossier. KLASSCI propose alors une **modale d'affectation** pour choisir la classe avec vérification des places.
+## 3 — Statut d'affectation MESRS
 
-## Validation d'une inscription
+Le statut d'affectation gouvernementale détermine quels montants seront facturés.
 
-### Validation individuelle
+![Section Statut d'affectation gouvernementale avec combo Affecté / Réaffecté / Non affecté](/img/docs/secretaire/inscription/05-statut-affectation-mesrs.png)
 
-Sur la fiche d'inscription, cliquez sur le bouton « Valider l'inscription ». KLASSCI vérifie automatiquement :
+Trois choix possibles :
 
-- qu'au moins un paiement existe sur cette inscription
-- que le paiement a un statut `valide` (pas `en_attente`)
-- qu'une classe est bien attribuée
-- que la classe a encore une place
+- **Affecté** — l'étudiant a été affecté par le MESRS dans cette filière. L'État prend en charge une partie des frais ; l'étudiant ne paie que la part étudiant configurée.
+- **Réaffecté** — l'étudiant a été réorienté par le MESRS depuis une autre filière. Tarif identique ou voisin de l'Affecté selon votre paramétrage.
+- **Non affecté** — étudiant privé, pas de prise en charge MESRS. Paie le tarif privé plein.
 
-Si toutes les conditions sont réunies, l'inscription passe à `etudiant_cree`. L'étudiant reçoit son matricule (auto-généré selon la convention de l'établissement) et un email avec ses identifiants étudiant.
+Le panneau de droite résume l'impact financier dès que vous choisissez. Pour le détail de la matrice, voir [Frais & comptabilité — matrice MESRS](/docs/modules/frais-comptabilite#matrice-mesrs).
+
+## 4 — Parents / Tuteurs (optionnel)
+
+Section repliable. Une inscription peut avoir zéro, un ou plusieurs parents/tuteurs rattachés.
+
+![Section Parents/Tuteurs dépliée avec un parent et bouton Ajouter](/img/docs/secretaire/inscription/06-parents-tuteurs-optionnel.png)
+
+Pour chaque parent : **nom**, **prénom(s)**, **téléphone** (les trois deviennent obligatoires si la section est remplie), puis email, profession, relation (Père / Mère / Tuteur / Autre) et adresse en optionnel.
+
+<Callout>
+  **Sélectionner un parent existant.** Si le parent a déjà été enregistré pour une fratrie, cochez **<Icon name="eye" /> Sélectionner un parent existant** en haut de la fiche. Recherchez par nom ou téléphone — KLASSCI rattache le parent existant sans créer de doublon dans la base de contacts.
+</Callout>
+
+Le bouton **+ Ajouter un autre parent / tuteur** ouvre une seconde fiche identique. Le bouton rouge **<Icon name="x" /> Supprimer** retire un parent.
 
 <Callout type="warn">
-  **Pas de validation sans paiement.** KLASSCI bloque la validation si aucun paiement valide n'est associé. Cette règle s'applique aussi en validation en lot. Pour les cas exceptionnels, le super-administrateur peut forcer la validation depuis la console artisan.
+  **Pas de rôle « parent » distinct dans KLASSCI.** Les parents en Côte d'Ivoire utilisent en pratique le compte de leur enfant pour suivre la scolarité. Les informations parentales sont conservées pour le contact (relances, urgences) mais ne créent pas de compte utilisateur.
 </Callout>
 
-### Validation en lot
+## 5 — Frais d'inscription et options
 
-Pour valider plusieurs inscriptions d'un coup (par exemple en début d'année scolaire), allez dans `Étudiants → Inscriptions`, cochez les inscriptions à valider, puis utilisez le bouton « Actions groupées → Valider la sélection ». KLASSCI traite chaque inscription dans une transaction séparée :
+Cette section s'active dès qu'une classe est sélectionnée.
 
-- Les inscriptions avec paiement validé passent à `etudiant_cree`.
-- Les inscriptions avec paiement `en_attente` sont **ignorées** (pas validées) avec la raison « paiement_en_attente ».
-- Les inscriptions sans paiement sont **ignorées** avec la raison « sans_paiement ».
-- Les inscriptions sur une classe pleine sont **ignorées** avec la raison « classe_pleine ».
+### Frais obligatoires
 
-Un toast récapitulatif affiche le nombre d'inscriptions validées et la liste des ignorées avec leurs raisons.
+Pré-cochés automatiquement selon la classe, la filière et le statut MESRS. Le montant retenu est :
 
-## Ré-inscription d'un étudiant existant
+1. La **variante MESRS** configurée pour cette classe (Affecté / Réaffecté / Non affecté), si elle existe.
+2. Sinon, le **montant par défaut** de la catégorie de frais (saisi à la création de la catégorie).
 
-Pour un étudiant qui passe d'une année à l'autre, utilisez `Étudiants → Réinscriptions → Nouvelle réinscription`. Le formulaire est pré-rempli avec :
+![Frais obligatoires pré-cochés avec montants par défaut](/img/docs/secretaire/inscription/07-frais-obligatoires-auto.png)
 
-- les informations personnelles de l'étudiant (modifiables)
-- l'historique de ses inscriptions précédentes
-- le **reliquat** éventuel de l'année précédente (somme due qui n'a pas été payée), automatiquement reportée sur la nouvelle année
+Le bandeau orange **Configuration incomplète** apparaît si une variante MESRS manque pour cette classe. Le **montant par défaut** est appliqué — l'inscription n'est jamais bloquée. Le lien **<Icon name="settings" /> Configuration rapide** vous emmène directement dans la grille de frais pour compléter.
 
-Choisissez la nouvelle classe (généralement le niveau supérieur dans la même filière) et finalisez le paiement initial. La règle métier impose que le **solde calculé** se base uniquement sur les `frais subscriptions` actives, sans fallback sur la configuration globale.
+### Frais optionnels
 
-Pour les filières en tronc commun, KLASSCI propose un workflow spécifique :
+Non cochés par défaut. L'étudiant (ou le parent) choisit explicitement de souscrire.
 
-1. À l'entrée, l'étudiant s'inscrit dans la classe `Tronc commun [Filière]`.
-2. À la fin du semestre commun, vous accédez à la fiche étudiant et utilisez « Spécialisation » pour le ré-inscrire dans une classe spécialisée. Une nouvelle inscription est créée, liée à la précédente par `inscription_origine_id`. La règle de contrainte unique a été assouplie pour permettre 2 inscriptions par année universitaire dans ce cas (`(etudiant_id, annee_universitaire_id, classe_id)`).
-3. Le bulletin annuel agrège automatiquement les notes du tronc commun (S1) et de la spécialisation (S2) avec la pondération configurée.
+![Frais optionnel CANTINE avec choix de formule](/img/docs/secretaire/inscription/08-formule-cantine.png)
 
-## Annuler une inscription
+Cliquez **<Icon name="plus-circle" /> Souscrire** sur la ligne. Pour les services à formules multiples (cantine avec *Repas complet*, *Plat de résistance*, etc.), choisissez la formule — le montant total est mis à jour automatiquement.
 
-Sur la liste des inscriptions, sélectionnez les lignes à annuler et utilisez « Actions groupées → Annuler la sélection ». KLASSCI vous demande une **raison** (4 choix : abandon, exclusion, transfert, autre) et un commentaire libre.
+![Chip vert Souscrit avec croix rouge pour annuler](/img/docs/secretaire/inscription/09-frais-souscrit-chip.png)
 
-L'inscription passe en `status = annule` et `workflow_step = annule`. Les données sont conservées (pas de suppression physique) pour l'historique. Les notes et bulletins associés sont **soft-archivés** : ils restent en base mais n'apparaissent plus dans les listings courants. Vous pouvez les retrouver dans `Notes → Filtres avancés → Inclure les annulés`.
+Le **chip vert <Icon name="check" /> Souscrit** confirme l'activation. La **croix rouge <Icon name="x" />** annule la souscription avant l'enregistrement.
 
-Si l'étudiant avait payé, son paiement n'est PAS automatiquement remboursé : c'est une décision administrative. Le module comptabilité affiche les paiements rattachés à des inscriptions annulées dans une rubrique dédiée pour faciliter le traitement des remboursements.
+Le **résumé des frais sélectionnés** s'actualise en bas de section avec le total à régler.
 
-## Exporter et imprimer
+Cliquez enfin **<Icon name="save" /> Enregistrer l'inscription**.
 
-Depuis la liste des inscriptions, le bouton « Export » propose :
+## La fiche d'inscription
 
-- **CSV** — pour Excel ou Google Sheets, avec toutes les colonnes
-- **PDF liste** — un document avec en-tête établissement et toutes les inscriptions filtrées
-- **PDF détaillé** — un document par étudiant (utile pour archivage papier)
+L'inscription est créée mais **pas encore validée**. Statut affiché : **En attente** / étape **Prospect**.
 
-Vous pouvez aussi générer le **dossier individuel** d'un étudiant depuis sa fiche : `Étudiants → [étudiant] → Documents → Dossier complet`. Le PDF inclut l'inscription, l'historique des paiements, les notes, le bulletin courant et les présences.
+![Fiche d'inscription — bandeau bleu avec nom, matricule, badges En attente et Prospect](/img/docs/secretaire/inscription/10-fiche-inscription-header.png)
 
-## Erreurs fréquentes et résolution
+Trois grandes zones composent la fiche.
 
-| Symptôme | Cause probable | Solution |
-| --- | --- | --- |
-| Le bouton « Valider » ne réagit pas | Aucun paiement validé | Validez d'abord le paiement dans `Comptabilité → Paiements` |
-| Toujours « En attente » après validation | `workflow_step != etudiant_cree` | Rafraîchir la page, ou vérifier que la validation a bien commit la transaction |
-| « Classe pleine » alors qu'il reste des places | Cache navigateur | Cliquer dans le sélecteur de classe (re-fetch AJAX) |
-| L'étudiant n'apparaît pas dans les effectifs | Filtre `workflow_step` actif | Vérifier que la validation est complète, ou enlever le filtre temporairement |
-| L'export PDF est vide | Filtre actif sans résultat | Vérifier les filtres actifs (statut, année, classe) |
+### Identité et académique
 
-Pour toute autre question, contactez le service technique via [contact@klassci.com](mailto:contact@klassci.com).
+La colonne gauche reprend les informations civiles. La colonne droite résume l'affectation : filière, niveau, classe, année universitaire, statut MESRS, date d'inscription, type (Première inscription / Réinscription).
 
-## Prochaine étape
+### Situation financière
 
-Une fois vos inscriptions sous contrôle, vous voudrez sans doute consulter le guide **Comptable** pour comprendre comment les paiements arrivent dans le module financier et comment générer les relances. Ce guide sera publié prochainement.
+Trois KPIs : **Total attendu** / **Total payé** (validé uniquement) / **Solde restant**, avec une barre de progression.
+
+![Détail par frais avec lignes Frais de scolarité et Frais d'inscription](/img/docs/secretaire/inscription/11-fiche-inscription-finances.png)
+
+La table **Détail par frais** liste chaque catégorie avec son statut (Obligatoire / Optionnel), son montant attendu, son montant payé, son solde et son statut de règlement. Le bouton **Payer** par ligne ouvre directement la modale de paiement ciblée sur cette catégorie.
+
+### Frais optionnels disponibles & paiements liés
+
+![Frais optionnels disponibles + Paiements liés (vide)](/img/docs/secretaire/inscription/12-fiche-paiements-vide.png)
+
+La zone **Frais Optionnels Disponibles** liste les services qui n'ont pas été souscrits à la création — vous pouvez encore souscrire l'étudiant ici (utile si la décision se fait après l'entretien d'inscription). Cliquez **+ Souscrire** ou **<Icon name="plus-circle" /> Souscrire l'étudiant** sur la carte.
+
+La zone **Paiements liés à cette inscription** est vide tant qu'aucun versement n'a été associé.
+
+## Bandeau d'actions
+
+Le bandeau bleu en haut de la fiche regroupe les actions principales.
+
+![Bandeau actions : Administration, Valider avec paiement, Valider, Modifier, Fiche étudiant, Retour](/img/docs/secretaire/inscription/13-bandeau-actions.png)
+
+| Bouton | Effet |
+|---|---|
+| **<Icon name="settings" /> Administration** | Réglages avancés (annulation, transfert vers une autre classe) |
+| **<Icon name="save" /> Valider avec paiement** | Raccourci recommandé : associer un premier paiement puis valider en une étape |
+| **<Icon name="check" /> Valider** | Validation directe sans paiement (bourse en attente, paiement différé) |
+| **<Icon name="pencil" /> Modifier** | Retour au formulaire — filière, niveau, classe restent modifiables tant que l'inscription n'est pas validée définitivement |
+| **<Icon name="eye" /> Fiche étudiant** | Aperçu de la fiche étudiant (largement vide tant que la validation n'est pas faite) |
+| **Retour** | Liste des inscriptions |
+
+<Callout type="warn">
+  **Pourquoi valider est obligatoire.** Tant qu'une inscription reste **Prospect / En attente**, l'étudiant n'a **pas de compte KLASSCI** : il n'apparaît pas dans les listes de classe, ne peut pas être noté, ne reçoit pas ses identifiants. La validation est l'étape qui transforme la candidature en présence active dans le système.
+</Callout>
+
+## Valider l'inscription
+
+Deux chemins selon que le premier paiement est déjà encaissé ou non.
+
+### Option A — Valider avec paiement (raccourci recommandé)
+
+Cliquez **<Icon name="save" /> Valider avec paiement**. Le modal d'association de paiement s'ouvre.
+
+![Modal Associer un paiement à l'inscription, vide](/img/docs/secretaire/inscription/14-modal-paiement-vide.png)
+
+Champs requis :
+
+- **Montant payé** (FCFA) — peut être partiel.
+- **Catégorie de frais** — combo affichant les frais obligatoires de l'inscription. Une fois la catégorie choisie, KLASSCI affiche le **Montant maximum autorisé** pour vous éviter de saisir un trop-perçu.
+- **Mode de paiement** — Espèces, Wave, Orange Money, MTN MoMo, Chèque, Virement bancaire.
+- **Date du paiement** — pré-remplie au jour courant.
+- **Référence du paiement** *(optionnel)* — numéro de chèque, ID transaction Wave / OM / MoMo, référence virement.
+- **Observations** *(optionnel)* — note libre visible dans l'historique.
+
+![Modal rempli avec montant 50 000 FCFA et mode Espèces](/img/docs/secretaire/inscription/22-modal-paiement-rempli.png)
+
+La case **<Icon name="check" /> Valider directement le paiement** :
+
+- **Cochée** — le paiement est immédiatement comptabilisé comme validé.
+- **Non cochée** — le paiement passe en *attente de validation*. La comptabilité doit le valider manuellement depuis l'onglet *Paiements à valider*.
+
+Cliquez **<Icon name="save" /> Associer le paiement**. Toast de confirmation, et le bandeau d'actions affiche maintenant un bouton **<Icon name="check" /> Valider** vert plein.
+
+![Toast Paiement associé avec succès et bouton Valider en vert](/img/docs/secretaire/inscription/23-toast-paiement-bouton-valider.png)
+
+### Option B — Valider sans paiement
+
+Cliquez directement **<Icon name="check" /> Valider** dans le bandeau, sans passer par le paiement.
+
+Utile pour :
+
+- Étudiants en bourse (paiement étatique attendu plus tard).
+- Inscriptions différées (premier versement au mois suivant).
+- Établissements qui valident à l'admission et encaissent à la rentrée.
+
+L'inscription passera en *Active* avec un solde non réglé. Le compte étudiant est tout de même créé : l'étudiant peut consulter sa fiche financière et voir ce qu'il reste à payer.
+
+## Validation définitive
+
+Que vous arriviez par l'option A ou B, le bouton **Valider** ouvre un modal de confirmation.
+
+![Modal Validation définitive avec liste des éléments figés](/img/docs/secretaire/inscription/24-modal-validation-definitive.png)
+
+KLASSCI rappelle les éléments qui seront **figés** après validation :
+
+- **Filière**
+- **Niveau d'études**
+- **Classe**
+
+Une **observation libre** peut être ajoutée — elle reste visible dans l'historique de l'inscription.
+
+Confirmez avec **<Icon name="check" /> Valider définitivement**. Deux choses se produisent simultanément :
+
+1. Le **statut** de l'inscription passe à **Active**.
+2. Le **compte utilisateur** de l'étudiant est généré (identifiants envoyés par email s'il est renseigné, sinon affichés dans une modale à imprimer).
+
+![Toast Prospect converti en étudiant avec succès, badge Active](/img/docs/secretaire/inscription/25-toast-converti-actif.png)
+
+![Statut Active avec situation financière partielle (50 000 sur 250 000 réglés)](/img/docs/secretaire/inscription/26-statut-actif-final.png)
+
+<Callout>
+  **Rectification après validation.** Si la classe doit changer après validation (réorientation, erreur de saisie), passez par **<Icon name="settings" /> Administration → Transférer vers une autre classe** depuis la fiche d'inscription. Une trace est conservée et les frais sont recalculés selon la nouvelle classe.
+</Callout>
+
+## La fiche étudiant
+
+Une fois l'inscription validée, accédez à la fiche étudiant complète depuis le bouton **<Icon name="eye" /> Fiche étudiant** ou via **Étudiants → Liste des Étudiants**.
+
+![Fiche étudiant — bandeau bleu avec nom, classe, badges et compteurs](/img/docs/secretaire/inscription/15-fiche-etudiant-header.png)
+
+Le bandeau bleu reprend :
+
+- **Identité** (nom complet, classe, filière, niveau, année courante).
+- **Badges** : système (LMD / BTS), matricule, statut d'inscription, nationalité.
+- **Compteurs** : Inscriptions / Présence / Absences / Payé (FCFA).
+- **Actions** : Modifier / Documents / Retour.
+
+Six onglets organisent le détail.
+
+### Vue d'ensemble
+
+Quatre KPIs clés (moyenne, taux présence, crédits CECT, paiements réglés) puis une carte *Informations rapides* et la liste des inscriptions année par année.
+
+![Onglet Vue d'ensemble — informations rapides + carte d'inscription 2025-2026](/img/docs/secretaire/inscription/16-fiche-etudiant-informations-rapides.png)
+
+Quand l'inscription n'est pas encore validée définitivement, un **callout jaune** rappelle l'action à faire et propose un bouton **<Icon name="check" /> Valider l'inscription** en raccourci.
+
+### Académique
+
+Bilan annuel : moyenne générale, classement, mention, et notes par matière dès qu'elles sont saisies.
+
+![Onglet Académique — bilan vide en début d'année](/img/docs/secretaire/inscription/17-onglet-academique.png)
+
+### Présences
+
+Taux global de présence et historique des absences / retards (renseignés via le module *Présences*).
+
+### Finances
+
+KPIs financiers détaillés, **Détail par frais**, et bouton **<Icon name="plus-circle" /> Enregistrer un paiement** pour saisir un nouveau versement à tout moment.
+
+![Onglet Finances avec Total attendu / Payé / Solde restant et boutons Payer par ligne](/img/docs/secretaire/inscription/18-onglet-finances.png)
+
+Les boutons **<Icon name="file-text" /> Situation financière** (toast) et **<Icon name="file-text" /> PDF Situation** (téléchargement) permettent d'éditer le relevé pour la famille.
+
+### Profil
+
+Informations personnelles complètes et zone **Compte utilisateur** : nom d'utilisateur, email de connexion, dernière connexion, date de création du compte, et bouton **<Icon name="settings" /> Réinitialiser le mot de passe** (envoie un nouveau mot de passe temporaire par email ou affiche-le dans une modale).
+
+![Onglet Profil avec section Compte utilisateur Active](/img/docs/secretaire/inscription/19-onglet-profil.png)
+
+### Documents
+
+Pièces jointes du dossier (certificats reçus, copies CNI, dossiers d'admission). Le badge rouge sur l'onglet indique des documents nouvellement ajoutés.
+
+![Onglet Documents avec un certificat de scolarité ajouté](/img/docs/secretaire/inscription/20-onglet-documents.png)
+
+Bouton **<Icon name="plus" /> Ajouter un document** pour joindre une pièce à la fiche.
+
+## Délivrer un certificat ou une attestation
+
+Deux documents officiels sont disponibles dès qu'une inscription est validée. Cliquez le bouton **<Icon name="file-text" /> Documents** dans le bandeau de la fiche étudiant.
+
+![Dropdown Documents — Certificat de scolarité et Attestation de fréquentation, chacun avec Prévisualiser et Télécharger PDF](/img/docs/secretaire/inscription/21-dropdown-documents-pdf.png)
+
+| Document | Quand le délivrer |
+|---|---|
+| **Certificat de scolarité** | Démarches administratives officielles (banque, ambassade, transports, dossier de visa) — atteste que l'étudiant est inscrit pour l'année courante |
+| **Attestation de fréquentation** | Justifier une présence effective passée (employeur, allocation familiale, stage) — porte sur une période antérieure |
+
+Pour chaque document : **<Icon name="eye" /> Prévisualiser** ouvre le PDF dans un nouvel onglet, **<Icon name="file-text" /> Télécharger PDF** sauvegarde directement.
+
+<Callout>
+  **Document personnalisé.** Pour tout autre document à joindre au dossier (acte de naissance scanné, copie CNI, justificatif de bourse, lettre de recommandation), passez par l'onglet **Documents** de la fiche étudiant et cliquez **<Icon name="plus" /> Ajouter un document**. Le fichier est rattaché à l'étudiant, pas à une inscription précise — il reste accessible d'une année à l'autre.
+</Callout>
+
+## Cas particuliers
+
+### Réinscription année suivante
+
+Ne créez **pas** une nouvelle inscription complète pour un étudiant existant. Utilisez **Étudiants → Réinscriptions** : KLASSCI reporte le profil et les parents, et ne demande que la nouvelle classe et le paiement initial. Le matricule reste le même.
+
+### Inscription « sous réserve »
+
+Si le dossier est incomplet (pièce manquante, paiement frais d'étude attendu), enregistrez l'inscription sans valider et placez-la en **Sous réserve** (sidebar dédié sous Étudiants). Elle sortira de cette liste à la validation définitive.
+
+### Annulation avant validation
+
+Bouton **<Icon name="settings" /> Administration → Annuler l'inscription** depuis la fiche. Aucun frais n'est facturé, le matricule est libéré, le dossier disparaît des listings courants (conservé en archive).
+
+### Annulation après validation
+
+Possible mais l'historique est conservé : le compte étudiant est désactivé, les frais déjà payés restent visibles dans la comptabilité (la gestion des remboursements est à votre charge). Voir **<Icon name="settings" /> Administration → Annuler l'inscription** sur la fiche.
+
+### Frais optionnels souscrits après validation
+
+Possible à tout moment depuis la fiche d'inscription (zone **Frais Optionnels Disponibles**) ou depuis la fiche étudiant onglet **Finances**. Le montant est ajouté au solde restant.
+
+## En résumé
+
+```text
+Nouvelle Inscription -> Formulaire 5 sections -> Enregistrer
+                                  |
+                         Fiche d'inscription
+                              (Prospect)
+                                  |
+                    +-------------+-------------+
+                    |                           |
+            Valider avec paiement        Valider seul
+                    |                           |
+                    +-------------+-------------+
+                                  |
+                       Validation definitive
+                                  |
+                    Etudiant Active + Compte cree
+                                  |
+                  Fiche etudiant + Certificat / Attestation
+```
+
+Voir aussi : [Frais & comptabilité](/docs/modules/frais-comptabilite) · [Bursar — opérations courantes](/docs/comptable/operations) · [Super-administrateur — installation initiale](/docs/superadmin/onboarding)

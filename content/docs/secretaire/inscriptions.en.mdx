@@ -1,126 +1,348 @@
 ---
-title: Registrar — managing enrollments
-description: Four-step enrollment workflow, validation, re-enrollment, cancellation, exports, and common errors.
+title: Registrar — creating a new enrollment
+description: From form to final validation — the full path that turns a prospect into an active KLASSCI student.
 ---
 
-## Workflow overview
+A KLASSCI enrollment moves through three phases:
 
-An enrollment in KLASSCI moves through four steps, modeled by the `workflow_step` field:
+1. **Capture** the enrollment record (student, class, MESRS status, parents, fees).
+2. **Validate** it (with or without a payment) to activate the student account.
+3. **Issue** the official documents (proof of enrollment, attendance certificate).
 
-1. **`pre_inscrit`** — the student has provided their information but the initial payment has not yet been validated. No class has been assigned.
-2. **`pre_inscrit_paye`** — the initial payment is validated. The student is waiting for the administration to assign a class.
-3. **`affecte`** — the class is assigned. The student is awaiting final validation.
-4. **`etudiant_cree`** — the enrollment is definitively validated. The student counts toward the school's headcount and can access their portal.
+This page walks through the three phases in the order you meet them on screen.
 
-This separation exists so a student who has only filled out a form (without paying) doesn't show up in headcount statistics. Every KPI page filters by default on `workflow_step = etudiant_cree`.
+## Where to start
+
+In the sidebar, expand **Students** and click **New Enrollment**.
+
+![Students sidebar with New Enrollment selected](/img/docs/secretaire/inscription/01-sidebar-nouvelle-inscription.png)
+
+The screen opens onto a five-section form. The numbered rail (1 to 5) on the right shows your progress through the form.
+
+## 1 — Personal information
+
+Civil identity of the student: surname, given name(s), gender, date and place of birth, nationality, phone, city, district.
+
+![Form — personal information with manual matricule field](/img/docs/secretaire/inscription/02-form-info-personnelles.png)
+
+**Email** and **photo** are optional. The email is used to deliver login credentials once the enrollment is validated — if you leave it blank, KLASSCI shows the credentials in a printable modal at validation time.
 
 <Callout>
-  **Golden rule.** As long as `workflow_step != etudiant_cree`, the student is NOT officially enrolled, even if their `status` is `active`. Headcount reports, remaining-seat calculations, and dashboards all respect this rule.
+  **Matricule.** Entered manually. Before saving, click **<Icon name="eye" /> Verify**: KLASSCI checks that this matricule does not already exist in the tenant. If your school uses a dedicated convention (for example `MESBTP25-0001`), keep to it — it makes exports and accounting imports much smoother.
 </Callout>
 
-## Creating a new enrollment
+## 2 — Academic information (class selection)
 
-### Standard case: the student pays right away
+The full academic assignment flows from the class. The track, study level, and academic year are inferred automatically.
 
-Go to `Étudiants → Inscriptions → Nouvelle inscription`. The form is split into logical sections:
+![Academic Information section with Select button](/img/docs/secretaire/inscription/03-bouton-selectionner-classe.png)
 
-1. **Student information** — last name, first names, date of birth, sex, nationality, phone, email
-2. **Address and emergency contact**
-3. **Prior education** — diploma earned, previous school, year
-4. **Academic placement** — filière, level, class (Select2 with search)
-5. **Fees and initial payment** — selection of fees due, payment method, amount
+Click the blue **<Icon name="plus" /> Select** button. A modal lists every class open for the current academic year.
 
-When you pick a class, KLASSCI checks remaining seats in real time via an AJAX call to `GET /esbtp/classes/{id}/available-places`. The display uses colored thresholds:
+![Class selection modal with filters and seat counts](/img/docs/secretaire/inscription/04-modal-selection-classe.png)
 
-| Color | Threshold | Message |
-| --- | --- | --- |
-| Green | > 30% | "Places disponibles : X / Y" |
-| Orange | 10% to 30% | "Places limitées : X / Y" |
-| Dark orange | < 10% | "Presque complet : X / Y" |
-| Red | 0 | "Classe pleine" + submit button disabled |
+Three columns help you choose: **CLASS**, **TRACK**, **LEVEL**. The **SEATS** column shows the enrolled / capacity ratio with a colour cue:
 
-If the class is full, the **Valider l'inscription** button is automatically greyed out and an explicit error message appears above the form. The student must pick another class or wait for a seat to open up.
+- **Green** — plenty of seats left
+- **Orange** — capacity nearly reached
+- **Red** — class full
 
-### Edge case: pre-enrollment without an immediate payment
+Filter by track (top-left combo) or search by class / track / level name (top-right field). Click **Select** on the right row — the modal closes and the class is bound to the enrollment.
 
-If the student doesn't yet have the funds to pay for enrollment, you can record them as a **pre-enrollment** under `Étudiants → Pré-inscriptions → Nouvelle pré-inscription`. The form is shorter (essential information only, no class assignment).
+The **Academic year** field is pre-filled with the tenant's current year. You can change it for retroactive or anticipated enrollments.
 
-Later, when the student pays, find their pre-enrollment in the list, click **Compléter l'inscription**, and finalize the file. KLASSCI then opens an **assignment modal** to pick a class with seat verification.
+## 3 — MESRS enrollment status
 
-## Validating an enrollment
+The government enrollment status decides which amounts get billed.
 
-### Single validation
+![Government enrollment status section with Affecté / Réaffecté / Non affecté combo](/img/docs/secretaire/inscription/05-statut-affectation-mesrs.png)
 
-On the enrollment record, click **Valider l'inscription**. KLASSCI automatically checks that:
+Three options:
 
-- at least one payment exists on this enrollment
-- the payment has status `valide` (not `en_attente`)
-- a class is assigned
-- the class still has a seat available
+- **Affecté** — the student was assigned to this track by MESRS. The State covers part of the fees; the student only pays the configured student share.
+- **Réaffecté** — the student was redirected by MESRS from another track. Same or close pricing as Affecté, depending on your matrix.
+- **Non affecté** — private student, no MESRS coverage. Pays the full private rate.
 
-If every condition is met, the enrollment moves to `etudiant_cree`. The student receives their matricule (auto-generated from the institution's convention) and an email with their student credentials.
+The right-hand panel summarises the financial impact as soon as you pick. For the full matrix, see [Fees & accounting — MESRS matrix](/en/docs/modules/frais-comptabilite#matrice-mesrs).
+
+## 4 — Parents / Guardians (optional)
+
+Collapsible section. An enrollment can have zero, one, or several parents/guardians attached.
+
+![Parents/Guardians section expanded with one parent and Add button](/img/docs/secretaire/inscription/06-parents-tuteurs-optionnel.png)
+
+Per parent: **surname**, **given name(s)**, **phone** (all three become required if the section is filled), then email, profession, relationship (Father / Mother / Guardian / Other), and address are optional.
+
+<Callout>
+  **Pick an existing parent.** If the parent is already in KLASSCI for a sibling, tick **<Icon name="eye" /> Select an existing parent** at the top of the parent card. Search by name or phone — KLASSCI links the existing parent without creating a duplicate contact.
+</Callout>
+
+The **+ Add another parent / guardian** button opens a second identical card. The red **<Icon name="x" /> Remove** button drops a parent.
 
 <Callout type="warn">
-  **No validation without payment.** KLASSCI blocks validation when no valid payment is attached. This rule applies to bulk validation as well. For exceptional cases, the super-administrator can force validation from the artisan console.
+  **No separate « parent » role in KLASSCI.** In Côte d'Ivoire, parents in practice use their child's account to follow the schooling. Parental information is kept for contact purposes (reminders, emergencies) but does not create a user account.
 </Callout>
 
-### Bulk validation
+## 5 — Enrollment fees and options
 
-To validate several enrollments at once (for example at the start of the school year), go to `Étudiants → Inscriptions`, tick the enrollments, then use **Actions groupées → Valider la sélection**. KLASSCI processes each enrollment in its own transaction:
+This section becomes active as soon as a class is selected.
 
-- Enrollments with a validated payment move to `etudiant_cree`.
-- Enrollments with a payment in `en_attente` are **skipped** (not validated) with reason "paiement_en_attente".
-- Enrollments without a payment are **skipped** with reason "sans_paiement".
-- Enrollments on a full class are **skipped** with reason "classe_pleine".
+### Mandatory fees
 
-A summary toast shows the count of validated enrollments and the list of skipped ones with their reasons.
+Auto-checked based on class, track and MESRS status. The amount used is:
 
-## Re-enrolling an existing student
+1. The **MESRS variant** configured for this class (Affecté / Réaffecté / Non affecté), if it exists.
+2. Otherwise, the **default amount** of the fee category (entered when the category was created).
 
-For a student moving from one year to the next, use `Étudiants → Réinscriptions → Nouvelle réinscription`. The form is pre-filled with:
+![Mandatory fees pre-checked with default amounts](/img/docs/secretaire/inscription/07-frais-obligatoires-auto.png)
 
-- the student's personal information (editable)
-- the history of their previous enrollments
-- any **outstanding balance** from the previous year, automatically carried over to the new year
+The orange **Configuration incomplete** banner shows up when a MESRS variant is missing for this class. The **default amount** is applied — the enrollment is never blocked. The **<Icon name="settings" /> Quick configuration** link jumps you straight into the fee grid to fill the gap.
 
-Pick the new class (usually the next level up in the same filière) and finalize the initial payment. The business rule is that the **calculated balance** is based exclusively on active fee subscriptions, with no fallback on the global configuration.
+### Optional fees
 
-For tronc-commun filières, KLASSCI offers a specific workflow:
+Not checked by default. The student (or parent) explicitly opts in.
 
-1. On entry, the student enrolls in the `Tronc commun [Filière]` class.
-2. At the end of the common semester, open the student's profile and use **Spécialisation** to re-enroll them in a specialised class. A new enrollment is created and linked to the previous one through `inscription_origine_id`. The unique constraint has been relaxed to allow two enrollments per academic year in this case (`(etudiant_id, annee_universitaire_id, classe_id)`).
-3. The annual report card automatically aggregates the tronc-commun grades (S1) and the specialisation grades (S2) using the configured weighting.
+![CANTINE optional fee with formula choice](/img/docs/secretaire/inscription/08-formule-cantine.png)
 
-## Cancelling an enrollment
+Click **<Icon name="plus-circle" /> Subscribe** on the row. For multi-formula services (canteen with *Full meal*, *Main course*, etc.), pick the formula — the running total updates automatically.
 
-In the enrollments list, select the rows to cancel and use **Actions groupées → Annuler la sélection**. KLASSCI asks for a **reason** (four options: dropout, expulsion, transfer, other) and a free-text comment.
+![Green Subscribed chip with red cross to cancel](/img/docs/secretaire/inscription/09-frais-souscrit-chip.png)
 
-The enrollment moves to `status = annule` and `workflow_step = annule`. Data is preserved (no physical delete) for the historical record. The associated grades and report cards are **soft-archived**: they stay in the database but no longer show up in the standard listings. You can find them under `Notes → Filtres avancés → Inclure les annulés`.
+The green **<Icon name="check" /> Subscribed** chip confirms it. The **red <Icon name="x" /> cross** cancels the subscription before saving.
 
-If the student had paid, their payment is NOT automatically refunded: that's an administrative decision. The accounting module shows payments tied to cancelled enrollments in a dedicated section to make refund processing easier.
+The **selected fees summary** at the bottom of the section keeps the running total in sight.
 
-## Exporting and printing
+Finally click **<Icon name="save" /> Save enrollment**.
 
-From the enrollments list, the **Export** button offers:
+## The enrollment record
 
-- **CSV** — for Excel or Google Sheets, with every column
-- **PDF list** — a document with the school header and every filtered enrollment
-- **Detailed PDF** — one document per student (useful for paper archives)
+The enrollment is created but **not yet validated**. Status shown: **Pending** / step **Prospect**.
 
-You can also generate a student's **individual file** from their profile: `Étudiants → [student] → Documents → Dossier complet`. The PDF includes the enrollment, payment history, grades, current report card, and attendance.
+![Enrollment record — blue header with name, matricule, Pending and Prospect badges](/img/docs/secretaire/inscription/10-fiche-inscription-header.png)
 
-## Common errors and fixes
+Three main zones make up the record.
 
-| Symptom | Likely cause | Fix |
-| --- | --- | --- |
-| The "Valider" button doesn't react | No validated payment | Validate the payment first under `Comptabilité → Paiements` |
-| Still "En attente" after validation | `workflow_step != etudiant_cree` | Refresh the page, or check that the validation actually committed |
-| "Classe pleine" although seats remain | Browser cache | Click in the class picker (re-fetches via AJAX) |
-| The student doesn't appear in headcount | `workflow_step` filter is active | Confirm validation is complete, or remove the filter temporarily |
-| The PDF export is empty | Active filter with no result | Check the active filters (status, year, class) |
+### Identity and academic
 
-For anything else, contact the technical team at [contact@klassci.com](mailto:contact@klassci.com).
+The left column repeats the civil information. The right column summarises the academic assignment: track, level, class, academic year, MESRS status, enrollment date, type (First enrollment / Re-enrollment).
 
-## Next step
+### Financial situation
 
-Once your enrollments are under control, you'll likely want to read the **Bursar** guide to understand how payments flow into the financial module and how to generate reminders. That guide is coming soon.
+Three KPIs: **Total expected** / **Total paid** (validated only) / **Remaining balance**, with a progress bar.
+
+![Detail by fee with Tuition fees and Enrollment fees rows](/img/docs/secretaire/inscription/11-fiche-inscription-finances.png)
+
+The **Detail by fee** table lists each category with its type (Mandatory / Optional), expected amount, paid amount, balance, and settlement status. The **Pay** button on each row opens the payment modal directly scoped to that category.
+
+### Available optional fees & linked payments
+
+![Available optional fees + Linked payments (empty)](/img/docs/secretaire/inscription/12-fiche-paiements-vide.png)
+
+The **Available Optional Fees** zone lists services that were not subscribed at creation — you can still subscribe the student here (handy when the decision is made after the enrollment interview). Click **+ Subscribe** or **<Icon name="plus-circle" /> Subscribe student** on the card.
+
+The **Payments linked to this enrollment** zone is empty until at least one payment has been associated.
+
+## Action bar
+
+The blue bar at the top of the record holds the main actions.
+
+![Action bar: Administration, Validate with payment, Validate, Edit, Student record, Back](/img/docs/secretaire/inscription/13-bandeau-actions.png)
+
+| Button | Effect |
+|---|---|
+| **<Icon name="settings" /> Administration** | Advanced settings (cancellation, transfer to another class) |
+| **<Icon name="save" /> Validate with payment** | Recommended shortcut: associate a first payment and validate in one step |
+| **<Icon name="check" /> Validate** | Direct validation with no payment (pending scholarship, deferred payment) |
+| **<Icon name="pencil" /> Edit** | Back to the form — track, level, class remain editable until the enrollment is finally validated |
+| **<Icon name="eye" /> Student record** | Preview of the student record (largely empty until validation is done) |
+| **Back** | Enrollments list |
+
+<Callout type="warn">
+  **Why validation is mandatory.** As long as an enrollment stays **Prospect / Pending**, the student has **no KLASSCI account**: not in class lists, cannot be graded, no credentials sent. Validation is the step that turns the application into an active presence in the system.
+</Callout>
+
+## Validate the enrollment
+
+Two routes depending on whether the first payment is already in or not.
+
+### Path A — Validate with payment (recommended shortcut)
+
+Click **<Icon name="save" /> Validate with payment**. The payment association modal opens.
+
+![Associate a payment to the enrollment modal, empty](/img/docs/secretaire/inscription/14-modal-paiement-vide.png)
+
+Required fields:
+
+- **Amount paid** (FCFA) — partial payments are fine.
+- **Fee category** — combo showing the mandatory fees on this enrollment. Once a category is picked, KLASSCI shows the **Maximum allowed amount** so you do not over-collect by accident.
+- **Payment method** — Cash, Wave, Orange Money, MTN MoMo, Cheque, Bank transfer.
+- **Payment date** — pre-filled with today.
+- **Payment reference** *(optional)* — cheque number, Wave / OM / MoMo transaction ID, transfer reference.
+- **Notes** *(optional)* — free comment kept in the history.
+
+![Modal filled with 50,000 FCFA and Cash method](/img/docs/secretaire/inscription/22-modal-paiement-rempli.png)
+
+The **<Icon name="check" /> Validate the payment immediately** checkbox:
+
+- **Checked** — the payment is recorded as validated right away.
+- **Unchecked** — the payment goes into *Pending validation*. Accounting must validate it manually from the *Payments to validate* tab.
+
+Click **<Icon name="save" /> Associate the payment**. A confirmation toast shows up and the action bar now exposes a solid green **<Icon name="check" /> Validate** button.
+
+![Toast Payment associated successfully and green Validate button](/img/docs/secretaire/inscription/23-toast-paiement-bouton-valider.png)
+
+### Path B — Validate without payment
+
+Click **<Icon name="check" /> Validate** straight from the action bar, skipping the payment step.
+
+Useful for:
+
+- Scholarship students (state payment expected later).
+- Deferred enrollments (first payment next month).
+- Schools that validate at admission and collect at the start of term.
+
+The enrollment becomes *Active* with an outstanding balance. The student account is still created: the student can see their financial record and what is left to pay.
+
+## Final validation
+
+Whether you take path A or B, the **Validate** button opens a confirmation modal.
+
+![Final validation modal with the list of frozen fields](/img/docs/secretaire/inscription/24-modal-validation-definitive.png)
+
+KLASSCI lists the items that will be **frozen** after validation:
+
+- **Track**
+- **Study level**
+- **Class**
+
+A **free-form note** can be added — it stays visible in the enrollment history.
+
+Confirm with **<Icon name="check" /> Validate definitively**. Two things happen at once:
+
+1. The enrollment **status** flips to **Active**.
+2. The student's **user account** is generated (credentials sent by email if filled in, otherwise shown in a printable modal).
+
+![Toast Prospect converted to student successfully, Active badge](/img/docs/secretaire/inscription/25-toast-converti-actif.png)
+
+![Active status with partial financial situation (50,000 of 250,000 settled)](/img/docs/secretaire/inscription/26-statut-actif-final.png)
+
+<Callout>
+  **Correcting after validation.** If the class needs to change after validation (re-orientation, data-entry mistake), go through **<Icon name="settings" /> Administration → Transfer to another class** from the enrollment record. A trail is kept and fees are recomputed for the new class.
+</Callout>
+
+## The student record
+
+Once the enrollment is validated, open the full student record from the **<Icon name="eye" /> Student record** button or via **Students → Student list**.
+
+![Student record — blue header with name, class, badges, and counters](/img/docs/secretaire/inscription/15-fiche-etudiant-header.png)
+
+The blue header shows:
+
+- **Identity** (full name, class, track, level, current year).
+- **Badges**: system (LMD / BTS), matricule, enrollment status, nationality.
+- **Counters**: Enrollments / Attendance / Absences / Paid (FCFA).
+- **Actions**: Edit / Documents / Back.
+
+Six tabs organise the rest.
+
+### Overview
+
+Four key KPIs (average grade, attendance rate, ECTS credits, % settled payments), then a *Quick info* card and the year-by-year list of enrollments.
+
+![Overview tab — quick info + 2025-2026 enrollment card](/img/docs/secretaire/inscription/16-fiche-etudiant-informations-rapides.png)
+
+When the enrollment has not been finally validated yet, a **yellow callout** reminds the action and offers a **<Icon name="check" /> Validate enrollment** shortcut button.
+
+### Academic
+
+Yearly summary: overall average, ranking, mention, and grades by subject as soon as they are entered.
+
+![Academic tab — empty summary at the start of the year](/img/docs/secretaire/inscription/17-onglet-academique.png)
+
+### Attendance
+
+Overall attendance rate and the absence / lateness history (filled by the *Attendance* module).
+
+### Finances
+
+Detailed financial KPIs, **Detail by fee**, and a **<Icon name="plus-circle" /> Record a payment** button to capture a new payment any time.
+
+![Finances tab with Total expected / Paid / Remaining and Pay buttons per row](/img/docs/secretaire/inscription/18-onglet-finances.png)
+
+The **<Icon name="file-text" /> Financial situation** (toast) and **<Icon name="file-text" /> PDF Statement** (download) buttons let you produce the family-facing statement.
+
+### Profile
+
+Full personal information and a **User account** zone: username, login email, last login, account creation date, and a **<Icon name="settings" /> Reset password** button (sends a fresh temporary password by email or shows it in a modal).
+
+![Profile tab with Active User account section](/img/docs/secretaire/inscription/19-onglet-profil.png)
+
+### Documents
+
+File attachments on the file (received certificates, ID copies, admission folders). The red badge on the tab signals newly added documents.
+
+![Documents tab with one proof of enrollment uploaded](/img/docs/secretaire/inscription/20-onglet-documents.png)
+
+**<Icon name="plus" /> Add a document** lets you attach any file to the record.
+
+## Issuing a proof of enrollment or attendance certificate
+
+Two official documents are available as soon as an enrollment is validated. Click the **<Icon name="file-text" /> Documents** button in the student record header.
+
+![Documents dropdown — Proof of enrollment and Attendance certificate, each with Preview and Download PDF](/img/docs/secretaire/inscription/21-dropdown-documents-pdf.png)
+
+| Document | When to issue |
+|---|---|
+| **Proof of enrollment** | Official paperwork (bank, embassy, transport pass, visa file) — confirms the student is enrolled for the current year |
+| **Attendance certificate** | Justify past actual presence (employer, family allowance, internship) — covers a previous period |
+
+For each document: **<Icon name="eye" /> Preview** opens the PDF in a new tab, **<Icon name="file-text" /> Download PDF** saves it directly.
+
+<Callout>
+  **Custom document.** For anything else attached to the file (scanned birth certificate, ID copy, scholarship justification, recommendation letter), go through the student record's **Documents** tab and click **<Icon name="plus" /> Add a document**. The file is bound to the student, not to a specific enrollment — it stays accessible across years.
+</Callout>
+
+## Edge cases
+
+### Re-enrollment for the next year
+
+Do **not** create a brand-new enrollment for an existing student. Use **Students → Re-enrollments**: KLASSCI carries the profile and the parents over and only asks for the new class and the initial payment. The matricule stays the same.
+
+### « Conditional » enrollment
+
+If the file is incomplete (missing document, study fee not yet paid), save the enrollment without validating and place it under **Conditional** (dedicated sidebar entry under Students). It will leave that list when validated definitively.
+
+### Cancellation before validation
+
+**<Icon name="settings" /> Administration → Cancel enrollment** from the record. No fee is billed, the matricule is freed, the file leaves the active listings (kept in archive).
+
+### Cancellation after validation
+
+Possible but the history is kept: the student account is deactivated, fees already paid stay visible in accounting (refunds are your call). See **<Icon name="settings" /> Administration → Cancel enrollment** on the record.
+
+### Optional fees subscribed after validation
+
+Possible at any time from the enrollment record (**Available Optional Fees** zone) or from the student record's **Finances** tab. The amount is added to the remaining balance.
+
+## At a glance
+
+```text
+New Enrollment -> 5-section form -> Save
+                         |
+                Enrollment record
+                    (Prospect)
+                         |
+            +------------+------------+
+            |                         |
+   Validate with payment       Validate alone
+            |                         |
+            +------------+------------+
+                         |
+              Final validation
+                         |
+            Active student + Account created
+                         |
+        Student record + Proof / Attendance PDFs
+```
+
+See also: [Fees & accounting](/en/docs/modules/frais-comptabilite) · [Bursar — daily operations](/en/docs/comptable/operations) · [Super-administrator — initial setup](/en/docs/superadmin/onboarding)

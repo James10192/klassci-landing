@@ -49,7 +49,7 @@ A few terms you'll see often, in the platform and throughout this documentation:
 - **Niveau d'étude** (study level / year level) — the year in the cursus (BTS1, BTS2, L1, L2, L3, M1, M2). Each level belongs to a cycle (BTS, Licence, Master).
 - **Class** — the operational unit that groups students for a given academic year. Always tied to a filière + a study level.
 - **Academic year** — the academic period (e.g., 2025-2026). Only one is flagged as "current" at a time.
-- **Enrollment** — the link between a student and a class for an academic year. Has a `status` (active / cancelled) and a `workflow_step` (pre_inscrit, etudiant_cree, etc.).
+- **Enrollment** — the link between a student and a class for an academic year. Follows a 3-step workflow (**Prospect** → **In review** → **Active**) which determines whether the student appears in class headcounts.
 - **Course** — the unit of instruction grades are attached to. In LMD, a course is an **ECUE** linked to a **UE** (Unité d'Enseignement) carrying ECTS credits.
 - **Assessment** — the type of evaluation (homework, midterm, final exam, project) configured for a course.
 - **Grade** — a student's mark on a given assessment.
