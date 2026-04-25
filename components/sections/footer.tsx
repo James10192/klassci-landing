@@ -1,6 +1,6 @@
 "use client";
 
-import { Facebook, Linkedin, Twitter } from "lucide-react";
+import { Facebook, Linkedin } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useCallback } from "react";
 
@@ -18,21 +18,19 @@ interface FooterColumn {
   links: FooterLink[];
 }
 
+// Reuse the parent group's socials (African Digit Consulting) until KLASSCI
+// gets its own dedicated handles. LinkedIn is on /company/klassci/ already —
+// it's the same page that ADC renamed during the rebrand.
 const SOCIAL_LINKS = [
   {
     key: "facebook",
-    href: "https://www.facebook.com/klassci",
+    href: "https://web.facebook.com/p/African-Digit-Consulting-100092649035928/?_rdc=1&_rdr",
     Icon: Facebook,
   },
   {
     key: "linkedin",
     href: "https://www.linkedin.com/company/klassci/",
     Icon: Linkedin,
-  },
-  {
-    key: "twitter",
-    href: "https://x.com/klassci",
-    Icon: Twitter,
   },
 ] as const;
 

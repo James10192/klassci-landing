@@ -433,8 +433,7 @@
         "title": "Product",
         "links": [
           { "label": "Features", "href": "#fonctionnalites" },
-          { "label": "Pricing", "href": "#tarifs" },
-          { "label": "Sign in", "href": "/login" }
+          { "label": "Pricing", "href": "#tarifs" }
         ]
       },
       "resources": {
@@ -456,8 +455,7 @@
     "copyright": "© {year} KLASSCI — African Digital Consulting",
     "social": {
       "facebook": "Facebook",
-      "linkedin": "LinkedIn",
-      "twitter": "X (Twitter)"
+      "linkedin": "LinkedIn"
     }
   },
   "tenantLookup": {
