@@ -95,7 +95,7 @@ export function FeaturesBig() {
                   {String(items.length).padStart(2, "0")}
                 </p>
                 <h3
-                  className="mt-4 font-serif font-light text-2xl leading-[1.3] text-text"
+                  className="mt-4 font-serif font-light text-2xl leading-[1.3] text-accent"
                   style={{ letterSpacing: "-0.02em" }}
                 >
                   {feature.title}
