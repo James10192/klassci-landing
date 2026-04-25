@@ -79,39 +79,84 @@ Concrètement, lorsque vous filtrez les étudiants par classe, ce qui les sépar
 
 ## Étape 2 : configurer les filières
 
-Allez dans `Académique → Filières → Nouvelle filière`. Pour chaque filière, renseignez :
+Une **filière** correspond à une discipline d'enseignement (Bâtiment, Informatique, Communication, Travaux Publics, etc.). C'est sur la filière que viennent ensuite se greffer les niveaux d'étude (BTS1, L1, M1…) et les classes.
 
-- **Nom** : `Génie Civil`, `Bâtiment`, `Informatique de Gestion`, etc.
-- **Code** : un code court unique (`GC`, `BAT`, `IG`)
-- **Système académique** : `BTS` ou `LMD`
-- **Tronc commun** : cochez si la filière commence par un semestre commun avant spécialisation
+### 2.1 — Ouvrir la liste des filières
 
-Si votre établissement propose à la fois des BTS et des Licences/Masters, créez deux filières distinctes (`BTS Génie Civil` et `Licence Génie Civil`) — les bulletins et calculs de moyenne diffèrent profondément entre les deux systèmes.
+Toujours dans le menu **Filières & Classes** de la sidebar, cliquez sur l'entrée **Filières** (juste au-dessus de Classes). La page liste toutes les filières existantes avec leur code, leur type, le nombre de niveaux et de matières rattachés.
 
-### Cas particulier : tronc commun
+![Page Gestion des Filières avec la liste des filières existantes et le bouton Nouvelle Filière](/img/docs/superadmin/onboarding/06-filieres-liste.png)
 
-Si vous activez le tronc commun sur une filière, vous devrez préciser :
+En haut à droite, cliquez sur **+ Nouvelle Filière**.
 
-- combien de semestres en tronc commun (généralement 1)
-- les filières de spécialisation cibles (les filières « enfants » de ce tronc commun)
+### 2.2 — Remplir le formulaire
 
-Le module tronc commun déclenche un workflow d'inscription en deux temps : l'étudiant s'inscrit d'abord en tronc commun, puis en spécialisation à l'issue du semestre commun. Le bulletin de la classe d'origine est conservé et la moyenne annuelle agrège les notes du tronc commun et de la spécialisation.
+![Formulaire Nouvelle Filière avec les champs nom, code, description, toggle filière active et section tronc commun](/img/docs/superadmin/onboarding/07-filieres-formulaire.png)
+
+Renseignez :
+
+- **Nom de la filière** *(requis)* — `BATIMENT`, `Communication & Marketing`, `INFORMATIQUE`, `TRAVAUX PUBLICS`. Évitez les abréviations : c'est ce libellé qui apparaît partout dans l'application.
+- **Code** *(requis)* — un code court unique (`BTP`, `INFO`, `TP`, `GES-COM`). Sert d'identifiant technique et de préfixe dans certains exports.
+- **Description** *(optionnel)* — un paragraphe qui décrit la filière. Affiché dans la fiche détaillée et utile pour les futurs guides étudiants.
+- **Filière active** — laissez activé. Une filière inactive est masquée des listes d'inscription mais ses données restent intactes.
+
+### 2.3 — Cas particulier : tronc commun
+
+Si votre filière démarre par un ou plusieurs semestres communs avant de se spécialiser (typiquement Génie Civil → Bâtiment / Travaux Publics au S2), activez le toggle **Cette filière est un tronc commun** dans la section dédiée.
+
+Pour les filières de **spécialisation** qui dépendent d'un tronc commun, c'est l'inverse : laissez le toggle désactivé, mais sélectionnez la filière tronc commun parente dans le dropdown **Filière parent (Tronc Commun)**. Vous devez donc créer le tronc commun en premier, puis ses spécialisations.
+
+<Callout>
+  **Workflow tronc commun.** L'étudiant s'inscrit d'abord en tronc commun, puis en spécialisation à l'issue du ou des semestres communs. Le bulletin agrège les notes du tronc commun et de la spécialisation pour la moyenne annuelle.
+</Callout>
+
+Cliquez sur **Créer la filière**. Vous êtes redirigé vers la liste, qui contient maintenant votre nouvelle filière avec le badge **ACTIVE**. Répétez l'opération pour chacune de vos filières.
 
 ## Étape 3 : créer les niveaux d'étude
 
-Dans `Académique → Niveaux`, créez les niveaux que votre établissement propose. Quelques exemples :
+Le **niveau d'étude** désigne la position dans le cursus (BTS 1ère année, BTS 2e année, Licence 1, Licence 2, Master 1, etc.). C'est ici que se fait la distinction entre les systèmes BTS (cycle court) et LMD (Licence-Master-Doctorat).
 
-| Système | Niveau | Cycle |
-| --- | --- | --- |
-| BTS | BTS1 | Cycle court |
-| BTS | BTS2 | Cycle court |
-| LMD | L1 | Licence |
-| LMD | L2 | Licence |
-| LMD | L3 | Licence |
-| LMD | M1 | Master |
-| LMD | M2 | Master |
+### 3.1 — Ouvrir la liste des niveaux
 
-Chaque niveau possède un **cycle** parent (BTS, Licence, Master, Doctorat) qui sert de filtre dans les rapports et les bulletins.
+Toujours dans la sidebar **Filières & Classes**, cliquez sur **Niveaux d'études**. La page expose un mini-tableau de bord avec quatre KPIs (total niveaux, niveaux actifs, total classes, total matières) puis la liste détaillée.
+
+![Page Gestion des Niveaux d'Études avec 4 KPIs et la liste BTS 1ere année, Licence 1ère année, BTS 2e année, Licence 2ème année](/img/docs/superadmin/onboarding/08-niveaux-liste.png)
+
+En haut à droite, cliquez sur **+ Nouveau Niveau**.
+
+### 3.2 — Remplir le formulaire
+
+![Haut du formulaire Créer un Nouveau Niveau d'Étude avec les champs nom, code, type de formation, année d'étude, libellé complet, description et toggle niveau actif](/img/docs/superadmin/onboarding/09-niveaux-formulaire-haut.png)
+
+Renseignez :
+
+- **Nom du niveau** *(requis)* — par exemple `BTS Première Année` ou `Licence 1`. C'est le libellé court qui apparaît dans les sélecteurs et les bulletins.
+- **Code du niveau** *(requis)* — code court unique (`BTS1`, `L1`, `M2`). Doit être stable dans le temps : c'est lui qui permet aux exports et imports de retrouver le niveau.
+- **Type de formation** *(dropdown)* — `BTS`, `Licence`, `Master`, `Doctorat`. C'est ce champ qui détermine si le niveau suit le système BTS (semestres simples) ou LMD (UE / ECUE / crédits ECTS).
+- **Année d'étude** *(dropdown)* — la position dans le cursus (1ère année, 2ème année, 3ème année…). Sert au calcul de la progression académique de l'étudiant.
+- **Libellé complet** *(optionnel)* — la version longue, par exemple `Brevet de Technicien Supérieur - Première Année`. Utilisé dans certains documents officiels (attestations, bulletins formels).
+- **Description** *(optionnel)* — un paragraphe libre pour le détail interne.
+- **Niveau actif** — laissez coché. Un niveau inactif disparaît des dropdowns d'inscription mais les classes existantes continuent de fonctionner.
+
+Faites défiler vers le bas du formulaire et cliquez sur **Créer le niveau**.
+
+![Bas du formulaire avec les boutons Retour et Créer le niveau (bleu)](/img/docs/superadmin/onboarding/10-niveaux-formulaire-bas.png)
+
+Répétez pour chaque niveau de votre offre. À titre d'exemple, voici une grille typique pour un établissement qui propose à la fois BTS et LMD :
+
+| Type de formation | Année | Nom recommandé | Code |
+| --- | --- | --- | --- |
+| BTS | 1ère année | BTS Première Année | BTS1 |
+| BTS | 2ème année | BTS Deuxième Année | BTS2 |
+| Licence | 1ère année | Licence 1 | L1 |
+| Licence | 2ème année | Licence 2 | L2 |
+| Licence | 3ème année | Licence 3 | L3 |
+| Master | 1ère année | Master 1 | M1 |
+| Master | 2ème année | Master 2 | M2 |
+
+<Callout>
+  **Ne pas confondre niveau et classe.** Un même niveau (`BTS1`) peut être instancié en plusieurs classes selon la filière (`BTS1 Bâtiment`, `BTS1 Informatique`…). Le niveau est un *concept*, la classe est un *groupe d'étudiants*. Vous créerez les classes à l'étape suivante.
+</Callout>
 
 ## Étape 4 : créer les classes
 
