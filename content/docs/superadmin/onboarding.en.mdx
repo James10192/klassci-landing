@@ -305,9 +305,9 @@ On the UE list, each row exposes a coloured action row.
 
 ![UE row with action buttons: play arrow, green plus to add an ECUE, blue chain to link to parcours, blue pencil to edit, red trash to delete](/img/docs/superadmin/onboarding/20-ue-actions-row.png)
 
-Left to right: ▶ expand the ECUE list, **green ➕** add an ECUE, **blue 🔗** link the UE to parcours, ✏️ edit the UE, 🗑️ delete.
+Left to right: <Icon name="play" /> expand the ECUE list, **green <Icon name="plus-circle" className="text-emerald-500" />** add an ECUE, **blue <Icon name="link" className="text-blue-500" />** link the UE to parcours, <Icon name="pencil" /> edit the UE, <Icon name="trash" /> delete.
 
-Click the **green ➕** button to open the ECUE add modal.
+Click the **green <Icon name="plus-circle" className="text-emerald-500" />** button to open the ECUE add modal.
 
 ![Ajouter un ECUE modal with a Crédits de l'UE gauge, two tabs Créer un ECUE / Lier un existant, a form with Nom + Code and contextual parameters (Coefficient, Crédits, Ordre)](/img/docs/superadmin/onboarding/21-ecue-formulaire.png)
 
@@ -321,7 +321,7 @@ Two tabs:
   - **Coefficient** *(default 1)* — weight of the ECUE in the UE's average.
   - **Crédits** *(default 2)* — share of the UE's credits assigned to this ECUE. The credits of every ECUE in the UE must add up to the UE total.
   - **Ordre** *(default 0)* — display order on the report card.
-- **🔗 Lier un existant** — reuses an ECUE already created in another UE (the same ECUE can belong to several UEs with different values).
+- **<Icon name="link" /> Lier un existant** — reuses an ECUE already created in another UE (the same ECUE can belong to several UEs with different values).
 
 <Callout>
   **Values are scoped to this UE.** The coefficient and credits set here apply only in *this* UE. If you later link the same ECUE to another UE, you can give it different values without affecting the first link.
@@ -331,7 +331,7 @@ Click **Créer l'ECUE** (green button). The ECUE is attached to the UE and the c
 
 #### 5.4.3 — Link the UE to one or more parcours
 
-A UE on its own does nothing until it's tied to a parcours and a semester — that's what makes it visible to students. On the UE row, click the **🔗 (blue chain)** button.
+A UE on its own does nothing until it's tied to a parcours and a semester — that's what makes it visible to students. On the UE row, click the **<Icon name="link" className="text-blue-500" /> (blue chain)** button.
 
 ![Lier à des Parcours modal for the UE Technologie de construction, with an empty list and the message Aucun parcours trouvé](/img/docs/superadmin/onboarding/22-ue-parcours.png)
 
@@ -373,9 +373,9 @@ Click **Gestion des Frais**. The page gives you the complete catalogue state at 
 
 The blue banner exposes 4 indicators (total categories, mandatory fees, optional services, active categories) and three global actions in the top right:
 
-- **🌐 Services Optionnels** — direct shortcut to optional-formulas management (step 6.5)
-- **⚙️ Configuration par Classe** — shortcut to the mandatory-amounts matrix (step 6.4)
-- **+ Nouvelle catégorie** — the button we'll use right now
+- **<Icon name="globe" /> Services Optionnels** — direct shortcut to optional-formulas management (step 6.5)
+- **<Icon name="settings" /> Configuration par Classe** — shortcut to the mandatory-amounts matrix (step 6.4)
+- **<Icon name="plus" /> Nouvelle catégorie** — the button we'll use right now
 
 Below the banner, three tabs visually split the catalogue:
 
@@ -383,7 +383,7 @@ Below the banner, three tabs visually split the catalogue:
 - **Services Optionnels** — à-la-carte services (cantine, transport, accommodation)
 - **Frais Administratifs** — paperwork, certificates, special files
 
-Each category card exposes its configuration status ("Configuré par classe" with a `3/28` counter when the matrix isn't done, "Service configuré" for an active optional service), an OBLIGATOIRE or SERVICE GLOBAL badge, and three action buttons: eye (view), pencil (edit category), 🎓 or 🌐 (shortcut to the business config — per-class for mandatory, formulas for optional).
+Each category card exposes its configuration status ("Configuré par classe" with a `3/28` counter when the matrix isn't done, "Service configuré" for an active optional service), an OBLIGATOIRE or SERVICE GLOBAL badge, and three action buttons: <Icon name="eye" /> view, <Icon name="pencil" /> edit category, <Icon name="graduation-cap" /> or <Icon name="globe" /> (shortcut to the business config — per-class for mandatory, formulas for optional).
 
 ### 6.3 — Create a fee category
 
@@ -413,17 +413,17 @@ Click **+ Nouvelle catégorie**. The full-page form opens, split into four secti
 
 A single checkbox, but it changes everything:
 
-- **Frais obligatoire checked** — every enrolled student must pay it, regardless of choice. An amount must be configured for EVERY class (filière × level), or students in unconfigured classes will simply not be billed. This is what step 6.4 takes care of.
+- **Frais obligatoire checked** — every enrolled student must pay it, regardless of choice. The **default amount** entered above applies automatically to every class; in step 6.4 you can override that amount for specific classes (e.g., if BTS1 and the Licence don't share the same enrollment fee).
 - **Frais obligatoire unchecked** — the category becomes an *optional service*. You no longer set per-class amounts; instead you define **formulas** (step 6.5) that eligible students can choose to subscribe to or not.
 
 The pre-filled examples at the bottom (Transport with stop-based variants, Cantine with menu-based variants, etc.) give you a sense of the typical granularity. Click **Créer la catégorie**. You're back on the list with your new entry.
 
-### 6.4 — Configure mandatory amounts (per-class matrix)
+### 6.4 — Override mandatory amounts per class
 
-For every category flagged *mandatory*, the system expects an amount on every class. Three entry points to the matrix page:
+The **default amount** of a mandatory category (entered in step 6.3) already bills every student. The per-class matrix exists to **override** that default for specific classes — for example `Frais d'inscription` defaulting to 150 000 F CFA but raised to 200 000 F CFA for Licence and Master classes. Three entry points to the matrix page:
 
-1. The **⚙️ Configuration par Classe** button in the Gestion des Frais header
-2. The **🎓** button on a mandatory category's card (direct shortcut)
+1. The **<Icon name="settings" /> Configuration par Classe** button in the Gestion des Frais header
+2. The **<Icon name="graduation-cap" />** button on a mandatory category's card (direct shortcut)
 3. Sidebar → **Comptabilité → Configuration Frais**
 
 ![Sidebar with the Configuration Frais entry highlighted under the Comptabilité dropdown](/img/docs/superadmin/onboarding/27-sidebar-config-frais.png)
@@ -455,12 +455,12 @@ The modal lists **every mandatory fee** you created in step 6.3, and for each on
 - **RÉAFFECTÉS** — students whose subsidy is preserved after a reassignment
 - **NON AFFECTÉS** — students paying the full price, without subsidy
 
-Three buttons — **Copier Affectés / Copier Réaffectés / Copier Non Aff.** — duplicate one column's amount to the other two with a single click. Useful when your institution doesn't host MESRS-funded students and bills the same amount to everyone.
+Three buttons — **Copier Affectés / Copier Réaffectés / Copier Non Aff.** — copy the amount from the named column to the **other two** in one click. For example: enter `150 000` in **NON AFFECTÉS** and click **Copier Non Aff.**, both AFFECTÉS and RÉAFFECTÉS get filled with the same value. Handy whenever the same amount applies to multiple affectation statuses.
 
 The **Échéance (jours après inscription)** field overrides the category's default delay for THIS class only. Leave it blank to use the default.
 
 <Callout>
-  **Côte d'Ivoire-specific.** The MESRS (Ministère de l'Enseignement Supérieur et de la Recherche Scientifique) affectation system distributes high-school graduates across institutions and partially subsidises their studies. If your institution doesn't host subsidised students, just enter the same amount in all three columns (one click on **Copier Non Aff.** after filling that column will do).
+  **Côte d'Ivoire-specific.** The MESRS (Ministère de l'Enseignement Supérieur et de la Recherche Scientifique) affectation system distributes high-school graduates across institutions and partially subsidises their studies. The three columns let you differentiate prices per status; if that doesn't apply to your offering, enter the same value everywhere.
 </Callout>
 
 Click **Enregistrer**. The modal closes and the class card updates: counter to `1/2` or `2/2`, percentage recomputed, badge flips to green when everything is filled in.
@@ -471,14 +471,14 @@ For *non-mandatory* categories (cantine, transport, activities…), the setup fo
 
 Two entry points:
 
-1. The **🌐 Services Optionnels** button in the Gestion des Frais header
-2. The **+ Frais Optionnels** button in the Configuration des Frais par Classe header
+1. The **<Icon name="globe" /> Services Optionnels** button in the Gestion des Frais header
+2. The **<Icon name="plus" /> Frais Optionnels** button in the Configuration des Frais par Classe header
 
 #### The Frais Optionnels page
 
 ![Frais Optionnels page with category CANTINE and 4 formulas: Repas complet 455 000, Plat de résistance 300 000, Repat complet plus 555 000, ENtre plat desser 300 000, plus an Ajouter une formule button](/img/docs/superadmin/onboarding/30-frais-optionnels.png)
 
-Every optional category renders as a section with its list of **FORMULES DISPONIBLES**. In the example, CANTINE exposes 4 formulas with their annual prices in F CFA. Each formula row has three buttons on the right: ✏️ edit, 👥 assign, 🗑 delete.
+Every optional category renders as a section with its list of **FORMULES DISPONIBLES**. In the example, CANTINE exposes 4 formulas with their annual prices in F CFA. Each formula row has three buttons on the right: <Icon name="pencil" /> edit, <Icon name="users" /> assign, <Icon name="trash" /> delete.
 
 #### Add a formula
 
@@ -486,7 +486,7 @@ At the bottom of each category, the **+ Ajouter une formule** button reveals an 
 
 #### Target eligible students with Assignments
 
-A formula with no assignment is offered to nobody. Click the **👥** button (people icon — the middle one of the three actions) on the formula's row.
+A formula with no assignment is offered to nobody. Click the **<Icon name="users" />** button (people icon — the middle one of the three actions) on the formula's row.
 
 ![Assignations modal with four assignment-type options: Tous les étudiants selected by default, Par filière, Par niveau, Par classe, and the Assignations actuelles area](/img/docs/superadmin/onboarding/31-assignations-modal.png)
 
@@ -504,9 +504,9 @@ For each selected type, chips appear so you can tick the values you want. The **
 
 Three buttons at the bottom:
 
-- **🗑 Tout supprimer** — clears every assignment (the formula becomes invisible to students).
-- **× Fermer** — close without saving.
-- **💾 Sauvegarder** — persist the changes.
+- **<Icon name="trash" /> Tout supprimer** — clears every assignment (the formula becomes invisible to students).
+- **<Icon name="x" /> Fermer** — close without saving.
+- **<Icon name="save" /> Sauvegarder** — persist the changes.
 
 <Callout type="warn">
   **A formula with no assignment is invisible.** If you create a formula but never open the Assignations modal, no student will be able to subscribe. Always check there's at least one chip in **ASSIGNATIONS ACTUELLES** before closing.

@@ -305,9 +305,9 @@ Sur la liste des UE, chaque ligne expose une rangée d'actions colorées.
 
 ![Ligne d'UE avec les boutons d'action : flèche play, vert plus pour ajouter ECUE, bleu chaîne pour lier aux parcours, bleu crayon pour modifier, rouge poubelle pour supprimer](/img/docs/superadmin/onboarding/20-ue-actions-row.png)
 
-De gauche à droite : ▶ déplier la liste des ECUE, **➕ vert** ajouter un ECUE, **🔗 bleu** lier l'UE à des parcours, ✏️ modifier l'UE, 🗑️ supprimer.
+De gauche à droite : <Icon name="play" /> déplier la liste des ECUE, <Icon name="plus-circle" className="text-emerald-500" /> **vert** ajouter un ECUE, <Icon name="link" className="text-blue-500" /> **bleu** lier l'UE à des parcours, <Icon name="pencil" /> modifier l'UE, <Icon name="trash" /> supprimer.
 
-Cliquez sur le **bouton vert ➕** pour ouvrir la modale d'ajout d'ECUE.
+Cliquez sur le **bouton vert <Icon name="plus-circle" className="text-emerald-500" />** pour ouvrir la modale d'ajout d'ECUE.
 
 ![Modale Ajouter un ECUE avec jauge Crédits de l'UE, deux onglets Créer un ECUE / Lier un existant, formulaire Nom + Code + paramètres contextuels (Coefficient, Crédits, Ordre)](/img/docs/superadmin/onboarding/21-ecue-formulaire.png)
 
@@ -321,7 +321,7 @@ Deux onglets :
   - **Coefficient** *(par défaut 1)* — poids de l'ECUE dans la moyenne de l'UE.
   - **Crédits** *(par défaut 2)* — part des crédits de l'UE attribuée à cet ECUE. La somme des crédits de tous les ECUE doit égaler le total de l'UE.
   - **Ordre** *(par défaut 0)* — ordre d'affichage dans le bulletin.
-- **🔗 Lier un existant** — réutilise un ECUE déjà créé dans une autre UE (un même ECUE peut appartenir à plusieurs UE avec des valeurs différentes).
+- **<Icon name="link" /> Lier un existant** — réutilise un ECUE déjà créé dans une autre UE (un même ECUE peut appartenir à plusieurs UE avec des valeurs différentes).
 
 <Callout>
   **Valeurs contextuelles à l'UE.** Le coefficient et les crédits saisis ici ne s'appliquent qu'à *cette* UE. Si vous liez le même ECUE à une autre UE plus tard, vous pourrez lui donner d'autres valeurs sans casser la première liaison.
@@ -331,7 +331,7 @@ Cliquez sur **Créer l'ECUE** (bouton vert). L'ECUE est rattaché à l'UE et la 
 
 #### 5.4.3 — Lier l'UE à un ou plusieurs parcours
 
-Une UE seule ne sert à rien tant qu'elle n'est pas accrochée à un parcours et à un semestre — c'est ce qui la rend visible aux étudiants. Sur la ligne UE, cliquez sur le **bouton 🔗 (chaîne bleue)**.
+Une UE seule ne sert à rien tant qu'elle n'est pas accrochée à un parcours et à un semestre — c'est ce qui la rend visible aux étudiants. Sur la ligne UE, cliquez sur le **bouton <Icon name="link" className="text-blue-500" /> (chaîne bleue)**.
 
 ![Modale Lier à des Parcours pour l'UE Technologie de construction, avec une liste vide et le message Aucun parcours trouvé](/img/docs/superadmin/onboarding/22-ue-parcours.png)
 
@@ -373,9 +373,9 @@ Cliquez sur **Gestion des Frais**. La page vous donne en un écran l'état compl
 
 Le bandeau bleu expose 4 indicateurs (total catégories, frais obligatoires, services optionnels, catégories actives) et trois actions globales en haut à droite :
 
-- **🌐 Services Optionnels** — raccourci direct vers la gestion des formules optionnelles (étape 6.5)
-- **⚙️ Configuration par Classe** — raccourci vers la matrice des montants obligatoires (étape 6.4)
-- **+ Nouvelle catégorie** — le bouton qu'on utilise tout de suite
+- **<Icon name="globe" /> Services Optionnels** — raccourci direct vers la gestion des formules optionnelles (étape 6.5)
+- **<Icon name="settings" /> Configuration par Classe** — raccourci vers la matrice des montants obligatoires (étape 6.4)
+- **<Icon name="plus" /> Nouvelle catégorie** — le bouton qu'on utilise tout de suite
 
 Sous le bandeau, trois onglets séparent visuellement :
 
@@ -383,7 +383,7 @@ Sous le bandeau, trois onglets séparent visuellement :
 - **Services Optionnels** — services à la carte (cantine, transport, hébergement)
 - **Frais Administratifs** — papiers, attestations, dossiers spéciaux
 
-Chaque carte de catégorie expose son statut de configuration (« Configuré par classe » avec un compteur `3/28` quand la matrice n'est pas finie, « Service configuré » pour un service optionnel actif), un badge OBLIGATOIRE ou SERVICE GLOBAL, et trois boutons d'action : œil (consulter), crayon (modifier la catégorie), 🎓 ou 🌐 (raccourci vers la configuration métier — par classe pour obligatoire, formules pour optionnel).
+Chaque carte de catégorie expose son statut de configuration (« Configuré par classe » avec un compteur `3/28` quand la matrice n'est pas finie, « Service configuré » pour un service optionnel actif), un badge OBLIGATOIRE ou SERVICE GLOBAL, et trois boutons d'action : <Icon name="eye" /> consulter, <Icon name="pencil" /> modifier la catégorie, <Icon name="graduation-cap" /> ou <Icon name="globe" /> (raccourci vers la configuration métier — par classe pour obligatoire, formules pour optionnel).
 
 ### 6.3 — Créer une catégorie de frais
 
@@ -413,17 +413,17 @@ Cliquez sur **+ Nouvelle catégorie**. Le formulaire s'ouvre en pleine page, div
 
 Une seule case à cocher mais elle change tout :
 
-- **Frais obligatoire coché** — tout étudiant inscrit doit le payer, indépendamment de son choix. Un montant doit être configuré pour CHAQUE classe (filière × niveau), sinon les étudiants de cette classe ne se verront rien facturer. C'est l'étape 6.4 qui rentre en jeu.
+- **Frais obligatoire coché** — tout étudiant inscrit doit le payer, indépendamment de son choix. Le **montant par défaut** saisi plus haut s'applique automatiquement à toutes les classes ; à l'étape 6.4 vous pourrez surcharger ce montant pour des classes spécifiques (par exemple si la BTS1 et la Licence n'ont pas le même tarif d'inscription).
 - **Frais obligatoire décoché** — la catégorie devient un *service optionnel*. Vous ne configurez plus de montants par classe ; à la place vous définissez des **formules** (étape 6.5) que les étudiants éligibles pourront choisir de souscrire ou non.
 
 Les exemples préremplis en bas du formulaire (Transport avec variants par arrêt, Cantine avec variants par menu, etc.) sont là pour vous donner une idée de la granularité courante. Cliquez **Créer la catégorie**. Vous revenez à la liste avec votre nouvelle entrée.
 
-### 6.4 — Configurer les montants obligatoires (matrice par classe)
+### 6.4 — Surcharger les montants obligatoires par classe
 
-Pour chaque catégorie marquée *obligatoire*, le système attend un montant pour chaque classe. Trois entrées vers la page matricielle :
+Le **montant par défaut** d'une catégorie obligatoire (saisi à l'étape 6.3) facture déjà tous les étudiants. La matrice par classe sert à **surcharger** ce montant pour des classes spécifiques — par exemple `Frais d'inscription` à 150 000 F CFA par défaut, mais 200 000 F CFA pour les classes Licence et Master. Trois entrées vers la page matricielle :
 
-1. Bouton **⚙️ Configuration par Classe** dans le header de la page Gestion des Frais
-2. Bouton **🎓** sur la carte d'une catégorie obligatoire (raccourci direct)
+1. Bouton **<Icon name="settings" /> Configuration par Classe** dans le header de la page Gestion des Frais
+2. Bouton **<Icon name="graduation-cap" />** sur la carte d'une catégorie obligatoire (raccourci direct)
 3. Sidebar → **Comptabilité → Configuration Frais**
 
 ![Sidebar avec l'entrée Configuration Frais surlignée sous le dropdown Comptabilité](/img/docs/superadmin/onboarding/27-sidebar-config-frais.png)
@@ -455,12 +455,12 @@ Le modal liste **tous les frais obligatoires** que vous avez créés à l'étape
 - **RÉAFFECTÉS** — étudiants dont la subvention est maintenue après une réaffectation
 - **NON AFFECTÉS** — étudiants payant le tarif complet, sans subvention
 
-Trois boutons **Copier Affectés / Copier Réaffectés / Copier Non Aff.** permettent de dupliquer un montant vers les deux autres colonnes en un clic — pratique quand votre établissement n'accueille pas de bourses MESRS et facture le même tarif à tous.
+Trois boutons **Copier Affectés / Copier Réaffectés / Copier Non Aff.** copient la valeur de la colonne nommée vers les **deux autres** en un clic. Par exemple : saisir `150 000` dans **NON AFFECTÉS** puis cliquer **Copier Non Aff.** remplit AFFECTÉS et RÉAFFECTÉS avec la même valeur. Pratique quand un même tarif s'applique à plusieurs statuts d'affectation.
 
 Le champ **Échéance (jours après inscription)** override le délai par défaut de la catégorie pour CETTE classe seulement. Laissez vide pour utiliser le défaut.
 
 <Callout>
-  **Spécifique Côte d'Ivoire.** Le système d'affectation MESRS (Ministère de l'Enseignement Supérieur et de la Recherche Scientifique) répartit les bacheliers entre les établissements et finance partiellement leurs études. Si votre établissement n'accueille pas d'étudiants subventionnés, mettez le même montant dans les trois colonnes (un clic sur **Copier Non Aff.** suffit après avoir saisi cette colonne).
+  **Spécifique Côte d'Ivoire.** Le système d'affectation MESRS (Ministère de l'Enseignement Supérieur et de la Recherche Scientifique) répartit les bacheliers entre les établissements et finance partiellement leurs études. Les trois colonnes permettent de différencier les tarifs selon le statut de l'étudiant ; si votre offre n'est pas concernée, saisissez la même valeur partout.
 </Callout>
 
 Cliquez **Enregistrer**. Le modal se ferme et la carte de la classe se met à jour : compteur `1/2` ou `2/2`, pourcentage recalculé, badge qui passe au vert quand tout est rempli.
@@ -471,14 +471,14 @@ Pour les catégories *non obligatoires* (cantine, transport, activités…), le 
 
 Deux entrées :
 
-1. Bouton **🌐 Services Optionnels** dans le header de Gestion des Frais
-2. Bouton **+ Frais Optionnels** dans le header de Configuration des Frais par Classe
+1. Bouton **<Icon name="globe" /> Services Optionnels** dans le header de Gestion des Frais
+2. Bouton **<Icon name="plus" /> Frais Optionnels** dans le header de Configuration des Frais par Classe
 
 #### La page Frais Optionnels
 
 ![Page Frais Optionnels avec catégorie CANTINE et 4 formules : Repas complet 455 000, Plat de résistance 300 000, Repat complet plus 555 000, ENtre plat desser 300 000, plus bouton Ajouter une formule](/img/docs/superadmin/onboarding/30-frais-optionnels.png)
 
-Chaque catégorie optionnelle s'affiche comme une section avec sa liste de **FORMULES DISPONIBLES**. Dans l'exemple, la catégorie CANTINE expose 4 formules avec leurs prix annuels en F CFA. Chaque ligne de formule a trois boutons à droite : ✏️ modifier, 👥 assigner, 🗑 supprimer.
+Chaque catégorie optionnelle s'affiche comme une section avec sa liste de **FORMULES DISPONIBLES**. Dans l'exemple, la catégorie CANTINE expose 4 formules avec leurs prix annuels en F CFA. Chaque ligne de formule a trois boutons à droite : <Icon name="pencil" /> modifier, <Icon name="users" /> assigner, <Icon name="trash" /> supprimer.
 
 #### Ajouter une formule
 
@@ -486,7 +486,7 @@ En bas de chaque catégorie, le bouton **+ Ajouter une formule** déroule un min
 
 #### Cibler les étudiants éligibles avec les Assignations
 
-Une formule sans assignation n'est proposée à personne. Cliquez sur le bouton **👥** (icône people, au milieu des trois boutons d'action) sur la ligne de la formule.
+Une formule sans assignation n'est proposée à personne. Cliquez sur le bouton **<Icon name="users" />** (icône people, au milieu des trois boutons d'action) sur la ligne de la formule.
 
 ![Modal Assignations avec quatre options de type d'assignation : Tous les étudiants sélectionné par défaut, Par filière, Par niveau, Par classe, et la zone Assignations actuelles](/img/docs/superadmin/onboarding/31-assignations-modal.png)
 
@@ -504,9 +504,9 @@ Le modal **Assignations** propose quatre types ciblage, du plus ouvert au plus r
 
 Trois boutons en bas du modal :
 
-- **🗑 Tout supprimer** — vide toutes les assignations (la formule devient invisible aux étudiants).
-- **× Fermer** — annule sans sauver.
-- **💾 Sauvegarder** — persiste les changements.
+- **<Icon name="trash" /> Tout supprimer** — vide toutes les assignations (la formule devient invisible aux étudiants).
+- **<Icon name="x" /> Fermer** — annule sans sauver.
+- **<Icon name="save" /> Sauvegarder** — persiste les changements.
 
 <Callout type="warn">
   **Une formule sans assignation est invisible.** Si vous créez une formule mais n'ouvrez jamais le modal Assignations, aucun étudiant ne pourra la souscrire. Vérifiez toujours qu'il y a au moins une chip dans **ASSIGNATIONS ACTUELLES** avant de fermer.
