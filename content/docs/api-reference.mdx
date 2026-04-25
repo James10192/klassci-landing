@@ -1,0 +1,340 @@
+---
+title: API Reference — KLASSCI LMS
+description: Catalogue complet des endpoints publics /api/lms/* pour intégrer un LMS externe à KLASSCI.
+---
+
+Cette référence documente les endpoints publics `/api/lms/*` exposés par KLASSCI pour permettre à un LMS (Learning Management System) externe de se connecter à un établissement, lire la structure académique, synchroniser les cours, les présences et les notes.
+
+<Callout>
+  Les endpoints internes `/api/cli/*` et `/api/admin/*` ne sont **jamais** documentés publiquement. Cette page liste uniquement la surface contractuelle stable destinée aux intégrateurs LMS.
+</Callout>
+
+## Conventions
+
+- **Base URL** : `https://<tenant>.klassci.com/api/lms` (ex : `https://esbtp-abidjan.klassci.com/api/lms`)
+- **Format** : JSON en entrée et en sortie. `Content-Type: application/json` requis sur les requêtes POST/PUT.
+- **Auth** : la plupart des endpoints requièrent un Bearer token Sanctum (`Authorization: Bearer {token}`). Les endpoints de découverte sont publics, rate-limités.
+- **Rate limit par défaut** : `api` (60 req/min/IP). Les endpoints de découverte utilisent `lms-discovery` (10 req/min/IP).
+- **Erreurs** : codes HTTP standards. 401 (token invalide ou expiré), 403 (droits insuffisants), 404 (ressource introuvable), 422 (validation), 429 (rate limit), 500 (erreur serveur).
+
+## Sommaire
+
+- [Découverte multi-tenant](#découverte-multi-tenant)
+- [Authentification](#authentification)
+- [Structure académique](#structure-académique)
+- [Planning et évaluations](#planning-et-évaluations)
+- [Visioconférences](#visioconférences-sync-lms--klassci)
+- [Données en écriture](#données-en-écriture)
+- [Notifications](#notifications)
+
+---
+
+## Découverte multi-tenant
+
+Endpoints publics permettant à un client LMS de découvrir l'établissement KLASSCI auquel il se connecte. Pas de token requis. Rate-limiting strict pour prévenir l'énumération.
+
+### `GET /api/lms/tenant-info`
+
+Informations publiques de l'établissement.
+
+Retourne le nom de l'établissement, son code tenant, ses logos publics et son fuseau horaire. Utile pour personnaliser l'écran de connexion d'une application cliente.
+
+**Réponse**
+
+```json
+{
+  "tenant_code": "esbtp-abidjan",
+  "name": "ESBTP Abidjan",
+  "logo_url": "https://...",
+  "timezone": "Africa/Abidjan"
+}
+```
+
+Rate-limit `api` (60 req/min/IP).
+
+### `POST /api/lms/auth/check-user`
+
+Vérifier qu'un utilisateur existe.
+
+Vérifie la présence d'un username/email côté KLASSCI sans révéler le rôle ni d'autre information sensible. Réponse minimaliste : `exists: true|false`.
+
+| Paramètre | In | Type | Requis | Description |
+| --- | --- | --- | --- | --- |
+| `identifier` | body | string | oui | Username ou email à vérifier |
+
+**Réponse**
+
+```json
+{ "exists": true }
+```
+
+Rate-limit `lms-discovery` (10 req/min/IP). Aucun champ rôle ou statut retourné.
+
+### `POST /api/lms/auth/check-availability`
+
+Health-check du tenant.
+
+Vérifie que le tenant KLASSCI est joignable et opérationnel. Renvoie l'année universitaire courante et le statut des modules activés.
+
+**Réponse**
+
+```json
+{
+  "available": true,
+  "current_year": "2025-2026",
+  "modules": ["..."]
+}
+```
+
+Rate-limit `lms-discovery`.
+
+### `GET /api/lms/auth/documentation`
+
+Document de référence machine-readable.
+
+Retourne un document JSON décrivant les endpoints disponibles. Utile pour générer dynamiquement un client typé.
+
+---
+
+## Authentification
+
+Flow Sanctum standard. Récupération d'un Bearer token via login, puis utilisation du header `Authorization: Bearer {token}` sur toutes les requêtes protégées.
+
+### `POST /api/lms/auth/login`
+
+Authentifier un utilisateur et émettre un token.
+
+Accepte un `identifier` (username ou email) et un `password`. En cas de succès, retourne un token Sanctum à utiliser sur les routes protégées. Le token n'expire pas tant qu'il n'est pas révoqué via `/logout`.
+
+| Paramètre | In | Type | Requis | Description |
+| --- | --- | --- | --- | --- |
+| `identifier` | body | string | oui | Username ou email |
+| `password` | body | string | oui | Mot de passe en clair (transmis sur HTTPS uniquement) |
+| `device_name` | body | string | non | Nom optionnel pour identifier le device dans la table `personal_access_tokens` |
+
+**Réponse**
+
+```json
+{
+  "token": "1|abc...xyz",
+  "user": { "id": 12, "name": "...", "role": "enseignant" }
+}
+```
+
+### `GET /api/lms/auth/me`
+
+Profil de l'utilisateur authentifié. Auth : Bearer.
+
+Retourne les informations du compte associé au token. Utile pour valider que le token est encore actif et récupérer le rôle de l'utilisateur.
+
+### `GET /api/lms/auth/check`
+
+Sonde de validité du token. Auth : Bearer.
+
+Léger health-check : retourne 200 si le token est valide, 401 sinon.
+
+### `POST /api/lms/auth/logout`
+
+Révoquer le token courant. Auth : Bearer.
+
+Supprime le token utilisé pour la requête. Les autres tokens du même utilisateur restent actifs.
+
+### `POST /api/lms/auth/logout-all`
+
+Révoquer tous les tokens de l'utilisateur. Auth : Bearer.
+
+Supprime tous les Sanctum tokens du compte. Utile en cas de compromission ou de changement de mot de passe.
+
+---
+
+## Structure académique
+
+Lecture seule. Filières, niveaux d'étude, classes et matières de l'année universitaire courante. Auth : Bearer.
+
+### `GET /api/lms/structure`
+
+Vue d'ensemble organisationnelle.
+
+Retourne l'arborescence complète : filières → niveaux → classes pour l'année courante. Utile pour initialiser un menu de navigation côté client.
+
+### `GET /api/lms/filieres`
+
+Liste des filières.
+
+Retourne toutes les filières actives de l'établissement avec leur code, leur système académique (BTS/LMD) et leur indicateur de tronc commun.
+
+### `GET /api/lms/niveaux-etudes`
+
+Liste des niveaux d'étude.
+
+Retourne tous les niveaux d'étude (BTS1, BTS2, L1, L2, L3, M1, M2) avec leur cycle parent.
+
+### `GET /api/lms/matieres`
+
+Matières accessibles à l'utilisateur.
+
+Retourne les matières filtrées par rôle : un enseignant ne voit que ses matières, un étudiant celles de sa classe, un coordinateur celles de sa filière. Pour le LMD, inclut le rattachement UE.
+
+| Paramètre | In | Type | Requis | Description |
+| --- | --- | --- | --- | --- |
+| `classe_id` | query | int | non | Filtrer par classe (selon les permissions) |
+
+### `GET /api/lms/matieres/{id}`
+
+Détail d'une matière.
+
+Retourne le coefficient, le volume horaire, le cycle de la matière, et la liste des évaluations programmées sur l'année courante.
+
+### `GET /api/lms/classes`
+
+Liste des classes accessibles.
+
+Retourne les classes filtrées par rôle. Inclut le nombre d'étudiants inscrits (`workflow_step = etudiant_cree` uniquement).
+
+### `GET /api/lms/classes/{id}`
+
+Détail d'une classe.
+
+Retourne les caractéristiques de la classe, son effectif réel, ses places restantes, ses matières et son emploi du temps.
+
+### `GET /api/lms/classes/{id}/etudiants`
+
+Étudiants inscrits dans une classe.
+
+Retourne uniquement les étudiants avec `workflow_step = etudiant_cree` (inscriptions validées). Les pré-inscriptions et brouillons ne sont jamais exposés.
+
+L'utilisateur doit avoir une permission de lecture sur la classe ciblée (vérifié via Policy).
+
+### `GET /api/lms/enseignants`
+
+Liste des enseignants actifs.
+
+Retourne les enseignants avec leur nom, leur matricule et les matières qu'ils encadrent. Le numéro de téléphone et l'email ne sont retournés qu'aux administrateurs.
+
+---
+
+## Planning et évaluations
+
+Lecture seule. Emploi du temps, séances de cours et évaluations programmées. Auth : Bearer.
+
+### `GET /api/lms/emploi-temps`
+
+Emploi du temps filtré par rôle.
+
+Pour un étudiant, retourne les séances de sa classe. Pour un enseignant, ses séances. Pour un coordinateur, celles de sa filière. Format compatible iCalendar (date, heure début/fin, salle, matière).
+
+| Paramètre | In | Type | Requis | Description |
+| --- | --- | --- | --- | --- |
+| `date_debut` | query | date | non | Borne inférieure (ISO 8601) |
+| `date_fin` | query | date | non | Borne supérieure (ISO 8601) |
+
+### `GET /api/lms/evaluations`
+
+Évaluations programmées.
+
+Retourne les évaluations à venir (devoir, partiel, examen final) accessibles à l'utilisateur. Inclut la date, la matière, le coefficient et le type.
+
+### `GET /api/lms/me/dashboard`
+
+Dashboard étudiant (rôle étudiant uniquement).
+
+Retourne un résumé personnalisé : prochaines séances, dernières notes, taux de présence, solde de scolarité, alertes éventuelles.
+
+### `GET /api/lms/me/teacher-dashboard`
+
+Dashboard enseignant (rôle enseignant uniquement).
+
+Retourne les KPIs enseignant : prochaines séances à émarger, évaluations à corriger, classes encadrées, taux de présence moyen sur les cours dispensés.
+
+---
+
+## Visioconférences (sync LMS → KLASSCI)
+
+Endpoints permettant à un LMS externe de gérer les rooms vidéo et de remonter les présences vidéo dans KLASSCI. Auth : Bearer.
+
+### `GET /api/lms/seances/upcoming`
+
+Séances à venir éligibles à une room vidéo.
+
+Retourne les séances de cours qui doivent commencer prochainement et pour lesquelles le LMS doit créer une salle de visioconférence.
+
+### `GET /api/lms/seances/{id}/participants`
+
+Participants attendus à une séance.
+
+Retourne la liste des étudiants inscrits à la classe de la séance (uniquement ceux dont l'inscription est validée).
+
+### `POST /api/lms/seances/{id}/validate-participant`
+
+Valider la connexion d'un participant.
+
+Le LMS appelle cet endpoint quand un étudiant rejoint la room vidéo. KLASSCI vérifie qu'il fait bien partie de la classe et retourne ok/refusé.
+
+| Paramètre | In | Type | Requis | Description |
+| --- | --- | --- | --- | --- |
+| `user_id` | body | int | oui | ID utilisateur KLASSCI |
+
+### `POST /api/lms/attendances/from-video-session`
+
+Synchroniser les présences depuis une session vidéo.
+
+À la fin d'une session vidéo, le LMS pousse la liste des participants effectifs avec leur durée de présence. KLASSCI crée les enregistrements de présence correspondants.
+
+| Paramètre | In | Type | Requis | Description |
+| --- | --- | --- | --- | --- |
+| `seance_id` | body | int | oui | Identifiant KLASSCI de la séance |
+| `participants` | body | array | oui | Tableau d'objets `{ user_id, joined_at, left_at }` |
+
+---
+
+## Données en écriture
+
+Endpoints permettant au LMS d'écrire dans KLASSCI : notes des évaluations passées en ligne, présences des cours en ligne, mise à jour du statut d'un cours. Auth : Bearer.
+
+### `POST /api/lms/evaluations/{id}/notes`
+
+Soumettre les notes d'une évaluation.
+
+Le LMS pousse les notes obtenues à une évaluation passée en ligne. KLASSCI met à jour les notes existantes ou les crée. Les permissions sont vérifiées : seul le LMS authentifié comme enseignant de la matière peut écrire.
+
+| Paramètre | In | Type | Requis | Description |
+| --- | --- | --- | --- | --- |
+| `notes` | body | array | oui | Tableau d'objets `{ etudiant_id, note, commentaire }` |
+
+Idempotent : envoyer la même note 2 fois ne crée pas de doublon.
+
+### `POST /api/lms/cours/{id}/presences`
+
+Enregistrer les présences à un cours.
+
+Crée ou met à jour les présences pour une séance de cours en ligne. Réservé aux enseignants ou administrateurs autorisés sur la séance.
+
+### `PUT /api/lms/cours/{id}/statut`
+
+Mettre à jour le statut d'un cours.
+
+Marque une séance comme `terminee` (avec heure de fin réelle), `annulee` ou `reportee`. Met à jour le suivi des heures réalisées.
+
+---
+
+## Notifications
+
+Envoi de rappels et lecture des préférences de notification. Auth : Bearer.
+
+### `POST /api/lms/notifications/send-session-reminder`
+
+Envoyer un rappel de séance.
+
+Déclenche l'envoi d'un email/notification aux participants d'une séance à venir. Utilisé par le LMS pour automatiser les rappels avant un cours en ligne.
+
+### `GET /api/lms/notifications/preferences/{userId}`
+
+Préférences de notification d'un utilisateur.
+
+Retourne le détail des préférences de notification (email/SMS/push) de l'utilisateur ciblé. Accessible uniquement si l'appelant a la permission de gérer cet utilisateur.
+
+---
+
+## Bibliothèques clientes
+
+Aucune bibliothèque officielle n'est fournie pour l'instant. Le document machine-readable accessible via `GET /api/lms/auth/documentation` permet de générer un client typé dans n'importe quel langage. Pour toute question d'intégration, écrire à [contact@klassci.com](mailto:contact@klassci.com).
