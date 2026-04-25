@@ -19,6 +19,7 @@ export default async function Layout({ children, params }: LayoutProps) {
   return (
     <DocsLayout
       tree={tree}
+      i18n
       nav={{
         title: (
           <span className="inline-flex items-center gap-2">
