@@ -456,7 +456,7 @@ This is the single most useful page at the start of the year: you see at a glanc
 
 ### Re-enrollment for the next year
 
-Do **not** create a brand-new enrollment for an existing student. Use **Students → Re-enrollments**: the form starts from the existing student record, the matricule is preserved, and only the new academic year's data (class, MESRS status, fees, initial payment) needs to be entered. Exact details depend on your tenant configuration.
+Do **not** create a brand-new enrollment for an existing student. Use **Students → Re-enrollments**: the form starts from the existing student record, the matricule is preserved, and only the new academic year's data (class, MESRS status, fees, initial payment) needs to be entered. Re-enrollment also handles **the previous year's outstanding balances** — you can carry them over to the new enrollment or write them off depending on your tenant settings. The new enrollment is created at the *Documents complete* step with *Active* status (no return to *Prospect*).
 
 ### « Conditional » enrollment
 
@@ -471,15 +471,25 @@ Final validation **always requires at least one validated payment** — no excep
 
 ### Cancellation before validation
 
-From the **Enrollment Administration page** (link above), **<Icon name="x" /> Cancel** action on the enrollment row. No fee is billed, the matricule is freed, the file leaves the active listings (kept in archive).
+From the **Enrollment Administration page** (link above), **<Icon name="x" /> Cancel** action on the enrollment row. Effects:
+
+- The enrollment moves to **status = cancelled**; the reason and cancellation date are recorded in the observations.
+- No fee is billed.
+- The file stays in the database (no physical delete) but leaves listings filtered on *status = active*.
+- **The matricule stays bound to the student** — it is *not* released, on purpose, to keep history coherent.
+- If the cancelled enrollment is the **only active enrollment** of the student, their user account is automatically deactivated (`etudiant.statut='inactif'`, `user.is_active=false`).
 
 ### Cancellation after validation
 
-Possible but the history is kept: the student account is deactivated, fees already paid stay visible in accounting (refunds are your call). Reserved for profiles allowed to delete an enrollment (super-administrator typically).
+Same method (`annulerInscription`) — no specific gating depending on whether the enrollment is *Prospect* or *Active*. The history is kept: status `cancelled` + recorded observations, payments already collected stay in the database with their original status (refunds are your call). The student account is deactivated **only when no other active enrollment remains**. A physical delete of the enrollment row goes through a separate route protected by a higher permission.
 
 ### Optional fees subscribed after validation
 
-Possible at any time from the enrollment record (**Available Optional Fees** zone) or from the student record's **Finances** tab. The amount is added to the remaining balance.
+Available at any time from the **enrollment record**, **Available Optional Fees** zone: click **<Icon name="plus-circle" /> Subscribe student** on the fee card. The amount is added to the remaining balance.
+
+<Callout type="warn">
+  **No subscription from the student record's Finances tab.** That tab only exposes *Financial Situation*, *PDF Statement* and *Record a payment* — to subscribe a new optional fee, you have to go through the enrollment record.
+</Callout>
 
 ## At a glance
 
@@ -496,7 +506,7 @@ New Enrollment -> 5-section form -> Save
                          |
                 Step 2: Validate definitively
                          |
-                Active student + Account created
+                Active student + Account activated
                          |
         Appears in class lists (real headcount)
                          |

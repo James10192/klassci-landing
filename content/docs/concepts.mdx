@@ -38,6 +38,10 @@ KLASSCI est pensé pour les profils suivants :
 Les rôles disposent de permissions granulaires gérées via Spatie Permission. Un super-administrateur peut activer ou désactiver des **modules complets** (LMD, comptabilité, communication...) selon le plan de l'établissement.
 
 <Callout>
+  **Disponibilité des rôles.** La liste ci-dessus reflète la matrice fonctionnelle complète de KLASSCI. Certains rôles (enseignant, comptable, coordinateur, caissier) sont créés à l'activation des modules concernés ou via les seeders étendus — sur un tenant fraîchement provisionné, seuls les rôles `superAdmin`, `secretaire` et `etudiant` sont garantis dès la première connexion.
+</Callout>
+
+<Callout>
   **Pas de rôle parent distinct.** En contexte africain, le flow d'inscription ne lie pas fiablement un parent à plusieurs enfants. Les parents utilisent donc le compte de leur enfant pour suivre notes, bulletin, situation financière et emploi du temps.
 </Callout>
 
@@ -49,7 +53,7 @@ Quelques termes que vous croiserez souvent dans la plateforme et dans le reste d
 - **Niveau d'étude** — l'année dans le cursus (BTS1, BTS2, L1, L2, L3, M1, M2). Un niveau appartient à un cycle (BTS, Licence, Master).
 - **Classe** — l'unité opérationnelle qui regroupe des étudiants pour une année universitaire donnée. Toujours liée à une filière + un niveau d'étude.
 - **Année universitaire** — la période académique (ex. : 2025-2026). Une seule est marquée comme « courante » à la fois.
-- **Inscription** — le lien entre un étudiant et une classe pour une année universitaire. Suit un workflow en 3 étapes principales (**Prospect** → **En validation** → **Active**) qui détermine la visibilité de l'étudiant dans les effectifs.
+- **Inscription** — le lien entre un étudiant et une classe pour une année universitaire. Suit un workflow en 3 étapes principales du flux normal : **Prospect** → **En validation** → **Compte étudiant créé** (qui détermine la visibilité de l'étudiant dans les effectifs). Deux étapes marginales existent aussi côté code : *documents complets* (utilisée par la réinscription) et *validé* (état transitionnel).
 - **Matière** — l'unité d'enseignement à laquelle on attache des notes. En LMD, une matière est une **ECUE** liée à une **UE** (Unité d'Enseignement) avec des crédits ECTS.
 - **Évaluation** — un type d'évaluation (devoir, partiel, examen final, projet) configuré pour une matière.
 - **Note** — la note d'un étudiant à une évaluation donnée.
@@ -64,19 +68,19 @@ KLASSCI est accessible depuis n'importe quel navigateur moderne (Chrome, Firefox
 Chaque établissement dispose d'une URL dédiée du type `https://votre-ecole.klassci.com`. Sur mobile, l'interface est entièrement responsive : les enseignants saisissent leurs notes depuis leur téléphone sans application native dédiée.
 
 <Callout>
-  **Sessions et mots de passe.** Les sessions expirent au bout de 12 heures d'inactivité. Si vous perdez votre mot de passe, utilisez le lien « Mot de passe oublié » sur la page de connexion : un email de réinitialisation est envoyé sous 60 secondes. Les mots de passe expirent au bout de 6 mois avec alerte 1 mois avant.
+  **Sessions et mots de passe.** Les sessions expirent au bout de **2 heures d'inactivité** (`SESSION_LIFETIME=120` minutes par défaut). Si vous perdez votre mot de passe, utilisez le lien « Mot de passe oublié » sur la page de connexion ; le délai d'arrivée de l'email dépend de la configuration SMTP de votre tenant. Les mots de passe expirent au bout de **6 mois** avec une alerte **1 mois avant** l'expiration.
 </Callout>
 
 ## Sécurité de vos données
 
 KLASSCI applique plusieurs niveaux de protection :
 
-- **Isolation par tenant** — chaque école a sa propre base MySQL, hébergée séparément (multi-Laravel filesystem-level, pas multi-tenancy logique).
-- **HTTPS obligatoire** — toutes les communications sont chiffrées (TLS 1.3 sur les domaines klassci.com).
-- **Permissions par rôle** — un comptable ne voit pas les notes, un enseignant ne voit pas la comptabilité.
-- **Audit IDOR** — protection systématique contre les accès directs non autorisés (`Policy` Laravel sur les ressources sensibles).
-- **Rate limiting** — les routes monétaires et d'authentification sont limitées pour bloquer les attaques en force brute.
-- **Sauvegardes** — sauvegardes automatiques quotidiennes, conservées 30 jours.
+- **Isolation par tenant** — chaque école a sa propre base MySQL et son propre dossier Laravel sur le serveur (isolation au niveau filesystem, pas multi-tenancy logique).
+- **HTTPS obligatoire** — toutes les communications sont chiffrées par TLS sur les domaines `klassci.com`.
+- **Permissions par rôle** — un comptable ne voit pas les notes, un enseignant ne voit pas la comptabilité (Spatie Permission, contrôle granulaire à la route et à la vue).
+- **Audit IDOR** — protection systématique contre les accès directs non autorisés (`Policy` Laravel sur les ressources sensibles, audit avril 2026).
+- **Rate limiting** — les routes monétaires et d'authentification sont limitées (throttle Laravel) pour bloquer les attaques en force brute.
+- **Sauvegardes** — politique de sauvegarde gérée côté infrastructure ; demandez à votre administrateur la fréquence et la période de rétention exactes pour votre tenant.
 
 ## Pour aller plus loin
 

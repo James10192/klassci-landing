@@ -456,7 +456,7 @@ C'est la page la plus utile en début d'année : vous y voyez d'un coup d'œil c
 
 ### Réinscription année suivante
 
-Ne créez **pas** une nouvelle inscription complète pour un étudiant existant. Utilisez **Étudiants → Réinscriptions** : le formulaire repart de la fiche étudiant existante, le matricule est conservé, et seules les données académiques de la nouvelle année (classe, statut MESRS, frais, paiement initial) restent à saisir. Les détails varient selon le paramétrage de votre tenant.
+Ne créez **pas** une nouvelle inscription complète pour un étudiant existant. Utilisez **Étudiants → Réinscriptions** : le formulaire repart de la fiche étudiant existante, le matricule est conservé, et seules les données académiques de la nouvelle année (classe, statut MESRS, frais, paiement initial) restent à saisir. La réinscription gère également les **reliquats de l'année précédente** (soldes restants) — vous pouvez les reporter sur la nouvelle inscription ou les annuler selon votre paramétrage. La nouvelle inscription est créée à l'étape *Documents complets* avec statut *Active* (pas de retour à *Prospect*).
 
 ### Inscription « sous réserve »
 
@@ -471,15 +471,25 @@ La validation définitive **exige toujours au moins un paiement validé** — pa
 
 ### Annulation avant validation
 
-Depuis la **page Administration des Inscriptions** (lien plus haut), action **<Icon name="x" /> Annuler** sur la ligne de l'inscription. Aucun frais n'est facturé, le matricule est libéré, le dossier disparaît des listings courants (conservé en archive).
+Depuis la **page Administration des Inscriptions** (lien plus haut), action **<Icon name="x" /> Annuler** sur la ligne de l'inscription. Effets :
+
+- L'inscription passe en **statut = annulée** ; le motif et la date d'annulation sont consignés dans les observations.
+- Aucun frais n'est facturé.
+- Le dossier reste en base (pas de suppression physique) mais sort des listings filtrés sur *statut = active*.
+- **Le matricule reste attaché à l'étudiant** — il n'est *pas* libéré, par cohérence avec l'historique.
+- Si l'inscription annulée est la **seule inscription active** de l'étudiant, son compte utilisateur est désactivé automatiquement (`etudiant.statut='inactif'`, `user.is_active=false`).
 
 ### Annulation après validation
 
-Possible mais l'historique est conservé : le compte étudiant est désactivé, les frais déjà payés restent visibles dans la comptabilité (la gestion des remboursements est à votre charge). Réservé aux profils habilités à la suppression d'inscription (super-administrateur typiquement).
+Même méthode (`annulerInscription`) — pas de gating spécifique selon que l'inscription est *Prospect* ou *Active*. L'historique est conservé : statut `annulée` + observations consignées, les paiements déjà encaissés restent en base avec leur statut original (la gestion des remboursements est à votre charge). Le compte étudiant n'est désactivé **que s'il ne lui reste aucune autre inscription active**. La suppression effective de l'inscription en base (DELETE physique) passe par une route distincte protégée par permission supérieure.
 
 ### Frais optionnels souscrits après validation
 
-Possible à tout moment depuis la fiche d'inscription (zone **Frais Optionnels Disponibles**) ou depuis la fiche étudiant onglet **Finances**. Le montant est ajouté au solde restant.
+Possible à tout moment depuis la **fiche d'inscription**, zone **Frais Optionnels Disponibles** : cliquez **<Icon name="plus-circle" /> Souscrire l'étudiant** sur la carte du frais. Le montant est ajouté au solde restant.
+
+<Callout type="warn">
+  **Pas de souscription depuis l'onglet Finances de la fiche étudiant.** Cet onglet expose uniquement *Situation Financière*, *PDF Situation* et *Enregistrer un paiement* — la souscription d'un nouveau frais optionnel passe **uniquement** par la fiche d'inscription.
+</Callout>
 
 ## En résumé
 
@@ -496,7 +506,7 @@ Nouvelle Inscription -> Formulaire 5 sections -> Enregistrer
                                   |
                 Etape 2 : Valider definitivement
                                   |
-                    Etudiant Active + Compte cree
+                Etudiant Active + Compte etudiant active
                                   |
         Apparait dans les listes de classe (effectifs)
                                   |
