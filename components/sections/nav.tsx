@@ -4,7 +4,6 @@ import { Menu, X } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
 
-import { Link } from "@/i18n/navigation";
 import { Logo } from "@/components/ui/logo";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
@@ -31,7 +30,7 @@ export function Nav() {
 
   const closeMobile = useCallback(() => setMobileOpen(false), []);
 
-  const handleLoginClick = useCallback(() => {
+  const handleContactClick = useCallback(() => {
     track("cta_click", { location: "nav", locale });
   }, [locale]);
 
@@ -60,13 +59,16 @@ export function Nav() {
           <div className="flex items-center gap-2">
             <LanguageSwitcher className="hidden sm:inline-flex" />
             <ThemeToggle className="hidden sm:inline-flex" />
-            <Link
-              href="/login"
-              onClick={handleLoginClick}
-              className="hidden sm:inline-flex items-center gap-2 px-3.5 py-1.5 text-[0.875rem] font-medium border border-border rounded text-text hover:border-border-strong hover:bg-bg-card transition-all"
+            {/* Pas de "Se connecter" central : chaque tenant a son propre
+                sous-domaine (esbtp-yakro.klassci.com etc.) avec son login Laravel.
+                Le CTA principal du marketing site est "Prendre contact". */}
+            <a
+              href="#contact"
+              onClick={handleContactClick}
+              className="hidden sm:inline-flex items-center gap-2 px-3.5 py-1.5 text-[0.875rem] font-medium border border-accent bg-accent text-white rounded hover:bg-accent-hover transition-all"
             >
-              {t("login")}
-            </Link>
+              {t("contact")}
+            </a>
 
             {/* Mobile hamburger */}
             <button
@@ -103,16 +105,16 @@ export function Nav() {
               {t(link.key)}
             </a>
           ))}
-          <Link
-            href="/login"
+          <a
+            href="#contact"
             onClick={() => {
-              handleLoginClick();
+              handleContactClick();
               closeMobile();
             }}
             className="font-serif font-light text-[1.75rem] text-accent"
           >
-            {t("login")}
-          </Link>
+            {t("contact")}
+          </a>
           <div className="flex items-center gap-4 mt-4">
             <LanguageSwitcher />
             <ThemeToggle />
