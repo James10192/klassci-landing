@@ -6,6 +6,9 @@
     "---By role---",
     "superadmin",
     "secretaire",
+    "comptable",
+    "---By module---",
+    "modules",
     "---Reference---",
     "api-reference",
     "changelog"

@@ -349,168 +349,17 @@ Si la modale affiche **« Aucun parcours trouvé »** comme dans la capture, c'e
 
 ## Étape 6 : configurer les frais
 
-Le paramétrage financier vit dans le module **Comptabilité**. Le profil cible est le comptable de l'établissement, mais le super-administrateur a aussi tous les droits — pratique pour boucler le setup initial avant l'arrivée de l'équipe finance.
+Le paramétrage financier se fait dans le module **Comptabilité**. Le détail complet (catégories, montants par classe au standard MESRS, services optionnels et assignations) vit dans la page de référence dédiée :
 
-L'architecture des frais repose sur trois objets :
+→ [**Module Frais & Comptabilité**](/docs/modules/frais-comptabilite)
 
-1. **Catégorie de frais** — le catalogue (Frais de scolarité, Inscription, Cantine, Transport…) avec une décision binaire : *obligatoire* (chaque étudiant inscrit doit la payer) ou *optionnel* (l'étudiant choisit s'il souscrit ou non).
-2. **Configuration par classe** — pour chaque catégorie obligatoire, vous saisissez les montants exacts pour chaque combinaison `filière × niveau` (le système ivoirien sépare en plus les étudiants AFFECTÉS / RÉAFFECTÉS / NON AFFECTÉS au sens MESRS).
-3. **Formules optionnelles avec assignations** — pour les catégories optionnelles, vous créez des formules (ex : Repas complet, Plat de résistance) et vous ciblez les étudiants éligibles (tout le monde, par filière, par niveau ou par classe précise).
+À paramétrer au minimum pour démarrer les inscriptions :
 
-### 6.1 — Le module Comptabilité dans la sidebar
+1. Créer les **catégories obligatoires** (au moins `Frais d'inscription` et `Frais de scolarité`) avec un montant par défaut.
+2. Configurer les **montants par classe** pour les classes qui auront des étudiants à la prochaine rentrée (uniquement si les tarifs diffèrent du défaut).
+3. Optionnel : créer les **services optionnels** (cantine, transport) avec leurs formules et leurs assignations.
 
-Dans la sidebar, repérez la section **GESTION FINANCIÈRE** puis ouvrez le dropdown **Comptabilité**.
-
-![Sidebar avec la section GESTION FINANCIÈRE et le dropdown Comptabilité ouvert montrant Gestion des Frais, Configuration Frais, Liste des Paiements, Suivi par Catégorie, Relances](/img/docs/superadmin/onboarding/23-sidebar-comptabilite.png)
-
-Cinq entrées au total. Pour le paramétrage initial, seules les deux premières comptent : **Gestion des Frais** (le catalogue) et **Configuration Frais** (la matrice par classe). Les trois autres (Liste des Paiements, Suivi par Catégorie, Relances) servent à l'usage quotidien du comptable.
-
-### 6.2 — Vue d'ensemble : Gestion des Frais
-
-Cliquez sur **Gestion des Frais**. La page vous donne en un écran l'état complet du catalogue.
-
-![Page Gestion des Frais avec bandeau bleu, 4 KPIs et 3 onglets Frais Académiques / Services Optionnels / Frais Administratifs, et 3 cartes de catégorie](/img/docs/superadmin/onboarding/24-frais-overview.png)
-
-Le bandeau bleu expose 4 indicateurs (total catégories, frais obligatoires, services optionnels, catégories actives) et trois actions globales en haut à droite :
-
-- **<Icon name="globe" /> Services Optionnels** — raccourci direct vers la gestion des formules optionnelles (étape 6.5)
-- **<Icon name="settings" /> Configuration par Classe** — raccourci vers la matrice des montants obligatoires (étape 6.4)
-- **<Icon name="plus" /> Nouvelle catégorie** — le bouton qu'on utilise tout de suite
-
-Sous le bandeau, trois onglets séparent visuellement :
-
-- **Frais Académiques** — frais d'inscription et de scolarité, obligatoires selon la filière et le niveau
-- **Services Optionnels** — services à la carte (cantine, transport, hébergement)
-- **Frais Administratifs** — papiers, attestations, dossiers spéciaux
-
-Chaque carte de catégorie expose son statut de configuration (« Configuré par classe » avec un compteur `3/28` quand la matrice n'est pas finie, « Service configuré » pour un service optionnel actif), un badge OBLIGATOIRE ou SERVICE GLOBAL, et trois boutons d'action : <Icon name="eye" /> consulter, <Icon name="pencil" /> modifier la catégorie, <Icon name="graduation-cap" /> ou <Icon name="globe" /> (raccourci vers la configuration métier — par classe pour obligatoire, formules pour optionnel).
-
-### 6.3 — Créer une catégorie de frais
-
-Cliquez sur **+ Nouvelle catégorie**. Le formulaire s'ouvre en pleine page, divisé en quatre sections.
-
-![Formulaire Nouvelle Catégorie de Frais avec les sections Informations principales, Configuration financière, Personnalisation visuelle](/img/docs/superadmin/onboarding/25-categorie-form-top.png)
-
-#### Informations principales
-
-- **Nom de la catégorie** *(requis)* — `Frais de scolarité`, `Cantine`, `Transport`. Apparaît dans les bulletins, les exports et l'espace étudiant.
-- **Code unique** *(requis)* — automatiquement converti en MAJUSCULES (`SCOLARITE`, `CANTINE`, `TRANSPORT`). Sert d'identifiant technique stable utilisé dans les imports/exports et les commandes artisan.
-- **Description détaillée** *(optionnel)* — un paragraphe libre.
-
-#### Configuration financière
-
-- **Montant par défaut (FCFA)** *(requis)* — montant indicatif. Sera affiné par classe (étape 6.4) pour les frais obligatoires ou par formule (étape 6.5) pour les optionnels.
-- **Délai de paiement (jours, défaut 30)** — combien de jours après l'inscription avant que l'étudiant soit considéré en retard. Au-delà, le module Relances l'identifiera comme débiteur.
-
-#### Personnalisation visuelle
-
-- **Icône (classe FontAwesome)** — par exemple `fas fa-money-bill`, `fas fa-utensils`, `fas fa-bus`. Apparaît dans les dashboards et les cartes.
-- **Couleur thématique** — pour distinguer visuellement les catégories.
-
-#### Configuration avancée — la décision la plus importante
-
-![Bas du formulaire avec la section Configuration avancée contenant le toggle Frais obligatoire, et les exemples de catégories courantes (Transport, Cantine, Hébergement, Matériel)](/img/docs/superadmin/onboarding/26-categorie-form-bottom.png)
-
-Une seule case à cocher mais elle change tout :
-
-- **Frais obligatoire coché** — tout étudiant inscrit doit le payer, indépendamment de son choix. Le **montant par défaut** saisi plus haut s'applique automatiquement à toutes les classes ; à l'étape 6.4 vous pourrez surcharger ce montant pour des classes spécifiques (par exemple si la BTS1 et la Licence n'ont pas le même tarif d'inscription).
-- **Frais obligatoire décoché** — la catégorie devient un *service optionnel*. Vous ne configurez plus de montants par classe ; à la place vous définissez des **formules** (étape 6.5) que les étudiants éligibles pourront choisir de souscrire ou non.
-
-Les exemples préremplis en bas du formulaire (Transport avec variants par arrêt, Cantine avec variants par menu, etc.) sont là pour vous donner une idée de la granularité courante. Cliquez **Créer la catégorie**. Vous revenez à la liste avec votre nouvelle entrée.
-
-### 6.4 — Surcharger les montants obligatoires par classe
-
-Le **montant par défaut** d'une catégorie obligatoire (saisi à l'étape 6.3) facture déjà tous les étudiants. La matrice par classe sert à **surcharger** ce montant pour des classes spécifiques — par exemple `Frais d'inscription` à 150 000 F CFA par défaut, mais 200 000 F CFA pour les classes Licence et Master. Trois entrées vers la page matricielle :
-
-1. Bouton **<Icon name="settings" /> Configuration par Classe** dans le header de la page Gestion des Frais
-2. Bouton **<Icon name="graduation-cap" />** sur la carte d'une catégorie obligatoire (raccourci direct)
-3. Sidebar → **Comptabilité → Configuration Frais**
-
-![Sidebar avec l'entrée Configuration Frais surlignée sous le dropdown Comptabilité](/img/docs/superadmin/onboarding/27-sidebar-config-frais.png)
-
-#### La page Configuration des Frais par Classe
-
-![Page Configuration des Frais par Classe avec une grille de 28 cartes de classe affichant compteurs OBLIGATOIRES et OPTIONNELS, badges Complet ou Non configuré, et bouton Configurer les Frais](/img/docs/superadmin/onboarding/28-config-par-classe.png)
-
-La page affiche **toutes les classes de l'établissement** sous forme de cartes (28 ici). Chaque carte expose :
-
-- Nom complet de la classe (`BATIMENT - BTS 1ere ANNEE`, `Communication & Marketing - Licence 1ère année`…)
-- Filière et niveau d'études en breadcrumb
-- Nombre d'étudiants déjà inscrits
-- Compteur **OBLIGATOIRES** (par exemple `2/2` = tous configurés, `0/2` = rien fait) et **OPTIONNELS** (info seulement, pas de saisie ici)
-- Pourcentage de remplissage et badge **Complet** (vert) ou **Non configuré** (rouge)
-- Bouton bleu **Configurer les Frais**
-
-Les classes en `100% Complet` (bordure verte) sont prêtes ; celles en `0% Non configuré` (bordure rouge) demandent encore une saisie.
-
-Cliquez sur **Configurer les Frais** d'une classe non encore complète.
-
-#### Le modal de saisie : le système MESRS ivoirien
-
-![Modal Configuration des Frais pour BATIMENT BTS 2e année avec une section Frais de scolarité OBLIGATOIRE et trois colonnes Affectés Réaffectés Non affectés en FCFA, plus boutons de copie et champ Échéance](/img/docs/superadmin/onboarding/29-modal-config-frais.png)
-
-Le modal liste **tous les frais obligatoires** que vous avez créés à l'étape 6.3, et pour chacun, vous saisissez **trois montants** correspondant au statut d'affectation gouvernementale de l'étudiant :
-
-- **AFFECTÉS** — étudiants affectés par le MESRS, avec subvention étatique possible
-- **RÉAFFECTÉS** — étudiants dont la subvention est maintenue après une réaffectation
-- **NON AFFECTÉS** — étudiants payant le tarif complet, sans subvention
-
-Trois boutons **Copier Affectés / Copier Réaffectés / Copier Non Aff.** copient la valeur de la colonne nommée vers les **deux autres** en un clic. Par exemple : saisir `150 000` dans **NON AFFECTÉS** puis cliquer **Copier Non Aff.** remplit AFFECTÉS et RÉAFFECTÉS avec la même valeur. Pratique quand un même tarif s'applique à plusieurs statuts d'affectation.
-
-Le champ **Échéance (jours après inscription)** override le délai par défaut de la catégorie pour CETTE classe seulement. Laissez vide pour utiliser le défaut.
-
-<Callout>
-  **Spécifique Côte d'Ivoire.** Le système d'affectation MESRS (Ministère de l'Enseignement Supérieur et de la Recherche Scientifique) répartit les bacheliers entre les établissements et finance partiellement leurs études. Les trois colonnes permettent de différencier les tarifs selon le statut de l'étudiant ; si votre offre n'est pas concernée, saisissez la même valeur partout.
-</Callout>
-
-Cliquez **Enregistrer**. Le modal se ferme et la carte de la classe se met à jour : compteur `1/2` ou `2/2`, pourcentage recalculé, badge qui passe au vert quand tout est rempli.
-
-### 6.5 — Configurer les frais optionnels (services à la carte)
-
-Pour les catégories *non obligatoires* (cantine, transport, activités…), le paramétrage suit un autre modèle : vous définissez des **formules** dans la catégorie, puis vous **assignez** chaque formule aux étudiants éligibles.
-
-Deux entrées :
-
-1. Bouton **<Icon name="globe" /> Services Optionnels** dans le header de Gestion des Frais
-2. Bouton **<Icon name="plus" /> Frais Optionnels** dans le header de Configuration des Frais par Classe
-
-#### La page Frais Optionnels
-
-![Page Frais Optionnels avec catégorie CANTINE et 4 formules : Repas complet 455 000, Plat de résistance 300 000, Repat complet plus 555 000, ENtre plat desser 300 000, plus bouton Ajouter une formule](/img/docs/superadmin/onboarding/30-frais-optionnels.png)
-
-Chaque catégorie optionnelle s'affiche comme une section avec sa liste de **FORMULES DISPONIBLES**. Dans l'exemple, la catégorie CANTINE expose 4 formules avec leurs prix annuels en F CFA. Chaque ligne de formule a trois boutons à droite : <Icon name="pencil" /> modifier, <Icon name="users" /> assigner, <Icon name="trash" /> supprimer.
-
-#### Ajouter une formule
-
-En bas de chaque catégorie, le bouton **+ Ajouter une formule** déroule un mini-formulaire inline avec trois champs : **Nom de la formule** (`Arrêt Centre-ville`, `Repas complet`), **Montant (F CFA)** annuel, **Description** (optionnel). Cliquez sur **+ Ajouter** à droite pour valider.
-
-#### Cibler les étudiants éligibles avec les Assignations
-
-Une formule sans assignation n'est proposée à personne. Cliquez sur le bouton **<Icon name="users" />** (icône people, au milieu des trois boutons d'action) sur la ligne de la formule.
-
-![Modal Assignations avec quatre options de type d'assignation : Tous les étudiants sélectionné par défaut, Par filière, Par niveau, Par classe, et la zone Assignations actuelles](/img/docs/superadmin/onboarding/31-assignations-modal.png)
-
-Le modal **Assignations** propose quatre types ciblage, du plus ouvert au plus restrictif :
-
-- **Tous les étudiants** — la formule est proposée à tout le monde, sans filtre.
-- **Par filière** — restriction à une ou plusieurs filières (BATIMENT, Communication & Marketing, INFORMATIQUE…).
-  ![Modal avec Par filière sélectionné, faisant apparaître une zone Choisir les filières avec des chips pour chaque filière disponible](/img/docs/superadmin/onboarding/32-assignations-filiere.png)
-- **Par niveau** — restriction par niveau (BTS 1ere ANNEE, BTS 2e année, Licence 1ère année, Licence 2ème année).
-  ![Modal avec Par niveau sélectionné et chips pour chaque niveau disponible](/img/docs/superadmin/onboarding/33-assignations-niveau.png)
-- **Par classe** — combinaison filière + niveau (la plus restrictive). Cocher BATIMENT + BTS 1ere ANNEE = uniquement les étudiants inscrits dans cette classe précise.
-  ![Modal avec Par classe sélectionné, chips pour les filières ET les niveaux à choisir, BATIMENT et BTS 1ere ANNEE en surbrillance](/img/docs/superadmin/onboarding/34-assignations-classe.png)
-
-À chaque type sélectionné, des chips apparaissent pour cocher les valeurs voulues. La zone **ASSIGNATIONS ACTUELLES** au bas du modal liste les chips déjà actives — chaque chip a un `×` pour la retirer individuellement.
-
-Trois boutons en bas du modal :
-
-- **<Icon name="trash" /> Tout supprimer** — vide toutes les assignations (la formule devient invisible aux étudiants).
-- **<Icon name="x" /> Fermer** — annule sans sauver.
-- **<Icon name="save" /> Sauvegarder** — persiste les changements.
-
-<Callout type="warn">
-  **Une formule sans assignation est invisible.** Si vous créez une formule mais n'ouvrez jamais le modal Assignations, aucun étudiant ne pourra la souscrire. Vérifiez toujours qu'il y a au moins une chip dans **ASSIGNATIONS ACTUELLES** avant de fermer.
-</Callout>
+Une fois fait, l'équipe comptable prend le relais via [Comptable — opérations](/docs/comptable/operations) pour le quotidien (paiements, relances, exports).
 
 ## Étape 7 : créer les comptes du personnel
 
