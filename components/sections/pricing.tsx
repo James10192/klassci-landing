@@ -45,7 +45,6 @@ export function Pricing() {
 
   const tiers = t.raw("tiers") as PricingTier[];
   const currency = t("currency");
-  const fromLabel = t("fromLabel");
   const firstYearLabel = t("firstYearLabel");
   const renewalPrefix = t("renewalPrefix");
   const renewalSuffix = t("renewalSuffix");
@@ -62,34 +61,32 @@ export function Pricing() {
   return (
     <section
       id="tarifs"
-      className="py-section container"
+      className="container py-12 lg:py-16"
       aria-labelledby="pricing-heading"
     >
-      {/* Section header */}
-      <div className="text-center mb-14">
-        <p className="font-mono uppercase tracking-[0.08em] text-[0.72rem] text-text-muted mb-4">
+      {/* Compact header so the 3 tiers can fit in ~100vh on standard laptops */}
+      <div className="text-center mb-8 lg:mb-10">
+        <p className="font-mono uppercase tracking-[0.08em] text-[0.7rem] text-text-muted mb-2.5">
           03 — {locale === "fr" ? "Tarifs" : "Pricing"}
         </p>
         <h2
           id="pricing-heading"
-          className="font-serif font-light text-section-h2 text-accent mb-3"
+          className="font-serif font-light text-[2rem] lg:text-[2.5rem] leading-[1.1] text-accent mb-2"
         >
           {t("title")}
         </h2>
-        <p className="text-text-secondary max-w-[42rem] mx-auto leading-relaxed">
+        <p className="text-text-secondary max-w-[40rem] mx-auto text-[0.9rem] leading-relaxed">
           {t("subtitle")}
         </p>
       </div>
 
-      {/* 3-tier premium grid. PRO featured (subtle elevation), Elite in dark
-          inverted variant for premium signalling. Mobile: stacked. */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-0 lg:items-stretch">
+      {/* 3 tiers, baseline aligned (items-stretch -> equal height + CTAs bottom). */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:items-stretch">
         {tiers.map((tier) => (
           <TierCard
             key={tier.key}
             tier={tier}
             currency={currency}
-            fromLabel={fromLabel}
             firstYearLabel={firstYearLabel}
             renewalPrefix={renewalPrefix}
             renewalSuffix={renewalSuffix}
@@ -101,7 +98,7 @@ export function Pricing() {
         ))}
       </div>
 
-      <p className="mt-10 text-center font-mono uppercase tracking-[0.08em] text-[0.72rem] text-text-muted max-w-[44rem] mx-auto leading-relaxed">
+      <p className="mt-6 text-center font-mono uppercase tracking-[0.08em] text-[0.68rem] text-text-muted max-w-[44rem] mx-auto leading-relaxed">
         {t("footer")}
       </p>
 
@@ -122,7 +119,6 @@ export function Pricing() {
 interface TierCardProps {
   tier: PricingTier;
   currency: string;
-  fromLabel: string;
   firstYearLabel: string;
   renewalPrefix: string;
   renewalSuffix: string;
@@ -135,7 +131,6 @@ interface TierCardProps {
 function TierCard({
   tier,
   currency,
-  fromLabel,
   firstYearLabel,
   renewalPrefix,
   renewalSuffix,
@@ -148,23 +143,16 @@ function TierCard({
   const isDark = tier.variant === "dark";
   const isHighlight = tier.variant === "highlight";
 
-  // Variant-driven styling. Three distinct visual identities:
-  // - light: clean white card, blue accents
-  // - highlight: warm beige PRO card, lifted, "Recommandé" badge, blue CTA
-  // - dark: deep KLASSCI blue ELITE card, white text, orange accents
+  // Three distinct visual identities, all baseline-aligned (no -my offset)
   const cardClasses = [
     "tier-card-hover",
-    "relative flex flex-col h-full",
-    "transition-all duration-300 ease-klassci",
-    "hover:-translate-y-1",
+    "relative flex flex-col h-full p-6 lg:p-7 rounded-lg",
+    "transition-shadow duration-300 ease-klassci",
     isDark
-      ? // Elite: dark inverted card
-        "bg-[#0a3d8f] text-white p-8 md:p-10 rounded-lg shadow-[0_12px_32px_rgba(10,61,143,0.25)] hover:shadow-[0_16px_40px_rgba(10,61,143,0.35)] lg:my-0"
+      ? "bg-[#0a3d8f] text-white shadow-[0_8px_24px_rgba(10,61,143,0.20)] hover:shadow-[0_12px_32px_rgba(10,61,143,0.30)]"
       : isHighlight
-      ? // PRO: highlighted, slightly elevated, accent-light bg
-        "bg-accent-light/70 p-8 md:p-10 rounded-lg border border-brand-orange/30 shadow-[0_8px_24px_rgba(245,130,32,0.12)] hover:shadow-[0_12px_32px_rgba(245,130,32,0.20)] lg:-my-2 lg:relative lg:z-10"
-      : // Essentiel: clean light card
-        "bg-white p-8 md:p-10 rounded-lg border border-border hover:border-border-strong hover:shadow-[0_8px_24px_rgba(4,83,203,0.08)] lg:my-0",
+      ? "bg-accent-light/70 border border-brand-orange/30 shadow-[0_6px_18px_rgba(245,130,32,0.10)] hover:shadow-[0_10px_24px_rgba(245,130,32,0.16)]"
+      : "bg-white border border-border hover:border-border-strong hover:shadow-[0_6px_18px_rgba(4,83,203,0.08)]",
   ]
     .filter(Boolean)
     .join(" ");
@@ -173,39 +161,38 @@ function TierCard({
   const dividerColor = isDark ? "bg-white/15" : "bg-border";
   const labelColor = isDark ? "text-white/60" : "text-text-muted";
   const renewalColor = isDark ? "text-white/75" : "text-text-secondary";
+  const featureTextColor = isDark ? "text-white/90" : "text-text-secondary";
+  const featureFirstColor = isDark ? "text-white" : "text-text";
 
   return (
     <div className={cardClasses}>
       {isFeatured && (
-        <span className="absolute -top-3 left-1/2 -translate-x-1/2 font-mono uppercase tracking-[0.10em] text-[0.65rem] bg-brand-orange text-white px-3 py-1 rounded-full shadow-[0_3px_10px_rgba(245,130,32,0.35)]">
+        <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 font-mono uppercase tracking-[0.10em] text-[0.6rem] bg-brand-orange text-white px-2.5 py-0.5 rounded-full shadow-[0_3px_8px_rgba(245,130,32,0.30)] whitespace-nowrap">
           {popularBadge}
         </span>
       )}
 
-      {/* Tier name + tagline */}
-      <div className="mb-6">
+      {/* Tier name + tagline — compact */}
+      <div className="mb-4">
         <h3
           className={[
-            "font-serif font-light text-3xl mb-2 leading-none",
+            "font-serif font-light text-[1.6rem] mb-1 leading-none",
             isDark ? "text-brand-orange" : isHighlight ? "text-accent" : "text-text",
           ].join(" ")}
         >
           {tier.name}
         </h3>
-        <p className={`text-[0.85rem] leading-snug ${taglineColor}`}>
+        <p className={`text-[0.78rem] leading-snug ${taglineColor}`}>
           {tier.tagline}
         </p>
       </div>
 
-      {/* Price block — first year hero, renewal context, then OR monthly */}
-      <div>
-        <p className={`font-mono uppercase tracking-[0.08em] text-[0.65rem] mb-2 ${labelColor}`}>
-          {fromLabel}
-        </p>
-        <div className="flex items-baseline gap-2 flex-wrap">
+      {/* Price block — collapsed to 4 lines: hero + first-year inline, renewal, monthly */}
+      <div className="mb-4">
+        <div className="flex items-baseline gap-1.5 flex-wrap">
           <span
             className={[
-              "font-serif font-light text-[2.75rem] leading-none tabular-nums",
+              "font-serif font-light text-[2rem] leading-none tabular-nums",
               isDark ? "text-white" : "text-text",
             ].join(" ")}
           >
@@ -213,75 +200,58 @@ function TierCard({
           </span>
           <span
             className={[
-              "font-mono uppercase tracking-[0.06em] text-[0.75rem]",
+              "font-mono uppercase tracking-[0.06em] text-[0.7rem]",
               isDark ? "text-white/70" : "text-text-secondary",
             ].join(" ")}
           >
             {currency}
           </span>
+          <span className={`text-[0.72rem] font-mono uppercase tracking-[0.06em] ml-1 ${labelColor}`}>
+            · {firstYearLabel}
+          </span>
         </div>
-        <p className={`mt-2 text-[0.78rem] font-mono uppercase tracking-[0.06em] ${labelColor}`}>
-          {firstYearLabel}
-        </p>
 
-        <p className={`mt-3 text-[0.825rem] ${renewalColor}`}>
+        <p className={`mt-1.5 text-[0.78rem] leading-tight ${renewalColor}`}>
           {renewalPrefix}{" "}
           <span className={isDark ? "font-medium text-white" : "font-medium text-text"}>
             {tier.pricing.renewal} {currency}
           </span>{" "}
           / an {renewalSuffix}
         </p>
-      </div>
 
-      {/* Monthly alternative — clearly secondary but visible */}
-      <div className={`mt-5 pt-5 border-t border-dashed ${isDark ? "border-white/20" : "border-border"}`}>
-        <p className={`font-mono uppercase tracking-[0.08em] text-[0.65rem] mb-1.5 ${labelColor}`}>
-          {orMonthlyLabel}
+        <p className={`mt-0.5 text-[0.78rem] leading-tight ${renewalColor}`}>
+          <span className={`font-mono uppercase tracking-[0.06em] text-[0.65rem] ${labelColor}`}>
+            {orMonthlyLabel} —
+          </span>{" "}
+          <span className={isDark ? "font-medium text-white" : "font-medium text-text"}>
+            {tier.pricing.monthly} {currency}
+          </span>{" "}
+          {perMonthSuffix}
         </p>
-        <div className="flex items-baseline gap-1.5">
-          <span
-            className={[
-              "font-serif font-light text-2xl leading-none tabular-nums",
-              isDark ? "text-white" : "text-text",
-            ].join(" ")}
-          >
-            {tier.pricing.monthly}
-          </span>
-          <span
-            className={[
-              "font-mono uppercase tracking-[0.06em] text-[0.7rem]",
-              isDark ? "text-white/70" : "text-text-secondary",
-            ].join(" ")}
-          >
-            {currency} {perMonthSuffix}
-          </span>
-        </div>
       </div>
 
-      <div className={`my-7 h-px ${dividerColor}`} />
+      <div className={`h-px ${dividerColor} mb-4`} />
 
-      {/* Features — flat list with check icons in tier-appropriate accent */}
-      <ul className="space-y-3 mb-8 flex-1">
+      {/* Features — tight spacing, simple stroke check */}
+      <ul className="space-y-1.5 mb-5 flex-1">
         {tier.features?.map((f, i) => (
-          <li key={i} className="flex items-start gap-3 text-[0.875rem]">
-            <span
-              aria-hidden
+          <li key={i} className="flex items-start gap-2 text-[0.82rem] leading-snug">
+            <Check
               className={[
-                "shrink-0 mt-[0.15rem] inline-flex items-center justify-center size-4 rounded-full",
+                "size-3.5 shrink-0 mt-[0.18rem]",
                 isDark
-                  ? "bg-brand-orange/20 text-brand-orange"
+                  ? "text-brand-orange"
                   : isHighlight
-                  ? "bg-brand-orange/15 text-brand-orange"
-                  : "bg-accent/10 text-accent",
+                  ? "text-brand-orange"
+                  : "text-accent",
               ].join(" ")}
-            >
-              <Check className="size-2.5" strokeWidth={3} aria-hidden />
-            </span>
+              strokeWidth={2.75}
+              aria-hidden
+            />
             <span
               className={[
-                "leading-snug",
-                isDark ? "text-white/90" : "text-text-secondary",
-                i === 0 && (isDark ? "text-white" : "font-medium text-text"),
+                featureTextColor,
+                i === 0 ? `font-medium ${featureFirstColor}` : "",
               ]
                 .filter(Boolean)
                 .join(" ")}
@@ -298,10 +268,10 @@ function TierCard({
         onClick={() => onCtaClick(tier.key)}
         className={
           tier.ctaStyle === "primary"
-            ? "mt-auto inline-flex items-center justify-center bg-accent text-white px-5 py-3 rounded text-[0.875rem] font-medium hover:bg-accent-hover transition-colors shadow-[0_4px_12px_rgba(4,83,203,0.18)]"
+            ? "mt-auto inline-flex items-center justify-center bg-accent text-white px-4 py-2.5 rounded text-[0.85rem] font-medium hover:bg-accent-hover transition-colors shadow-[0_3px_10px_rgba(4,83,203,0.18)]"
             : tier.ctaStyle === "dark"
-            ? "mt-auto inline-flex items-center justify-center bg-brand-orange text-white px-5 py-3 rounded text-[0.875rem] font-medium hover:bg-[#e07b1c] transition-colors shadow-[0_4px_12px_rgba(245,130,32,0.30)]"
-            : "mt-auto inline-flex items-center justify-center border border-border-strong text-text bg-white rounded px-5 py-3 text-[0.875rem] font-medium hover:bg-bg-alt hover:border-text transition-all"
+            ? "mt-auto inline-flex items-center justify-center bg-brand-orange text-white px-4 py-2.5 rounded text-[0.85rem] font-medium hover:bg-[#e07b1c] transition-colors shadow-[0_3px_10px_rgba(245,130,32,0.30)]"
+            : "mt-auto inline-flex items-center justify-center border border-border-strong text-text bg-white rounded px-4 py-2.5 text-[0.85rem] font-medium hover:bg-bg-alt hover:border-text transition-all"
         }
         style={{ letterSpacing: "-0.01em" }}
       >
