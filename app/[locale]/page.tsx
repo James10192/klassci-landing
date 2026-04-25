@@ -1,4 +1,4 @@
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { ClientMarquee } from "@/components/sections/client-marquee";
 import { Contact } from "@/components/sections/contact";
@@ -17,6 +17,7 @@ import { Security } from "@/components/sections/security";
 import { Support } from "@/components/sections/support";
 import { Testimonials } from "@/components/sections/testimonials";
 import { VideoTestimonial } from "@/components/sections/video-testimonial";
+import { StructuredData } from "@/components/seo/structured-data";
 
 export default async function HomePage({
   params,
@@ -26,8 +27,11 @@ export default async function HomePage({
   const { locale } = await params;
   setRequestLocale(locale);
 
+  const t = await getTranslations({ locale, namespace: "metadata" });
+
   return (
     <>
+      <StructuredData description={t("description")} />
       <Nav />
       <main>
         <Hero />
