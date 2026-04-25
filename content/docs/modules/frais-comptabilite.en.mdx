@@ -48,7 +48,7 @@ Click **+ Nouvelle catégorie**. The full-page form opens, split into four secti
 ### Main information
 
 - **Nom de la catégorie** *(required)* — `Frais de scolarité`, `Cantine`, `Transport`. Shows up on report cards, exports, and in the student portal.
-- **Code unique** *(required)* — automatically uppercased (`SCOLARITE`, `CANTINE`, `TRANSPORT`). Used as the stable technical identifier in imports/exports and artisan commands.
+- **Code unique** *(required)* — a short code (`SCOLARITE`, `CANTINE`, `TRANSPORT`). KLASSCI **auto-suggests an uppercase version** derived from the name as soon as you tab out of the Name field (only when the Code field is still empty), but you can override it manually. Used as the stable technical identifier in imports/exports and artisan commands.
 - **Description détaillée** *(optional)* — free-form paragraph.
 
 ### Financial configuration
@@ -59,7 +59,7 @@ Click **+ Nouvelle catégorie**. The full-page form opens, split into four secti
 ### Visual personalisation
 
 - **Icône** (FontAwesome class) — for example `fas fa-money-bill`, `fas fa-utensils`, `fas fa-bus`. Renders on dashboards and cards.
-- **Couleur thématique** — to visually distinguish categories.
+- **Couleur thématique** — pick from a 6-value Bootstrap palette: Blue (Primary), Green (Success), Cyan (Info), Orange (Warning), Red (Danger), Grey (Secondary). Used to distinguish categories on dashboards and cards.
 
 ### Advanced configuration — the most important decision
 
@@ -91,11 +91,11 @@ The page lays out **every class in the institution** as cards (28 here). Each ca
 - The class's full name (`BATIMENT - BTS 1ere ANNEE`, `Communication & Marketing - Licence 1ère année`…)
 - Filière and study level as a breadcrumb
 - Number of students already enrolled
-- An **OBLIGATOIRES** counter (e.g., `2/2` = all configured, `0/2` = nothing yet) and an **OPTIONNELS** counter (display only — no input here)
-- A completion percentage with a **Complet** (green) or **Non configuré** (red) badge
+- An **Obligatoires** counter (e.g., `2/2` = all configured, `0/2` = nothing yet) and an **Optionnels** counter (display only — no input here)
+- A completion percentage with a three-state badge: **Complet** (green, fully configured), **Partiel** (orange, started but incomplete) or **Non configuré** (red, nothing done)
 - A blue **Configurer les Frais** button
 
-Cards at `100% Complet` (green border) are ready; cards at `0% Non configuré` (red border) still need input.
+Cards at `100% Complet` (green border) are ready; **Partiel** ones (orange) have a partial matrix that needs finishing; **Non configuré** ones (red) still need input.
 
 Click **Configurer les Frais** on any incomplete class.
 
@@ -109,9 +109,9 @@ The modal lists **every mandatory fee** you created in the previous section, and
 - **RÉAFFECTÉS** — students whose subsidy is preserved after a reassignment
 - **NON AFFECTÉS** — students paying the full price, without subsidy
 
-Three buttons — **Copier Affectés / Copier Réaffectés / Copier Non Aff.** — copy the amount from the named column to the **other two** in one click. For example: enter `150 000` in **NON AFFECTÉS** and click **Copier Non Aff.**, both AFFECTÉS and RÉAFFECTÉS get filled with the same value. Handy whenever the same amount applies to multiple affectation statuses.
+Three buttons — **Copier Affectés / Copier Réaffectés / Copier Non Aff.** — propagate the value of the named column to **all three columns** (Affectés, Réaffectés, Non Affectés) in one click. For example: enter `150 000` in **NON AFFECTÉS** and click **Copier Non Aff.**, all three columns line up on that value. Handy whenever the same amount applies to every status.
 
-The **Échéance (jours après inscription)** field overrides the category's default delay for THIS class only. Leave it blank to use the default.
+The **Échéance (jours après inscription)** field adjusts the delay for the current configuration. Leave it blank to use the category's default delay.
 
 <Callout>
   **Côte d'Ivoire-specific.** The MESRS (Ministère de l'Enseignement Supérieur et de la Recherche Scientifique) affectation system distributes high-school graduates across institutions and partially subsidises their studies. The three columns let you differentiate prices per status; if that doesn't apply to your offering, enter the same value everywhere.
@@ -130,7 +130,7 @@ Two entry points:
 
 ### The Frais Optionnels page
 
-![Frais Optionnels page with category CANTINE and 4 formulas: Repas complet 455 000, Plat de résistance 300 000, Repat complet plus 555 000, ENtre plat desser 300 000, plus an Ajouter une formule button](/img/docs/superadmin/onboarding/30-frais-optionnels.png)
+![Frais Optionnels page with category CANTINE and 4 formulas: Repas complet, Plat de résistance, Repas complet plus, Entrée plat dessert, plus an Ajouter une formule button](/img/docs/superadmin/onboarding/30-frais-optionnels.png)
 
 Every optional category renders as a section with its list of **FORMULES DISPONIBLES**. In the example, CANTINE exposes 4 formulas with their annual prices in F CFA. Each formula row has three buttons on the right: <Icon name="pencil" /> edit, <Icon name="users" /> assign, <Icon name="trash" /> delete.
 
@@ -142,9 +142,9 @@ At the bottom of each category, the **+ Ajouter une formule** button reveals an 
 
 A formula with no assignment is offered to nobody. Click the **<Icon name="users" />** button (people icon — the middle one of the three actions) on the formula's row.
 
-![Assignations modal with four assignment-type options: Tous les étudiants selected by default, Par filière, Par niveau, Par classe, and the Assignations actuelles area](/img/docs/superadmin/onboarding/31-assignations-modal.png)
+![Assignations modal with four assignment-type options: Tous les étudiants, Par filière, Par niveau, Par classe, and the Assignations actuelles area](/img/docs/superadmin/onboarding/31-assignations-modal.png)
 
-The **Assignations** modal exposes four targeting types, from broadest to most specific:
+The **Assignations** modal exposes four targeting types, from broadest to most specific. None is selected by default at open — you have to pick explicitly:
 
 - **Tous les étudiants** — the formula is offered to everyone, no filter.
 - **Par filière** — restriction to one or more filières (BATIMENT, Communication & Marketing, INFORMATIQUE…).

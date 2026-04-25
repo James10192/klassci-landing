@@ -102,7 +102,11 @@ Fill in:
 
 ### 2.3 — Edge case: tronc commun
 
-If your filière starts with one or more shared semesters before specialising (typically Civil Engineering → Building / Public Works in S2), turn on the **Cette filière est un tronc commun** toggle in the dedicated section.
+<Callout type="warn">
+  **Conditional feature.** The tronc-commun section appears in the form **only when the `tronc_commun_enabled` setting is on** in the tenant's parameters. On a fresh tenant this setting is off by default — the section and its toggle do not exist, you can skip this sub-step. Turn it on from **Settings → Advanced** if your offer includes a common-core programme.
+</Callout>
+
+If your filière starts with one or more shared semesters before specialising (typically Civil Engineering → Building / Public Works in S2), turn on the **Cette filière est un tronc commun** toggle in the dedicated section. A **Number of common semesters** field appears (defaulting to 1).
 
 For **specialisation** filières that depend on a tronc commun, do the opposite: leave the toggle off, but pick the parent tronc-commun filière in the **Filière parent (Tronc Commun)** dropdown. So you need to create the tronc commun first, then its specialisations.
 
@@ -110,7 +114,7 @@ For **specialisation** filières that depend on a tronc commun, do the opposite:
   **Tronc-commun workflow.** The student first enrolls in the tronc commun, then in a specialisation at the end of the common semester(s). The report card aggregates tronc-commun grades and specialisation grades for the annual average.
 </Callout>
 
-Click **Créer la filière**. You're redirected to the list, which now contains your new filière with the **ACTIVE** badge. Repeat for each of your filières.
+Click **Créer la filière**. You're redirected to the list, which now contains your new filière with the blue **Active** badge. Repeat for each of your filières.
 
 ## Step 3: create the study levels
 
@@ -132,8 +136,8 @@ Fill in:
 
 - **Nom du niveau** *(required)* — for example `BTS Première Année` or `Licence 1`. This is the short label that appears in pickers and report cards.
 - **Code du niveau** *(required)* — a short, unique code (`BTS1`, `L1`, `M2`). Should stay stable over time: it's what exports and imports use to find the level.
-- **Type de formation** *(dropdown)* — `BTS`, `Licence`, `Master`, `Doctorat`. This is the field that determines whether the level follows the BTS system (plain semesters) or LMD (UE / ECUE / ECTS credits).
-- **Année d'étude** *(dropdown)* — position in the cursus (1st year, 2nd year, 3rd year...). Used to compute the student's academic progression.
+- **Type de formation** *(optional)* — seven options: `BTS`, `Bachelor`, `Licence`, `Master`, `Doctorat`, `Diplôme`, `Certificat`. Only **Licence**, **Master** and **Doctorat** trigger the LMD system (UE / ECUE / ECTS credits). All others fall back to BTS (plain semesters) — `Bachelor`, `Diplôme` and `Certificat` are *not* LMD despite their naming.
+- **Année d'étude** *(optional)* — position in the cursus (1st year, 2nd year, 3rd year...). Used to compute the student's academic progression.
 - **Libellé complet** *(optional)* — the long form, e.g., `Brevet de Technicien Supérieur - Première Année`. Used in some official documents (attestations, formal report cards).
 - **Description** *(optional)* — free-form paragraph for internal detail.
 - **Niveau actif** — leave it ticked. An inactive level disappears from enrollment dropdowns, but existing classes keep working.
@@ -194,7 +198,7 @@ Fill in:
 - **Niveau d'études** *(required)* — pick from the list created in step 3.
 - **Année universitaire** *(required)* — pre-filled with the current year but editable, useful to prepare next year's intake in advance.
 - **Système académique** — not editable. Determined automatically from the study level (Licence/Master/Doctorat level → LMD; otherwise BTS).
-- **Capacité maximale** *(required)* — defaults to 30. This is the upper bound on enrollments for the class; beyond it the system blocks new entries and the card shows a "full" badge.
+- **Capacité maximale** *(required)* — defaults to 30. This is the upper bound shown on the class card and used to compute the fill rate. *Strict blocking of new enrollments once the capacity is reached is a UI feature still being finalised; in the meantime KLASSCI lets you go over but flags the class as full.*
 - **Classe active** — leave it on. An inactive class disappears from enrollment pickers but keeps all its data.
 - **Description** *(optional)* — a free-form paragraph to spell out context (option, special mention, access restriction...).
 
@@ -246,7 +250,7 @@ Fill in the **Identité de la matière** column:
 
 - **Code de la matière** *(optional)* — leave it blank to have it auto-generated from the name (`MATH`, `ALG`, `MKT-DIG`). You can also force your own if you have an internal convention.
 - **Nom complet** *(required)* — for example `Mathématiques appliquées`, `Algorithmique`, `Marketing digital`. This is the label that shows up everywhere.
-- **Type de formation** *(required)* — defaults to `Formation générale`. Used for internal classification (continuing education, foundational, transversal, etc.).
+- **Type de formation** *(required)* — two options: `Formation générale` (default) or `Formation technologique et professionnelle`. Used for internal classification and some catalogue filters.
 - **Couleur de la matière** *(color picker)* — used to represent the course on the schedule. Pick a color that's easy to tell apart from the other courses at the same level.
 - **Description** *(optional)* — free text to spell out the syllabus or the history.
 - **Matière active** — leave it on. An inactive course disappears from upcoming schedules and assessments, but past grades stay intact.
@@ -281,33 +285,33 @@ In the sidebar, click **Unités d'Enseignement** under LMD.
 
 ![Unités d'Enseignement page with stats (1 UE, 0 ECUE, 3 ECTS credits), Parcours and Type UE filters, and a list with one UE Technologie de construction of type Découverte](/img/docs/superadmin/onboarding/18-ue-liste.png)
 
-The blue banner summarises the LMD catalogue (UE count, attached ECUEs, total ECTS credits distributed). Top right, **+ Nouvelle UE** opens the creation modal.
+The blue banner summarises the LMD catalogue (UE count, attached ECUEs, total ECTS credits distributed). Top right, **+ Nouvelle UE** routes you to the **full creation form** (a dedicated page, not a modal even though the visual rendering uses a centered card style).
 
-![Nouvelle Unité d'Enseignement modal with sections Identity (Intitulé + Code), Academic parameters (Crédits CECT + Type UE) and Description](/img/docs/superadmin/onboarding/19-ue-formulaire.png)
+![Nouvelle Unité d'Enseignement form with sections Identity (Intitulé + Code), Academic parameters (Credits + Type UE) and Description](/img/docs/superadmin/onboarding/19-ue-formulaire.png)
 
-Fill in:
+The form covers **the UE identity** (intitulé, code, credits, type, description) **and its initial link to a curriculum** (parcours, filière, level, semester, order, coefficient) — all on the same screen. Fill in:
 
 - **Intitulé** *(required)* — for example `Technologie de construction`, `Mathématiques fondamentales`. This is the label that appears on the report card.
 - **Code** *(required)* — a short code unique within the parcours (`UE:BTCB1`, `UE-MATH01`).
-- **Crédits ECTS** *(required)* — total credits this UE is worth (typically 3, 6, 9, or 12). It will be split across the ECUEs in the next step.
-- **Type UE** *(required)* — `Fondamentale` (core curriculum), `Découverte` (cross-cutting), `Optionnelle`, `Transversale`. The type doesn't change calculations, just the visual classification.
+- **Credits** *(required)* — total credits this UE is worth (typically between 1 and 30). It will be split across the ECUEs.
+- **Type UE** *(required)* — four options: `Fondamentale`, `Méthodologique`, `Découverte`, `Transversale`. The type doesn't change calculations, just the visual classification.
+- **Parcours**, **Filière**, **Niveau**, **Semestre**, **Ordre**, **Coefficient** *(required depending on context)* — the initial curriculum link is set right on this page. You can always link the UE to additional parcours later (step 5.4.3).
 - **Description** *(optional)* — free text.
 
-<Callout>
-  **Semester, filière, and level are NOT in this form.** They're set later via the link to a parcours (step 5.4.3). The same UE can therefore be reused in several parcours.
-</Callout>
-
-Click **Enregistrer**. The UE shows up in the list with **0 ECUE**.
+Click **Enregistrer**. The UE shows up in the list with **0 ECUE** and its first parcours link already active.
 
 #### 5.4.2 — Add ECUEs to the UE
 
-On the UE list, each row exposes a coloured action row.
+**Two paths depending on timing:**
 
-![UE row with action buttons: play arrow, green plus to add an ECUE, blue chain to link to parcours, blue pencil to edit, red trash to delete](/img/docs/superadmin/onboarding/20-ue-actions-row.png)
+- **Inline while creating the UE** — an ECUE table on the same UE creation page lets you add ECUEs straight away. Handy for a quick setup when you already know the ECUEs at UE creation time.
+- **From the UE list after creation** — each UE row exposes an action bar with a dedicated button to add an ECUE. The screenshots below document this second path.
 
-Left to right: <Icon name="play" /> expand the ECUE list, **green <Icon name="plus-circle" className="text-emerald-500" />** add an ECUE, **blue <Icon name="link" className="text-blue-500" />** link the UE to parcours, <Icon name="pencil" /> edit the UE, <Icon name="trash" /> delete.
+![UE row with action buttons: add ECUE (green), link to parcours (route), edit, delete](/img/docs/superadmin/onboarding/20-ue-actions-row.png)
 
-Click the **green <Icon name="plus-circle" className="text-emerald-500" />** button to open the ECUE add modal.
+Buttons on the row, left to right: **green <Icon name="plus-circle" className="text-emerald-500" />** add an ECUE, **route** indigo link the UE to parcours, <Icon name="pencil" /> edit the UE, <Icon name="trash" /> delete. *(To expand the list of ECUEs already attached, click the UE row itself — the `▶` arrow on the left is a visual cue, not a button.)*
+
+Click the **green <Icon name="plus-circle" className="text-emerald-500" />** button to open the ECUE add form.
 
 ![Ajouter un ECUE modal with a Crédits de l'UE gauge, two tabs Créer un ECUE / Lier un existant, a form with Nom + Code and contextual parameters (Coefficient, Crédits, Ordre)](/img/docs/superadmin/onboarding/21-ecue-formulaire.png)
 
@@ -331,7 +335,7 @@ Click **Créer l'ECUE** (green button). The ECUE is attached to the UE and the c
 
 #### 5.4.3 — Link the UE to one or more parcours
 
-A UE on its own does nothing until it's tied to a parcours and a semester — that's what makes it visible to students. On the UE row, click the **<Icon name="link" className="text-blue-500" /> (blue chain)** button.
+A UE can be taught in several parcours and several semesters beyond its initial link (step 5.4.1). To add or adjust those links, on the UE row click the **indigo route button** (itinerary icon, not a chain).
 
 ![Lier à des Parcours modal for the UE Technologie de construction, with an empty list and the message Aucun parcours trouvé](/img/docs/superadmin/onboarding/22-ue-parcours.png)
 
@@ -430,9 +434,9 @@ On submit (simple role or faculty), a **Compte créé avec succès** modal opens
 
 ![Account-created modal showing the generated username and temporary password](/img/docs/superadmin/onboarding/38-personnel-credentials.png)
 
-The **username** uses a per-role prefix (`coord.firstname.lastname`, `prof.firstname.lastname`, `sec.firstname.lastname`…) with auto-deduplication (`.1`, `.2`…) on collision. The **temporary password** is secure and shown in clear once — use the **Imprimer** button or the copy button to share it with the member. For faculty, a **Voir la fiche** button leads straight to the detail card to configure availability.
+The **username** uses a per-role prefix: `coord.` (Coordinator), `prof.` (Faculty), `sec.` (Registrar), `compta.` (Bursar), `caisse.` (Cashier). Final format: `prefix.firstname.lastname`, with auto-deduplication (`.1`, `.2`…) on collision. The **temporary password** is secure and shown in clear once — use the **Imprimer** button or the copy button to share it with the member. For faculty, a **Voir la fiche** button leads straight to the detail card to configure availability.
 
-On **first sign-in**, the member is forced to change their password. Passwords expire after **6 months** with a 1-month advance warning.
+On **first sign-in**, the member is forced to change their password. Passwords expire after **6 months** with a 1-month advance warning — adjustable by the super-administrator via the tenant setting `password_expiry_months`.
 
 <Callout type="warn">
   **Watch the faculty permissions.** If you enable the `notes_evaluations`, `presences`, and `emploi_temps` modules at the tenant level, remember to grant them to the `enseignant` role in Spatie Permission too. Otherwise, faculty members will see an empty sidebar. Toggling the module isn't enough — the business permission has to be granted as well.

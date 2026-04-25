@@ -102,7 +102,11 @@ Renseignez :
 
 ### 2.3 — Cas particulier : tronc commun
 
-Si votre filière démarre par un ou plusieurs semestres communs avant de se spécialiser (typiquement Génie Civil → Bâtiment / Travaux Publics au S2), activez le toggle **Cette filière est un tronc commun** dans la section dédiée.
+<Callout type="warn">
+  **Fonctionnalité conditionnelle.** La section tronc commun n'apparaît dans le formulaire **que si le réglage `tronc_commun_enabled` est activé** dans les paramètres du tenant. Sur un nouveau tenant, ce paramètre est désactivé par défaut — la section et son toggle n'existent même pas, vous pouvez sauter cette sous-étape. Activez-le depuis **Paramètres → Réglages avancés** si votre offre comprend un tronc commun.
+</Callout>
+
+Si votre filière démarre par un ou plusieurs semestres communs avant de se spécialiser (typiquement Génie Civil → Bâtiment / Travaux Publics au S2), activez le toggle **Cette filière est un tronc commun** dans la section dédiée. Un champ **Nombre de semestres tronc commun** apparaît alors (1 par défaut).
 
 Pour les filières de **spécialisation** qui dépendent d'un tronc commun, c'est l'inverse : laissez le toggle désactivé, mais sélectionnez la filière tronc commun parente dans le dropdown **Filière parent (Tronc Commun)**. Vous devez donc créer le tronc commun en premier, puis ses spécialisations.
 
@@ -110,7 +114,7 @@ Pour les filières de **spécialisation** qui dépendent d'un tronc commun, c'es
   **Workflow tronc commun.** L'étudiant s'inscrit d'abord en tronc commun, puis en spécialisation à l'issue du ou des semestres communs. Le bulletin agrège les notes du tronc commun et de la spécialisation pour la moyenne annuelle.
 </Callout>
 
-Cliquez sur **Créer la filière**. Vous êtes redirigé vers la liste, qui contient maintenant votre nouvelle filière avec le badge **ACTIVE**. Répétez l'opération pour chacune de vos filières.
+Cliquez sur **Créer la filière**. Vous êtes redirigé vers la liste, qui contient maintenant votre nouvelle filière avec le badge bleu **Active**. Répétez l'opération pour chacune de vos filières.
 
 ## Étape 3 : créer les niveaux d'étude
 
@@ -132,8 +136,8 @@ Renseignez :
 
 - **Nom du niveau** *(requis)* — par exemple `BTS Première Année` ou `Licence 1`. C'est le libellé court qui apparaît dans les sélecteurs et les bulletins.
 - **Code du niveau** *(requis)* — code court unique (`BTS1`, `L1`, `M2`). Doit être stable dans le temps : c'est lui qui permet aux exports et imports de retrouver le niveau.
-- **Type de formation** *(dropdown)* — `BTS`, `Licence`, `Master`, `Doctorat`. C'est ce champ qui détermine si le niveau suit le système BTS (semestres simples) ou LMD (UE / ECUE / crédits ECTS).
-- **Année d'étude** *(dropdown)* — la position dans le cursus (1ère année, 2ème année, 3ème année…). Sert au calcul de la progression académique de l'étudiant.
+- **Type de formation** *(optionnel)* — sept choix : `BTS`, `Bachelor`, `Licence`, `Master`, `Doctorat`, `Diplôme`, `Certificat`. Seuls **Licence**, **Master** et **Doctorat** déclenchent le système LMD (UE / ECUE / crédits ECTS). Tous les autres bascules en BTS (semestres simples) — `Bachelor`, `Diplôme` et `Certificat` ne sont pas LMD malgré leur appellation.
+- **Année d'étude** *(optionnel)* — la position dans le cursus (1ère année, 2ème année, 3ème année…). Sert au calcul de la progression académique de l'étudiant.
 - **Libellé complet** *(optionnel)* — la version longue, par exemple `Brevet de Technicien Supérieur - Première Année`. Utilisé dans certains documents officiels (attestations, bulletins formels).
 - **Description** *(optionnel)* — un paragraphe libre pour le détail interne.
 - **Niveau actif** — laissez coché. Un niveau inactif disparaît des dropdowns d'inscription mais les classes existantes continuent de fonctionner.
@@ -194,7 +198,7 @@ Renseignez :
 - **Niveau d'études** *(requis)* — sélectionnez dans la liste créée à l'étape 3.
 - **Année universitaire** *(requis)* — pré-remplie avec l'année courante mais modifiable, utile pour préparer la rentrée suivante en avance.
 - **Système académique** — non saisissable. Déterminé automatiquement par le niveau d'études (un niveau Licence/Master/Doctorat → LMD ; sinon → BTS).
-- **Capacité maximale** *(requis)* — par défaut 30. C'est la borne haute des inscriptions sur cette classe ; au-delà le système bloque les nouvelles entrées et la carte affiche un badge complet.
+- **Capacité maximale** *(requis)* — par défaut 30. C'est la borne haute affichée sur la carte de la classe et utilisée pour calculer le taux de remplissage. *Le blocage strict des nouvelles inscriptions une fois la capacité atteinte est une fonctionnalité en cours de finalisation côté UI ; en attendant, KLASSCI vous laisse dépasser mais flagge la classe comme pleine.*
 - **Classe active** — laissez activé. Une classe inactive disparaît des sélecteurs d'inscription mais conserve toutes ses données.
 - **Description** *(optionnel)* — un paragraphe libre pour préciser un contexte (option, mention spéciale, restriction d'accès…).
 
@@ -246,7 +250,7 @@ Renseignez la colonne **Identité de la matière** :
 
 - **Code de la matière** *(optionnel)* — laissez vide pour qu'il soit généré automatiquement à partir du nom (`MATH`, `ALG`, `MKT-DIG`). Vous pouvez aussi imposer le vôtre si vous avez une convention interne.
 - **Nom complet** *(requis)* — par exemple `Mathématiques appliquées`, `Algorithmique`, `Marketing digital`. C'est le libellé qui s'affiche partout.
-- **Type de formation** *(requis)* — par défaut `Formation générale`. Sert à la classification interne (formation continue, fondamentale, transversale, etc.).
+- **Type de formation** *(requis)* — deux choix : `Formation générale` (par défaut) ou `Formation technologique et professionnelle`. Sert à la classification interne et à certains filtres de catalogue.
 - **Couleur de la matière** *(color picker)* — utilisée pour représenter la matière dans l'emploi du temps. Choisissez une couleur facilement distinguable des autres matières du même niveau.
 - **Description** *(optionnel)* — texte libre pour préciser le contenu pédagogique ou l'historique.
 - **Matière active** — laissez activé. Une matière inactive disparaît des emplois du temps et des évaluations à venir, mais ses notes passées restent intactes.
@@ -281,33 +285,33 @@ Dans la sidebar, cliquez sur **Unités d'Enseignement** sous LMD.
 
 ![Page Unités d'Enseignement avec stats (1 UE, 0 ECUE, 3 crédits ECTS), filtres Parcours et Type UE, et la liste avec une UE Technologie de construction de type Découverte](/img/docs/superadmin/onboarding/18-ue-liste.png)
 
-Le bandeau bleu résume le catalogue LMD (nombre d'UE, d'ECUE rattachés, total des crédits ECTS distribués). En haut à droite, **+ Nouvelle UE** ouvre la modale de création.
+Le bandeau bleu résume le catalogue LMD (nombre d'UE, d'ECUE rattachés, total des crédits ECTS distribués). En haut à droite, **+ Nouvelle UE** vous mène vers le **formulaire de création complet** (page dédiée, pas une modale même si le rendu visuel a un style de carte centrée).
 
-![Modale Nouvelle Unité d'Enseignement avec sections Identité (Intitulé + Code), Paramètres académiques (Crédits CECT + Type UE) et Description](/img/docs/superadmin/onboarding/19-ue-formulaire.png)
+![Formulaire Nouvelle Unité d'Enseignement avec sections Identité (Intitulé + Code), Paramètres académiques (Crédits + Type UE) et Description](/img/docs/superadmin/onboarding/19-ue-formulaire.png)
 
-Renseignez :
+Le formulaire couvre **l'identité de l'UE** (intitulé, code, crédits, type, description) **et sa liaison initiale au cursus** (parcours, filière, niveau, semestre, ordre, coefficient) — tout dans le même écran. Renseignez :
 
 - **Intitulé** *(requis)* — par exemple `Technologie de construction`, `Mathématiques fondamentales`. C'est le libellé qui apparaît sur le bulletin.
 - **Code** *(requis)* — un code court unique au sein du parcours (`UE:BTCB1`, `UE-MATH01`).
-- **Crédits ECTS** *(requis)* — total des crédits que vaut l'UE entière (typiquement 3, 6, 9 ou 12). Sera réparti entre les ECUE à l'étape suivante.
-- **Type UE** *(requis)* — `Fondamentale` (cœur du cursus), `Découverte` (transversale), `Optionnelle`, `Transversale`. Le type ne change pas le calcul, juste la classification visuelle.
+- **Credits** *(requis)* — total des crédits que vaut l'UE entière (typiquement entre 1 et 30). Sera réparti entre les ECUE.
+- **Type UE** *(requis)* — quatre choix : `Fondamentale`, `Méthodologique`, `Découverte`, `Transversale`. Le type ne change pas le calcul, juste la classification visuelle.
+- **Parcours**, **Filière**, **Niveau**, **Semestre**, **Ordre**, **Coefficient** *(requis selon le contexte)* — la liaison initiale au cursus se fait dès cette page. Vous pourrez toujours lier l'UE à des parcours additionnels par la suite (étape 5.4.3).
 - **Description** *(optionnel)* — texte libre.
 
-<Callout>
-  **Le semestre, la filière et le niveau ne sont PAS dans ce formulaire.** Ils sont définis plus tard via la liaison au parcours (étape 5.4.4). Une même UE peut donc être réutilisée dans plusieurs parcours différents.
-</Callout>
-
-Cliquez sur **Enregistrer**. L'UE apparaît dans la liste avec **0 ECUE**.
+Cliquez sur **Enregistrer**. L'UE apparaît dans la liste avec **0 ECUE** et sa première liaison parcours déjà active.
 
 #### 5.4.2 — Ajouter des ECUE à l'UE
 
-Sur la liste des UE, chaque ligne expose une rangée d'actions colorées.
+**Deux chemins possibles selon le moment :**
 
-![Ligne d'UE avec les boutons d'action : flèche play, vert plus pour ajouter ECUE, bleu chaîne pour lier aux parcours, bleu crayon pour modifier, rouge poubelle pour supprimer](/img/docs/superadmin/onboarding/20-ue-actions-row.png)
+- **Inline pendant la création de l'UE** — un tableau ECUE permet de saisir les ECUE directement dans la même page que l'UE elle-même. Pratique pour un setup rapide quand vous créez l'UE et que vous connaissez déjà les ECUE.
+- **Depuis la liste des UE après création** — chaque ligne UE expose une rangée d'actions ; un bouton dédié ouvre le formulaire d'ajout d'ECUE pour cette UE existante. C'est ce flux que les captures suivantes documentent.
 
-De gauche à droite : <Icon name="play" /> déplier la liste des ECUE, <Icon name="plus-circle" className="text-emerald-500" /> **vert** ajouter un ECUE, <Icon name="link" className="text-blue-500" /> **bleu** lier l'UE à des parcours, <Icon name="pencil" /> modifier l'UE, <Icon name="trash" /> supprimer.
+![Ligne d'UE avec les boutons d'action : ajouter ECUE (vert), lier aux parcours (route), modifier, supprimer](/img/docs/superadmin/onboarding/20-ue-actions-row.png)
 
-Cliquez sur le **bouton vert <Icon name="plus-circle" className="text-emerald-500" />** pour ouvrir la modale d'ajout d'ECUE.
+Boutons sur la ligne, de gauche à droite : <Icon name="plus-circle" className="text-emerald-500" /> **vert** ajouter un ECUE, **route** indigo lier l'UE à des parcours, <Icon name="pencil" /> modifier l'UE, <Icon name="trash" /> supprimer. *(Pour déplier la liste des ECUE déjà rattachés, cliquez directement sur la ligne UE — la flèche `▶` qui apparaît à gauche n'est pas un bouton à cliquer mais un indicateur visuel.)*
+
+Cliquez sur le **bouton vert <Icon name="plus-circle" className="text-emerald-500" />** pour ouvrir le formulaire d'ajout d'ECUE.
 
 ![Modale Ajouter un ECUE avec jauge Crédits de l'UE, deux onglets Créer un ECUE / Lier un existant, formulaire Nom + Code + paramètres contextuels (Coefficient, Crédits, Ordre)](/img/docs/superadmin/onboarding/21-ecue-formulaire.png)
 
@@ -331,7 +335,7 @@ Cliquez sur **Créer l'ECUE** (bouton vert). L'ECUE est rattaché à l'UE et la 
 
 #### 5.4.3 — Lier l'UE à un ou plusieurs parcours
 
-Une UE seule ne sert à rien tant qu'elle n'est pas accrochée à un parcours et à un semestre — c'est ce qui la rend visible aux étudiants. Sur la ligne UE, cliquez sur le **bouton <Icon name="link" className="text-blue-500" /> (chaîne bleue)**.
+Une UE peut être enseignée dans plusieurs parcours et plusieurs semestres au-delà de sa liaison initiale (étape 5.4.1). Pour ajouter ou ajuster ces liaisons, sur la ligne UE, cliquez sur le **bouton route indigo** (icône itinéraire / pas une chaîne).
 
 ![Modale Lier à des Parcours pour l'UE Technologie de construction, avec une liste vide et le message Aucun parcours trouvé](/img/docs/superadmin/onboarding/22-ue-parcours.png)
 
@@ -430,9 +434,9 @@ Cliquez **Créer l'enseignant**.
 
 ![Modale Compte créé avec succès affichant le nom d'utilisateur et le mot de passe temporaire](/img/docs/superadmin/onboarding/38-personnel-credentials.png)
 
-Le **nom d'utilisateur** suit un préfixe par rôle (`coord.prenom.nom`, `prof.prenom.nom`, `sec.prenom.nom`…) avec déduplication automatique (`.1`, `.2`…) en cas de collision. Le **mot de passe temporaire** est sécurisé et affiché en clair une seule fois — utilisez le bouton **Imprimer** ou le bouton de copie pour le transmettre au membre. Pour les enseignants, un bouton **Voir la fiche** mène directement à la fiche détaillée pour configurer la disponibilité.
+Le **nom d'utilisateur** suit un préfixe par rôle : `coord.` (Coordinateur), `prof.` (Enseignant), `sec.` (Secrétaire), `compta.` (Comptable), `caisse.` (Caissier). Format final : `prefixe.prenom.nom`, avec déduplication automatique (`.1`, `.2`…) en cas de collision. Le **mot de passe temporaire** est sécurisé et affiché en clair une seule fois — utilisez le bouton **Imprimer** ou le bouton de copie pour le transmettre au membre. Pour les enseignants, un bouton **Voir la fiche** mène directement à la fiche détaillée pour configurer la disponibilité.
 
-À la **première connexion**, le membre est forcé de changer son mot de passe. Les mots de passe expirent au bout de **6 mois** avec une alerte 1 mois avant.
+À la **première connexion**, le membre est forcé de changer son mot de passe. Les mots de passe expirent au bout de **6 mois** avec une alerte 1 mois avant — durée modifiable par le super-administrateur via le réglage tenant `password_expiry_months`.
 
 <Callout type="warn">
   **Attention aux permissions enseignant.** Si vous activez les modules `notes_evaluations`, `presences` et `emploi_temps` au niveau du tenant, pensez à les attribuer également au rôle `enseignant` dans Spatie Permission. Sinon, les enseignants verront une sidebar vide. Le toggle module ne suffit pas — il faut aussi la permission métier.

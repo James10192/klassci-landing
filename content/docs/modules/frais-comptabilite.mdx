@@ -48,7 +48,7 @@ Cliquez sur **+ Nouvelle catégorie**. Le formulaire s'ouvre en pleine page, div
 ### Informations principales
 
 - **Nom de la catégorie** *(requis)* — `Frais de scolarité`, `Cantine`, `Transport`. Apparaît dans les bulletins, les exports et l'espace étudiant.
-- **Code unique** *(requis)* — automatiquement converti en MAJUSCULES (`SCOLARITE`, `CANTINE`, `TRANSPORT`). Sert d'identifiant technique stable utilisé dans les imports/exports et les commandes artisan.
+- **Code unique** *(requis)* — un code court (`SCOLARITE`, `CANTINE`, `TRANSPORT`). KLASSCI **suggère automatiquement une version en majuscules** dérivée du nom dès que vous quittez le champ Nom (s'il est encore vide), mais vous pouvez le surcharger manuellement. Sert d'identifiant technique stable utilisé dans les imports/exports et les commandes artisan.
 - **Description détaillée** *(optionnel)* — un paragraphe libre.
 
 ### Configuration financière
@@ -59,7 +59,7 @@ Cliquez sur **+ Nouvelle catégorie**. Le formulaire s'ouvre en pleine page, div
 ### Personnalisation visuelle
 
 - **Icône (classe FontAwesome)** — par exemple `fas fa-money-bill`, `fas fa-utensils`, `fas fa-bus`. Apparaît dans les dashboards et les cartes.
-- **Couleur thématique** — pour distinguer visuellement les catégories.
+- **Couleur thématique** — choix dans une palette Bootstrap à 6 valeurs sémantiques : Bleu (Primary), Vert (Success), Cyan (Info), Orange (Warning), Rouge (Danger), Gris (Secondary). Utilisée pour distinguer visuellement les catégories dans les dashboards et cartes.
 
 ### Configuration avancée — la décision la plus importante
 
@@ -91,11 +91,11 @@ La page affiche **toutes les classes de l'établissement** sous forme de cartes 
 - Nom complet de la classe (`BATIMENT - BTS 1ere ANNEE`, `Communication & Marketing - Licence 1ère année`…)
 - Filière et niveau d'études en breadcrumb
 - Nombre d'étudiants déjà inscrits
-- Compteur **OBLIGATOIRES** (par exemple `2/2` = tous configurés, `0/2` = rien fait) et **OPTIONNELS** (info seulement, pas de saisie ici)
-- Pourcentage de remplissage et badge **Complet** (vert) ou **Non configuré** (rouge)
+- Compteur **Obligatoires** (par exemple `2/2` = tous configurés, `0/2` = rien fait) et **Optionnels** (info seulement, pas de saisie ici)
+- Pourcentage de remplissage et badge à trois états : **Complet** (vert, tout est configuré), **Partiel** (orange, configuration commencée mais incomplète) ou **Non configuré** (rouge, rien fait)
 - Bouton bleu **Configurer les Frais**
 
-Les classes en `100% Complet` (bordure verte) sont prêtes ; celles en `0% Non configuré` (bordure rouge) demandent encore une saisie.
+Les classes en `100% Complet` (bordure verte) sont prêtes ; celles en `Partiel` (orange) ont une matrice partielle à finir ; celles en `Non configuré` (rouge) demandent encore une saisie.
 
 Cliquez sur **Configurer les Frais** d'une classe non encore complète.
 
@@ -109,9 +109,9 @@ Le modal liste **tous les frais obligatoires** que vous avez créés dans la sec
 - **RÉAFFECTÉS** — étudiants dont la subvention est maintenue après une réaffectation
 - **NON AFFECTÉS** — étudiants payant le tarif complet, sans subvention
 
-Trois boutons **Copier Affectés / Copier Réaffectés / Copier Non Aff.** copient la valeur de la colonne nommée vers les **deux autres** en un clic. Par exemple : saisir `150 000` dans **NON AFFECTÉS** puis cliquer **Copier Non Aff.** remplit AFFECTÉS et RÉAFFECTÉS avec la même valeur. Pratique quand un même tarif s'applique à plusieurs statuts d'affectation.
+Trois boutons **Copier Affectés / Copier Réaffectés / Copier Non Aff.** propagent la valeur de la colonne nommée à **toutes les colonnes** (Affectés, Réaffectés, Non Affectés) en un clic. Par exemple : saisir `150 000` dans **NON AFFECTÉS** puis cliquer **Copier Non Aff.** aligne les trois colonnes sur cette même valeur. Pratique quand un même tarif s'applique à tous les statuts d'affectation.
 
-Le champ **Échéance (jours après inscription)** override le délai par défaut de la catégorie pour CETTE classe seulement. Laissez vide pour utiliser le défaut.
+Le champ **Échéance (jours après inscription)** ajuste le délai pour la configuration en cours. Laissez vide pour utiliser le délai par défaut de la catégorie.
 
 <Callout>
   **Spécifique Côte d'Ivoire.** Le système d'affectation MESRS (Ministère de l'Enseignement Supérieur et de la Recherche Scientifique) répartit les bacheliers entre les établissements et finance partiellement leurs études. Les trois colonnes permettent de différencier les tarifs selon le statut de l'étudiant ; si votre offre n'est pas concernée, saisissez la même valeur partout.
@@ -130,7 +130,7 @@ Deux entrées :
 
 ### La page Frais Optionnels
 
-![Page Frais Optionnels avec catégorie CANTINE et 4 formules : Repas complet 455 000, Plat de résistance 300 000, Repat complet plus 555 000, ENtre plat desser 300 000, plus bouton Ajouter une formule](/img/docs/superadmin/onboarding/30-frais-optionnels.png)
+![Page Frais Optionnels avec catégorie CANTINE et 4 formules : Repas complet, Plat de résistance, Repas complet plus, Entrée plat dessert, plus bouton Ajouter une formule](/img/docs/superadmin/onboarding/30-frais-optionnels.png)
 
 Chaque catégorie optionnelle s'affiche comme une section avec sa liste de **FORMULES DISPONIBLES**. Dans l'exemple, la catégorie CANTINE expose 4 formules avec leurs prix annuels en F CFA. Chaque ligne de formule a trois boutons à droite : <Icon name="pencil" /> modifier, <Icon name="users" /> assigner, <Icon name="trash" /> supprimer.
 
@@ -142,9 +142,9 @@ En bas de chaque catégorie, le bouton **+ Ajouter une formule** déroule un min
 
 Une formule sans assignation n'est proposée à personne. Cliquez sur le bouton **<Icon name="users" />** (icône people, au milieu des trois boutons d'action) sur la ligne de la formule.
 
-![Modal Assignations avec quatre options de type d'assignation : Tous les étudiants sélectionné par défaut, Par filière, Par niveau, Par classe, et la zone Assignations actuelles](/img/docs/superadmin/onboarding/31-assignations-modal.png)
+![Modal Assignations avec quatre options de type d'assignation : Tous les étudiants, Par filière, Par niveau, Par classe, et la zone Assignations actuelles](/img/docs/superadmin/onboarding/31-assignations-modal.png)
 
-Le modal **Assignations** propose quatre types ciblage, du plus ouvert au plus restrictif :
+Le modal **Assignations** propose quatre types de ciblage, du plus ouvert au plus restrictif. Aucun n'est sélectionné par défaut à l'ouverture — vous devez choisir explicitement :
 
 - **Tous les étudiants** — la formule est proposée à tout le monde, sans filtre.
 - **Par filière** — restriction à une ou plusieurs filières (BATIMENT, Communication & Marketing, INFORMATIQUE…).
