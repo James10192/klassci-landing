@@ -1,0 +1,472 @@
+{
+  "metadata": {
+    "title": "KLASSCI — School management, reimagined.",
+    "description": "KLASSCI digitises school operations end-to-end. Grades, schedules, payments, report cards — one tool, zero paperwork.",
+    "keywords": "school management, school software, KLASSCI, grades, report cards, timetable, payments, attendance, education SaaS, Côte d'Ivoire, Africa",
+    "ogSiteName": "KLASSCI"
+  },
+  "nav": {
+    "features": "Features",
+    "pricing": "Pricing",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "login": "Sign in",
+    "themeToggleDark": "Dark",
+    "themeToggleLight": "Light",
+    "themeToggleAria": "Toggle theme",
+    "menuOpen": "Open menu",
+    "menuClose": "Close menu",
+    "languageSwitcherAria": "Switch language"
+  },
+  "hero": {
+    "title": "School management, reimagined.",
+    "subtitle": "KLASSCI replaces your spreadsheets, grade books, and bulletin boards. One place to run everything.",
+    "primaryCta": "Try it free",
+    "primaryCtaSub": "— it's free",
+    "secondaryCta": "See how it works",
+    "note": "Browser-based. No installation required.",
+    "screenshots": [
+      { "label": "Dashboard", "alt": "KLASSCI dashboard" },
+      { "label": "Student management", "alt": "KLASSCI student management page" },
+      { "label": "New enrolment", "alt": "KLASSCI new enrolment form" },
+      { "label": "Results & report cards", "alt": "KLASSCI results and report cards" },
+      { "label": "Master timetable", "alt": "KLASSCI master timetable" },
+      { "label": "Attendance", "alt": "KLASSCI attendance management" },
+      { "label": "LMD pathway", "alt": "KLASSCI LMD pathway" },
+      { "label": "Staff management", "alt": "KLASSCI staff management" },
+      { "label": "Sign-in code", "alt": "KLASSCI attendance sign-in code" }
+    ]
+  },
+  "pillars": {
+    "items": [
+      {
+        "title": "Simple",
+        "description": "Built for secretaries, teachers, and principals who don't have time to learn complex software. Trial account in 2-3 days, full deployment in 2 weeks."
+      },
+      {
+        "title": "Complete",
+        "description": "Grades, report cards, schedules, payments, attendance, enrolments — everything is integrated. Zero extra tools."
+      },
+      {
+        "title": "Secure",
+        "description": "Each school runs on its own isolated database. Your data is never shared with other schools."
+      }
+    ]
+  },
+  "features": {
+    "title": "What KLASSCI does for you",
+    "intro": "Every feature was built by listening to the real needs of the schools we've supported since 2023.",
+    "learnMore": "Learn more",
+    "big": [
+      {
+        "key": "notes",
+        "title": "Grade entry & report cards",
+        "description": "Teachers enter grades directly from their phones. Averages, ranks, and comments are computed automatically. PDF report cards are generated in one click, branded with your school colours.",
+        "image": "/img/dashboard/notes-bulletins.png",
+        "alt": "Grade entry and report cards — KLASSCI student record"
+      },
+      {
+        "key": "finance",
+        "title": "Real-time financial tracking",
+        "description": "See each student's payment status instantly. Send automatic reminders, generate receipts, and export financial reports. Compatible with category-based fee systems.",
+        "image": "/img/dashboard/finance.png",
+        "alt": "KLASSCI real-time financial tracking"
+      },
+      {
+        "key": "planning",
+        "title": "Master timetable",
+        "description": "Configure teaching hours for each programme/level combination. Track planned vs delivered hours with a clean admin dashboard.",
+        "image": "/img/dashboard/planning.png",
+        "alt": "KLASSCI master timetable"
+      },
+      {
+        "key": "presences",
+        "title": "Attendance management",
+        "description": "Comprehensive dashboard for student attendance. Teachers run a digital roll-call or admin staff mark presences. Real-time rates, trends, and exportable reports.",
+        "image": "/img/dashboard/presences.png",
+        "alt": "KLASSCI attendance management"
+      },
+      {
+        "key": "lmd",
+        "title": "Full LMD system",
+        "description": "Manages units, course modules, credits, and semesters in line with UEMOA standards. Adapted report cards, automatic credit validation, and full student pathway tracking.",
+        "image": "/img/dashboard/lmd.png",
+        "alt": "KLASSCI LMD pathway"
+      },
+      {
+        "key": "personnel",
+        "title": "Staff management",
+        "description": "Unified administration of coordinators, teachers, secretaries, and accountants. Overview with role/status filters and fast search.",
+        "image": "/img/dashboard/personnel.png",
+        "alt": "KLASSCI staff management"
+      }
+    ],
+    "small": [
+      {
+        "title": "Online enrolments",
+        "description": "End-to-end workflow: from application to validation, with document and required-paperwork tracking."
+      },
+      {
+        "title": "Role-based dashboards",
+        "description": "Principal, secretary, teacher, accountant, coordinator — each one sees only what concerns them."
+      },
+      {
+        "title": "API & integrations",
+        "description": "Connect KLASSCI to your LMS or existing system through our documented REST API."
+      }
+    ],
+    "modals": {
+      "notes": {
+        "title": "Grade entry & report cards",
+        "image": "/img/dashboard/notes-bulletins.png",
+        "intro": "KLASSCI turns grade management into a fast, simple process. No more shared spreadsheets and entry errors.",
+        "bullets": [
+          "Online entry from phone, tablet, or computer",
+          "Automatic averages, ranks, and comments",
+          "PDF report cards branded with your school colours",
+          "Coefficients, credits, and class-level subject management",
+          "Full grade history per student and per term",
+          "Bulk export for printing or archiving"
+        ],
+        "outro": "Teachers enter grades directly — secretaries no longer re-key them. Report card production drops from 3 weeks to 48 hours."
+      },
+      "finance": {
+        "title": "Real-time financial tracking",
+        "image": "/img/dashboard/finance.png",
+        "intro": "The KLASSCI accounting module delivers a clear, instant view of your school's financial health.",
+        "bullets": [
+          "Dashboard with live KPIs: revenue, receivables, collection rate",
+          "Per-student payment tracking with full history",
+          "Automatic email reminders with customisable templates",
+          "Generate payment receipts and PDF financial statements",
+          "Financial reports by period, class, or fee category",
+          "Flexible fee system: enrolment, tuition, exams, and more"
+        ],
+        "outro": "Accountants see at a glance who has paid and who needs reminding, and can act immediately — no waiting for month-end."
+      },
+      "planning": {
+        "title": "Master timetable",
+        "image": "/img/dashboard/planning.png",
+        "intro": "The master timetable lets you configure and track teaching hours across the school.",
+        "bullets": [
+          "Hour-volume configuration per programme/level pairing",
+          "Track planned vs delivered hours",
+          "KPIs: number of sessions, teaching hours, active teachers",
+          "Overview, year planner, class load, and coordinator interface",
+          "Subject-level hour volume per programme and level"
+        ],
+        "outro": ""
+      },
+      "presences": {
+        "title": "Attendance management",
+        "image": "/img/dashboard/presences.png",
+        "intro": "Track student attendance with a clean dashboard and simple tools.",
+        "bullets": [
+          "Digital roll-call by teacher or admin marking",
+          "Dashboard with KPIs: present, absent, late, excused",
+          "Live attendance rate by class and by student",
+          "7-day trends and per-class attendance",
+          "Reports and CSV/PDF export",
+          "Detailed statistics and full history"
+        ],
+        "outro": ""
+      },
+      "lmd": {
+        "title": "Full LMD system",
+        "image": "/img/dashboard/lmd.png",
+        "intro": "KLASSCI supports the LMD system (Bachelor-Master-Doctorate) compliant with UEMOA standards.",
+        "bullets": [
+          "Units, modules, and credits managed by semester",
+          "Student pathway with progressive credit validation",
+          "LMD report cards with weighted averages and credits",
+          "Configurable calculation formulas (AQ, NAQ, APC)",
+          "Mix classic vocational programmes and LMD in the same school"
+        ],
+        "outro": ""
+      },
+      "personnel": {
+        "title": "Staff management",
+        "image": "/img/dashboard/personnel.png",
+        "intro": "Unified administration of every member of your school's staff.",
+        "bullets": [
+          "Overview: coordinators, teachers, secretaries, and accountants",
+          "Per-role KPIs with live counters",
+          "Per-category tabs with search and filters (status, payroll ID)",
+          "Fast onboarding of new staff with direct assignment",
+          "Detailed profiles with contact details, hire date, and status"
+        ],
+        "outro": ""
+      },
+      "ctaPrimary": "Request a demo",
+      "ctaSecondary": "See pricing",
+      "close": "Close"
+    }
+  },
+  "socialProof": {
+    "title": "Trusted by schools educating thousands of students",
+    "clients": [
+      { "name": "ESBTP Abidjan", "detail": "2,600+ students · Élite plan", "logo": "/img/clients/esbtp.png" },
+      { "name": "ESBTP Yamoussoukro", "detail": "2,000+ students · Élite plan", "logo": "/img/clients/esbtp.png" },
+      { "name": "Institut Pascal", "detail": "1,000+ students · Élite plan", "logo": "/img/clients/institut-pascal.jpg" },
+      { "name": "San Andrea School", "detail": "1,200+ students · Élite plan", "logo": "/img/clients/san-andrea.jpg" },
+      { "name": "ITS", "detail": "800+ students · Pro plan", "logo": "/img/clients/its.jpg" }
+    ],
+    "testimonials": [
+      {
+        "quote": "Before KLASSCI, grade entry took 3 weeks. Today, report cards are ready in 48 hours. Teachers enter grades directly online.",
+        "highlight": "report cards are ready in 48 hours",
+        "author": "Dr. Soro Kouadio",
+        "role": "Principal",
+        "avatar": "/img/avatars/soro-kouadio.png",
+        "featured": false
+      },
+      {
+        "quote": "Financial tracking has completely changed for us. We see in real time who has paid, who needs a reminder, and the reports are always up to date. We no longer wait until month-end to get a clear picture. It has become indispensable.",
+        "highlight": "Financial tracking has completely changed for us.",
+        "author": "Ama Bamba",
+        "role": "Accountant",
+        "avatar": "/img/avatars/ama-bamba.jpg",
+        "featured": true
+      },
+      {
+        "quote": "Digital sign-in cut absenteeism by 30%. Coordinators see in real time who is present, without waiting for paper sign-in sheets.",
+        "highlight": "cut absenteeism by 30%",
+        "author": "Tarek Mehdy",
+        "role": "Coordinator",
+        "avatar": "/img/avatars/tarek-mehdy.jpg",
+        "featured": false
+      }
+    ]
+  },
+  "partnership": {
+    "alt": "Become a KLASSCI partner — 0 FCFA",
+    "image": "/img/sections/partnership.png"
+  },
+  "video": {
+    "title": "They say it better than we do",
+    "description": "Hear from a school administrator who uses KLASSCI every day to manage students, teachers, and finances.",
+    "badge": "TESTIMONIAL",
+    "src": "/videos/testimonial.mp4",
+    "playAria": "Play video"
+  },
+  "security": {
+    "title": "Total security and trust",
+    "p1": "We guarantee the highest level of data protection in strict compliance with GDPR. Our dedicated cybersecurity team works continuously to strengthen our defences.",
+    "p2": "Each school runs on its own isolated database — no data is ever shared between schools.",
+    "image": "/img/sections/security.png",
+    "alt": "KLASSCI data security and protection"
+  },
+  "support": {
+    "title": "Customer support, available 24/7",
+    "p1": "Get reliable answers any time through our built-in chatbot. Talk directly to our team via email, WhatsApp, or Telegram.",
+    "p2": "Our agents handle French and English fluently. Average response time: under 2 minutes.",
+    "image": "/img/sections/support.png",
+    "alt": "KLASSCI customer support — chat and assistance"
+  },
+  "imageBanner": {
+    "alt": "KLASSCI students",
+    "image": "/img/sections/students-banner.png"
+  },
+  "pricing": {
+    "title": "Simple pricing",
+    "subtitle": "Start free. Scale up when you're ready.",
+    "popularBadge": "popular",
+    "perMonth": "/ month",
+    "tiers": [
+      {
+        "key": "free",
+        "name": "Free",
+        "tagline": "To explore",
+        "price": "0 FCFA",
+        "period": "3-month trial",
+        "features": [
+          { "text": "Up to 50 students", "included": true },
+          { "text": "Grade management", "included": true },
+          { "text": "Basic timetable", "included": true },
+          { "text": "1 admin user", "included": true },
+          { "text": "Accounting", "included": false },
+          { "text": "Priority support", "included": false }
+        ],
+        "cta": "Get started",
+        "ctaStyle": "outline",
+        "featured": false
+      },
+      {
+        "key": "essentiel",
+        "name": "Essentiel",
+        "tagline": "Growing schools",
+        "price": "150k FCFA",
+        "period": "/ month",
+        "features": [
+          { "text": "1,000 students", "included": true },
+          { "text": "Grades + PDF report cards", "included": true },
+          { "text": "Advanced timetable", "included": true },
+          { "text": "Full accounting", "included": true },
+          { "text": "5 users", "included": true },
+          { "text": "Email support", "included": true }
+        ],
+        "cta": "Choose Essentiel",
+        "ctaStyle": "primary",
+        "featured": true
+      },
+      {
+        "key": "pro",
+        "name": "Pro",
+        "tagline": "Large schools",
+        "price": "350k FCFA",
+        "period": "/ month",
+        "features": [
+          { "text": "Unlimited students", "included": true },
+          { "text": "All features", "included": true },
+          { "text": "Full LMD system", "included": true },
+          { "text": "API for integrations", "included": true },
+          { "text": "Unlimited users", "included": true },
+          { "text": "Priority 24/7 support", "included": true }
+        ],
+        "cta": "Choose Pro",
+        "ctaStyle": "outline",
+        "featured": false
+      },
+      {
+        "key": "elite",
+        "name": "Élite",
+        "tagline": "Tailored to your school",
+        "price": "Custom quote",
+        "period": "full customisation",
+        "features": [
+          { "text": "Everything in Pro", "included": true },
+          { "text": "Custom features", "included": true },
+          { "text": "PDFs and exports in your school colours", "included": true },
+          { "text": "Dedicated deployment (~2 weeks)", "included": true },
+          { "text": "Team training", "included": true },
+          { "text": "Dedicated account manager", "included": true }
+        ],
+        "cta": "Contact us",
+        "ctaStyle": "primary",
+        "featured": false
+      }
+    ],
+    "footer": "Free 3-month trial · No credit card required · Support included"
+  },
+  "faq": {
+    "title": "Frequently asked questions",
+    "items": [
+      {
+        "q": "Is my data secure?",
+        "a": "Each school runs on its own isolated database. Data is encrypted in transit and at rest. No school can access another school's data."
+      },
+      {
+        "q": "Can I migrate my data from Excel?",
+        "a": "Yes. KLASSCI offers import tools for student lists, classes, and subjects in Excel format. Our team can also assist with the initial migration."
+      },
+      {
+        "q": "Does KLASSCI support the LMD system?",
+        "a": "Yes. KLASSCI supports both classic vocational programmes and the LMD system (Bachelor-Master-Doctorate) with units, modules, credits, and semesters compliant with UEMOA standards."
+      },
+      {
+        "q": "How long until we're up and running?",
+        "a": "On the free plan (3-month trial), your account is created in 2 to 3 days. On a paid plan, expect about 2 weeks for full customisation and deployment."
+      },
+      {
+        "q": "Does KLASSCI work on mobile?",
+        "a": "Yes. The interface is fully responsive and works on smartphones, tablets, and desktops. Teachers can record attendance and grades directly from their phones."
+      },
+      {
+        "q": "Can I try KLASSCI for free?",
+        "a": "The Free plan lets you test KLASSCI for 3 months with up to 50 students. Your account is ready in 2 to 3 days. On a paid plan, expect about 2 weeks for full customisation and deployment."
+      }
+    ]
+  },
+  "contact": {
+    "title": "Request a demonstration",
+    "intro": "Have questions or want to see KLASSCI in action? Fill in the form and our team will get back to you within 24 hours.",
+    "info": {
+      "email": "contact@klassci.com",
+      "location": "Abidjan, Côte d'Ivoire",
+      "emailLabel": "Email",
+      "locationLabel": "Location"
+    },
+    "form": {
+      "name": { "label": "Full name", "placeholder": "Your name" },
+      "email": { "label": "Email", "placeholder": "you@example.com" },
+      "school": { "label": "School", "placeholder": "Your school name" },
+      "phone": { "label": "Phone", "placeholder": "+225 07 00 00 00 00" },
+      "type": {
+        "label": "School type",
+        "placeholder": "Select",
+        "options": [
+          { "value": "ecole_superieure", "label": "Higher education school" },
+          { "value": "universite", "label": "University" },
+          { "value": "lycee", "label": "High school" },
+          { "value": "college", "label": "Middle school" },
+          { "value": "centre_formation", "label": "Training centre" },
+          { "value": "autre", "label": "Other" }
+        ]
+      },
+      "message": { "label": "Message", "labelOptional": "Message (optional)", "placeholder": "Tell us how KLASSCI can help you..." },
+      "submit": "Send request",
+      "submitArrow": "→",
+      "submitting": "Sending...",
+      "responseNote": "Reply within 24h"
+    },
+    "success": {
+      "title": "Message sent",
+      "text": "We will get back to you within 24 hours."
+    },
+    "error": {
+      "title": "Sending failed",
+      "text": "Something went wrong. Please retry, or email contact@klassci.com."
+    }
+  },
+  "letter": {
+    "badge": "A note from the team",
+    "title": "Ready to simplify your school's operations?",
+    "text": "We built KLASSCI because African schools deserve modern, simple, and reliable tools. Try it — it's free.",
+    "cta": "Start for free"
+  },
+  "footer": {
+    "tagline": "School management platform built for higher-education institutions in Africa.",
+    "columns": {
+      "product": {
+        "title": "Product",
+        "links": [
+          { "label": "Features", "href": "#fonctionnalites" },
+          { "label": "Pricing", "href": "#tarifs" },
+          { "label": "Sign in", "href": "/login" }
+        ]
+      },
+      "resources": {
+        "title": "Resources",
+        "links": [
+          { "label": "Documentation", "href": "/docs" },
+          { "label": "API reference", "href": "/api-reference" },
+          { "label": "Changelog", "href": "/changelog" }
+        ]
+      },
+      "contact": {
+        "title": "Contact",
+        "links": [
+          { "label": "contact@klassci.com", "href": "mailto:contact@klassci.com" },
+          { "label": "Abidjan, Côte d'Ivoire", "href": "#" }
+        ]
+      }
+    },
+    "copyright": "© {year} KLASSCI — African Digital Consulting",
+    "social": {
+      "facebook": "Facebook",
+      "linkedin": "LinkedIn",
+      "twitter": "X (Twitter)"
+    }
+  },
+  "tenantLookup": {
+    "pageTitle": "Sign in to your school",
+    "intro": "Enter your email or username to reach your school's workspace.",
+    "label": "Email or username",
+    "placeholder": "you@school.org or your.username",
+    "submit": "Continue",
+    "submitting": "Searching...",
+    "notFound": "No school was found for this identifier. Please contact your administrator.",
+    "error": "Something went wrong. Please try again in a moment.",
+    "alreadyKnow": "I already know my school's address"
+  }
+}

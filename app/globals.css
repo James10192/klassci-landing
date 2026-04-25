@@ -1,0 +1,237 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ────────────────────────────────────────────────
+   KLASSCI Design Tokens — light & dark
+   Mirror the welcome.blade.php :root system so the
+   Next.js build matches the Laravel landing 1:1.
+   ──────────────────────────────────────────────── */
+
+:root {
+  --bg: #f6f4f0;
+  --bg-alt: #edeae4;
+  --bg-card: #ffffff;
+
+  --text: #1a1a1a;
+  --text-secondary: #3a3d43;
+  --text-muted: #8a8a8a;
+
+  --accent: #0453cb;
+  --accent-hover: #0340a0;
+  --accent-light: rgba(4, 83, 203, 0.08);
+
+  --border: #dadde2;
+  --border-strong: #c5c9d0;
+
+  --nav-bg: rgba(246, 244, 240, 0.85);
+
+  --footer-bg: var(--accent);
+  --footer-text: #ffffff;
+  --footer-link: rgba(255, 255, 255, 0.7);
+  --footer-border: rgba(255, 255, 255, 0.15);
+
+  --dot-color: rgba(0, 0, 0, 0.06);
+
+  --duration-fast: 100ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+  color-scheme: light;
+}
+
+html.dark {
+  --bg: #1a1d23;
+  --bg-alt: #21252b;
+  --bg-card: #282c34;
+
+  --text: #dce0e5;
+  --text-secondary: #9da3ae;
+  --text-muted: #6b7280;
+
+  --accent: #4b8af0;
+  --accent-hover: #6da3f7;
+  --accent-light: rgba(75, 138, 240, 0.12);
+
+  --border: #363b44;
+  --border-strong: #4b5263;
+
+  --nav-bg: rgba(26, 29, 35, 0.85);
+
+  --footer-bg: #111318;
+  --footer-text: #dce0e5;
+  --footer-link: rgba(220, 224, 229, 0.6);
+  --footer-border: rgba(255, 255, 255, 0.08);
+
+  --dot-color: rgba(255, 255, 255, 0.04);
+
+  color-scheme: dark;
+}
+
+/* ────────────────────────────────────────────────
+   Base reset & body
+   ──────────────────────────────────────────────── */
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-plex-sans), system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  font-feature-settings: "ss01", "cv01";
+  transition:
+    background var(--duration-slow),
+    color var(--duration-slow);
+}
+
+/* Theme switch flash — used by the bootstrap script to soften the swap */
+html.theme-switching body {
+  animation: themeFlash 0.8s var(--ease-out);
+}
+
+@keyframes themeFlash {
+  0% { opacity: 1; }
+  40% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+/* ────────────────────────────────────────────────
+   Typography defaults
+   ──────────────────────────────────────────────── */
+
+h1, h2, h3, h4 {
+  font-family: var(--font-plex-serif), Georgia, serif;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--text);
+}
+
+h4 {
+  font-family: var(--font-plex-sans), system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--duration-normal);
+}
+
+a:hover {
+  color: var(--accent);
+}
+
+::selection {
+  background: var(--accent-light);
+  color: var(--accent);
+}
+
+/* ────────────────────────────────────────────────
+   Reusable utilities — scroll-reveal, marquee fade,
+   gradient text shimmer (used by Hero h1)
+   ──────────────────────────────────────────────── */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.6s var(--ease-out),
+    transform 0.6s var(--ease-out);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-d1 { transition-delay: 80ms; }
+.reveal-d2 { transition-delay: 160ms; }
+.reveal-d3 { transition-delay: 240ms; }
+
+.gradient-text {
+  background: linear-gradient(
+    90deg,
+    #0453cb 0%,
+    #5e91de 25%,
+    #0453cb 50%,
+    #5e91de 75%,
+    #0453cb 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientText 4s linear infinite;
+}
+
+html.dark .gradient-text {
+  background: linear-gradient(
+    90deg,
+    #4b8af0 0%,
+    #7ab0ff 25%,
+    #4b8af0 50%,
+    #7ab0ff 75%,
+    #4b8af0 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@keyframes gradientText {
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+/* Marquee edge fade (light/dark aware) */
+.marquee-fade::before,
+.marquee-fade::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.marquee-fade::before {
+  left: 0;
+  background: linear-gradient(90deg, var(--bg), transparent);
+}
+
+.marquee-fade::after {
+  right: 0;
+  background: linear-gradient(270deg, var(--bg), transparent);
+}
+
+/* Reduce motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

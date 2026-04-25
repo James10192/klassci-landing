@@ -1,0 +1,472 @@
+{
+  "metadata": {
+    "title": "KLASSCI — Gestion scolaire, repensée.",
+    "description": "KLASSCI digitalise la gestion de votre établissement scolaire. Notes, emplois du temps, paiements, bulletins — un seul outil, zéro paperasse.",
+    "keywords": "gestion scolaire, logiciel école, KLASSCI, notes, bulletins, emploi du temps, paiements, présences, SaaS éducation, Côte d'Ivoire, Afrique",
+    "ogSiteName": "KLASSCI"
+  },
+  "nav": {
+    "features": "Fonctionnalités",
+    "pricing": "Tarifs",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "login": "Se connecter",
+    "themeToggleDark": "Sombre",
+    "themeToggleLight": "Clair",
+    "themeToggleAria": "Changer le thème",
+    "menuOpen": "Ouvrir le menu",
+    "menuClose": "Fermer le menu",
+    "languageSwitcherAria": "Changer de langue"
+  },
+  "hero": {
+    "title": "Gestion scolaire, repensée.",
+    "subtitle": "KLASSCI est l'outil qui remplace vos fichiers Excel, vos cahiers de notes et vos tableaux d'affichage. Un seul endroit pour tout gérer.",
+    "primaryCta": "Essayer gratuitement",
+    "primaryCtaSub": "— c'est gratuit",
+    "secondaryCta": "Voir comment ça marche",
+    "note": "Disponible sur navigateur. Aucune installation requise.",
+    "screenshots": [
+      { "label": "Tableau de bord", "alt": "Tableau de bord KLASSCI" },
+      { "label": "Gestion des étudiants", "alt": "Page de gestion des étudiants KLASSCI" },
+      { "label": "Nouvelle inscription", "alt": "Formulaire de nouvelle inscription KLASSCI" },
+      { "label": "Résultats et bulletins", "alt": "Résultats et bulletins KLASSCI" },
+      { "label": "Planning général", "alt": "Planning général KLASSCI" },
+      { "label": "Gestion des présences", "alt": "Gestion des présences KLASSCI" },
+      { "label": "Parcours LMD", "alt": "Parcours LMD KLASSCI" },
+      { "label": "Gestion du personnel", "alt": "Gestion du personnel KLASSCI" },
+      { "label": "Code d'émargement", "alt": "Code d'émargement KLASSCI" }
+    ]
+  },
+  "pillars": {
+    "items": [
+      {
+        "title": "Simple",
+        "description": "Pensé pour les secrétaires, enseignants et directeurs qui n'ont pas le temps d'apprendre un logiciel complexe. Compte test en 2-3 jours, déploiement complet en 2 semaines."
+      },
+      {
+        "title": "Complet",
+        "description": "Notes, bulletins, emplois du temps, paiements, présences, inscriptions — tout est intégré. Zéro outil supplémentaire."
+      },
+      {
+        "title": "Sécurisé",
+        "description": "Chaque établissement a sa propre base de données isolée. Vos données ne sont jamais partagées avec d'autres écoles."
+      }
+    ]
+  },
+  "features": {
+    "title": "Ce que KLASSCI fait pour vous",
+    "intro": "Chaque fonctionnalité a été construite en écoutant les besoins réels des établissements que nous accompagnons depuis 2023.",
+    "learnMore": "En savoir plus",
+    "big": [
+      {
+        "key": "notes",
+        "title": "Saisie des notes et bulletins",
+        "description": "Les enseignants saisissent leurs notes directement depuis leur téléphone. Les moyennes, rangs et appréciations se calculent automatiquement. Les bulletins PDF sont générés en un clic, personnalisés aux couleurs de votre école.",
+        "image": "/img/dashboard/notes-bulletins.png",
+        "alt": "Saisie des notes et bulletins — fiche étudiant KLASSCI"
+      },
+      {
+        "key": "finance",
+        "title": "Suivi financier en temps réel",
+        "description": "Visualisez instantanément l'état des paiements de chaque étudiant. Envoyez des relances automatiques, générez des reçus, et exportez vos rapports financiers. Compatible avec le système de frais par catégorie.",
+        "image": "/img/dashboard/finance.png",
+        "alt": "Suivi financier en temps réel KLASSCI"
+      },
+      {
+        "key": "planning",
+        "title": "Planning général",
+        "description": "Configurez les volumes horaires pour chaque combinaison filière et niveau d'étude. Suivez les heures planifiées vs réalisées avec un tableau de bord clair pour les administrateurs.",
+        "image": "/img/dashboard/planning.png",
+        "alt": "Planning général KLASSCI"
+      },
+      {
+        "key": "presences",
+        "title": "Gestion des présences",
+        "description": "Tableau de bord complet pour le suivi des présences étudiants. L'enseignant fait l'appel numérique ou l'administration marque les présences. Taux en temps réel, tendances et rapports exportables.",
+        "image": "/img/dashboard/presences.png",
+        "alt": "Gestion des présences KLASSCI"
+      },
+      {
+        "key": "lmd",
+        "title": "Système LMD complet",
+        "description": "Gestion des UE, ECUE, crédits et semestres conforme aux standards UEMOA. Bulletins adaptés, calcul automatique des crédits validés et parcours étudiant.",
+        "image": "/img/dashboard/lmd.png",
+        "alt": "Parcours LMD KLASSCI"
+      },
+      {
+        "key": "personnel",
+        "title": "Gestion du personnel",
+        "description": "Administration unifiée de vos coordinateurs, enseignants, secrétaires et comptables. Vue d'ensemble avec filtres par rôle, statut et recherche rapide.",
+        "image": "/img/dashboard/personnel.png",
+        "alt": "Gestion du personnel KLASSCI"
+      }
+    ],
+    "small": [
+      {
+        "title": "Inscriptions en ligne",
+        "description": "Workflow complet : de la demande à la validation, avec suivi des documents et pièces requises."
+      },
+      {
+        "title": "Tableau de bord par rôle",
+        "description": "Directeur, secrétaire, enseignant, comptable, coordinateur — chacun voit ce qui le concerne."
+      },
+      {
+        "title": "API et intégrations",
+        "description": "Connectez KLASSCI à votre LMS ou système existant via notre API REST documentée."
+      }
+    ],
+    "modals": {
+      "notes": {
+        "title": "Saisie des notes et bulletins",
+        "image": "/img/dashboard/notes-bulletins.png",
+        "intro": "KLASSCI transforme la gestion des notes en un processus simple et rapide. Fini les tableaux Excel partagés et les erreurs de saisie.",
+        "bullets": [
+          "Saisie en ligne depuis téléphone, tablette ou ordinateur",
+          "Calcul automatique des moyennes, rangs et appréciations",
+          "Bulletins PDF personnalisés aux couleurs de votre école",
+          "Gestion des coefficients, crédits et matières par classe",
+          "Historique complet des notes par étudiant et par semestre",
+          "Export en lot pour impression ou archivage"
+        ],
+        "outro": "Les enseignants saisissent directement — les secrétaires n'ont plus à recopier. Le temps de production des bulletins passe de 3 semaines à 48 heures."
+      },
+      "finance": {
+        "title": "Suivi financier en temps réel",
+        "image": "/img/dashboard/finance.png",
+        "intro": "Le module comptabilité de KLASSCI donne une vision claire et instantanée de la santé financière de votre établissement.",
+        "bullets": [
+          "Dashboard avec KPI en temps réel : recettes, créances, taux de recouvrement",
+          "Suivi des paiements par étudiant avec historique complet",
+          "Relances automatiques par email avec modèles personnalisables",
+          "Génération de reçus de paiement et situations financières PDF",
+          "Rapports financiers par période, classe ou catégorie de frais",
+          "Système de frais flexible : inscription, scolarité, examens, etc."
+        ],
+        "outro": "Les comptables voient en un coup d'œil qui a payé, qui est en retard, et peuvent agir immédiatement — sans attendre la fin du mois."
+      },
+      "planning": {
+        "title": "Planning général",
+        "image": "/img/dashboard/planning.png",
+        "intro": "Le planning général permet de configurer et suivre les volumes horaires de votre établissement.",
+        "bullets": [
+          "Configuration des volumes horaires par combinaison filière / niveau d'étude",
+          "Suivi des heures planifiées vs heures réalisées",
+          "KPI : nombre de séances, heures de cours, enseignants actifs",
+          "Vue d'ensemble, planning annuel, charge par classe et interface coordinateur",
+          "Volume horaire des matières par filière et niveau d'étude"
+        ],
+        "outro": ""
+      },
+      "presences": {
+        "title": "Gestion des présences",
+        "image": "/img/dashboard/presences.png",
+        "intro": "Suivez les présences de vos étudiants avec un tableau de bord clair et des outils simples.",
+        "bullets": [
+          "Appel numérique par l'enseignant ou marquage par l'administration",
+          "Tableau de bord avec KPI : présences, absences, retards, excusés",
+          "Taux de présence en temps réel par classe et par étudiant",
+          "Tendances sur 7 jours et présences par classe",
+          "Génération de rapports et export CSV/PDF",
+          "Statistiques détaillées et historique complet"
+        ],
+        "outro": ""
+      },
+      "lmd": {
+        "title": "Système LMD complet",
+        "image": "/img/dashboard/lmd.png",
+        "intro": "KLASSCI supporte le système LMD (Licence-Master-Doctorat) conforme aux standards UEMOA.",
+        "bullets": [
+          "Gestion des UE, ECUE et crédits par semestre",
+          "Parcours étudiant avec validation progressive des crédits",
+          "Bulletins LMD avec moyennes pondérées et crédits",
+          "Formules de calcul configurables (AQ, NAQ, APC)",
+          "Compatible BTS classique et LMD dans le même établissement"
+        ],
+        "outro": ""
+      },
+      "personnel": {
+        "title": "Gestion du personnel",
+        "image": "/img/dashboard/personnel.png",
+        "intro": "Administration unifiée de tout le personnel de votre établissement.",
+        "bullets": [
+          "Vue d'ensemble : coordinateurs, enseignants, secrétaires et comptables",
+          "KPI par rôle avec compteurs en temps réel",
+          "Onglets par catégorie avec recherche et filtres (statut, matricule)",
+          "Ajout rapide de nouveau personnel avec affectation directe",
+          "Profils détaillés avec coordonnées, date d'embauche et statut"
+        ],
+        "outro": ""
+      },
+      "ctaPrimary": "Demander une démo",
+      "ctaSecondary": "Voir les tarifs",
+      "close": "Fermer"
+    }
+  },
+  "socialProof": {
+    "title": "Adopté par des établissements qui forment des milliers d'étudiants",
+    "clients": [
+      { "name": "ESBTP Abidjan", "detail": "2 600+ étudiants · Plan Élite", "logo": "/img/clients/esbtp.png" },
+      { "name": "ESBTP Yamoussoukro", "detail": "2 000+ étudiants · Plan Élite", "logo": "/img/clients/esbtp.png" },
+      { "name": "Institut Pascal", "detail": "1 000+ étudiants · Plan Élite", "logo": "/img/clients/institut-pascal.jpg" },
+      { "name": "San Andrea School", "detail": "1 200+ étudiants · Plan Élite", "logo": "/img/clients/san-andrea.jpg" },
+      { "name": "ITS", "detail": "800+ étudiants · Plan Pro", "logo": "/img/clients/its.jpg" }
+    ],
+    "testimonials": [
+      {
+        "quote": "Avant KLASSCI, la saisie des notes prenait 3 semaines. Aujourd'hui, les bulletins sont prêts en 48 heures. Les enseignants saisissent directement en ligne.",
+        "highlight": "les bulletins sont prêts en 48 heures",
+        "author": "Dr. Soro Kouadio",
+        "role": "Directeur",
+        "avatar": "/img/avatars/soro-kouadio.png",
+        "featured": false
+      },
+      {
+        "quote": "Le suivi financier a complètement changé. On voit en temps réel qui a payé, qui doit relancer, et les rapports sont toujours à jour. Plus besoin d'attendre la fin du mois pour avoir une vision claire. C'est devenu indispensable pour nous.",
+        "highlight": "Le suivi financier a complètement changé.",
+        "author": "Ama Bamba",
+        "role": "Comptable",
+        "avatar": "/img/avatars/ama-bamba.jpg",
+        "featured": true
+      },
+      {
+        "quote": "L'émargement numérique a réduit l'absentéisme de 30%. Les coordinateurs voient en temps réel qui est présent, sans attendre les feuilles de présence.",
+        "highlight": "réduit l'absentéisme de 30%",
+        "author": "Tarek Mehdy",
+        "role": "Coordinateur",
+        "avatar": "/img/avatars/tarek-mehdy.jpg",
+        "featured": false
+      }
+    ]
+  },
+  "partnership": {
+    "alt": "Devenez partenaire KLASSCI — 0 FCFA",
+    "image": "/img/sections/partnership.png"
+  },
+  "video": {
+    "title": "Ils en parlent mieux que nous",
+    "description": "Découvrez le témoignage d'un responsable d'établissement qui utilise KLASSCI au quotidien pour gérer ses étudiants, ses enseignants et ses finances.",
+    "badge": "TÉMOIGNAGE",
+    "src": "/videos/testimonial.mp4",
+    "playAria": "Lire la vidéo"
+  },
+  "security": {
+    "title": "Sécurité et confiance totales",
+    "p1": "Nous garantissons la protection optimale de vos données, dans le respect strict des normes RGPD. Notre équipe dédiée à la cybersécurité travaille en continu pour renforcer nos dispositifs de protection.",
+    "p2": "Chaque établissement dispose de sa propre base de données isolée — aucun partage de données entre écoles.",
+    "image": "/img/sections/security.png",
+    "alt": "Sécurité et protection des données KLASSCI"
+  },
+  "support": {
+    "title": "Support client disponible 24h/24",
+    "p1": "Accédez à des informations fiables à tout moment grâce à notre chatbot intégré. Échangez directement avec notre service client par email, WhatsApp ou Telegram.",
+    "p2": "Nos agents maîtrisent le français et l'anglais. Temps de réponse moyen : moins de 2 minutes.",
+    "image": "/img/sections/support.png",
+    "alt": "Support client KLASSCI — chat et assistance"
+  },
+  "imageBanner": {
+    "alt": "Étudiants KLASSCI",
+    "image": "/img/sections/students-banner.png"
+  },
+  "pricing": {
+    "title": "Tarification simple",
+    "subtitle": "Commencez gratuitement. Évoluez quand vous êtes prêt.",
+    "popularBadge": "populaire",
+    "perMonth": "/ mois",
+    "tiers": [
+      {
+        "key": "free",
+        "name": "Free",
+        "tagline": "Pour découvrir",
+        "price": "0 FCFA",
+        "period": "3 mois d'essai",
+        "features": [
+          { "text": "50 étudiants max", "included": true },
+          { "text": "Gestion des notes", "included": true },
+          { "text": "Emploi du temps basique", "included": true },
+          { "text": "1 administrateur", "included": true },
+          { "text": "Comptabilité", "included": false },
+          { "text": "Support prioritaire", "included": false }
+        ],
+        "cta": "Commencer",
+        "ctaStyle": "outline",
+        "featured": false
+      },
+      {
+        "key": "essentiel",
+        "name": "Essentiel",
+        "tagline": "Établissements en croissance",
+        "price": "150k FCFA",
+        "period": "/ mois",
+        "features": [
+          { "text": "1 000 étudiants", "included": true },
+          { "text": "Notes + Bulletins PDF", "included": true },
+          { "text": "Emploi du temps avancé", "included": true },
+          { "text": "Comptabilité complète", "included": true },
+          { "text": "5 utilisateurs", "included": true },
+          { "text": "Support email", "included": true }
+        ],
+        "cta": "Choisir Essentiel",
+        "ctaStyle": "primary",
+        "featured": true
+      },
+      {
+        "key": "pro",
+        "name": "Pro",
+        "tagline": "Grands établissements",
+        "price": "350k FCFA",
+        "period": "/ mois",
+        "features": [
+          { "text": "Étudiants illimités", "included": true },
+          { "text": "Toutes les fonctionnalités", "included": true },
+          { "text": "Système LMD complet", "included": true },
+          { "text": "API pour intégrations", "included": true },
+          { "text": "Utilisateurs illimités", "included": true },
+          { "text": "Support prioritaire 24/7", "included": true }
+        ],
+        "cta": "Choisir Pro",
+        "ctaStyle": "outline",
+        "featured": false
+      },
+      {
+        "key": "elite",
+        "name": "Élite",
+        "tagline": "Sur mesure pour votre établissement",
+        "price": "Sur devis",
+        "period": "personnalisation complète",
+        "features": [
+          { "text": "Tout le plan Pro inclus", "included": true },
+          { "text": "Fonctionnalités sur mesure", "included": true },
+          { "text": "PDF et exports aux couleurs de l'école", "included": true },
+          { "text": "Déploiement dédié (~2 semaines)", "included": true },
+          { "text": "Formation de vos équipes", "included": true },
+          { "text": "Interlocuteur dédié", "included": true }
+        ],
+        "cta": "Nous contacter",
+        "ctaStyle": "primary",
+        "featured": false
+      }
+    ],
+    "footer": "Essai gratuit de 3 mois · Aucune carte bancaire requise · Support inclus"
+  },
+  "faq": {
+    "title": "Questions fréquentes",
+    "items": [
+      {
+        "q": "Mes données sont-elles en sécurité ?",
+        "a": "Chaque établissement dispose de sa propre base de données isolée. Les données sont chiffrées en transit et au repos. Aucun établissement ne peut accéder aux données d'un autre."
+      },
+      {
+        "q": "Puis-je migrer mes données depuis Excel ?",
+        "a": "Oui. KLASSCI dispose d'outils d'importation pour les listes d'étudiants, classes et matières au format Excel. Notre équipe peut également vous accompagner lors de la migration initiale."
+      },
+      {
+        "q": "KLASSCI fonctionne-t-il avec le système LMD ?",
+        "a": "Oui. KLASSCI supporte le système BTS classique et le système LMD (Licence-Master-Doctorat) avec gestion des UE, ECUE, crédits et semestres conforme aux standards UEMOA."
+      },
+      {
+        "q": "Combien de temps pour être opérationnel ?",
+        "a": "Pour le plan gratuit (essai de 3 mois), votre compte est créé en 2 à 3 jours. Si vous passez à une formule payante, comptez environ 2 semaines pour la personnalisation complète et le déploiement de votre établissement."
+      },
+      {
+        "q": "KLASSCI fonctionne-t-il sur téléphone ?",
+        "a": "Oui. L'interface est entièrement responsive et fonctionne sur smartphone, tablette et ordinateur. Les enseignants peuvent saisir les présences et les notes directement depuis leur téléphone."
+      },
+      {
+        "q": "Puis-je essayer gratuitement ?",
+        "a": "Le plan Free vous permet de tester KLASSCI pendant 3 mois avec jusqu'à 50 étudiants. Votre compte est créé en 2 à 3 jours. Si vous passez à une formule payante, comptez environ 2 semaines pour la personnalisation et le déploiement complet de votre établissement."
+      }
+    ]
+  },
+  "contact": {
+    "title": "Demandez une démonstration",
+    "intro": "Vous avez des questions ou souhaitez voir KLASSCI en action ? Remplissez le formulaire et notre équipe vous recontactera sous 24h.",
+    "info": {
+      "email": "contact@klassci.com",
+      "location": "Abidjan, Côte d'Ivoire",
+      "emailLabel": "Email",
+      "locationLabel": "Localisation"
+    },
+    "form": {
+      "name": { "label": "Nom complet", "placeholder": "Votre nom" },
+      "email": { "label": "Email", "placeholder": "vous@exemple.com" },
+      "school": { "label": "Établissement", "placeholder": "Nom de votre établissement" },
+      "phone": { "label": "Téléphone", "placeholder": "+225 07 00 00 00 00" },
+      "type": {
+        "label": "Type d'établissement",
+        "placeholder": "Sélectionnez",
+        "options": [
+          { "value": "ecole_superieure", "label": "École supérieure" },
+          { "value": "universite", "label": "Université" },
+          { "value": "lycee", "label": "Lycée" },
+          { "value": "college", "label": "Collège" },
+          { "value": "centre_formation", "label": "Centre de formation" },
+          { "value": "autre", "label": "Autre" }
+        ]
+      },
+      "message": { "label": "Message", "labelOptional": "Message (optionnel)", "placeholder": "Dites-nous en quoi KLASSCI peut vous aider..." },
+      "submit": "Envoyer la demande",
+      "submitArrow": "→",
+      "submitting": "Envoi...",
+      "responseNote": "Réponse sous 24h"
+    },
+    "success": {
+      "title": "Message envoyé",
+      "text": "Nous vous recontacterons sous 24h."
+    },
+    "error": {
+      "title": "Erreur d'envoi",
+      "text": "Un problème est survenu. Réessayez ou écrivez à contact@klassci.com."
+    }
+  },
+  "letter": {
+    "badge": "Un mot de l'équipe",
+    "title": "Prêt à simplifier la gestion de votre établissement ?",
+    "text": "Nous avons construit KLASSCI parce que nous croyons que les écoles africaines méritent des outils modernes, simples et fiables. Essayez, c'est gratuit.",
+    "cta": "Commencer gratuitement"
+  },
+  "footer": {
+    "tagline": "Plateforme de gestion scolaire conçue pour les établissements d'enseignement supérieur en Afrique.",
+    "columns": {
+      "product": {
+        "title": "Produit",
+        "links": [
+          { "label": "Fonctionnalités", "href": "#fonctionnalites" },
+          { "label": "Tarifs", "href": "#tarifs" },
+          { "label": "Connexion", "href": "/login" }
+        ]
+      },
+      "resources": {
+        "title": "Ressources",
+        "links": [
+          { "label": "Documentation", "href": "/docs" },
+          { "label": "API Reference", "href": "/api-reference" },
+          { "label": "Changelog", "href": "/changelog" }
+        ]
+      },
+      "contact": {
+        "title": "Contact",
+        "links": [
+          { "label": "contact@klassci.com", "href": "mailto:contact@klassci.com" },
+          { "label": "Abidjan, Côte d'Ivoire", "href": "#" }
+        ]
+      }
+    },
+    "copyright": "© {year} KLASSCI — African Digital Consulting",
+    "social": {
+      "facebook": "Facebook",
+      "linkedin": "LinkedIn",
+      "twitter": "X (Twitter)"
+    }
+  },
+  "tenantLookup": {
+    "pageTitle": "Connexion à votre établissement",
+    "intro": "Entrez votre email ou nom d'utilisateur pour rejoindre l'espace de votre école.",
+    "label": "Email ou nom d'utilisateur",
+    "placeholder": "vous@etablissement.ci ou votre.username",
+    "submit": "Continuer",
+    "submitting": "Recherche...",
+    "notFound": "Aucun établissement trouvé pour cet identifiant. Contactez votre administrateur.",
+    "error": "Une erreur est survenue. Réessayez dans quelques instants.",
+    "alreadyKnow": "Je connais déjà l'adresse de mon école"
+  }
+}
