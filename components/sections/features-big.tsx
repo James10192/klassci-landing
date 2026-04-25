@@ -77,8 +77,8 @@ export function FeaturesBig() {
                 <Image
                   src={feature.image}
                   alt={feature.alt}
-                  width={1920}
-                  height={1200}
+                  width={1872}
+                  height={924}
                   sizes="(max-width: 1024px) 100vw, 560px"
                   className="w-full h-auto"
                   loading="lazy"
