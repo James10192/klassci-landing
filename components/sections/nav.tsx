@@ -113,7 +113,7 @@ export function Nav() {
             }}
             className="font-serif font-light text-[1.75rem] text-accent"
           >
-            {t("contact")}
+            {t("contactCta")}
           </a>
           <div className="flex items-center gap-4 mt-4">
             <LanguageSwitcher />
