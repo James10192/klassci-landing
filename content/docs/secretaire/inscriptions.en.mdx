@@ -1,0 +1,126 @@
+---
+title: Registrar — managing enrollments
+description: Four-step enrollment workflow, validation, re-enrollment, cancellation, exports, and common errors.
+---
+
+## Workflow overview
+
+An enrollment in KLASSCI moves through four steps, modeled by the `workflow_step` field:
+
+1. **`pre_inscrit`** — the student has provided their information but the initial payment has not yet been validated. No class has been assigned.
+2. **`pre_inscrit_paye`** — the initial payment is validated. The student is waiting for the administration to assign a class.
+3. **`affecte`** — the class is assigned. The student is awaiting final validation.
+4. **`etudiant_cree`** — the enrollment is definitively validated. The student counts toward the school's headcount and can access their portal.
+
+This separation exists so a student who has only filled out a form (without paying) doesn't show up in headcount statistics. Every KPI page filters by default on `workflow_step = etudiant_cree`.
+
+<Callout>
+  **Golden rule.** As long as `workflow_step != etudiant_cree`, the student is NOT officially enrolled, even if their `status` is `active`. Headcount reports, remaining-seat calculations, and dashboards all respect this rule.
+</Callout>
+
+## Creating a new enrollment
+
+### Standard case: the student pays right away
+
+Go to `Étudiants → Inscriptions → Nouvelle inscription`. The form is split into logical sections:
+
+1. **Student information** — last name, first names, date of birth, sex, nationality, phone, email
+2. **Address and emergency contact**
+3. **Prior education** — diploma earned, previous school, year
+4. **Academic placement** — filière, level, class (Select2 with search)
+5. **Fees and initial payment** — selection of fees due, payment method, amount
+
+When you pick a class, KLASSCI checks remaining seats in real time via an AJAX call to `GET /esbtp/classes/{id}/available-places`. The display uses colored thresholds:
+
+| Color | Threshold | Message |
+| --- | --- | --- |
+| Green | > 30% | "Places disponibles : X / Y" |
+| Orange | 10% to 30% | "Places limitées : X / Y" |
+| Dark orange | < 10% | "Presque complet : X / Y" |
+| Red | 0 | "Classe pleine" + submit button disabled |
+
+If the class is full, the **Valider l'inscription** button is automatically greyed out and an explicit error message appears above the form. The student must pick another class or wait for a seat to open up.
+
+### Edge case: pre-enrollment without an immediate payment
+
+If the student doesn't yet have the funds to pay for enrollment, you can record them as a **pre-enrollment** under `Étudiants → Pré-inscriptions → Nouvelle pré-inscription`. The form is shorter (essential information only, no class assignment).
+
+Later, when the student pays, find their pre-enrollment in the list, click **Compléter l'inscription**, and finalize the file. KLASSCI then opens an **assignment modal** to pick a class with seat verification.
+
+## Validating an enrollment
+
+### Single validation
+
+On the enrollment record, click **Valider l'inscription**. KLASSCI automatically checks that:
+
+- at least one payment exists on this enrollment
+- the payment has status `valide` (not `en_attente`)
+- a class is assigned
+- the class still has a seat available
+
+If every condition is met, the enrollment moves to `etudiant_cree`. The student receives their matricule (auto-generated from the institution's convention) and an email with their student credentials.
+
+<Callout type="warn">
+  **No validation without payment.** KLASSCI blocks validation when no valid payment is attached. This rule applies to bulk validation as well. For exceptional cases, the super-administrator can force validation from the artisan console.
+</Callout>
+
+### Bulk validation
+
+To validate several enrollments at once (for example at the start of the school year), go to `Étudiants → Inscriptions`, tick the enrollments, then use **Actions groupées → Valider la sélection**. KLASSCI processes each enrollment in its own transaction:
+
+- Enrollments with a validated payment move to `etudiant_cree`.
+- Enrollments with a payment in `en_attente` are **skipped** (not validated) with reason "paiement_en_attente".
+- Enrollments without a payment are **skipped** with reason "sans_paiement".
+- Enrollments on a full class are **skipped** with reason "classe_pleine".
+
+A summary toast shows the count of validated enrollments and the list of skipped ones with their reasons.
+
+## Re-enrolling an existing student
+
+For a student moving from one year to the next, use `Étudiants → Réinscriptions → Nouvelle réinscription`. The form is pre-filled with:
+
+- the student's personal information (editable)
+- the history of their previous enrollments
+- any **outstanding balance** from the previous year, automatically carried over to the new year
+
+Pick the new class (usually the next level up in the same filière) and finalize the initial payment. The business rule is that the **calculated balance** is based exclusively on active fee subscriptions, with no fallback on the global configuration.
+
+For tronc-commun filières, KLASSCI offers a specific workflow:
+
+1. On entry, the student enrolls in the `Tronc commun [Filière]` class.
+2. At the end of the common semester, open the student's profile and use **Spécialisation** to re-enroll them in a specialised class. A new enrollment is created and linked to the previous one through `inscription_origine_id`. The unique constraint has been relaxed to allow two enrollments per academic year in this case (`(etudiant_id, annee_universitaire_id, classe_id)`).
+3. The annual report card automatically aggregates the tronc-commun grades (S1) and the specialisation grades (S2) using the configured weighting.
+
+## Cancelling an enrollment
+
+In the enrollments list, select the rows to cancel and use **Actions groupées → Annuler la sélection**. KLASSCI asks for a **reason** (four options: dropout, expulsion, transfer, other) and a free-text comment.
+
+The enrollment moves to `status = annule` and `workflow_step = annule`. Data is preserved (no physical delete) for the historical record. The associated grades and report cards are **soft-archived**: they stay in the database but no longer show up in the standard listings. You can find them under `Notes → Filtres avancés → Inclure les annulés`.
+
+If the student had paid, their payment is NOT automatically refunded: that's an administrative decision. The accounting module shows payments tied to cancelled enrollments in a dedicated section to make refund processing easier.
+
+## Exporting and printing
+
+From the enrollments list, the **Export** button offers:
+
+- **CSV** — for Excel or Google Sheets, with every column
+- **PDF list** — a document with the school header and every filtered enrollment
+- **Detailed PDF** — one document per student (useful for paper archives)
+
+You can also generate a student's **individual file** from their profile: `Étudiants → [student] → Documents → Dossier complet`. The PDF includes the enrollment, payment history, grades, current report card, and attendance.
+
+## Common errors and fixes
+
+| Symptom | Likely cause | Fix |
+| --- | --- | --- |
+| The "Valider" button doesn't react | No validated payment | Validate the payment first under `Comptabilité → Paiements` |
+| Still "En attente" after validation | `workflow_step != etudiant_cree` | Refresh the page, or check that the validation actually committed |
+| "Classe pleine" although seats remain | Browser cache | Click in the class picker (re-fetches via AJAX) |
+| The student doesn't appear in headcount | `workflow_step` filter is active | Confirm validation is complete, or remove the filter temporarily |
+| The PDF export is empty | Active filter with no result | Check the active filters (status, year, class) |
+
+For anything else, contact the technical team at [contact@klassci.com](mailto:contact@klassci.com).
+
+## Next step
+
+Once your enrollments are under control, you'll likely want to read the **Bursar** guide to understand how payments flow into the financial module and how to generate reminders. That guide is coming soon.

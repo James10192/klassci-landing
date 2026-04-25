@@ -1,0 +1,408 @@
+---
+title: Super-administrator — initial setup
+description: Provisioning, configuring filières, levels, classes, courses, fees, and staff.
+---
+
+## Before you start
+
+This guide is for the **super-administrator** of an institution that has just been provisioned on KLASSCI. It walks through the order in which to configure the platform so you can start enrolling students for your first academic year.
+
+Plan for **2 to 3 hours** of full setup, with the following on hand:
+
+- the list of your filières and their study levels,
+- the tuition-fee grid (or at least the enrollment fees),
+- the list of administrative and teaching staff with their email addresses,
+- optionally, the parent accounts if you enable parent access.
+
+<Callout>
+  **Don't worry about missing something.** Everything is editable later. You can perfectly start with one filière and one fee, then enrich week by week.
+</Callout>
+
+## Step 1: create the current academic year
+
+The academic year is the foundation of the entire platform: enrollments, payments, report cards, and results are all tied to a given year. So it's the very first object to create in a new tenant.
+
+### 1.1 — Starting point: your dashboard
+
+Once signed in as super-administrator, you land on the dashboard. The academic year shown in the top right (blue badge `2025-2026`) is the *current* year for your institution.
+
+![KLASSCI super-administrator dashboard with the academic year badge in the top right](/img/docs/superadmin/onboarding/00-dashboard.png)
+
+### 1.2 — Open the Academic Years module
+
+In the left sidebar, expand the **Filières & Classes** menu (under `GESTION ACADÉMIQUE`). The submenu lists four entries: Filières, Classes, Niveaux d'études, and **Années universitaires**.
+
+![Sidebar with the Filières & Classes dropdown open showing the Années universitaires entry](/img/docs/superadmin/onboarding/01-sidebar-filieres-classes.png)
+
+Click **Années universitaires**. The page lists every year already created with its status. On a fresh tenant, the table is empty.
+
+![Academic years list page with the Nouvelle année universitaire button in the top right](/img/docs/superadmin/onboarding/02-liste-annees.png)
+
+In the top right, click the blue **+ Nouvelle année universitaire** button.
+
+### 1.3 — Fill out the creation form
+
+![New academic year form with the name, description, dates, and toggles fields](/img/docs/superadmin/onboarding/03-formulaire-annee.png)
+
+Fill in the following:
+
+- **Nom** *(required)* — the recommended convention is `YYYY-YYYY`, for example `2025-2026`. This label shows up everywhere in the application (report cards, exports, badges).
+- **Description** *(optional)* — useful to distinguish two parallel campaigns or add an internal note.
+- **Date de rentrée** *(required)* — official first day of the school year (typically early October in Côte d'Ivoire).
+- **Date de fin** *(required)* — official last day, usually the date of the final jury.
+- **Année universitaire active** — leave it on. An *inactive* year can no longer be picked for new enrollments (only useful for archiving a past year).
+- **Définir comme année universitaire en cours** — leave it off for now. You'll switch it on at the next step from the dedicated button on the list.
+
+Click **Enregistrer l'année**. You're redirected to the list, which now contains your new year with the cyan **ACTIVE** badge.
+
+### 1.4 — Mark the year as current
+
+In the list, each row exposes a row of actions: eye (view), blue pencil (edit), **yellow circle with a check (set as current)**, red trash (delete).
+
+![Action buttons on an academic year row — eye, blue pencil, yellow check circle, red trash](/img/docs/superadmin/onboarding/04-bouton-definir-courante.png)
+
+Click the **yellow button** on the row of the year you just created. The badge switches from cyan **ACTIVE** to green **ANNÉE EN COURS**, and the row turns light green to confirm the change.
+
+![Academic year 2025-2026 marked as current with the green ANNÉE EN COURS badge](/img/docs/superadmin/onboarding/05-annee-courante.png)
+
+That's it. From now on, every new enrollment, payment, and report card is tied to this year by default.
+
+<Callout>
+  **One current year at a time.** If you click the yellow button on another year, the previous "current" one automatically falls back to plain `ACTIVE`. No data is lost: enrollments from the previous year stay tied to their original year.
+</Callout>
+
+### Worth knowing about enrollments and academic years
+
+In KLASSCI, **a class is NOT attached to an academic year** — the enrollment is. This means a single class (e.g., `BTS Bâtiment 1ère année`) can host students from several successive academic years without having to be recreated each fall.
+
+Concretely, when you filter students by class, what separates 2024-2025 from 2025-2026 is the `annee_universitaire_id` on their enrollment, not the class itself.
+
+## Step 2: configure your filières
+
+A **filière** is a field of study (Building, IT, Communication, Public Works, etc.). It's the filière that study levels (BTS1, L1, M1...) and classes are then attached to.
+
+### 2.1 — Open the filières list
+
+Still in the **Filières & Classes** sidebar menu, click **Filières** (just above Classes). The page lists every existing filière with its code, type, and the count of attached levels and courses.
+
+![Filière management page with the list of existing filières and the Nouvelle Filière button](/img/docs/superadmin/onboarding/06-filieres-liste.png)
+
+In the top right, click **+ Nouvelle Filière**.
+
+### 2.2 — Fill out the form
+
+![New Filière form with name, code, description, active toggle, and tronc commun section](/img/docs/superadmin/onboarding/07-filieres-formulaire.png)
+
+Fill in:
+
+- **Nom de la filière** *(required)* — `BATIMENT`, `Communication & Marketing`, `INFORMATIQUE`, `TRAVAUX PUBLICS`. Avoid abbreviations: this is the label that shows up everywhere in the app.
+- **Code** *(required)* — a short, unique code (`BTP`, `INFO`, `TP`, `GES-COM`). Used as a technical identifier and as a prefix in some exports.
+- **Description** *(optional)* — a paragraph describing the filière. Shown on the detail page and useful for future student-facing guides.
+- **Filière active** — leave it on. An inactive filière is hidden from enrollment lists but its data stays intact.
+
+### 2.3 — Edge case: tronc commun
+
+If your filière starts with one or more shared semesters before specialising (typically Civil Engineering → Building / Public Works in S2), turn on the **Cette filière est un tronc commun** toggle in the dedicated section.
+
+For **specialisation** filières that depend on a tronc commun, do the opposite: leave the toggle off, but pick the parent tronc-commun filière in the **Filière parent (Tronc Commun)** dropdown. So you need to create the tronc commun first, then its specialisations.
+
+<Callout>
+  **Tronc-commun workflow.** The student first enrolls in the tronc commun, then in a specialisation at the end of the common semester(s). The report card aggregates tronc-commun grades and specialisation grades for the annual average.
+</Callout>
+
+Click **Créer la filière**. You're redirected to the list, which now contains your new filière with the **ACTIVE** badge. Repeat for each of your filières.
+
+## Step 3: create the study levels
+
+The **study level** marks the position in the cursus (BTS first year, BTS second year, Licence 1, Licence 2, Master 1, etc.). This is where the distinction is made between the BTS system (short cycle) and LMD (Licence-Master-Doctorat).
+
+### 3.1 — Open the levels list
+
+Still under **Filières & Classes** in the sidebar, click **Niveaux d'études**. The page shows a mini dashboard with four KPIs (total levels, active levels, total classes, total courses) followed by the full list.
+
+![Study levels management page with 4 KPIs and the list of BTS 1ere année, Licence 1ère année, BTS 2e année, Licence 2ème année](/img/docs/superadmin/onboarding/08-niveaux-liste.png)
+
+In the top right, click **+ Nouveau Niveau**.
+
+### 3.2 — Fill out the form
+
+![Top of the New Study Level form with name, code, training type, study year, full label, description, and active toggle](/img/docs/superadmin/onboarding/09-niveaux-formulaire-haut.png)
+
+Fill in:
+
+- **Nom du niveau** *(required)* — for example `BTS Première Année` or `Licence 1`. This is the short label that appears in pickers and report cards.
+- **Code du niveau** *(required)* — a short, unique code (`BTS1`, `L1`, `M2`). Should stay stable over time: it's what exports and imports use to find the level.
+- **Type de formation** *(dropdown)* — `BTS`, `Licence`, `Master`, `Doctorat`. This is the field that determines whether the level follows the BTS system (plain semesters) or LMD (UE / ECUE / ECTS credits).
+- **Année d'étude** *(dropdown)* — position in the cursus (1st year, 2nd year, 3rd year...). Used to compute the student's academic progression.
+- **Libellé complet** *(optional)* — the long form, e.g., `Brevet de Technicien Supérieur - Première Année`. Used in some official documents (attestations, formal report cards).
+- **Description** *(optional)* — free-form paragraph for internal detail.
+- **Niveau actif** — leave it ticked. An inactive level disappears from enrollment dropdowns, but existing classes keep working.
+
+Scroll to the bottom of the form and click **Créer le niveau**.
+
+![Bottom of the form with the Retour and Créer le niveau (blue) buttons](/img/docs/superadmin/onboarding/10-niveaux-formulaire-bas.png)
+
+Repeat for each level in your offer. As an example, here's a typical grid for an institution running both BTS and LMD:
+
+| Training type | Year | Recommended name | Code |
+| --- | --- | --- | --- |
+| BTS | 1st year | BTS Première Année | BTS1 |
+| BTS | 2nd year | BTS Deuxième Année | BTS2 |
+| Licence | 1st year | Licence 1 | L1 |
+| Licence | 2nd year | Licence 2 | L2 |
+| Licence | 3rd year | Licence 3 | L3 |
+| Master | 1st year | Master 1 | M1 |
+| Master | 2nd year | Master 2 | M2 |
+
+<Callout>
+  **Don't confuse level and class.** A single level (`BTS1`) can be instantiated as several classes depending on the filière (`BTS1 Bâtiment`, `BTS1 Informatique`...). The level is a *concept*, the class is a *group of students*. You'll create classes in the next step.
+</Callout>
+
+## Step 4: create the classes
+
+A **class** is a group of students who share the same filière, the same study level, and the same academic year. It's the most-used object day to day: enrollments, schedules, grades, attendance, and report cards are all attached to it.
+
+### 4.1 — Open the Classes page
+
+Still under **Filières & Classes** in the sidebar, click **Classes**. The page opens with a wide blue banner that summarizes class status for the current year:
+
+- total active classes,
+- total enrolled students across all classes,
+- total and used seats,
+- overall occupancy rate.
+
+![Class management page with the stats banner, filters, and the grid of class cards](/img/docs/superadmin/onboarding/11-classes-liste.png)
+
+Below the banner you have a search bar, four filters (filière, level, status, capacity), and an **Exporter** button to generate a CSV. Each class is shown as a card that exposes at a glance its filière, level, enrolled count, and fill rate.
+
+In the top right, two buttons:
+
+- **Sync BTS/LMD** — recomputes each class's academic system from its study level (Licence / Master / Doctorat → LMD, otherwise BTS). Use it if a class ends up on the wrong cycle after a manual level change or a data migration.
+- **+ Nouvelle classe** — opens the creation modal.
+
+### 4.2 — Fill out the creation modal
+
+Click **+ Nouvelle classe**. A modal form opens over the list without reloading the page.
+
+![Class information modal with name, code, filière, level, year, capacity, description, and active toggle](/img/docs/superadmin/onboarding/12-classes-modal-formulaire.png)
+
+Fill in:
+
+- **Nom de la classe** *(required)* — for example `1ère année BTS Génie Civil Option Bâtiment`. This is the label that shows up in class lists, report cards, and imports/exports.
+- **Code** *(required)* — a short code unique within the year (`1BTS-GC-BAT`, `B2-COM`, `INFO-BTS-1A`). Used as a stable technical identifier.
+- **Filière** *(required)* — pick from the list created in step 2.
+- **Niveau d'études** *(required)* — pick from the list created in step 3.
+- **Année universitaire** *(required)* — pre-filled with the current year but editable, useful to prepare next year's intake in advance.
+- **Système académique** — not editable. Determined automatically from the study level (Licence/Master/Doctorat level → LMD; otherwise BTS).
+- **Capacité maximale** *(required)* — defaults to 30. This is the upper bound on enrollments for the class; beyond it the system blocks new entries and the card shows a "full" badge.
+- **Classe active** — leave it on. An inactive class disappears from enrollment pickers but keeps all its data.
+- **Description** *(optional)* — a free-form paragraph to spell out context (option, special mention, access restriction...).
+
+Click **Enregistrer la classe**. The modal closes and the grid refreshes immediately with your new card.
+
+### 4.3 — The action menu on each card
+
+On each card, the **three-dot** button in the top right opens a contextual menu.
+
+![Action menu open on a class card with the options Gérer les matières, Liste d'appel, Liste complète, Modifier, Archivage](/img/docs/superadmin/onboarding/13-classes-actions-menu.png)
+
+The available actions:
+
+- **Gérer les matières** — assigns courses (BTS) or UE/ECUE (LMD) to the class with their coefficients and hours volume. You'll come back to this in step 5.
+- **Liste d'appel** — opens the attendance sheet for the most recent session.
+- **Liste complète** — exports the list of enrolled students with their administrative info.
+- **Modifier** — re-opens the modal from step 4.2 to adjust name, capacity, description, etc.
+- **Archivage** — moves the class to the archive folder at end-of-year. The button is disabled while the class is tied to a current year.
+
+<Callout>
+  **One class per (filière, level, parallel) triplet.** If you have two parallel groups of the same level (e.g., `BTS1 Bâtiment Groupe A` and `BTS1 Bâtiment Groupe B`), create two distinct classes. That way you can manage their schedules, grades, and capacity independently.
+</Callout>
+
+## Step 5: configure the courses
+
+A **course** is a teaching unit (Mathematics, English, Algorithmics, Digital Marketing...). In KLASSCI, each course lives in a **central catalogue** and is then linked to one or more (filière × level) pairs — what we call a **link**. So the same course can be taught across several filières at different intensities.
+
+### 5.1 — Open the Courses module
+
+In the sidebar, locate the **ENSEIGNEMENT** section and click **Matières**.
+
+![Sidebar with the Enseignement section and the Matières entry highlighted in blue](/img/docs/superadmin/onboarding/14-sidebar-matieres.png)
+
+The page opens with a blue stats banner (total courses, active, with links, total hours) followed by the full catalogue.
+
+![Course management page with stats, filters, and table of existing courses](/img/docs/superadmin/onboarding/15-matieres-liste.png)
+
+Each row shows the code, name, default coefficient, hours volume, the count of **links** (badges like `BTP 1A`, `BH123 LIN456` that mark a filière × level pair), and the status. The filter bar (filière, level, status) makes lookup easy once the catalogue grows past a dozen entries.
+
+In the top right, click **+ Nouvelle matière**.
+
+### 5.2 — Identify the course
+
+The form is split into two columns: identity on the left, the big link picker on the right.
+
+![Add Course form in two columns: identity on the left, filière and level links on the right](/img/docs/superadmin/onboarding/16-matieres-formulaire.png)
+
+Fill in the **Identité de la matière** column:
+
+- **Code de la matière** *(optional)* — leave it blank to have it auto-generated from the name (`MATH`, `ALG`, `MKT-DIG`). You can also force your own if you have an internal convention.
+- **Nom complet** *(required)* — for example `Mathématiques appliquées`, `Algorithmique`, `Marketing digital`. This is the label that shows up everywhere.
+- **Type de formation** *(required)* — defaults to `Formation générale`. Used for internal classification (continuing education, foundational, transversal, etc.).
+- **Couleur de la matière** *(color picker)* — used to represent the course on the schedule. Pick a color that's easy to tell apart from the other courses at the same level.
+- **Description** *(optional)* — free text to spell out the syllabus or the history.
+- **Matière active** — leave it on. An inactive course disappears from upcoming schedules and assessments, but past grades stay intact.
+
+### 5.3 — Pick the links (filière × level)
+
+This is the heart of the system. In the **Liaisons Filières & Niveaux** column, each card represents a filière (BATIMENT, Communication & Marketing, Gestion Commerciale, Travaux Publics, Informatique...) and lists every study level as checkboxes.
+
+Click the levels where the course should be taught. Each click activates the link and increments the **"n sélection"** counter in the top right. The **Tout sélectionner** button on a card ticks every level of that filière at once (useful for a transversal course like English or Mathematics).
+
+<Callout>
+  **Coefficient and hours volume per link.** The coefficient and the hours volume (CM / TD / TP) for each (filière, level) pair can be tuned separately after the course is created, from the detail page (eye icon in the list). This mechanism is what lets the same Mathematics carry coefficient `3` in BATIMENT and `4` in TRAVAUX PUBLICS, without duplicating the course.
+</Callout>
+
+Click **Enregistrer la matière**. You're redirected to the list, where the new entry shows up with its link badges.
+
+### 5.4 — LMD system: structuring with UE and ECUE
+
+For **Licence / Master / Doctorat** levels, the course form in step 5.2 isn't enough on its own. The LMD system enforces a two-tier hierarchy: an **UE** (Unité d'Enseignement, teaching unit) groups several **ECUE** (Éléments Constitutifs d'Unité d'Enseignement — the actual courses students attend), with a per-UE total of ECTS credits.
+
+This structure lives in the **SYSTÈME LMD** section of the sidebar.
+
+![Sidebar with the SYSTÈME LMD section open showing Domaines & Parcours, Unités d'Enseignement, Notes LMD, Résultats LMD and Bulletins LMD](/img/docs/superadmin/onboarding/17-sidebar-lmd.png)
+
+<Callout type="warn">
+  **Prerequisite: Domaines & Parcours.** Before you can attach a UE to a curriculum, you need at least one **parcours** (academic track / programme) created in `LMD → Domaines & Parcours` (e.g., *Licence Marketing & Communication*, *Master Génie Civil*). Without a parcours, step 5.4.3 has nothing to link against. If your institution has only configured BTS so far (steps 1 through 5.3), this is where the LMD setup begins.
+</Callout>
+
+#### 5.4.1 — Create a UE
+
+In the sidebar, click **Unités d'Enseignement** under LMD.
+
+![Unités d'Enseignement page with stats (1 UE, 0 ECUE, 3 ECTS credits), Parcours and Type UE filters, and a list with one UE Technologie de construction of type Découverte](/img/docs/superadmin/onboarding/18-ue-liste.png)
+
+The blue banner summarises the LMD catalogue (UE count, attached ECUEs, total ECTS credits distributed). Top right, **+ Nouvelle UE** opens the creation modal.
+
+![Nouvelle Unité d'Enseignement modal with sections Identity (Intitulé + Code), Academic parameters (Crédits CECT + Type UE) and Description](/img/docs/superadmin/onboarding/19-ue-formulaire.png)
+
+Fill in:
+
+- **Intitulé** *(required)* — for example `Technologie de construction`, `Mathématiques fondamentales`. This is the label that appears on the report card.
+- **Code** *(required)* — a short code unique within the parcours (`UE:BTCB1`, `UE-MATH01`).
+- **Crédits ECTS** *(required)* — total credits this UE is worth (typically 3, 6, 9, or 12). It will be split across the ECUEs in the next step.
+- **Type UE** *(required)* — `Fondamentale` (core curriculum), `Découverte` (cross-cutting), `Optionnelle`, `Transversale`. The type doesn't change calculations, just the visual classification.
+- **Description** *(optional)* — free text.
+
+<Callout>
+  **Semester, filière, and level are NOT in this form.** They're set later via the link to a parcours (step 5.4.3). The same UE can therefore be reused in several parcours.
+</Callout>
+
+Click **Enregistrer**. The UE shows up in the list with **0 ECUE**.
+
+#### 5.4.2 — Add ECUEs to the UE
+
+On the UE list, each row exposes a coloured action row.
+
+![UE row with action buttons: play arrow, green plus to add an ECUE, blue chain to link to parcours, blue pencil to edit, red trash to delete](/img/docs/superadmin/onboarding/20-ue-actions-row.png)
+
+Left to right: ▶ expand the ECUE list, **green ➕** add an ECUE, **blue 🔗** link the UE to parcours, ✏️ edit the UE, 🗑️ delete.
+
+Click the **green ➕** button to open the ECUE add modal.
+
+![Ajouter un ECUE modal with a Crédits de l'UE gauge, two tabs Créer un ECUE / Lier un existant, a form with Nom + Code and contextual parameters (Coefficient, Crédits, Ordre)](/img/docs/superadmin/onboarding/21-ecue-formulaire.png)
+
+At the top, the **`Crédits de l'UE 0 / 3` gauge** fills up as you add ECUEs — at a glance you can tell whether the UE total has been reached (3 credits in this case).
+
+Two tabs:
+
+- **+ Créer un ECUE** — creates a brand-new ECUE. Fields:
+  - **Nom** (`Résistance des Matériaux`, `Mécanique appliquée`)
+  - **Code** (`RDM101`, `MEC-A2`)
+  - **Coefficient** *(default 1)* — weight of the ECUE in the UE's average.
+  - **Crédits** *(default 2)* — share of the UE's credits assigned to this ECUE. The credits of every ECUE in the UE must add up to the UE total.
+  - **Ordre** *(default 0)* — display order on the report card.
+- **🔗 Lier un existant** — reuses an ECUE already created in another UE (the same ECUE can belong to several UEs with different values).
+
+<Callout>
+  **Values are scoped to this UE.** The coefficient and credits set here apply only in *this* UE. If you later link the same ECUE to another UE, you can give it different values without affecting the first link.
+</Callout>
+
+Click **Créer l'ECUE** (green button). The ECUE is attached to the UE and the credit gauge increases. Repeat until the UE total is reached.
+
+#### 5.4.3 — Link the UE to one or more parcours
+
+A UE on its own does nothing until it's tied to a parcours and a semester — that's what makes it visible to students. On the UE row, click the **🔗 (blue chain)** button.
+
+![Lier à des Parcours modal for the UE Technologie de construction, with an empty list and the message Aucun parcours trouvé](/img/docs/superadmin/onboarding/22-ue-parcours.png)
+
+Tick the parcours where the UE should appear, then click the relevant semesters on each row. Click **Enregistrer**.
+
+<Callout>
+  **All ECUEs follow automatically.** When you link a UE to a parcours, *every* ECUE inside it becomes available in that parcours. No need to repeat the link for each ECUE.
+</Callout>
+
+If the modal shows **"Aucun parcours trouvé"** as in the screenshot, no parcours have been created yet. Head to **LMD → Domaines & Parcours** to create one, then come back to the UE list to make the link.
+
+<Callout type="warn">
+  **If your institution only runs BTS**, you can ignore the SYSTÈME LMD section of the sidebar entirely. The course catalogue (steps 5.1 through 5.3) is all you need.
+</Callout>
+
+## Step 6: configure tuition fees
+
+The accounting module is central to your cash flow. Go to `Comptabilité → Frais → Configurer`.
+
+First, define the **fee categories** (under `Comptabilité → Frais → Catégories`):
+
+- Enrollment fees
+- Tuition fees
+- Exam fees
+- Library fees
+- Course-pack fees
+- Uniform fees
+- and so on
+
+Each category can be mandatory or optional. Mandatory categories are automatically expected when a student enrolls.
+
+Next, under `Comptabilité → Frais → Configurer`, create **variants**: for each `(filière, level, category)` combination, set the expected amount. You can manage this interactively via the artisan command:
+
+```bash
+php artisan klassci:fees:configure
+```
+
+The command walks you through generating every subscription without duplicates, archiving inactive ones, and fixing unique-constraint violations.
+
+## Step 7: create staff accounts
+
+Go to `Personnel → Vue unifiée` and use the **+ Nouveau personnel** button. Pick the role (`coordinateur`, `enseignant`, `secrétaire`, `comptable`, `caissier`, `service technique`, `super-administrateur`).
+
+For each member, KLASSCI automatically generates:
+
+- a **username** in the form `firstname.lastname` (auto-deduplicated on collision)
+- a secure **initial password** (sent by email or shown in an immediate modal)
+- an **activation email** containing the first-login link
+
+On first sign-in, the member is forced to change their password. Passwords expire after 6 months with a 1-month advance warning.
+
+<Callout type="warn">
+  **Watch the faculty permissions.** If you enable the `notes_evaluations`, `presences`, and `emploi_temps` modules, remember to grant them to the `enseignant` role too. Otherwise, faculty members will see an empty sidebar. Toggling the module isn't enough; the business permission has to be granted as well.
+</Callout>
+
+## Step 8: validate the configuration and launch
+
+Before sending the URL to your students, run a final check:
+
+1. Sign in as super-administrator at your institution's URL (`https://your-school.klassci.com`).
+2. Confirm that the sidebar shows every expected module.
+3. Create a test student (`Étudiants → Nouvel étudiant`) and enroll them in a class.
+4. Confirm that the test student's financial standing shows the expected fees.
+5. Sign in as a test faculty account and confirm grade entry works.
+
+You're ready. Send the URL and credentials to your administrative team and start enrolling students.
+
+## What's next
+
+- For day-to-day enrollment management, read the [Registrar — managing enrollments](/en/docs/secretaire/inscriptions) guide.
+- To understand the enrollment statuses and validation workflow, the same guide goes into detail.
+- For anything else, the support team replies within 24 business hours at [contact@klassci.com](mailto:contact@klassci.com).
+
+Welcome to KLASSCI.

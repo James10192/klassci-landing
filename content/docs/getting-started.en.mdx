@@ -1,0 +1,95 @@
+---
+title: Welcome to KLASSCI
+description: Platform overview, first steps, essential vocabulary.
+---
+
+## What is KLASSCI
+
+KLASSCI is a school management platform built for **higher-education institutions in Africa**: universities, grandes écoles, BTS institutes, professional licences. One tool that replaces the Excel files, the grade books, the noticeboards, and the aging Access databases.
+
+The platform covers the full student life cycle, from pre-enrollment to graduation:
+
+- enrollments and re-enrollments, with a validation workflow and payment tracking
+- class schedules, course sessions, and faculty sign-in
+- student attendance, sign-in codes, attendance reports
+- grade entry, automatic average calculation, report-card generation
+- accounting: fees, payments, reminders, financial dashboards
+- a full LMD system (UE, ECUE, ECTS credits, parcours) running alongside the BTS track
+- communication: announcements, messages, notifications
+
+Each school gets **its own isolated database**. Your data is never shared with another institution.
+
+## Who it's for
+
+KLASSCI is built for the following profiles:
+
+| Role | What they do in KLASSCI |
+| --- | --- |
+| Super-administrator | Initial setup, account management, fee configuration, global oversight |
+| Coordinator | Academic oversight, master schedule, class workload |
+| Registrar | Enrollments, re-enrollments, student records, document generation |
+| Faculty | Grade entry, sign-in, class lookups, reports |
+| Bursar | Payment tracking, reminders, financial statements, accounting exports |
+| Cashier | Quick pre-enrollment, taking payments, generating receipts |
+| Student | Viewing grades, report cards, financial standing, class schedule |
+
+Roles use granular permissions managed through Spatie Permission. A super-administrator can enable or disable **whole modules** (LMD, accounting, communication, and so on) depending on the institution's plan.
+
+## Essential vocabulary
+
+A few terms you'll see often, in the platform and throughout this documentation:
+
+- **Filière** (academic track / programme) — the field of study (e.g., Civil Engineering, Building, Business IT).
+- **Niveau d'étude** (study level / year level) — the year in the cursus (BTS1, BTS2, L1, L2, L3, M1, M2). Each level belongs to a cycle (BTS, Licence, Master).
+- **Class** — the operational unit that groups students for a given academic year. Always tied to a filière + a study level.
+- **Academic year** — the academic period (e.g., 2025-2026). Only one is flagged as "current" at a time.
+- **Enrollment** — the link between a student and a class for an academic year. Has a `status` (active / cancelled) and a `workflow_step` (pre_inscrit, etudiant_cree, etc.).
+- **Course** — the unit of instruction grades are attached to. In LMD, a course is an **ECUE** linked to a **UE** (Unité d'Enseignement) carrying ECTS credits.
+- **Assessment** — the type of evaluation (homework, midterm, final exam, project) configured for a course.
+- **Grade** — a student's mark on a given assessment.
+- **Report card** — the synthesis of a student's results for a period (semester or year).
+- **Tronc commun** (common core) — a two-step enrollment pattern: common core in S1, then specialisation in S2 (or the other way around, depending on the filière).
+
+## First steps after your account is created
+
+Once the KLASSCI team has provisioned your institution, you'll receive your super-administrator credentials. Here's the recommended order:
+
+1. **Check the current academic year** under `Paramètres → Configuration → Année universitaire`. If none exists, create it and set `is_current = true`.
+2. **Configure your filières** (`Académique → Filières`), then your **study levels** (`Académique → Niveaux`).
+3. **Create the classes** for the current year (`Académique → Classes`). Each class is the intersection of a filière + a level for a given year.
+4. **Define your courses** (`Académique → Matières`). For LMD, create the UE first, then the ECUE attached to them.
+5. **Set up tuition fees** (`Comptabilité → Frais → Configurer`). Define categories (enrollment, tuition, exams...) and amounts per filière + level.
+6. **Import or create staff accounts** (`Personnel`). Each member gets their credentials by email. Passwords are valid 6 months and expire with a 1-month advance warning.
+7. **Start enrolling students** (`Étudiants → Inscriptions → Nouvelle inscription`).
+
+The [Super-administrator — initial setup](/en/docs/superadmin/onboarding) guide walks through every step with the matching screens.
+
+## Logging in and environments
+
+KLASSCI runs in any modern browser (Chrome, Firefox, Safari, Edge). No local install, no extension to download.
+
+Each institution gets a dedicated URL like `https://your-school.klassci.com`. On mobile, the interface is fully responsive: faculty can enter grades from their phone without a dedicated native app.
+
+<Callout>
+  **Good to know.** Sessions expire after 12 hours of inactivity. If you lose your password, use the "Mot de passe oublié" link on the sign-in page; a reset email arrives within 60 seconds.
+</Callout>
+
+## Data security
+
+KLASSCI applies several layers of protection:
+
+- **Tenant isolation** — each school has its own MySQL database, hosted separately.
+- **HTTPS everywhere** — every request is encrypted (TLS 1.3 on klassci.com domains).
+- **Role-based permissions** — a bursar doesn't see grades, a faculty member doesn't see accounting.
+- **IDOR audit** — systematic protection against direct unauthorized access (Laravel `Policy` on sensitive resources).
+- **Rate limiting** — money-related and authentication routes are throttled to block brute-force attacks.
+- **Backups** — automated daily backups, retained for 30 days.
+
+## What's next
+
+Pick the guide that matches your role:
+
+- [Super-administrator — initial setup](/en/docs/superadmin/onboarding) if you're configuring your institution for the first time
+- [Registrar — managing enrollments](/en/docs/secretaire/inscriptions) if you handle student records day to day
+
+Module-specific guides (LMD, schedules, grades, accounting, attendance) are being written and will roll out over the coming weeks. For any question or a demo request, write to [contact@klassci.com](mailto:contact@klassci.com).

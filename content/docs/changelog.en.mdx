@@ -1,0 +1,142 @@
+---
+title: Changelog
+description: Notable changes to the KLASSCI platform, grouped by month.
+---
+
+The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+
+<Callout>
+  This file is curated by hand from the release log. Minor fixes, internal refactors, and infrastructure changes aren't always listed. For the full technical history, check the repo's git log.
+</Callout>
+
+---
+
+## April 2026
+
+### Added
+
+- **Bulk attendance entry without a course** — the new interface lets you log class hours without assigning a specific course, useful for shared lectures and conferences. `UNIQUE+NULL` pattern, cross-compatible MariaDB/MySQL via a generated column.
+- **Group portal for founders** — cross-tenant aggregation of financial, academic, and operational metrics, with per-school health scoring, automated alerts (plan mismatch, inactive tenant, SSL expiry, enrollment drop), and a transverse subscription banner.
+- **Group member onboarding** — new DGA role, email-based invite flow with auto-generated password and a 24-hour signed URL, forced password change on first login, `username` fallback (auto-generated `firstname.lastname` with collision-handling).
+- **Cross-tenant notifications** — invoice system, faculty notifications, founder notifications, dedicated table with per-user preferences.
+- **Block enrollments on full classes** in the enrollment form: live display of available seats with colored thresholds (green above 30%, orange 10-30%, dark orange below 10%, red full), automatic disabling of the submit button, only validated enrollments for the current year are counted.
+- **Conversational context for the Claude chatbot** — the bot now remembers the last tool result (students or classes) so it can answer follow-up questions like "and the next class over?" without you having to re-specify the class.
+- **Richer chatbot filters** — student lookup by workflow step and status, class lookup by system (BTS / LMD) and seat availability.
+- **Signature 2026 pricing scheme** — three tiers (Essentiel, PRO, ELITE) aligned with higher education, Partner formula at 15,000 XOF per year, 3-month trial, grandfathering of existing subscriptions for 24/18/12 months.
+
+### Improved
+
+- **Full overhaul of the accounting module** — six premium pages redesigned: bursar dashboard, payments, category tracking, fee configuration, dashboard, reminders. Two-row `planning-header` pattern with KPIs embedded in the hero.
+- **Redesigned Attendance tab** on the student profile — single unified dark hero gathering the synthesis, white sub-cards for granular detail, gating of past years to prevent visual regressions.
+- **Redesigned class schedule page** — day/week/month views with colored session pills, per-session kebab menu, legend, dynamic per-school PDF settings, one-click week duplication.
+- **Premium overhaul of enrollments** — live-updating KPIs, bulk actions (cancellation, export), modal `iiConfirm` confirmations, uniform toasts, shared styles via `common.js` and `ii-*` CSS namespace.
+- **Redesigned classes page** — restructured layout, semantic badges, modernized table, AJAX filters.
+- **Redesigned admin modals** — unified on the KLASSCI monochrome blue palette, removed non-semantic decorative colors.
+- **Hardened money-related actions** — `throttle:60,1` and `10,1` on payment routes, every native `window.confirm()` replaced with custom `iiConfirm` dialogs.
+
+### Fixed
+
+- **N+1 fix in the chatbot's class lookup** — went from 300 queries per call down to 2, using a filtered `withCount` and a single current-year lookup.
+- **Double `selectClasse()` definition** in the class picker: the second hoisted definition silently overwrote the first without calling `toggleSubmitButton()`, so the button was never disabled by the "class full" modal. The two functions are merged.
+- **"Notes" button** on the assessments page now redirects to quick entry; bulk delete fixed.
+- **Removed a `composer install` at deploy time** that froze some tenants on shared environments.
+
+### Security
+
+- **IDOR audit phase 1** — three Policies created, `authorize()` calls added to sensitive routes, `viewFinancials` masked for unauthorized roles.
+- **Cleanup of stack traces** exposed in production on ten identified routes.
+- **Migration of 230+ `hasRole()` calls** to the Spatie permission system (`@can`, `@cannot`), removed hardcoded role checks in controllers.
+
+---
+
+## March 2026
+
+### Added
+
+- **Full LMD system** alongside BTS — UE, ECUE, and credits per semester, many-to-many ECUE↔UE pivot with contextual coefficients, student parcours with progressive credit validation, LMD report cards with weighted averages, configurable calculation formulas (AQ, NAQ, APC).
+- **Tronc commun module** — common-core enrollment flow then specialisation, original-class report card, shared courses, strict scheduling, three configuration parameters (report card, courses, schedule).
+- **Conduct grade** — automatic calculation on a 16/20 scale (one point off per 4 hours of absence), Reprimand and Warning mentions, eight tiers of appreciation, per-school configuration, factors in absences per course.
+- **Cashier role** — dedicated workspace with cash dashboard, multi-step pre-enrollment flow with category-by-category fee entry, partial payment, automatic credentials via `UserService`, administrative completion banner with safeguards.
+- **Multi-tenant LMS API** — public school discovery endpoints (no permanent token required), dedicated authentication with `lms-discovery` rate limiting, internal documentation accessible via `GET /api/lms/documentation`.
+- **Student documents module** — upload, list, download, extension badge, role-based read permissions.
+- **BTS/LMD differentiation on the student profile** — semester tabs, residual fees by category, lifetime CECT, unified `photo_url` accessor.
+- **Interactive fee configuration** — artisan command to manage fee subscriptions interactively, no-duplicate generation, archive of inactive entries.
+- **ECUE module** — two-tab modal with credit validation, premium Select2 tabs, fully-AJAX UE page (zero reload), UE↔Parcours linking across multiple semesters.
+
+### Improved
+
+- **Coordinator dashboard overhaul** — premium design with KPIs and AJAX navigation between tabs, no reloads.
+- **Class schedule page overhaul** — premium design, KPIs, ECharts scrollable charts, HH:MM time format everywhere.
+- **Results pages overhaul** (index, classes, class) — annual / S1 / S2 views, attendance integration, fix for inconsistent grade filtering.
+- **Notes page overhaul** — availability calendar with inline editing, real-time search in selection modals, standalone modal replacing the legacy AJAX embed.
+- **Pre-enrollment page overhaul** — premium analytics cards, centered steps with continuous lines between circles, student lookup for the re-enrollment flow.
+- **Annual planning page overhaul** — Events tab merged in, balanced calendar (900 px, 48 px cells), KPIs corrected on every tab, save modal without reload.
+- **Coordinator and Class workload sections overhaul** — premium design, sign-in modal aligned with the attendance-codes page.
+- **Financial standing overhaul** — preview as a dark hero in the student-profile style, PDF in formal-document style, action buttons on the Finances tab, SVG fallback for missing avatars.
+- **Staff page overhaul** — premium design, role masking based on permissions, cashier tab added to the unified view.
+- **Performance tweaks** — extracted fee-configuration constants, removed hardcoded email, fixed N+1 in LMD via proper eager loading.
+
+### Fixed
+
+- **LMD report card averages stuck at zero** — period-format inconsistency in the query, added `getPeriodeVariants()`.
+- **Enrollment workflow fix** — a validated payment is now required before the enrollment itself can be validated, alert on the student page when the enrollment is pending, automatic redirect after validation.
+- **superAdmin dashboard fix** — white background, softer warning text, AJAX refresh fixed for class/faculty loads.
+- **Parent modal rendering fix** — eliminated hover flash, removed transitions, custom modal replacing the Bootstrap one for parent search.
+- **Select2 in modals fix** — z-index 1075, dropdown forced downward, dropdownParent on body to escape `overflow-y:auto`.
+- **"Edit availability" button fix** in the faculty grid.
+
+---
+
+## February 2026
+
+### Added
+
+- **Enriched report-card system** — semester weighting for the annual average, persistence of results on generation, report-card style picker, "Abidjan style" toggle.
+- **Per-student report card** — coefficient modal self-contained on the student profile, no round-trip to a separate page.
+- **Filières & Levels overhaul** — selectable pills, per-filière handling of levels in the linkages.
+- **Faculty sign-in module** — "Coming up" badges, bulk editing, report modal, tracking of completed hours, availability polling.
+- **Administrative PDF documents** — full overhaul of the previews, configurable color settings, generation via Browserless for reliability, stronger watermarks, themed header applied to certificates.
+- **Blank grade-sheet PDF generation** for manual entry.
+- **Quick faculty creation** from the course-session modal.
+- **Real-time search in selection modals** for students, classes, and courses.
+
+### Improved
+
+- **Availability calendar overhaul** — inline editing right inside `add-seance`.
+- **Fullscreen notes modal overhaul** + fix for the 500 error on faculty `quick-create`.
+- **Faculty attendance stats overhaul** + faculty report page overhaul.
+- **"Hours per course" tracking section overhaul** on the class page.
+- **Class filters** in the planner + standardized HH:MM time format.
+- **Student management modals** on the class page (add, remove, transfer).
+
+### Fixed
+
+- **bulk-update-status fix** for faculty attendance — uses `url()` instead of `route()` to avoid crashes when the route isn't cached on the server.
+- **Matricule regeneration fix** — changes are now applied during student edits.
+- **Auto-generated matricule fix** — pulls info from the most recent enrollment.
+
+---
+
+## January 2026
+
+### Added
+
+- **Premium overhaul of the landing page** — editorial design inspired by zed.dev, IBM Plex Serif/Sans/Mono, KLASSCI blue on a beige background, dot grid + grain texture, premium animations (gradient text shimmer, morphing blobs, clip-path text reveal, button pulse, pillar stagger), 9 real screenshots in the hero marquee, feature modals, full dark mode, mobile-responsive.
+- **Per-role permission manager** — dedicated UI, permissions grouped by module, automatic group expansion, role grouping in the UI.
+- **Full Notes module overhaul** — modal-based workflow, dedicated API endpoints.
+- **Faculty attendance module** — per-faculty drilldown, individual stats, PDF button in the bulk banner, accordion for bulk editing, time pickers in the embed, conflict confirmations during quick generation.
+- **Bulk schedule editing** for sessions, with conflict handling for faculty.
+- **Auto-generated matricules** for new students.
+- **Coefficients per filière and level** — strict application instead of a global fallback.
+- **Schedule helper tip** — step-by-step guide modal.
+- **plan-and-confirm workflow** — validation step before code for significant changes.
+
+### Improved
+
+- **Average-coefficient unblock** — improved UX for tronc commun cases.
+- **ESBTP-ABIDJAN cleanup** — MASTER/L3 matricules adjusted, full-class handling.
+- **Bulk faculty availability management** — dedicated UI, mass apply.
+
+---
+
+*Last updated: April 25, 2026*

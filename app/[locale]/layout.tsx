@@ -10,10 +10,47 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { ReactNode } from "react";
 
 import { RootProvider } from "fumadocs-ui/provider";
+import { I18nProvider } from "fumadocs-ui/i18n";
 
 import { PostHogProvider } from "@/components/analytics/posthog-provider";
 import { MotionConfigProvider } from "@/components/motion-config-provider";
 import { routing } from "@/i18n/routing";
+
+// UI strings shown by Fumadocs (search dialog, TOC label, theme toggle, etc.)
+// per locale. English values are the library defaults but we set them
+// explicitly for clarity. `chooseLanguage` powers the docs sidebar language
+// switcher.
+const FUMADOCS_TRANSLATIONS = {
+  fr: {
+    search: "Rechercher",
+    searchNoResult: "Aucun résultat",
+    toc: "Sur cette page",
+    tocNoHeadings: "Aucune section",
+    lastUpdate: "Dernière mise à jour",
+    chooseLanguage: "Choisir une langue",
+    nextPage: "Suivant",
+    previousPage: "Précédent",
+    chooseTheme: "Thème",
+    editOnGithub: "Modifier sur GitHub",
+  },
+  en: {
+    search: "Search",
+    searchNoResult: "No results",
+    toc: "On this page",
+    tocNoHeadings: "No sections",
+    lastUpdate: "Last updated",
+    chooseLanguage: "Choose a language",
+    nextPage: "Next",
+    previousPage: "Previous",
+    chooseTheme: "Theme",
+    editOnGithub: "Edit on GitHub",
+  },
+} as const;
+
+const FUMADOCS_LOCALES = [
+  { name: "Français", locale: "fr" },
+  { name: "English", locale: "en" },
+];
 
 const plexSerif = IBM_Plex_Serif({
   subsets: ["latin", "latin-ext"],
@@ -157,9 +194,23 @@ export default async function LocaleLayout({
               enableColorScheme: true,
             }}
           >
-            <PostHogProvider>
-              <MotionConfigProvider>{children}</MotionConfigProvider>
-            </PostHogProvider>
+            {/* Fumadocs UI v14 doesn't expose an `i18n` prop on RootProvider —
+                that landed in v15.2.3. We wrap with the dedicated
+                <I18nProvider> so docs UI strings (search, TOC label) and the
+                language switcher render in the active locale. */}
+            <I18nProvider
+              locale={locale}
+              locales={FUMADOCS_LOCALES}
+              translations={
+                FUMADOCS_TRANSLATIONS[
+                  locale as keyof typeof FUMADOCS_TRANSLATIONS
+                ]
+              }
+            >
+              <PostHogProvider>
+                <MotionConfigProvider>{children}</MotionConfigProvider>
+              </PostHogProvider>
+            </I18nProvider>
           </RootProvider>
         </NextIntlClientProvider>
         <Analytics />

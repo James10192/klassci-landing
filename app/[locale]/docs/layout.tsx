@@ -4,10 +4,21 @@ import type { ReactNode } from "react";
 
 import { source } from "@/lib/source";
 
-export default function Layout({ children }: { children: ReactNode }) {
+interface LayoutProps {
+  children: ReactNode;
+  params: Promise<{ locale: string }>;
+}
+
+export default async function Layout({ children, params }: LayoutProps) {
+  const { locale } = await params;
+  // With i18n on the loader, pageTree is { [locale]: Root }. getPageTree(locale)
+  // returns the per-locale tree so sidebar links carry the right URLs
+  // (`/docs/...` for FR, `/en/docs/...` for EN).
+  const tree = source.getPageTree(locale);
+
   return (
     <DocsLayout
-      tree={source.pageTree}
+      tree={tree}
       nav={{
         title: (
           <span className="inline-flex items-center gap-2">
@@ -24,7 +35,7 @@ export default function Layout({ children }: { children: ReactNode }) {
             </span>
           </span>
         ),
-        url: "/",
+        url: locale === "fr" ? "/" : `/${locale}`,
       }}
       sidebar={{
         defaultOpenLevel: 1,

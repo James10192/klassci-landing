@@ -11,19 +11,19 @@ interface PageParams {
 }
 
 export async function generateStaticParams() {
-  // Generate static params for all docs pages × all locales.
-  // Fumadocs source returns the FR pages by default; EN variants will be added
-  // later when content is translated.
-  return source.generateParams().flatMap((p) =>
-    ["fr", "en"].map((locale) => ({ ...p, locale })),
-  );
+  // With i18n on the source loader, generateParams returns one entry per
+  // (slug, locale) pair. We just rename `lang` → `locale` to match our
+  // [locale] segment in the App Router.
+  return source
+    .generateParams("slug", "locale")
+    .map(({ slug, locale }) => ({ slug, locale }));
 }
 
 export async function generateMetadata({
   params,
 }: PageParams): Promise<Metadata> {
-  const { slug } = await params;
-  const page = source.getPage(slug);
+  const { locale, slug } = await params;
+  const page = source.getPage(slug, locale);
   if (!page) return {};
 
   return {
@@ -36,7 +36,10 @@ export default async function DocPage({ params }: PageParams) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
 
-  const page = source.getPage(slug);
+  // getPage returns the locale-specific file when present, falling back to
+  // the default-language file otherwise. So an untranslated EN page silently
+  // serves the FR content rather than 404'ing.
+  const page = source.getPage(slug, locale);
   if (!page) notFound();
 
   // Fumadocs v11 runtime exposes the MDX module's React component on `body`

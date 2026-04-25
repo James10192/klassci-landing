@@ -1,0 +1,13 @@
+{
+  "title": "Documentation",
+  "pages": [
+    "index",
+    "getting-started",
+    "---By role---",
+    "superadmin",
+    "secretaire",
+    "---Reference---",
+    "api-reference",
+    "changelog"
+  ]
+}
