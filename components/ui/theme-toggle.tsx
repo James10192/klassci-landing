@@ -1,57 +1,57 @@
 "use client";
 
-import { Moon, Sun } from "lucide-react";
+import { Monitor, Moon, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
 
 import { track } from "@/lib/analytics/track";
 
-type Theme = "light" | "dark";
+type Theme = "light" | "dark" | "system";
+const ORDER: readonly Theme[] = ["system", "light", "dark"] as const;
 
-const STORAGE_KEY = "klassci-theme";
-
-function readStoredTheme(): Theme {
-  if (typeof window === "undefined") return "light";
-  return localStorage.getItem(STORAGE_KEY) === "dark" ? "dark" : "light";
-}
-
+// Theme cycle button. Reuses the next-themes context exposed by Fumadocs
+// RootProvider so the docs sidebar toggle and this nav toggle stay in sync.
+// Cycles system → light → dark → system.
 export function ThemeToggle({ className = "" }: { className?: string }) {
   const t = useTranslations("nav");
-  const [theme, setTheme] = useState<Theme>("light");
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setTheme(readStoredTheme());
+    setMounted(true);
   }, []);
 
-  const toggle = useCallback(() => {
-    const html = document.documentElement;
-    const next: Theme = html.classList.contains("dark") ? "light" : "dark";
-
-    html.classList.add("theme-switching");
-    html.classList.toggle("dark", next === "dark");
-    html.classList.toggle("light", next === "light");
-    localStorage.setItem(STORAGE_KEY, next);
+  const cycle = useCallback(() => {
+    const current = (theme as Theme) ?? "system";
+    const idx = ORDER.indexOf(current);
+    const next = ORDER[(idx + 1) % ORDER.length] as Theme;
     setTheme(next);
-    track("theme_toggle", { to: next });
+    if (next !== "system") {
+      track("theme_toggle", { to: next });
+    }
+  }, [theme, setTheme]);
 
-    window.setTimeout(() => {
-      html.classList.remove("theme-switching");
-    }, 850);
-  }, []);
+  const current = (mounted ? theme : "system") as Theme;
+  const Icon = current === "dark" ? Moon : current === "light" ? Sun : Monitor;
+  const label =
+    current === "dark"
+      ? t("themeToggleLight")
+      : current === "light"
+        ? t("themeToggleDark")
+        : t("themeToggleAria");
 
   return (
     <button
       type="button"
-      onClick={toggle}
+      onClick={cycle}
       className={`inline-flex items-center justify-center h-9 w-9 rounded border border-border text-text-secondary hover:text-text hover:border-border-strong transition-colors ${className}`}
-      aria-label={t("themeToggleAria")}
-      title={t("themeToggleAria")}
+      aria-label={label}
+      title={label}
+      suppressHydrationWarning
     >
-      <Sun className="h-4 w-4 dark:hidden" aria-hidden />
-      <Moon className="h-4 w-4 hidden dark:block" aria-hidden />
-      <span className="sr-only">
-        {theme === "dark" ? t("themeToggleLight") : t("themeToggleDark")}
-      </span>
+      <Icon className="h-4 w-4" aria-hidden />
+      <span className="sr-only">{label}</span>
     </button>
   );
 }

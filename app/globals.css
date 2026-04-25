@@ -18,7 +18,7 @@
   --fd-background: 39 23% 96%;      /* #f6f4f0 — KLASSCI beige */
   --fd-foreground: 0 0% 10%;        /* #1a1a1a */
   --fd-muted: 36 16% 91%;           /* #edeae4 — bg-alt */
-  --fd-muted-foreground: 0 0% 54%;  /* #8a8a8a */
+  --fd-muted-foreground: 220 9% 27%; /* #3a3d43 — was too pale at #8a8a8a, sidebar items unreadable */
   --fd-card: 0 0% 100%;             /* white */
   --fd-card-foreground: 0 0% 10%;
   --fd-popover: 0 0% 100%;
@@ -38,7 +38,7 @@ html.dark {
   --fd-background: 220 12% 12%;     /* #1a1d23 */
   --fd-foreground: 213 18% 88%;     /* #dce0e5 */
   --fd-muted: 220 11% 14%;          /* #21252b */
-  --fd-muted-foreground: 215 8% 58%;
+  --fd-muted-foreground: 213 10% 75%; /* lighter for readability in dark sidebar */
   --fd-card: 220 8% 19%;            /* #282c34 */
   --fd-card-foreground: 213 18% 88%;
   --fd-popover: 220 8% 19%;

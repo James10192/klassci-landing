@@ -122,18 +122,9 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-// Inline script that applies the persisted theme before hydration so the
-// page never flashes the wrong palette. Mirror of welcome.blade.php logic.
-const themeBootstrap = `
-(function(){
-  try {
-    var t = localStorage.getItem('klassci-theme');
-    var h = document.documentElement;
-    if (t === 'dark') { h.classList.add('dark'); h.classList.remove('light'); }
-    else { h.classList.add('light'); h.classList.remove('dark'); }
-  } catch (e) {}
-})();
-`;
+// Theme management is delegated to Fumadocs RootProvider (next-themes under
+// the hood). It handles light / dark / system + no-flash bootstrap, so we
+// don't need our own inline script anymore.
 
 export default async function LocaleLayout({
   children,
@@ -153,18 +144,19 @@ export default async function LocaleLayout({
       className={`${plexSerif.variable} ${plexSans.variable} ${plexMono.variable}`}
       suppressHydrationWarning
     >
-      <head>
-        <script
-          dangerouslySetInnerHTML={{ __html: themeBootstrap }}
-        />
-      </head>
       <body>
         <NextIntlClientProvider>
-          {/* Fumadocs RootProvider — disable its own next-themes ThemeProvider
-              since we already manage `html.dark`/`html.light` via the inline
-              theme bootstrap script above. Fumadocs UI just reads the CSS vars
-              we expose under `:root` and `html.dark`. */}
-          <RootProvider theme={{ enabled: false }}>
+          {/* Fumadocs RootProvider wires next-themes with light / dark / system.
+              The CSS we ship under `:root` (light) and `html.dark` (dark) just
+              works because next-themes toggles the `dark` class on <html>. */}
+          <RootProvider
+            theme={{
+              attribute: "class",
+              defaultTheme: "system",
+              enableSystem: true,
+              enableColorScheme: true,
+            }}
+          >
             <PostHogProvider>
               <MotionConfigProvider>{children}</MotionConfigProvider>
             </PostHogProvider>
