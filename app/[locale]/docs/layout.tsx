@@ -1,4 +1,5 @@
 import { DocsLayout } from "fumadocs-ui/layouts/docs";
+import Image from "next/image";
 import type { ReactNode } from "react";
 
 import { source } from "@/lib/source";
@@ -9,8 +10,18 @@ export default function Layout({ children }: { children: ReactNode }) {
       tree={source.pageTree}
       nav={{
         title: (
-          <span className="font-serif font-medium tracking-tight text-text">
-            KLASSCI <span className="text-text-muted text-[0.85em]">/ Docs</span>
+          <span className="inline-flex items-center gap-2">
+            <Image
+              src="/img/logo-klassci-full.png"
+              alt="KLASSCI"
+              width={469}
+              height={179}
+              priority
+              className="h-6 w-auto"
+            />
+            <span className="font-serif text-[0.85em] text-text-muted">
+              / Docs
+            </span>
           </span>
         ),
         url: "/",
