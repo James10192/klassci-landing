@@ -278,6 +278,16 @@ html.dark .gradient-text {
   background: linear-gradient(270deg, var(--bg), transparent);
 }
 
+/* Fumadocs SearchDialog (Cmd+K): the highlighted row gets bg-fd-accent
+   (brand orange) + text-fd-accent-foreground. The title inherits correctly
+   but the description has its own .text-fd-muted-foreground which keeps it
+   grey on orange = unreadable. Force muted text inside any active/selected
+   container to inherit its parent's foreground. */
+[aria-selected="true"] .text-fd-muted-foreground,
+[data-active="true"] .text-fd-muted-foreground {
+  color: inherit;
+}
+
 /* Reduce motion preference */
 @media (prefers-reduced-motion: reduce) {
   *,
