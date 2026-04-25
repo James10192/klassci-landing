@@ -180,6 +180,14 @@ h1, h2, h3, h4 {
   color: var(--text);
 }
 
+/* When the SearchDialog or a TOC click lands on a heading via #anchor,
+   modern browsers honour scroll-margin-top so the target sits below any
+   sticky nav rather than under it. The Fumadocs DocsLayout has a 56px
+   nav header — we add 16px breathing room. */
+:where(h1, h2, h3, h4, h5, h6)[id] {
+  scroll-margin-top: 5rem;
+}
+
 h4 {
   font-family: var(--font-plex-sans), system-ui, sans-serif;
   font-weight: 600;
