@@ -270,85 +270,96 @@
     "image": "/img/sections/students-banner.png"
   },
   "pricing": {
-    "title": "Tarification simple",
-    "subtitle": "Commencez gratuitement. Évoluez quand vous êtes prêt.",
-    "popularBadge": "populaire",
-    "perMonth": "/ mois",
+    "title": "Formule Signature",
+    "subtitle": "Trois tiers pensés pour le supérieur ivoirien. Tarif annuel dégressif dès la 2ᵉ année, ou mensualité fixe — vous choisissez.",
+    "popularBadge": "Recommandé",
+    "fromLabel": "À partir de",
+    "firstYearLabel": "Première année",
+    "renewalPrefix": "puis",
+    "renewalSuffix": "dès la 2ᵉ année",
+    "orMonthlyLabel": "Ou en mensualité",
+    "perMonthSuffix": "/ mois",
+    "currency": "XOF",
     "tiers": [
-      {
-        "key": "free",
-        "name": "Free",
-        "tagline": "Pour découvrir",
-        "price": "0 FCFA",
-        "period": "3 mois d'essai",
-        "features": [
-          { "text": "50 étudiants max", "included": true },
-          { "text": "Gestion des notes", "included": true },
-          { "text": "Emploi du temps basique", "included": true },
-          { "text": "1 administrateur", "included": true },
-          { "text": "Comptabilité", "included": false },
-          { "text": "Support prioritaire", "included": false }
-        ],
-        "cta": "Commencer",
-        "ctaStyle": "outline",
-        "featured": false
-      },
       {
         "key": "essentiel",
         "name": "Essentiel",
-        "tagline": "Établissements en croissance",
-        "price": "150k FCFA",
-        "period": "/ mois",
+        "tagline": "Université / école supérieure émergente",
+        "pricing": {
+          "firstYear": "988 000",
+          "renewal": "700 000",
+          "monthly": "58 400"
+        },
         "features": [
-          { "text": "1 000 étudiants", "included": true },
-          { "text": "Notes + Bulletins PDF", "included": true },
-          { "text": "Emploi du temps avancé", "included": true },
-          { "text": "Comptabilité complète", "included": true },
-          { "text": "5 utilisateurs", "included": true },
-          { "text": "Support email", "included": true }
+          { "text": "1 compte par fonction clé : Fondateur, DG, Directeur des études, Comptable, Caissier", "included": true },
+          { "text": "4 comptes éducateurs", "included": true },
+          { "text": "Capacité : 500 apprenants · 30 professeurs", "included": true },
+          { "text": "Maintenance à l'année incluse", "included": true },
+          { "text": "Relais d'information : Mail", "included": true },
+          { "text": "Assistance 4j/7j", "included": true },
+          { "text": "Personnalisation initiale du design", "included": true },
+          { "text": "Mises à jour de l'ergonomie", "included": true },
+          { "text": "Une formation de prise en main", "included": true }
         ],
-        "cta": "Choisir Essentiel",
-        "ctaStyle": "primary",
-        "featured": true
+        "cta": "Démarrer en Essentiel",
+        "ctaStyle": "outline",
+        "featured": false,
+        "variant": "light"
       },
       {
         "key": "pro",
         "name": "Pro",
-        "tagline": "Grands établissements",
-        "price": "350k FCFA",
-        "period": "/ mois",
+        "tagline": "Université / école supérieure établie",
+        "pricing": {
+          "firstYear": "1 300 000",
+          "renewal": "1 150 000",
+          "monthly": "93 833"
+        },
         "features": [
-          { "text": "Étudiants illimités", "included": true },
-          { "text": "Toutes les fonctionnalités", "included": true },
-          { "text": "Système LMD complet", "included": true },
-          { "text": "API pour intégrations", "included": true },
-          { "text": "Utilisateurs illimités", "included": true },
-          { "text": "Support prioritaire 24/7", "included": true }
+          { "text": "1 compte par fonction clé : Fondateur, DG, Directeur des études, Comptable, Caissier", "included": true },
+          { "text": "10 comptes éducateurs", "included": true },
+          { "text": "Capacité : 2 500 apprenants · 50 professeurs", "included": true },
+          { "text": "Maintenance à l'année incluse", "included": true },
+          { "text": "Relais d'information : Mail + WhatsApp (5 types)", "included": true },
+          { "text": "Assistance 5j/7j", "included": true },
+          { "text": "Plateforme de cours en ligne", "included": true },
+          { "text": "Mises à jour de l'ergonomie", "included": true },
+          { "text": "Personnalisation continue", "included": true },
+          { "text": "Une formation de prise en main", "included": true }
         ],
         "cta": "Choisir Pro",
-        "ctaStyle": "outline",
-        "featured": false
+        "ctaStyle": "primary",
+        "featured": true,
+        "variant": "highlight"
       },
       {
         "key": "elite",
         "name": "Élite",
-        "tagline": "Sur mesure pour votre établissement",
-        "price": "Sur devis",
-        "period": "personnalisation complète",
+        "tagline": "Groupe universitaire / réseau d'écoles supérieures",
+        "pricing": {
+          "firstYear": "6 000 000",
+          "renewal": "4 800 000",
+          "monthly": "480 300"
+        },
         "features": [
-          { "text": "Tout le plan Pro inclus", "included": true },
-          { "text": "Fonctionnalités sur mesure", "included": true },
-          { "text": "PDF et exports aux couleurs de l'école", "included": true },
-          { "text": "Déploiement dédié (~2 semaines)", "included": true },
-          { "text": "Formation de vos équipes", "included": true },
-          { "text": "Interlocuteur dédié", "included": true }
+          { "text": "Comptes utilisateurs illimités", "included": true },
+          { "text": "Capacité illimitée : apprenants et professeurs", "included": true },
+          { "text": "Maintenance à l'année incluse", "included": true },
+          { "text": "Relais d'information : Mail + WhatsApp (6 types · 5 000 envois/mois)", "included": true },
+          { "text": "Plateforme de cours en ligne", "included": true },
+          { "text": "Assistance 6j/7j", "included": true },
+          { "text": "Personnalisation continue", "included": true },
+          { "text": "Mises à jour de l'ergonomie", "included": true },
+          { "text": "Accès gratuit aux nouvelles fonctionnalités", "included": true },
+          { "text": "Une formation de prise en main", "included": true }
         ],
-        "cta": "Nous contacter",
-        "ctaStyle": "primary",
-        "featured": false
+        "cta": "Discuter d'Élite",
+        "ctaStyle": "dark",
+        "featured": false,
+        "variant": "dark"
       }
     ],
-    "footer": "Essai gratuit de 3 mois · Aucune carte bancaire requise · Support inclus"
+    "footer": "Tous les tiers incluent l'hébergement, les sauvegardes et la conformité MESRS · Migration de vos données existantes incluse à l'activation"
   },
   "faq": {
     "title": "Questions fréquentes",

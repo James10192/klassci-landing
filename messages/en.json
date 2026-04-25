@@ -270,85 +270,96 @@
     "image": "/img/sections/students-banner.png"
   },
   "pricing": {
-    "title": "Simple pricing",
-    "subtitle": "Start free. Scale up when you're ready.",
-    "popularBadge": "popular",
-    "perMonth": "/ month",
+    "title": "Signature plans",
+    "subtitle": "Three tiers built for Ivorian higher education. Annual rate drops from year two, or fixed monthly billing — your call.",
+    "popularBadge": "Recommended",
+    "fromLabel": "From",
+    "firstYearLabel": "First year",
+    "renewalPrefix": "then",
+    "renewalSuffix": "from year two",
+    "orMonthlyLabel": "Or monthly",
+    "perMonthSuffix": "/ month",
+    "currency": "XOF",
     "tiers": [
-      {
-        "key": "free",
-        "name": "Free",
-        "tagline": "To explore",
-        "price": "0 FCFA",
-        "period": "3-month trial",
-        "features": [
-          { "text": "Up to 50 students", "included": true },
-          { "text": "Grade management", "included": true },
-          { "text": "Basic timetable", "included": true },
-          { "text": "1 admin user", "included": true },
-          { "text": "Accounting", "included": false },
-          { "text": "Priority support", "included": false }
-        ],
-        "cta": "Get started",
-        "ctaStyle": "outline",
-        "featured": false
-      },
       {
         "key": "essentiel",
         "name": "Essentiel",
-        "tagline": "Growing schools",
-        "price": "150k FCFA",
-        "period": "/ month",
+        "tagline": "Emerging higher-education institution",
+        "pricing": {
+          "firstYear": "988,000",
+          "renewal": "700,000",
+          "monthly": "58,400"
+        },
         "features": [
-          { "text": "1,000 students", "included": true },
-          { "text": "Grades + PDF report cards", "included": true },
-          { "text": "Advanced timetable", "included": true },
-          { "text": "Full accounting", "included": true },
-          { "text": "5 users", "included": true },
-          { "text": "Email support", "included": true }
+          { "text": "One account per key role: Founder, Director, Studies Director, Bursar, Cashier", "included": true },
+          { "text": "4 educator accounts", "included": true },
+          { "text": "Capacity: 500 learners · 30 teachers", "included": true },
+          { "text": "Yearly maintenance included", "included": true },
+          { "text": "Information relay: Email", "included": true },
+          { "text": "Support 4d/7", "included": true },
+          { "text": "Initial design customisation", "included": true },
+          { "text": "Ergonomics updates", "included": true },
+          { "text": "One onboarding training", "included": true }
         ],
-        "cta": "Choose Essentiel",
-        "ctaStyle": "primary",
-        "featured": true
+        "cta": "Start with Essentiel",
+        "ctaStyle": "outline",
+        "featured": false,
+        "variant": "light"
       },
       {
         "key": "pro",
         "name": "Pro",
-        "tagline": "Large schools",
-        "price": "350k FCFA",
-        "period": "/ month",
+        "tagline": "Established higher-education institution",
+        "pricing": {
+          "firstYear": "1,300,000",
+          "renewal": "1,150,000",
+          "monthly": "93,833"
+        },
         "features": [
-          { "text": "Unlimited students", "included": true },
-          { "text": "All features", "included": true },
-          { "text": "Full LMD system", "included": true },
-          { "text": "API for integrations", "included": true },
-          { "text": "Unlimited users", "included": true },
-          { "text": "Priority 24/7 support", "included": true }
+          { "text": "One account per key role: Founder, Director, Studies Director, Bursar, Cashier", "included": true },
+          { "text": "10 educator accounts", "included": true },
+          { "text": "Capacity: 2,500 learners · 50 teachers", "included": true },
+          { "text": "Yearly maintenance included", "included": true },
+          { "text": "Information relay: Email + WhatsApp (5 types)", "included": true },
+          { "text": "Support 5d/7", "included": true },
+          { "text": "Online learning platform", "included": true },
+          { "text": "Ergonomics updates", "included": true },
+          { "text": "Continuous customisation", "included": true },
+          { "text": "One onboarding training", "included": true }
         ],
         "cta": "Choose Pro",
-        "ctaStyle": "outline",
-        "featured": false
+        "ctaStyle": "primary",
+        "featured": true,
+        "variant": "highlight"
       },
       {
         "key": "elite",
         "name": "Élite",
-        "tagline": "Tailored to your school",
-        "price": "Custom quote",
-        "period": "full customisation",
+        "tagline": "University group / network of institutions",
+        "pricing": {
+          "firstYear": "6,000,000",
+          "renewal": "4,800,000",
+          "monthly": "480,300"
+        },
         "features": [
-          { "text": "Everything in Pro", "included": true },
-          { "text": "Custom features", "included": true },
-          { "text": "PDFs and exports in your school colours", "included": true },
-          { "text": "Dedicated deployment (~2 weeks)", "included": true },
-          { "text": "Team training", "included": true },
-          { "text": "Dedicated account manager", "included": true }
+          { "text": "Unlimited user accounts", "included": true },
+          { "text": "Unlimited capacity: learners and teachers", "included": true },
+          { "text": "Yearly maintenance included", "included": true },
+          { "text": "Information relay: Email + WhatsApp (6 types · 5,000 sends/month)", "included": true },
+          { "text": "Online learning platform", "included": true },
+          { "text": "Support 6d/7", "included": true },
+          { "text": "Continuous customisation", "included": true },
+          { "text": "Ergonomics updates", "included": true },
+          { "text": "Free access to new features", "included": true },
+          { "text": "One onboarding training", "included": true }
         ],
-        "cta": "Contact us",
-        "ctaStyle": "primary",
-        "featured": false
+        "cta": "Talk about Élite",
+        "ctaStyle": "dark",
+        "featured": false,
+        "variant": "dark"
       }
     ],
-    "footer": "Free 3-month trial · No credit card required · Support included"
+    "footer": "Every tier includes hosting, backups and MESRS compliance · Migration of your existing data included at activation"
   },
   "faq": {
     "title": "Frequently asked questions",

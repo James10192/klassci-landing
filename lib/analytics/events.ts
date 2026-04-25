@@ -9,7 +9,6 @@ export type AnalyticsEventMap = {
       | "hero_primary"
       | "hero_secondary"
       | "letter"
-      | "pricing_free"
       | "pricing_essentiel"
       | "pricing_pro"
       | "pricing_elite"
