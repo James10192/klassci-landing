@@ -160,16 +160,62 @@ Répétez pour chaque niveau de votre offre. À titre d'exemple, voici une grill
 
 ## Étape 4 : créer les classes
 
-Une classe est l'intersection **filière × niveau d'étude** dans laquelle vos étudiants seront inscrits. Allez dans `Académique → Classes → Nouvelle classe` :
+Une **classe** est un groupe d'étudiants qui partagent la même filière, le même niveau d'étude et la même année universitaire. C'est l'objet le plus utilisé au quotidien : c'est à lui que sont rattachés les inscriptions, les emplois du temps, les notes, les présences et les bulletins.
 
-- **Nom** : `BTS Bâtiment 1ère année`, `L2 Génie Civil`, etc.
-- **Filière** : sélectionner dans la liste créée à l'étape 2
-- **Niveau d'étude** : sélectionner dans la liste créée à l'étape 3
-- **Système académique** : déduit automatiquement de la filière (BTS ou LMD)
-- **Places totales** : la capacité maximale d'étudiants — sert au blocage automatique sur les inscriptions
+### 4.1 — Ouvrir la page Classes
+
+Toujours dans la sidebar **Filières & Classes**, cliquez sur **Classes**. La page s'ouvre sur un grand bandeau bleu qui résume l'état des classes pour l'année en cours :
+
+- nombre total de classes actives,
+- nombre d'étudiants inscrits sur l'ensemble des classes,
+- places totales et utilisées,
+- taux d'occupation global.
+
+![Page Gestion des classes avec le bandeau de stats, les filtres et la grille de cartes de classe](/img/docs/superadmin/onboarding/11-classes-liste.png)
+
+Sous le bandeau, vous disposez d'un moteur de recherche, de quatre filtres (filière, niveau, statut, capacité) et d'un bouton **Exporter** pour générer un CSV. Chaque classe est représentée par une carte qui expose en un coup d'œil sa filière, son niveau, ses inscrits et son taux de remplissage.
+
+En haut à droite, deux boutons :
+
+- **Sync BTS/LMD** — re-synchronise le rattachement des matières aux classes selon les planifications académiques (utile après une mise à jour en masse des planifs).
+- **+ Nouvelle classe** — ouvre la modale de création.
+
+### 4.2 — Remplir la modale de création
+
+Cliquez sur **+ Nouvelle classe**. Un formulaire modal s'ouvre par-dessus la liste sans recharger la page.
+
+![Modale Informations de la classe avec les champs nom, code, filière, niveau, année, capacité, description et toggle classe active](/img/docs/superadmin/onboarding/12-classes-modal-formulaire.png)
+
+Renseignez :
+
+- **Nom de la classe** *(requis)* — par exemple `1ère année BTS Génie Civil Option Bâtiment`. C'est le libellé qui apparaît dans les listes de classes, les bulletins et les imports/exports.
+- **Code** *(requis)* — code court unique au sein de l'année (`1BTS-GC-BAT`, `B2-COM`, `INFO-BTS-1A`). Sert d'identifiant technique stable.
+- **Filière** *(requis)* — sélectionnez dans la liste créée à l'étape 2.
+- **Niveau d'études** *(requis)* — sélectionnez dans la liste créée à l'étape 3.
+- **Année universitaire** *(requis)* — pré-remplie avec l'année courante mais modifiable, utile pour préparer la rentrée suivante en avance.
+- **Système académique** — non saisissable. Déterminé automatiquement par le niveau d'études (un niveau Licence/Master/Doctorat → LMD ; sinon → BTS).
+- **Capacité maximale** *(requis)* — par défaut 30. C'est la borne haute des inscriptions sur cette classe ; au-delà le système bloque les nouvelles entrées et la carte affiche un badge complet.
+- **Classe active** — laissez activé. Une classe inactive disparaît des sélecteurs d'inscription mais conserve toutes ses données.
+- **Description** *(optionnel)* — un paragraphe libre pour préciser un contexte (option, mention spéciale, restriction d'accès…).
+
+Cliquez sur **Enregistrer la classe**. La modale se ferme et la grille s'actualise immédiatement avec votre nouvelle carte.
+
+### 4.3 — Le menu d'actions sur chaque carte
+
+Sur chaque carte, le bouton **trois points** en haut à droite ouvre un menu contextuel.
+
+![Menu d'actions ouvert sur une carte de classe avec les options Gérer les matières, Liste d'appel, Liste complète, Modifier, Archivage](/img/docs/superadmin/onboarding/13-classes-actions-menu.png)
+
+Les actions disponibles :
+
+- **Gérer les matières** — affecte les matières (BTS) ou les UE/ECUE (LMD) à la classe avec leurs coefficients et volumes horaires. Vous y reviendrez à l'étape 5.
+- **Liste d'appel** — ouvre la fiche de présence de la classe pour la séance la plus récente.
+- **Liste complète** — exporte la liste des étudiants inscrits avec leurs informations administratives.
+- **Modifier** — réouvre la modale de l'étape 4.2 pour ajuster nom, capacité, description, etc.
+- **Archivage** — bascule la classe dans le dossier d'archives en fin d'année. Le bouton est désactivé tant que la classe est rattachée à une année courante.
 
 <Callout>
-  **Astuce.** Le seuil de blocage par défaut est 30 % de places restantes (vert), 10–30 % (orange), &lt;10 % (orange foncé), 0 (rouge complet). Ces seuils sont configurables dans `Paramètres → Inscriptions → Capacité des classes`.
+  **Une classe par triplet (filière, niveau, parallèle).** Si vous avez deux groupes parallèles d'un même niveau (ex : `BTS1 Bâtiment Groupe A` et `BTS1 Bâtiment Groupe B`), créez deux classes distinctes. Cela permet de gérer indépendamment leurs emplois du temps, leurs notes et leur capacité.
 </Callout>
 
 ## Étape 5 : configurer les matières
