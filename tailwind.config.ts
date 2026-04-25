@@ -38,6 +38,11 @@ const config: Config = {
           hover: "var(--accent-hover)",
           light: "var(--accent-light)",
         },
+        brand: {
+          orange: "var(--brand-orange)",
+          "orange-hover": "var(--brand-orange-hover)",
+          "orange-light": "var(--brand-orange-light)",
+        },
         border: {
           DEFAULT: "var(--border)",
           strong: "var(--border-strong)",

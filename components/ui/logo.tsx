@@ -9,8 +9,14 @@ export function Logo({
   className?: string;
   variant?: "default" | "footer";
 }) {
-  const colorClass =
-    variant === "footer" ? "text-footer-text" : "text-text";
+  // Footer variant: invert the wordmark to white via CSS filter — the source PNG
+  // is bicolor (orange K + blue LASSCI on transparent), and on the dark blue
+  // footer background the orange would clash. brightness(0)+invert(1) flattens
+  // it to a clean white wordmark.
+  const filterClass =
+    variant === "footer"
+      ? "[filter:brightness(0)_invert(1)] opacity-90"
+      : "";
 
   return (
     <Link
@@ -19,20 +25,13 @@ export function Logo({
       aria-label="KLASSCI"
     >
       <Image
-        src="/img/logo-klassci.png"
-        alt=""
-        width={32}
-        height={32}
+        src="/img/logo-klassci-full.png"
+        alt="KLASSCI"
+        width={469}
+        height={179}
         priority
-        className="h-7 w-auto"
+        className={`h-7 w-auto ${filterClass}`}
       />
-      <span
-        aria-hidden
-        className={`font-serif font-medium tracking-tight text-[1.15rem] leading-none ${colorClass}`}
-        style={{ letterSpacing: "-0.02em" }}
-      >
-        KLASSCI
-      </span>
     </Link>
   );
 }

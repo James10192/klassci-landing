@@ -21,6 +21,12 @@
   --accent-hover: #0340a0;
   --accent-light: rgba(4, 83, 203, 0.08);
 
+  /* Secondary brand accent — orange from the official KLASSCI wordmark.
+     Used sparingly to add warmth without diluting the primary blue. */
+  --brand-orange: #f58220;
+  --brand-orange-hover: #e57212;
+  --brand-orange-light: rgba(245, 130, 32, 0.1);
+
   --border: #dadde2;
   --border-strong: #c5c9d0;
 
@@ -53,6 +59,10 @@ html.dark {
   --accent: #4b8af0;
   --accent-hover: #6da3f7;
   --accent-light: rgba(75, 138, 240, 0.12);
+
+  --brand-orange: #ff9d4a;
+  --brand-orange-hover: #ffb675;
+  --brand-orange-light: rgba(255, 157, 74, 0.15);
 
   --border: #363b44;
   --border-strong: #4b5263;
@@ -170,25 +180,21 @@ a:hover {
   background: linear-gradient(
     90deg,
     #0453cb 0%,
-    #5e91de 25%,
-    #0453cb 50%,
-    #5e91de 75%,
+    #f58220 50%,
     #0453cb 100%
   );
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: gradientText 4s linear infinite;
+  animation: gradientText 6s linear infinite;
 }
 
 html.dark .gradient-text {
   background: linear-gradient(
     90deg,
     #4b8af0 0%,
-    #7ab0ff 25%,
-    #4b8af0 50%,
-    #7ab0ff 75%,
+    #ff9d4a 50%,
     #4b8af0 100%
   );
   background-size: 200% auto;

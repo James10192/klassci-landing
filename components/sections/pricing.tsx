@@ -120,7 +120,7 @@ export function Pricing() {
                 .join(" ")}
             >
               {isFeatured && (
-                <span className="absolute top-3 right-3 font-mono uppercase tracking-[0.08em] text-[0.65rem] bg-accent text-white px-2 py-0.5 rounded">
+                <span className="absolute top-3 right-3 font-mono uppercase tracking-[0.08em] text-[0.65rem] bg-brand-orange text-white px-2 py-0.5 rounded shadow-[0_2px_6px_rgba(245,130,32,0.3)]">
                   {t("popularBadge")}
                 </span>
               )}
