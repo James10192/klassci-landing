@@ -1,0 +1,85 @@
+---
+title: Concepts essentiels
+description: Vocabulaire, rôles, sécurité — la matière de fond de KLASSCI à connaître avant ou pendant le paramétrage.
+---
+
+Cette page sert de **référence** pour le vocabulaire et les rôles utilisés partout dans KLASSCI. Si vous démarrez votre tenant, allez directement au [Quickstart 60 minutes](/docs/getting-started) et revenez ici quand un terme vous bloque.
+
+## Qu'est-ce que KLASSCI
+
+KLASSCI est une plateforme de gestion scolaire conçue pour les **établissements d'enseignement supérieur en Afrique** : universités, grandes écoles, instituts BTS, licences professionnelles. Un seul outil pour remplacer les fichiers Excel, les cahiers de notes, les tableaux d'affichage et les bases Access vieillissantes.
+
+La plateforme couvre l'ensemble du cycle de vie d'un étudiant, de la pré-inscription à la délivrance du diplôme :
+
+- inscriptions et ré-inscriptions, avec workflow de validation et gestion des paiements
+- emploi du temps, séances de cours et émargement enseignant
+- présences étudiants, codes d'émargement, rapports d'assiduité
+- saisie des notes, calcul automatique des moyennes, génération des bulletins
+- comptabilité : frais, paiements, relances, dashboards financiers
+- système LMD complet (UE, ECUE, crédits ECTS, parcours) en parallèle du BTS classique
+- communication : annonces, messages, notifications
+
+Chaque établissement dispose de **sa propre base de données isolée**. Vos données ne sont jamais partagées avec d'autres écoles.
+
+## Pour qui
+
+KLASSCI est pensé pour les profils suivants :
+
+| Rôle | Ce qu'il fait dans KLASSCI |
+| --- | --- |
+| Super-administrateur | Paramétrage initial, gestion des comptes, configuration des frais, supervision globale |
+| Coordinateur | Pilotage pédagogique, planning général, charge par classe |
+| Secrétaire | Inscriptions, ré-inscriptions, dossiers étudiants, génération de documents |
+| Enseignant | Saisie des notes, émargement, consultation des classes, rapports |
+| Comptable | Suivi des paiements, relances, situations financières, exports comptables |
+| Caissier | Pré-inscription rapide, encaissement, génération de reçus |
+| Étudiant | Consultation des notes, bulletins, situation financière, emploi du temps |
+
+Les rôles disposent de permissions granulaires gérées via Spatie Permission. Un super-administrateur peut activer ou désactiver des **modules complets** (LMD, comptabilité, communication...) selon le plan de l'établissement.
+
+<Callout>
+  **Pas de rôle parent distinct.** En contexte africain, le flow d'inscription ne lie pas fiablement un parent à plusieurs enfants. Les parents utilisent donc le compte de leur enfant pour suivre notes, bulletin, situation financière et emploi du temps.
+</Callout>
+
+## Vocabulaire essentiel
+
+Quelques termes que vous croiserez souvent dans la plateforme et dans le reste de cette documentation :
+
+- **Filière** — la spécialité d'enseignement (ex. : Génie Civil, Bâtiment, Informatique de Gestion).
+- **Niveau d'étude** — l'année dans le cursus (BTS1, BTS2, L1, L2, L3, M1, M2). Un niveau appartient à un cycle (BTS, Licence, Master).
+- **Classe** — l'unité opérationnelle qui regroupe des étudiants pour une année universitaire donnée. Toujours liée à une filière + un niveau d'étude.
+- **Année universitaire** — la période académique (ex. : 2025-2026). Une seule est marquée comme « courante » à la fois.
+- **Inscription** — le lien entre un étudiant et une classe pour une année universitaire. Possède un `status` (active / annulée) et une `workflow_step` (pre_inscrit, etudiant_cree, etc.).
+- **Matière** — l'unité d'enseignement à laquelle on attache des notes. En LMD, une matière est une **ECUE** liée à une **UE** (Unité d'Enseignement) avec des crédits ECTS.
+- **Évaluation** — un type d'évaluation (devoir, partiel, examen final, projet) configuré pour une matière.
+- **Note** — la note d'un étudiant à une évaluation donnée.
+- **Bulletin** — la synthèse des résultats d'un étudiant pour une période (semestre ou année).
+- **Tronc commun** — un mode d'inscription en deux temps : tronc commun en S1, puis spécialisation en S2 (ou inversement selon la filière).
+- **MESRS** — Ministère de l'Enseignement Supérieur et de la Recherche Scientifique de Côte d'Ivoire. Régule l'affectation des bacheliers entre établissements ; KLASSCI permet de saisir des tarifs différenciés selon le statut **AFFECTÉ / RÉAFFECTÉ / NON AFFECTÉ**.
+
+## Connexion et environnements
+
+KLASSCI est accessible depuis n'importe quel navigateur moderne (Chrome, Firefox, Safari, Edge). Aucune installation locale, aucune extension à télécharger.
+
+Chaque établissement dispose d'une URL dédiée du type `https://votre-ecole.klassci.com`. Sur mobile, l'interface est entièrement responsive : les enseignants saisissent leurs notes depuis leur téléphone sans application native dédiée.
+
+<Callout>
+  **Sessions et mots de passe.** Les sessions expirent au bout de 12 heures d'inactivité. Si vous perdez votre mot de passe, utilisez le lien « Mot de passe oublié » sur la page de connexion : un email de réinitialisation est envoyé sous 60 secondes. Les mots de passe expirent au bout de 6 mois avec alerte 1 mois avant.
+</Callout>
+
+## Sécurité de vos données
+
+KLASSCI applique plusieurs niveaux de protection :
+
+- **Isolation par tenant** — chaque école a sa propre base MySQL, hébergée séparément (multi-Laravel filesystem-level, pas multi-tenancy logique).
+- **HTTPS obligatoire** — toutes les communications sont chiffrées (TLS 1.3 sur les domaines klassci.com).
+- **Permissions par rôle** — un comptable ne voit pas les notes, un enseignant ne voit pas la comptabilité.
+- **Audit IDOR** — protection systématique contre les accès directs non autorisés (`Policy` Laravel sur les ressources sensibles).
+- **Rate limiting** — les routes monétaires et d'authentification sont limitées pour bloquer les attaques en force brute.
+- **Sauvegardes** — sauvegardes automatiques quotidiennes, conservées 30 jours.
+
+## Pour aller plus loin
+
+- [Quickstart 60 minutes](/docs/getting-started) — le parcours linéaire pour démarrer un tenant
+- [Super-administrateur — installation initiale](/docs/superadmin/onboarding) — la référence détaillée étape par étape
+- [Module Frais & Comptabilité](/docs/modules/frais-comptabilite) — référence complète du paramétrage financier

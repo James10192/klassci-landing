@@ -1,95 +1,181 @@
 ---
-title: Welcome to KLASSCI
-description: Platform overview, first steps, essential vocabulary.
+title: 60-minute Quickstart
+description: From "I just got my super-admin credentials" to "I can enroll my first student", in 8 verifiable steps. No choices, no detours.
 ---
 
-## What is KLASSCI
+This linear path takes you from a brand-new tenant to a system ready to enroll students. **One hour**, 8 steps, a checkpoint at every milestone. By the end you'll know exactly where your setup stands.
 
-KLASSCI is a school management platform built for **higher-education institutions in Africa**: universities, grandes écoles, BTS institutes, professional licences. One tool that replaces the Excel files, the grade books, the noticeboards, and the aging Access databases.
+For vocabulary and concepts, keep [Core concepts](/en/docs/concepts) open in another tab and check it whenever a term blocks you.
 
-The platform covers the full student life cycle, from pre-enrollment to graduation:
+## Before you start
 
-- enrollments and re-enrollments, with a validation workflow and payment tracking
-- class schedules, course sessions, and faculty sign-in
-- student attendance, sign-in codes, attendance reports
-- grade entry, automatic average calculation, report-card generation
-- accounting: fees, payments, reminders, financial dashboards
-- a full LMD system (UE, ECUE, ECTS credits, parcours) running alongside the BTS track
-- communication: announcements, messages, notifications
+You'll need:
 
-Each school gets **its own isolated database**. Your data is never shared with another institution.
-
-## Who it's for
-
-KLASSCI is built for the following profiles:
-
-| Role | What they do in KLASSCI |
-| --- | --- |
-| Super-administrator | Initial setup, account management, fee configuration, global oversight |
-| Coordinator | Academic oversight, master schedule, class workload |
-| Registrar | Enrollments, re-enrollments, student records, document generation |
-| Faculty | Grade entry, sign-in, class lookups, reports |
-| Bursar | Payment tracking, reminders, financial statements, accounting exports |
-| Cashier | Quick pre-enrollment, taking payments, generating receipts |
-| Student | Viewing grades, report cards, financial standing, class schedule |
-
-Roles use granular permissions managed through Spatie Permission. A super-administrator can enable or disable **whole modules** (LMD, accounting, communication, and so on) depending on the institution's plan.
-
-## Essential vocabulary
-
-A few terms you'll see often, in the platform and throughout this documentation:
-
-- **Filière** (academic track / programme) — the field of study (e.g., Civil Engineering, Building, Business IT).
-- **Niveau d'étude** (study level / year level) — the year in the cursus (BTS1, BTS2, L1, L2, L3, M1, M2). Each level belongs to a cycle (BTS, Licence, Master).
-- **Class** — the operational unit that groups students for a given academic year. Always tied to a filière + a study level.
-- **Academic year** — the academic period (e.g., 2025-2026). Only one is flagged as "current" at a time.
-- **Enrollment** — the link between a student and a class for an academic year. Has a `status` (active / cancelled) and a `workflow_step` (pre_inscrit, etudiant_cree, etc.).
-- **Course** — the unit of instruction grades are attached to. In LMD, a course is an **ECUE** linked to a **UE** (Unité d'Enseignement) carrying ECTS credits.
-- **Assessment** — the type of evaluation (homework, midterm, final exam, project) configured for a course.
-- **Grade** — a student's mark on a given assessment.
-- **Report card** — the synthesis of a student's results for a period (semester or year).
-- **Tronc commun** (common core) — a two-step enrollment pattern: common core in S1, then specialisation in S2 (or the other way around, depending on the filière).
-
-## First steps after your account is created
-
-Once the KLASSCI team has provisioned your institution, you'll receive your super-administrator credentials. Here's the recommended order:
-
-1. **Check the current academic year** under `Paramètres → Configuration → Année universitaire`. If none exists, create it and set `is_current = true`.
-2. **Configure your filières** (`Académique → Filières`), then your **study levels** (`Académique → Niveaux`).
-3. **Create the classes** for the current year (`Académique → Classes`). Each class is the intersection of a filière + a level for a given year.
-4. **Define your courses** (`Académique → Matières`). For LMD, create the UE first, then the ECUE attached to them.
-5. **Set up tuition fees** (`Comptabilité → Frais → Configurer`). Define categories (enrollment, tuition, exams...) and amounts per filière + level.
-6. **Import or create staff accounts** (`Personnel`). Each member gets their credentials by email. Passwords are valid 6 months and expire with a 1-month advance warning.
-7. **Start enrolling students** (`Étudiants → Inscriptions → Nouvelle inscription`).
-
-The [Super-administrator — initial setup](/en/docs/superadmin/onboarding) guide walks through every step with the matching screens.
-
-## Logging in and environments
-
-KLASSCI runs in any modern browser (Chrome, Firefox, Safari, Edge). No local install, no extension to download.
-
-Each institution gets a dedicated URL like `https://your-school.klassci.com`. On mobile, the interface is fully responsive: faculty can enter grades from their phone without a dedicated native app.
+- your **tenant URL** (`https://your-school.klassci.com`)
+- your **super-administrator credentials** (received by email)
+- the list of your **filières** and **study levels**
+- the **tuition-fee grid** (or at least the enrollment fees)
+- the **email addresses** of your administrative and teaching staff
+- **60 uninterrupted minutes**
 
 <Callout>
-  **Good to know.** Sessions expire after 12 hours of inactivity. If you lose your password, use the "Mot de passe oublié" link on the sign-in page; a reset email arrives within 60 seconds.
+  **Everything is editable later.** You can perfectly start with one filière and one fee, then enrich week by week. The goal here is reaching first enrollment, not perfection.
 </Callout>
 
-## Data security
+## Step 1 — Create the academic year (5 min)
 
-KLASSCI applies several layers of protection:
+Sidebar → **Filières & Classes → Années universitaires** → **+ Nouvelle année universitaire** button.
 
-- **Tenant isolation** — each school has its own MySQL database, hosted separately.
-- **HTTPS everywhere** — every request is encrypted (TLS 1.3 on klassci.com domains).
-- **Role-based permissions** — a bursar doesn't see grades, a faculty member doesn't see accounting.
-- **IDOR audit** — systematic protection against direct unauthorized access (Laravel `Policy` on sensitive resources).
-- **Rate limiting** — money-related and authentication routes are throttled to block brute-force attacks.
-- **Backups** — automated daily backups, retained for 30 days.
+1. Fill in **Nom** (`2025-2026`), **Date de rentrée**, and **Date de fin**.
+2. Leave **Année universitaire active** on. Click **Enregistrer**.
+3. Back on the list, click the **yellow circle with a check** on the year's row to mark it as current.
 
-## What's next
+![Academic year 2025-2026 marked as current with the green ANNÉE EN COURS badge](/img/docs/superadmin/onboarding/05-annee-courante.png)
 
-Pick the guide that matches your role:
+<Callout>
+  <Icon name="check" /> **Checkpoint** — a green **ANNÉE EN COURS** badge shows up on the row. Every future enrollment is tied to this year by default.
+</Callout>
 
-- [Super-administrator — initial setup](/en/docs/superadmin/onboarding) if you're configuring your institution for the first time
-- [Registrar — managing enrollments](/en/docs/secretaire/inscriptions) if you handle student records day to day
+[Full walkthrough, screenshots and edge cases →](/en/docs/superadmin/onboarding#étape-1--créer-lannée-universitaire-courante)
 
-Module-specific guides (LMD, schedules, grades, accounting, attendance) are being written and will roll out over the coming weeks. For any question or a demo request, write to [contact@klassci.com](mailto:contact@klassci.com).
+## Step 2 — Create the filières (10 min)
+
+Sidebar → **Filières & Classes → Filières** → **+ Nouvelle Filière** button.
+
+For each filière in your offer:
+
+1. **Nom** (`BATIMENT`, `INFORMATIQUE`, `Communication & Marketing`…) and short **Code** (`BTP`, `INFO`, `BH123`).
+2. Leave **Filière active** on.
+3. Click **Créer la filière**.
+
+![Filière management page with several filières and their ACTIVE badge](/img/docs/superadmin/onboarding/06-filieres-liste.png)
+
+<Callout>
+  <Icon name="check" /> **Checkpoint** — every filière shows up with a green **ACTIVE** badge and the levels/courses counter at `0`.
+</Callout>
+
+If a filière starts with a **tronc commun** before specialisation, see the dedicated subsection in the full guide.
+
+[Full walkthrough →](/en/docs/superadmin/onboarding#step-2-configure-your-filières)
+
+## Step 3 — Create the study levels (5 min)
+
+Sidebar → **Filières & Classes → Niveaux d'études** → **+ Nouveau Niveau** button.
+
+For each level (BTS1, BTS2, L1, L2, M1…):
+
+1. **Nom** (`BTS Première Année`), **Code** (`BTS1`).
+2. **Type de formation** (`BTS`, `Licence`, `Master`, `Doctorat`) — this is what determines whether the level follows the BTS system or LMD.
+3. **Année d'étude** (1st, 2nd, etc.) → **Créer le niveau**.
+
+![Study levels page with four configured levels](/img/docs/superadmin/onboarding/08-niveaux-liste.png)
+
+<Callout>
+  <Icon name="check" /> **Checkpoint** — the levels appear in the table with their codes and the **ACTIF** badge.
+</Callout>
+
+[Full walkthrough →](/en/docs/superadmin/onboarding#step-3-create-the-study-levels)
+
+## Step 4 — Create the classes (10 min)
+
+Sidebar → **Filières & Classes → Classes** → **+ Nouvelle classe** button.
+
+For every `filière × niveau` combination that will host students at the start of the year:
+
+1. **Nom de la classe** (`1ère année BTS Génie Civil`), **Code** (`1BTS-GC-BAT`).
+2. Pick **Filière**, **Niveau d'études**, and **Année universitaire**.
+3. Set the **Capacité maximale** (default 30) → **Enregistrer la classe**.
+
+![Class management page with the card grid](/img/docs/superadmin/onboarding/11-classes-liste.png)
+
+<Callout>
+  <Icon name="check" /> **Checkpoint** — every class shows up as a card with its **0 inscrits** counter and the **ACTIVE** badge.
+</Callout>
+
+The BTS/LMD academic system is auto-derived from the level (Licence/Master/Doctorat → LMD; otherwise BTS).
+
+[Full walkthrough →](/en/docs/superadmin/onboarding#step-4-create-the-classes)
+
+## Step 5 — Configure the courses (10 min)
+
+### For BTS levels
+
+Sidebar → **ENSEIGNEMENT → Matières** → **+ Nouvelle matière** button.
+
+1. **Nom complet** (`Mathématiques appliquées`), **Type de formation** (`Formation générale` by default).
+2. In the **Liaisons Filières & Niveaux** column on the right, **tick each level** where the course is taught. The **Tout sélectionner** button on a card ticks every level of that filière at once.
+3. Click **Enregistrer la matière**.
+
+![Course catalogue page with stats and the list of courses with their links](/img/docs/superadmin/onboarding/15-matieres-liste.png)
+
+### For LMD levels
+
+Sidebar → **SYSTÈME LMD → Unités d'Enseignement** → **+ Nouvelle UE** (fill name, code, ECTS credits, type) → on the UE row, click **<Icon name="plus-circle" className="text-emerald-500" />** to add each ECUE → then click **<Icon name="link" className="text-blue-500" />** to attach the UE to a parcours.
+
+<Callout>
+  <Icon name="check" /> **Checkpoint** — courses (BTS) or UE+ECUE (LMD) appear with their attached-combinations counter.
+</Callout>
+
+[BTS walkthrough →](/en/docs/superadmin/onboarding#step-5-configure-the-courses) · [LMD UE/ECUE →](/en/docs/superadmin/onboarding#54--lmd-system-structuring-with-ue-and-ecue)
+
+## Step 6 — Configure fees (10 min)
+
+Sidebar → **GESTION FINANCIÈRE → Comptabilité → Gestion des Frais** → **+ Nouvelle catégorie** button.
+
+Create at least **two mandatory categories**:
+
+1. **Frais d'inscription** (code `INSCRIPTION`, default amount, **Frais obligatoire** ticked).
+2. **Frais de scolarité** (code `SCOLARITE`, default amount, mandatory).
+
+Then **Configuration par Classe** in the header → click **Configurer les Frais** on each unconfigured class → enter the **3 MESRS amounts** (AFFECTÉS / RÉAFFECTÉS / NON AFFECTÉS).
+
+![Per-class fee configuration page with cards showing Complet or Non configuré](/img/docs/superadmin/onboarding/28-config-par-classe.png)
+
+<Callout>
+  <Icon name="check" /> **Checkpoint** — every class card shows its green **Complet** badge once the 3 amounts are filled in for every mandatory fee. If a class isn't configured, the category's **default amount** is used as a fallback.
+</Callout>
+
+[Fees & Accounting module — full reference →](/en/docs/modules/frais-comptabilite)
+
+## Step 7 — Create staff accounts (5 min)
+
+Sidebar → **Personnel → Vue unifiée** → **+ Nouveau personnel** button.
+
+For each staff member:
+
+1. Fill in last name, first name, email.
+2. Pick the **role** (`secretaire`, `enseignant`, `comptable`, `caissier`, `coordinateur`, `service_technique`).
+3. Submit. KLASSCI generates a **username** in `firstname.lastname` format and a **secure initial password**, then sends an activation email.
+
+<Callout>
+  <Icon name="check" /> **Checkpoint** — the staff member shows up in the list with their role. On first sign-in they're forced to change their password.
+</Callout>
+
+<Callout type="warn">
+  **Watch faculty permissions.** If you turn on the `notes_evaluations`, `presences`, and `emploi_temps` modules, also grant them to the `enseignant` role. The module toggle isn't enough — the business permission must be granted too.
+</Callout>
+
+[Full walkthrough →](/en/docs/superadmin/onboarding#step-7-create-staff-accounts)
+
+## Step 8 — Validate and launch (5 min)
+
+Before sharing the URL with students, run an **end-to-end test**:
+
+1. **Étudiants → Nouvel étudiant** → create a test student, enroll them in a class.
+2. Open their **financial standing**: the class's mandatory fees should be ready to charge.
+3. Sign in with a **test faculty account** and verify grade entry works in their class.
+4. Check the sidebar shows every expected module for each role.
+
+<Callout>
+  <Icon name="check" /> **Final checkpoint** — student created, fees visible, grades editable. You're ready to share the URL and credentials with your administrative team.
+</Callout>
+
+## You're ready
+
+At this point your tenant is operational. What you can attack next:
+
+- **Day-to-day registrar work** — [Registrar — managing enrollments](/en/docs/secretaire/inscriptions) (full pre-enrollment to validation workflow).
+- **Day-to-day bursar work** — [Bursar — operations](/en/docs/comptable/operations) (payments, reminders, exports — page under construction).
+- **Fees reference** — [Fees & Accounting module](/en/docs/modules/frais-comptabilite) if you want to dig into MESRS, optional services, and assignments.
+
+For an urgent question, email [contact@klassci.com](mailto:contact@klassci.com) — reply within 24 working hours.

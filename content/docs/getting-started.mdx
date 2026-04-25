@@ -1,95 +1,181 @@
 ---
-title: Bienvenue sur KLASSCI
-description: Présentation de la plateforme, premiers pas, vocabulaire essentiel.
+title: Quickstart 60 minutes
+description: De « j'ai mes accès super-admin » à « je peux inscrire mon premier étudiant », en 8 étapes vérifiables. Pas de choix, pas d'embranchements.
 ---
 
-## Qu'est-ce que KLASSCI
+Ce parcours linéaire vous emmène d'un tenant tout neuf à un système prêt à inscrire des étudiants. **Une seule heure**, 8 étapes, validation à chaque palier. À la fin vous saurez exactement où en est votre paramétrage.
 
-KLASSCI est une plateforme de gestion scolaire conçue pour les **établissements d'enseignement supérieur en Afrique** : universités, grandes écoles, instituts BTS, licences professionnelles. Un seul outil pour remplacer les fichiers Excel, les cahiers de notes, les tableaux d'affichage et les bases Access vieillissantes.
+Pour le vocabulaire et les concepts, gardez [Concepts essentiels](/docs/concepts) ouvert dans un autre onglet — vous y reviendrez si un terme vous bloque.
 
-La plateforme couvre l'ensemble du cycle de vie d'un étudiant, de la pré-inscription à la délivrance du diplôme :
+## Avant de commencer
 
-- inscriptions et ré-inscriptions, avec workflow de validation et gestion des paiements
-- emploi du temps, séances de cours et émargement enseignant
-- présences étudiants, codes d'émargement, rapports d'assiduité
-- saisie des notes, calcul automatique des moyennes, génération des bulletins
-- comptabilité : frais, paiements, relances, dashboards financiers
-- système LMD complet (UE, ECUE, crédits ECTS, parcours) en parallèle du BTS classique
-- communication : annonces, messages, notifications
+Vous aurez besoin de :
 
-Chaque établissement dispose de **sa propre base de données isolée**. Vos données ne sont jamais partagées avec d'autres écoles.
-
-## Pour qui
-
-KLASSCI est pensé pour les profils suivants :
-
-| Rôle | Ce qu'il fait dans KLASSCI |
-| --- | --- |
-| Super-administrateur | Paramétrage initial, gestion des comptes, configuration des frais, supervision globale |
-| Coordinateur | Pilotage pédagogique, planning général, charge par classe |
-| Secrétaire | Inscriptions, ré-inscriptions, dossiers étudiants, génération de documents |
-| Enseignant | Saisie des notes, émargement, consultation des classes, rapports |
-| Comptable | Suivi des paiements, relances, situations financières, exports comptables |
-| Caissier | Pré-inscription rapide, encaissement, génération de reçus |
-| Étudiant | Consultation des notes, bulletins, situation financière, emploi du temps |
-
-Les rôles disposent de permissions granulaires gérées via Spatie Permission. Un super-administrateur peut activer ou désactiver des **modules complets** (LMD, comptabilité, communication...) selon le plan de l'établissement.
-
-## Vocabulaire essentiel
-
-Quelques termes que vous croiserez souvent dans la plateforme et dans le reste de cette documentation :
-
-- **Filière** — la spécialité d'enseignement (ex. : Génie Civil, Bâtiment, Informatique de Gestion).
-- **Niveau d'étude** — l'année dans le cursus (BTS1, BTS2, L1, L2, L3, M1, M2). Un niveau appartient à un cycle (BTS, Licence, Master).
-- **Classe** — l'unité opérationnelle qui regroupe des étudiants pour une année universitaire donnée. Toujours liée à une filière + un niveau d'étude.
-- **Année universitaire** — la période académique (ex. : 2025-2026). Une seule est marquée comme « courante » à la fois.
-- **Inscription** — le lien entre un étudiant et une classe pour une année universitaire. Possède un `status` (active / annulée) et une `workflow_step` (pre_inscrit, etudiant_cree, etc.).
-- **Matière** — l'unité d'enseignement à laquelle on attache des notes. En LMD, une matière est une **ECUE** liée à une **UE** (Unité d'Enseignement) avec des crédits ECTS.
-- **Évaluation** — un type d'évaluation (devoir, partiel, examen final, projet) configuré pour une matière.
-- **Note** — la note d'un étudiant à une évaluation donnée.
-- **Bulletin** — la synthèse des résultats d'un étudiant pour une période (semestre ou année).
-- **Tronc commun** — un mode d'inscription en deux temps : tronc commun en S1, puis spécialisation en S2 (ou inversement selon la filière).
-
-## Premières étapes après création de votre compte
-
-Une fois votre établissement provisionné par l'équipe KLASSCI, vous recevez vos identifiants super-administrateur. Voici l'ordre recommandé :
-
-1. **Vérifiez l'année universitaire courante** dans `Paramètres → Configuration → Année universitaire`. Si elle n'est pas créée, créez-la et marquez-la `is_current = true`.
-2. **Configurez les filières** (`Académique → Filières`) puis les **niveaux d'étude** (`Académique → Niveaux`).
-3. **Créez les classes** pour l'année courante (`Académique → Classes`). Chaque classe est l'intersection d'une filière + un niveau pour une année donnée.
-4. **Définissez les matières** (`Académique → Matières`). Pour le LMD, créez d'abord les UE puis les ECUE rattachées.
-5. **Paramétrez les frais** (`Comptabilité → Frais → Configurer`). Définissez les catégories (inscription, scolarité, examens...) et les montants par filière + niveau.
-6. **Importez ou créez les comptes du personnel** (`Personnel`). Chaque membre reçoit ses identifiants par email. Le mot de passe est valable 6 mois et expire avec une alerte 1 mois avant.
-7. **Démarrez les inscriptions étudiants** (`Étudiants → Inscriptions → Nouvelle inscription`).
-
-Le guide [Super-administrateur — installation initiale](/docs/superadmin/onboarding) détaille chaque étape avec les écrans correspondants.
-
-## Connexion et environnements
-
-KLASSCI est accessible depuis n'importe quel navigateur moderne (Chrome, Firefox, Safari, Edge). Aucune installation locale, aucune extension à télécharger.
-
-Chaque établissement dispose d'une URL dédiée du type `https://votre-ecole.klassci.com`. Sur mobile, l'interface est entièrement responsive : les enseignants saisissent leurs notes depuis leur téléphone sans application native dédiée.
+- l'**URL de votre tenant** (`https://votre-ecole.klassci.com`)
+- vos **identifiants super-administrateur** (reçus par email)
+- la liste de vos **filières** et **niveaux d'étude**
+- la **grille des frais de scolarité** (au minimum les frais d'inscription)
+- les **adresses email** de votre personnel administratif et enseignant
+- **60 minutes** ininterrompues
 
 <Callout>
-  **Bon à savoir.** Les sessions expirent au bout de 12 heures d'inactivité. Si vous perdez votre mot de passe, utilisez le lien « Mot de passe oublié » sur la page de connexion : un email de réinitialisation est envoyé sous 60 secondes.
+  **Tout est éditable plus tard.** Vous pouvez démarrer avec une seule filière et un seul frais, puis enrichir au fil des semaines. L'objectif ici est d'atteindre la première inscription, pas la perfection.
 </Callout>
 
-## Sécurité de vos données
+## Étape 1 — Créer l'année universitaire (5 min)
 
-KLASSCI applique plusieurs niveaux de protection :
+Sidebar → **Filières & Classes → Années universitaires** → bouton **+ Nouvelle année universitaire**.
 
-- **Isolation par tenant** : chaque école a sa propre base MySQL, hébergée séparément.
-- **HTTPS obligatoire** : toutes les communications sont chiffrées (TLS 1.3 sur les domaines klassci.com).
-- **Permissions par rôle** : un comptable ne voit pas les notes, un enseignant ne voit pas la comptabilité.
-- **Audit IDOR** : protection systématique contre les accès directs non autorisés (`Policy` Laravel sur les ressources sensibles).
-- **Rate limiting** : les routes monétaires et d'authentification sont limitées pour bloquer les attaques en force brute.
-- **Sauvegardes** : sauvegardes automatiques quotidiennes, conservées 30 jours.
+1. Saisissez le **Nom** (`2025-2026`), la **Date de rentrée** et la **Date de fin**.
+2. Laissez **Année universitaire active** activé. Cliquez **Enregistrer**.
+3. De retour sur la liste, cliquez le bouton **rond jaune avec coche** sur la ligne de l'année pour la marquer comme courante.
 
-## Prochaines étapes
+![Année universitaire 2025-2026 marquée comme courante avec le badge vert ANNÉE EN COURS](/img/docs/superadmin/onboarding/05-annee-courante.png)
 
-Selon votre rôle, continuez par l'un des guides suivants :
+<Callout>
+  <Icon name="check" /> **Validation** — un badge vert **ANNÉE EN COURS** apparaît sur la ligne. Toutes les futures inscriptions seront rattachées à cette année par défaut.
+</Callout>
 
-- [Super-administrateur — installation initiale](/docs/superadmin/onboarding) si vous configurez votre établissement pour la première fois
-- [Secrétaire — gérer les inscriptions](/docs/secretaire/inscriptions) si vous gérez les dossiers étudiants au quotidien
+[Détails complets, captures + variantes →](/docs/superadmin/onboarding#étape-1--créer-lannée-universitaire-courante)
 
-Les guides par module (LMD, emploi du temps, notes, comptabilité, présences) sont en cours de rédaction et seront publiés progressivement. Pour toute question ou demande de démo, écrivez à [contact@klassci.com](mailto:contact@klassci.com).
+## Étape 2 — Créer les filières (10 min)
+
+Sidebar → **Filières & Classes → Filières** → bouton **+ Nouvelle Filière**.
+
+Pour chaque filière de votre offre :
+
+1. **Nom** (`BATIMENT`, `INFORMATIQUE`, `Communication & Marketing`…) et **Code** court (`BTP`, `INFO`, `BH123`).
+2. Laissez **Filière active** activé.
+3. Cliquez **Créer la filière**.
+
+![Page Gestion des Filières avec plusieurs filières et leur badge ACTIVE](/img/docs/superadmin/onboarding/06-filieres-liste.png)
+
+<Callout>
+  <Icon name="check" /> **Validation** — chaque filière apparaît avec un badge vert **ACTIVE** et le compteur niveaux/matières à `0`.
+</Callout>
+
+Si une filière démarre par un **tronc commun** avant spécialisation, voir la sous-section dédiée dans le guide complet.
+
+[Détails complets →](/docs/superadmin/onboarding#étape-2--configurer-les-filières)
+
+## Étape 3 — Créer les niveaux d'étude (5 min)
+
+Sidebar → **Filières & Classes → Niveaux d'études** → bouton **+ Nouveau Niveau**.
+
+Pour chaque niveau (BTS1, BTS2, L1, L2, M1…) :
+
+1. **Nom** (`BTS Première Année`), **Code** (`BTS1`).
+2. **Type de formation** (`BTS`, `Licence`, `Master`, `Doctorat`) — c'est ce champ qui détermine si le niveau suit le système BTS ou LMD.
+3. **Année d'étude** (1ère, 2ème, etc.) → **Créer le niveau**.
+
+![Page Gestion des Niveaux d'Études avec quatre niveaux configurés](/img/docs/superadmin/onboarding/08-niveaux-liste.png)
+
+<Callout>
+  <Icon name="check" /> **Validation** — les niveaux apparaissent dans le tableau avec leur code et le badge **ACTIF**.
+</Callout>
+
+[Détails complets →](/docs/superadmin/onboarding#étape-3--créer-les-niveaux-détude)
+
+## Étape 4 — Créer les classes (10 min)
+
+Sidebar → **Filières & Classes → Classes** → bouton **+ Nouvelle classe**.
+
+Pour chaque combinaison `filière × niveau` qui aura des étudiants à la rentrée :
+
+1. **Nom de la classe** (`1ère année BTS Génie Civil`), **Code** (`1BTS-GC-BAT`).
+2. Sélectionnez **Filière**, **Niveau d'études** et **Année universitaire**.
+3. Définissez la **Capacité maximale** (par défaut 30) → **Enregistrer la classe**.
+
+![Page Gestion des classes avec la grille de cartes de classes](/img/docs/superadmin/onboarding/11-classes-liste.png)
+
+<Callout>
+  <Icon name="check" /> **Validation** — chaque classe apparaît comme une carte avec son compteur **0 inscrits** et le badge **ACTIVE**.
+</Callout>
+
+Le système académique BTS/LMD est dérivé automatiquement du niveau (Licence/Master/Doctorat → LMD ; sinon BTS).
+
+[Détails complets →](/docs/superadmin/onboarding#étape-4--créer-les-classes)
+
+## Étape 5 — Configurer les matières (10 min)
+
+### Pour les niveaux BTS
+
+Sidebar → **ENSEIGNEMENT → Matières** → bouton **+ Nouvelle matière**.
+
+1. **Nom complet** (`Mathématiques appliquées`), **Type de formation** (`Formation générale` par défaut).
+2. Dans la colonne **Liaisons Filières & Niveaux** à droite, **cochez chaque niveau** où la matière est enseignée. Le bouton **Tout sélectionner** d'une carte coche tous les niveaux d'une filière d'un coup.
+3. Cliquez **Enregistrer la matière**.
+
+![Page Gestion des matières avec stats et la liste des matières et leurs liaisons](/img/docs/superadmin/onboarding/15-matieres-liste.png)
+
+### Pour les niveaux LMD
+
+Sidebar → **SYSTÈME LMD → Unités d'Enseignement** → **+ Nouvelle UE** (saisissez intitulé, code, crédits ECTS, type) → puis sur la ligne UE, cliquez **<Icon name="plus-circle" className="text-emerald-500" />** pour ajouter chaque ECUE → puis cliquez **<Icon name="link" className="text-blue-500" />** pour lier l'UE à un parcours.
+
+<Callout>
+  <Icon name="check" /> **Validation** — les matières (BTS) ou UE+ECUE (LMD) apparaissent avec leur compteur de combinaisons rattachées.
+</Callout>
+
+[Détails complets BTS →](/docs/superadmin/onboarding#étape-5--configurer-les-matières) · [LMD UE/ECUE →](/docs/superadmin/onboarding#54--cas-du-système-lmd--structurer-en-ue--ecue)
+
+## Étape 6 — Paramétrer les frais (10 min)
+
+Sidebar → **GESTION FINANCIÈRE → Comptabilité → Gestion des Frais** → bouton **+ Nouvelle catégorie**.
+
+Créez au minimum **deux catégories obligatoires** :
+
+1. **Frais d'inscription** (code `INSCRIPTION`, montant par défaut, **Frais obligatoire** coché).
+2. **Frais de scolarité** (code `SCOLARITE`, montant par défaut, obligatoire).
+
+Puis **Configuration par Classe** dans le header → cliquez **Configurer les Frais** sur chaque classe non encore configurée → saisissez les **3 montants MESRS** (AFFECTÉS / RÉAFFECTÉS / NON AFFECTÉS).
+
+![Page Configuration des Frais par Classe avec des cartes affichant Complet ou Non configuré](/img/docs/superadmin/onboarding/28-config-par-classe.png)
+
+<Callout>
+  <Icon name="check" /> **Validation** — chaque carte de classe affiche son badge vert **Complet** une fois les 3 montants saisis pour chaque frais obligatoire. Si une classe n'est pas configurée, le **montant par défaut** de la catégorie sera utilisé.
+</Callout>
+
+[Module Frais & Comptabilité — référence complète →](/docs/modules/frais-comptabilite)
+
+## Étape 7 — Créer les comptes du personnel (5 min)
+
+Sidebar → **Personnel → Vue unifiée** → bouton **+ Nouveau personnel**.
+
+Pour chaque membre :
+
+1. Renseignez nom, prénom, email.
+2. Choisissez le **rôle** (`secretaire`, `enseignant`, `comptable`, `caissier`, `coordinateur`, `service_technique`).
+3. Validez. KLASSCI génère un **username** au format `prenom.nom` et un **mot de passe initial sécurisé**, et envoie un email d'activation.
+
+<Callout>
+  <Icon name="check" /> **Validation** — le membre apparaît dans la liste du personnel avec son rôle. À la première connexion, il sera forcé à changer son mot de passe.
+</Callout>
+
+<Callout type="warn">
+  **Attention permissions enseignant.** Si vous activez les modules `notes_evaluations`, `presences` et `emploi_temps`, attribuez-les aussi au rôle `enseignant`. Le toggle module ne suffit pas, il faut la permission métier.
+</Callout>
+
+[Détails complets →](/docs/superadmin/onboarding#étape-7--créer-les-comptes-du-personnel)
+
+## Étape 8 — Valider et lancer (5 min)
+
+Avant de communiquer l'URL aux étudiants, faites un **test bout-en-bout** :
+
+1. **Étudiants → Nouvel étudiant** → créez un étudiant test, inscrivez-le dans une classe.
+2. Ouvrez sa **fiche financière** : les frais obligatoires de la classe doivent être prêts à régler.
+3. Connectez-vous avec un **compte enseignant test** et vérifiez que la saisie des notes fonctionne dans sa classe.
+4. Vérifiez que la sidebar affiche tous les modules attendus pour chaque rôle.
+
+<Callout>
+  <Icon name="check" /> **Validation finale** — étudiant créé, frais visibles, notes saisissables. Vous êtes prêt à communiquer l'URL et les identifiants à votre équipe administrative.
+</Callout>
+
+## Vous êtes prêt
+
+À ce stade votre tenant est opérationnel. Voici ce que vous pouvez attaquer ensuite :
+
+- **Quotidien secrétariat** — [Secrétaire — gérer les inscriptions](/docs/secretaire/inscriptions) (workflow complet de la pré-inscription à la validation).
+- **Quotidien comptable** — [Comptable — opérations](/docs/comptable/operations) (encaissements, relances, exports — page en construction).
+- **Référence frais** — [Module Frais & Comptabilité](/docs/modules/frais-comptabilite) si vous voulez creuser le système MESRS, les services optionnels et les assignations.
+
+Pour une question urgente, écrivez à [contact@klassci.com](mailto:contact@klassci.com) — réponse sous 24h ouvrées.
