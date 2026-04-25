@@ -220,25 +220,61 @@ Les actions disponibles :
 
 ## Étape 5 : configurer les matières
 
-### Pour les filières BTS
+Une **matière** est une unité d'enseignement (Mathématiques, Anglais, Algorithmique, Marketing digital…). Dans KLASSCI, chaque matière vit dans un **catalogue central** et se voit ensuite associée à un ou plusieurs couples *(filière × niveau)* — ce qu'on appelle une **liaison**. Une même matière peut donc être enseignée dans plusieurs filières avec des intensités différentes.
 
-Allez dans `Académique → Matières → Nouvelle matière`. Pour chaque matière, indiquez :
+### 5.1 — Ouvrir le module Matières
 
-- **Nom** : `Mathématiques appliquées`, `Topographie`, etc.
-- **Coefficient par défaut** : utilisé par les bulletins si la planification académique ne précise pas autrement
+Dans la sidebar, repérez la section **ENSEIGNEMENT** et cliquez sur **Matières**.
 
-Les matières BTS sont **rattachées aux classes** via les **planifications académiques**. Cette mécanique vous permet de définir des coefficients différents pour la même matière selon la filière et le niveau (par exemple, les Mathématiques peuvent avoir un coefficient 3 en Génie Civil et 4 en Topographie).
+![Sidebar avec la section Enseignement et l'entrée Matières surlignée en bleu](/img/docs/superadmin/onboarding/14-sidebar-matieres.png)
 
-Concrètement, allez dans `Planning Général → Configuration` et définissez les triplets `(filière, niveau, matière)` avec leur coefficient et volume horaire (CM / TD / TP).
+La page s'ouvre sur un bandeau bleu de stats (total matières, actives, avec liaisons, volume horaire cumulé) puis la liste détaillée du catalogue.
 
-### Pour les filières LMD
+![Page Gestion des matières avec stats, filtres et table de matières existantes](/img/docs/superadmin/onboarding/15-matieres-liste.png)
 
-Le LMD utilise une hiérarchie en deux niveaux :
+Chaque ligne expose le code, le nom, le coefficient par défaut, le volume horaire, le nombre de **liaisons** (badges `BTP 1A`, `BH123 LIN456`, etc., qui désignent un couple filière × niveau) et le statut. La barre de filtres (filière, niveau, statut) facilite la recherche dès que le catalogue dépasse une dizaine d'entrées.
 
-1. **UE (Unité d'Enseignement)** — un regroupement thématique avec un nombre total de crédits ECTS (généralement entre 6 et 12).
-2. **ECUE** — les matières concrètes qui composent l'UE. Une ECUE peut appartenir à plusieurs UE avec des coefficients contextuels différents (relation many-to-many).
+En haut à droite, cliquez sur **+ Nouvelle matière**.
 
-Créez d'abord les UE (`Académique → LMD → UE → Nouvelle UE`) puis les ECUE (`Académique → LMD → ECUE → Nouvelle ECUE`). La modale ECUE inclut une jauge de validation des crédits qui empêche de dépasser le total alloué à l'UE.
+### 5.2 — Identifier la matière
+
+Le formulaire est divisé en deux colonnes : à gauche l'identité, à droite le grand sélecteur de liaisons.
+
+![Formulaire Ajouter une Matière en deux colonnes : identité à gauche, liaisons filières et niveaux à droite](/img/docs/superadmin/onboarding/16-matieres-formulaire.png)
+
+Renseignez la colonne **Identité de la matière** :
+
+- **Code de la matière** *(optionnel)* — laissez vide pour qu'il soit généré automatiquement à partir du nom (`MATH`, `ALG`, `MKT-DIG`). Vous pouvez aussi imposer le vôtre si vous avez une convention interne.
+- **Nom complet** *(requis)* — par exemple `Mathématiques appliquées`, `Algorithmique`, `Marketing digital`. C'est le libellé qui s'affiche partout.
+- **Type de formation** *(requis)* — par défaut `Formation générale`. Sert à la classification interne (formation continue, fondamentale, transversale, etc.).
+- **Couleur de la matière** *(color picker)* — utilisée pour représenter la matière dans l'emploi du temps. Choisissez une couleur facilement distinguable des autres matières du même niveau.
+- **Description** *(optionnel)* — texte libre pour préciser le contenu pédagogique ou l'historique.
+- **Matière active** — laissez activé. Une matière inactive disparaît des emplois du temps et des évaluations à venir, mais ses notes passées restent intactes.
+
+### 5.3 — Sélectionner les liaisons (filière × niveau)
+
+C'est le cœur du système. Dans la colonne **Liaisons Filières & Niveaux**, chaque carte représente une filière (BATIMENT, Communication & Marketing, Gestion Commerciale, Travaux Publics, Informatique…) et liste tous ses niveaux d'étude sous forme de checkboxes.
+
+Cliquez sur les niveaux où la matière doit être enseignée. Chaque clic active la liaison et incrémente le compteur **« n sélection »** en haut à droite. Le bouton **Tout sélectionner** d'une carte permet de cocher d'un coup tous les niveaux de la filière (utile pour une matière transversale comme Anglais ou Mathématiques).
+
+<Callout>
+  **Coefficient et volume horaire par liaison.** Le coefficient et le volume horaire (CM / TD / TP) propres à chaque couple *(filière, niveau)* peuvent être ajustés séparément après création de la matière, depuis la fiche détail (icône œil sur la liste). C'est ce mécanisme qui permet aux mêmes Mathématiques d'avoir un coefficient `3` en BATIMENT et `4` en TRAVAUX PUBLICS, sans dupliquer la matière.
+</Callout>
+
+Cliquez sur **Enregistrer la matière**. Vous êtes redirigé vers la liste, où la nouvelle entrée apparaît avec ses badges de liaison.
+
+### 5.4 — Le cas particulier du système LMD (UE / ECUE)
+
+Pour les niveaux LMD (Licence / Master / Doctorat), le catalogue de matières fonctionne en deux temps :
+
+1. Vous créez vos **ECUE** (Éléments Constitutifs d'Unité d'Enseignement) via le formulaire ci-dessus — ce sont les *vraies* matières que les étudiants suivent.
+2. Vous regroupez ces ECUE en **UE** (Unités d'Enseignement) dans la section dédiée de la sidebar (**SYSTÈME LMD → LMD**), avec un total de crédits ECTS par UE (typiquement entre 6 et 12).
+
+La modale UE inclut une jauge de validation qui empêche de dépasser le total alloué (tous les ECUE d'une UE doivent additionner exactement le total de crédits prévus). Une même ECUE peut être rattachée à plusieurs UE avec des coefficients contextuels différents.
+
+<Callout type="warn">
+  **Si votre établissement ne propose que du BTS**, vous pouvez ignorer entièrement la section LMD de la sidebar. Le catalogue de matières seul suffit.
+</Callout>
 
 ## Étape 6 : configurer les frais
 
