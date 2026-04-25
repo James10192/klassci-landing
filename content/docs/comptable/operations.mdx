@@ -1,20 +1,202 @@
 ---
 title: Comptable — opérations quotidiennes
-description: Suivi des paiements, relances, exports comptables et dashboard financier.
+description: Enregistrer des paiements, valider, consulter et imprimer la situation financière des étudiants.
 ---
 
 Ce guide couvre les **opérations courantes** du comptable une fois la configuration initiale des frais réalisée. Pour le **paramétrage initial** des catégories et des tarifs par classe, voir [Module Frais & Comptabilité](/docs/modules/frais-comptabilite).
 
+Les workflows de paiement sont étroitement liés au cycle d'inscription. Si vous découvrez la plateforme, lisez d'abord [Secrétaire — créer une nouvelle inscription](/docs/secretaire/inscriptions) pour comprendre le contexte (Prospect → En validation → Active).
+
+## Tableau de bord comptabilité
+
+Quand vous vous connectez avec un compte **comptable**, l'application ouvre directement sur le **Dashboard Comptabilité** — la page d'accueil dédiée à l'équipe financière. Tout part de là.
+
+![Dashboard Comptabilité — KPIs, retard de paiement et encaissements mensuels](/img/docs/comptable/01-dashboard-haut.png)
+
+### Filtres et raccourcis
+
+Le bandeau supérieur expose deux raccourcis : **Relances** et **Paiements**. Trois filtres permettent ensuite de scoper l'ensemble des vues du dashboard : **Année** (par défaut, l'année universitaire en cours, badge « en cours »), **Filière**, **Classe**. Le bouton **Réinitialiser** revient aux défauts.
+
+### Les quatre KPIs principaux
+
+| KPI | Lecture |
+|---|---|
+| **Total frais dus** | Somme des frais souscrits par tous les étudiants du périmètre filtré ; le sous-titre indique le nombre de souscriptions. |
+| **Encaissé** | Somme des paiements **validés**. Une barre indique le **taux de recouvrement** (encaissé / dû). |
+| **Restant impayé** | Solde non réglé ; le sous-titre indique le nombre d'étudiants concernés. |
+| **Paiements en attente** | Compteur de paiements `en_attente` à traiter ; le sous-titre indique combien ont déjà été validés. |
+
+### Retard de paiement par tranche
+
+Les étudiants en retard sont répartis en **quatre tranches** selon l'ancienneté du retard, chacune avec une étiquette d'urgence et un montant cumulé :
+
+| Tranche | Étiquette |
+|---|---|
+| **< 30 j** | Priorité normale |
+| **30 – 60 j** | À relancer |
+| **60 – 90 j** | Relance urgente |
+| **> 90 j** | Critique |
+
+Le bouton **<Icon name="link" /> Relancer** dans l'en-tête du panneau ouvre le flux de relance. Le lien **Tous les paiements** redirige vers la liste filtrée correspondante.
+
+### Encaissements mensuels
+
+Graphique de courbe couvrant l'année universitaire en cours, mois par mois. Permet de visualiser les pics (rentrée, deuxième semestre) et les creux pour la trésorerie prévisionnelle.
+
+### Paiements en attente et accès rapides
+
+![Dashboard Comptabilité — paiements en attente et accès rapides](/img/docs/comptable/02-dashboard-bas.png)
+
+La zone **Paiements en attente** liste les paiements `en_attente` à traiter directement depuis le dashboard. Quand tout est validé, KLASSCI affiche « Aucun paiement en attente — Tous les paiements ont été traités ». Le bouton **Voir tout** ouvre la liste filtrée.
+
+Six **cartes d'accès rapides** mènent aux pages les plus utilisées :
+
+- **Frais → Catégories** — paramétrage des catégories de frais
+- **Paiements → Historique** — liste globale des paiements
+- **Relances → Impayés** — module de relance des impayés
+- **Config → Frais & Tarifs** — paramétrage avancé des montants
+- **Suivi → Par catégorie** — recouvrement par catégorie de frais
+- **Export → Excel** — exports comptables au format Excel
+
+## Enregistrer un paiement
+
+Un paiement peut être saisi depuis trois points d'entrée. **Chacun ouvre une modale dédiée** ; les champs sont **identiques d'une modale à l'autre**, mais le design et la valeur par défaut de la case « Valider directement » diffèrent.
+
+1. Sur la **fiche d'inscription** : bouton **Payer** sur une ligne du *Détail par frais*, ou bouton **<Icon name="save" /> Valider avec paiement** dans le bandeau si l'inscription n'a aucun paiement encore associé. *Case « Valider directement » décochée par défaut.*
+2. Sur la **fiche étudiant** onglet **Finances** : bouton bleu **<Icon name="plus-circle" /> Enregistrer un paiement** (visible uniquement si un solde reste dû). *Case « Valider directement » **cochée** par défaut — pratique pour le geste comptable courant.*
+3. Sur la **page Administration des Inscriptions** : sur la ligne d'une inscription en attente, action **Associer un paiement** (si aucun paiement n'y est encore lié) ou **Valider le paiement** (si un paiement en attente y est déjà lié — ouvre alors une modale de validation rapide, pas la modale d'enregistrement complète).
+
+![Modale Associer un paiement à l'inscription](/img/docs/secretaire/inscription/14-modal-paiement-vide.png)
+
+### Champs requis
+
+- **Montant payé** (FCFA) — peut être partiel.
+- **Catégorie de frais** — combo affichant les frais obligatoires de l'inscription. Une fois la catégorie choisie, KLASSCI affiche le **Montant maximum autorisé** pour vous éviter de saisir un trop-perçu.
+- **Mode de paiement** — quatre choix : **Espèces**, **Chèque**, **Virement** ou **Mobile Money** (Wave / Orange Money / MTN MoMo regroupés sous Mobile Money — précisez l'opérateur dans la *Référence*).
+- **Date du paiement** — pré-remplie au jour courant ; ajustable pour saisir un paiement reçu antérieurement.
+- **Référence du paiement** *(optionnel)* — numéro de chèque, ID transaction Wave / OM / MoMo, référence virement.
+- **Observations** *(optionnel)* — note libre visible dans l'historique du paiement.
+
+![Modale rempli avec montant 50 000 FCFA et mode Espèces](/img/docs/secretaire/inscription/22-modal-paiement-rempli.png)
+
+### Valider directement ou laisser en attente
+
+La case **<Icon name="check" /> Valider directement le paiement** :
+
+- **Cochée** — le paiement est immédiatement comptabilisé comme **validé**. Les KPIs *Total payé* et *Solde restant* sont mis à jour, le paiement compte pour la validation définitive de l'inscription. C'est ce que vous voulez 99 % du temps quand vous encaissez vous-même.
+- **Non cochée** — le paiement est créé en **attente de validation** (`status='en_attente'`). Il apparaît dans le solde mais n'est **pas** encore comptabilisé comme reçu. Utile quand un caissier ou un guichet enregistre un règlement que vous voulez recouper avec votre relevé bancaire avant validation.
+
+<Callout>
+  **Où valider un paiement laissé en attente.** Le comptable peut valider manuellement un paiement `en_attente` à deux endroits :
+
+  - **Page Administration des Inscriptions** — sur la ligne de l'inscription qui porte le paiement en attente, le bouton **Valider paiement** apparaît et ouvre une modale de validation rapide.
+  - **Liste globale des paiements** (`Comptabilité → Paiements`) — action **Valider** sur la ligne du paiement (réservée aux profils avec la permission `access_admin`).
+
+  La fiche d'inscription elle-même affiche les paiements liés (zone *Paiements liés à cette inscription*) **sans action de validation** — il faut passer par les deux endroits ci-dessus.
+
+  Tant que le paiement reste *en attente*, l'inscription **ne peut pas** être validée définitivement (le bouton **Valider** retournera « Aucun paiement validé trouvé »).
+</Callout>
+
+Cliquez **<Icon name="save" /> Associer le paiement**. Toast de confirmation, le détail par frais est mis à jour, et le paiement apparaît dans la zone *Paiements liés à cette inscription*.
+
+## Consulter la situation financière d'un étudiant
+
+Depuis la **fiche étudiant** onglet **Finances**, KLASSCI expose les KPIs *Total attendu / Total payé / Solde restant* avec une barre de progression, le détail par frais ligne par ligne, et trois boutons d'action :
+
+![Onglet Finances avec Total attendu / Payé / Solde restant et boutons Payer par ligne](/img/docs/secretaire/inscription/18-onglet-finances.png)
+
+### Aperçu web — Situation Financière
+
+Le bouton **vert <Icon name="file-text" /> Situation Financière** ouvre une **page web complète** (pas un toast) qui restitue le relevé : hero KPIs, informations de l'étudiant, détail des frais souscrits, paiements validés, reliquats reportés, solde restant. Affichage à l'écran, prêt à imprimer ou à partager via le bouton **<Icon name="file-text" /> Imprimer**.
+
+![Aperçu web Situation Financière — hero KPIs et informations étudiant](/img/docs/secretaire/inscription/38-situation-financiere-apercu.png)
+
+### Édition PDF — PDF Situation
+
+Le bouton **rouge <Icon name="file-text" /> PDF Situation** télécharge la même situation au format **PDF A4 portrait** avec une mise en page formelle : en-tête établissement, dates d'émission, signature directeur, watermark. C'est ce que vous remettez à la famille ou que vous envoyez par email.
+
+![PDF Situation Financière — A4 portrait avec en-tête établissement et signature](/img/docs/secretaire/inscription/39-pdf-situation-financiere.png)
+
+<Callout>
+  **Aucun de ces boutons ne modifie quoi que ce soit côté étudiant.** *Situation Financière* et *PDF Situation* sont des restitutions en lecture seule — utiles pour répondre à une demande de relevé sans saisir une nouvelle ligne. Pour modifier ou annuler un paiement existant, voir [Ajuster ou annuler un paiement](#ajuster-ou-annuler-un-paiement) ci-dessous.
+</Callout>
+
+## Suivre les inscriptions en attente de paiement
+
+La **page Administration des Inscriptions** (accès depuis le bouton **<Icon name="settings" /> Administration** sur n'importe quelle fiche d'inscription) est l'outil central pour le comptable en début d'année.
+
+![Page Administration des Inscriptions avec 6 KPIs et liste filtrée](/img/docs/secretaire/inscription/37-page-administration-inscriptions.png)
+
+**Six KPIs** scopés sur l'année universitaire active :
+
+- **Total** — toutes les inscriptions en attente
+- **Avec paiement** — déjà liées à un versement
+- **Sans paiement** — aucun paiement encore associé
+- **Prospects** — étape Prospect
+- **Documents** — étape Documents complets
+- **En validation** — étape En validation
+
+**Filtres** : matricule / nom / prénom, filière, niveau, année courante.
+
+**Actions par ligne** :
+
+- Voir l'inscription
+- Valider l'inscription (raccourci sans repasser par la fiche)
+- **Associer un paiement** (si aucun n'est encore lié) ou **Valider le paiement** (si un paiement en attente y est lié)
+- Annuler l'inscription
+
+**Actions en lot** (cochez plusieurs lignes) : **Valider**, **Annuler**, **Exporter**. La validation en lot tente chaque inscription ; sont ignorées celles **sans paiement** *et* celles avec un paiement **encore en attente de validation** — les deux cas remontent dans le récapitulatif avec leur raison.
+
+C'est là que vous traitez en série les inscriptions à valider : trier sur *Avec paiement* pour les rendre actives, puis revenir à *Sans paiement* pour relancer.
+
+## Souscrire un frais optionnel après validation
+
+Si une famille décide en cours d'année de souscrire à un service optionnel (cantine, transport, équipement), passez par la **fiche d'inscription** de l'étudiant, zone **Frais Optionnels Disponibles**, et cliquez **<Icon name="plus-circle" /> Souscrire l'étudiant** sur la carte du frais. Le montant est ajouté au solde restant.
+
+<Callout type="warn">
+  **Pas depuis la fiche étudiant.** L'onglet Finances de la fiche étudiant ne propose pas la souscription — il faut bien passer par la fiche d'inscription.
+</Callout>
+
+## Émettre un reçu de paiement
+
+KLASSCI génère un **reçu officiel** au format PDF A4 portrait pour chaque paiement validé (nom de fichier `Recu_{numero_recu}.pdf`).
+
+**Accès :** **Comptabilité → Paiements** (liste globale des paiements). Sur la ligne d'un paiement au statut **validé**, dropdown **PDF** → choisissez **Aperçu** (vue HTML imprimable) ou **Télécharger PDF**.
+
+<Callout type="warn">
+  **Le reçu n'est généré que pour un paiement validé.** Tant qu'un paiement est `en_attente`, l'option PDF/Reçu n'apparaît pas dans le dropdown — passez d'abord par la validation. Aucun reçu n'est accessible non plus depuis la fiche d'inscription ni la fiche étudiant : il faut bien passer par la liste globale des paiements.
+</Callout>
+
+## Modifier, valider, rejeter ou supprimer un paiement
+
+Toutes les actions de cycle de vie d'un paiement existant passent par la **liste globale des paiements** : **Comptabilité → Paiements**.
+
+| Action | Quand | Permission |
+|---|---|---|
+| **Modifier** | Tant que le statut n'est pas *validé* | `paiements.manage` |
+| **Valider** | Paiement en attente | `access_admin` |
+| **Rejeter** | Paiement en attente — ouvre une modale de motif | `access_admin` |
+| **Supprimer** *(soft-delete)* | Depuis l'onglet **Finances** de la fiche étudiant | `paiements.manage` |
+| **Imprimer le reçu** | Paiement validé uniquement | Lecture (profils habilités à la consultation) |
+
+**Validation / rejet en lot.** Les routes dédiées `paiements.bulk-valider` et `paiements.bulk-rejeter` permettent de traiter plusieurs paiements en attente d'un coup (limitées par throttle anti-abus).
+
+### Trop-perçu sur une catégorie de frais
+
+Quand le montant payé sur une catégorie dépasse le montant attendu (solde négatif), un bouton **Transférer vers un autre frais** apparaît sur la fiche d'inscription, ligne de la catégorie concernée. Le surplus peut être réaffecté à un autre frais de la même inscription. Permission : `paiements.edit`.
+
+### Désouscription d'un frais optionnel
+
+Sur la fiche d'inscription, dans le *Détail par frais*, un bouton **Désouscrire** retire un frais optionnel souscrit par erreur (le frais doit être *non obligatoire* et déjà souscrit). Permission : `inscriptions.edit`.
+
 ## En préparation
 
-Cette page est en cours de rédaction. Les sections prévues couvrent le quotidien de l'équipe comptable :
+Les sections suivantes du quotidien comptable seront documentées avec captures et workflows vérifiés :
 
-- **Encaisser un paiement** — enregistrer un règlement (espèces, virement, mobile money), via le caissier ou directement, générer le reçu.
-- **Suivre les soldes** — par étudiant, par classe, par catégorie de frais. Lecture du dashboard comptable.
 - **Configurer les relances automatiques** — seuils de retard, templates de messages (SMS / email), fréquence d'envoi.
-- **Suivi par catégorie** — vue agrégée des recouvrements par type de frais, taux d'impayés.
-- **Exports comptables** — formats Sage, Excel, CSV. Périmètres temporels (mois, trimestre, année).
-- **Ajustements et remises** — appliquer une remise exceptionnelle (bourse interne, geste commercial), traiter un trop-perçu, gérer un avoir.
+- **Suivi par catégorie** — vue agrégée des recouvrements par type de frais et taux d'impayés.
+- **Exports comptables** — formats et périmètres temporels disponibles (à confirmer côté code avant publication).
+- **Bourses internes** — workflow de saisie d'une bourse partielle ou totale (au-delà du contournement déjà documenté dans [Inscription — étudiant en bourse](/docs/secretaire/inscriptions#étudiant-en-bourse-ou-paiement-différé)).
 - **Clôture de fin d'année** — basculer les soldes restants sur l'année suivante, archiver les comptes des étudiants partis.
 
 Pour toute question urgente : [contact@klassci.com](mailto:contact@klassci.com).
