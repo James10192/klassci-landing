@@ -363,18 +363,79 @@ Une fois fait, l'équipe comptable prend le relais via [Comptable — opération
 
 ## Étape 7 : créer les comptes du personnel
 
-Allez dans `Personnel → Vue unifiée` et utilisez le bouton « + Nouveau personnel ». Choisissez le rôle (`coordinateur`, `enseignant`, `secrétaire`, `comptable`, `caissier`, `service technique`, `super-administrateur`).
+Le module Personnel centralise les comptes administratifs et enseignants. KLASSCI gère **deux types de formulaires** : un formulaire simple pour les rôles administratifs (Coordinateur, Secrétaire, Comptable, Caissier) et un assistant en 4 étapes pour les Enseignants (champs académiques + documents).
 
-Pour chaque membre, KLASSCI génère automatiquement :
+### 7.1 — Ouvrir Gestion du Personnel
 
-- un **username** au format `prenom.nom` (déduplication automatique en cas de collision)
-- un **mot de passe initial** sécurisé (envoyé par email ou affiché dans une modale immédiate)
-- un **email** d'activation contenant le lien de première connexion
+Sidebar → section **ADMINISTRATION → Personnel → Gestion du personnel**.
 
-À la première connexion, le membre est forcé à changer son mot de passe. Les mots de passe expirent au bout de 6 mois avec une alerte 1 mois avant.
+![Sidebar avec la section Administration ouverte montrant Personnel et Gestion du personnel](/img/docs/superadmin/onboarding/35-sidebar-personnel.png)
+
+La page expose un bandeau de stats par rôle (Coordinateurs, Enseignants, Secrétaires, Comptables, Caissiers) et 5 onglets correspondants. Un bouton **+ Nouveau Personnel** en haut à droite ouvre un menu déroulant pour choisir le rôle à créer.
+
+![Page Gestion du Personnel avec stats par rôle et 5 onglets](/img/docs/superadmin/onboarding/36-personnel-liste.png)
+
+### 7.2 — Créer un rôle administratif (Coordinateur, Secrétaire, Comptable, Caissier)
+
+Cliquez **+ Nouveau Personnel → Coordinateur** (ou Secrétaire, Comptable, Caissier). Le formulaire est sur **une seule page**.
+
+![Formulaire Créer un Coordinateur avec sections Informations personnelles, Adresse, Sécurité et Privilèges](/img/docs/superadmin/onboarding/37-coordinateur-form.png)
+
+Quatre sections :
+
+- **Informations personnelles** — Nom complet *(requis)*, Email *(requis)*, Téléphone, Spécialité, Date de naissance.
+- **Adresse** — texte libre.
+- **Informations de Sécurité** — bandeau d'info : le username et le mot de passe initial seront générés automatiquement à la création.
+- **Privilèges du Coordinateur** — liste **read-only** des fonctionnalités auxquelles le rôle aura accès. Cette liste change selon le rôle (le Comptable verra des privilèges financiers, la Secrétaire des privilèges d'inscription, etc.).
+
+Cliquez **Créer le Coordinateur**.
+
+<Callout>
+  **Secrétaire / Comptable / Caissier suivent exactement le même formulaire** — seule la liste des privilèges en bas change. Le bouton **+ Nouveau Personnel** dans le header propose chaque rôle dans son menu déroulant.
+</Callout>
+
+### 7.3 — Créer un Enseignant (assistant 4 étapes)
+
+Le formulaire enseignant est plus riche parce qu'il porte des champs académiques utilisés par les modules notes, emploi du temps et bulletins. Cliquez **+ Nouveau Personnel → Enseignant** : un assistant en 4 paliers s'ouvre.
+
+**Étape 1/4 — Informations Personnelles**
+
+![Wizard étape 1 : Nom complet, Email, Téléphone, Titre académique](/img/docs/superadmin/onboarding/39-enseignant-wizard-1.png)
+
+Nom complet *(requis)*, Email, Téléphone, **Titre académique** (Pr., Dr., M., Mme…). Bouton **Suivant**.
+
+**Étape 2/4 — Qualifications & Expérience**
+
+![Wizard étape 2 : Diplôme principal, Université, Année d'obtention, Grade académique, Années d'expérience, Spécialisation](/img/docs/superadmin/onboarding/40-enseignant-wizard-2.png)
+
+Diplôme principal, Université/Institut, Année d'obtention, Grade académique, Années d'expérience en enseignement et professionnelle, Spécialisation *(requis)* — c'est ce dernier champ qui détermine quelles matières peuvent lui être affectées.
+
+**Étape 3/4 — Informations Professionnelles**
+
+![Wizard étape 3 : Département, Type de contrat, Statut d'emploi, Date d'embauche, Taux horaire, Charge horaire max](/img/docs/superadmin/onboarding/41-enseignant-wizard-3.png)
+
+Département, Laboratoire, Type de contrat (`Permanent` / `Temporaire`), Statut d'emploi (`Temps Plein` / `Temps Partiel`), Date d'embauche, Fin de contrat (si temporaire), Taux horaire, **Charge horaire max/semaine** (utilisé par le module emploi du temps pour limiter les affectations).
+
+**Étape 4/4 — Finalisation**
+
+![Wizard étape 4 : Biographie, Motivation, Objectifs pédagogiques, Site web, CV upload, Photo upload (tous optionnels)](/img/docs/superadmin/onboarding/42-enseignant-wizard-4.png)
+
+Biographie, Motivation, Objectifs pédagogiques, Site web/portfolio, **CV** (PDF/DOC/DOCX max 2 MB), **Photo de profil** (JPG/PNG/GIF max 2 MB). **Tous les champs sont optionnels** — vous pouvez submit l'enseignant sans rien remplir ici, et l'enseignant complétera lui-même depuis son espace.
+
+Cliquez **Créer l'enseignant**.
+
+### 7.4 — Identifiants générés automatiquement
+
+À la création (rôle simple ou enseignant), une modale **Compte créé avec succès** s'ouvre avec les identifiants prêts à transmettre.
+
+![Modale Compte créé avec succès affichant le nom d'utilisateur et le mot de passe temporaire](/img/docs/superadmin/onboarding/38-personnel-credentials.png)
+
+Le **nom d'utilisateur** suit un préfixe par rôle (`coord.prenom.nom`, `prof.prenom.nom`, `sec.prenom.nom`…) avec déduplication automatique (`.1`, `.2`…) en cas de collision. Le **mot de passe temporaire** est sécurisé et affiché en clair une seule fois — utilisez le bouton **Imprimer** ou le bouton de copie pour le transmettre au membre. Pour les enseignants, un bouton **Voir la fiche** mène directement à la fiche détaillée pour configurer la disponibilité.
+
+À la **première connexion**, le membre est forcé de changer son mot de passe. Les mots de passe expirent au bout de **6 mois** avec une alerte 1 mois avant.
 
 <Callout type="warn">
-  **Attention aux permissions enseignant.** Si vous activez les modules `notes_evaluations`, `presences` et `emploi_temps`, pensez à les attribuer également au rôle `enseignant`. Sinon, les enseignants verront une sidebar vide. Le toggle module ne suffit pas, il faut aussi la permission métier.
+  **Attention aux permissions enseignant.** Si vous activez les modules `notes_evaluations`, `presences` et `emploi_temps` au niveau du tenant, pensez à les attribuer également au rôle `enseignant` dans Spatie Permission. Sinon, les enseignants verront une sidebar vide. Le toggle module ne suffit pas — il faut aussi la permission métier.
 </Callout>
 
 ## Étape 8 : valider la configuration et lancer
