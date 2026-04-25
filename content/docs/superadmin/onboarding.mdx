@@ -20,20 +20,60 @@ Comptez environ **2 à 3 heures** pour un paramétrage complet, à condition d'a
 
 ## Étape 1 : créer l'année universitaire courante
 
-L'année universitaire est la fondation de toute la plateforme : inscriptions, paiements, bulletins et résultats sont rattachés à une année donnée.
+L'année universitaire est la fondation de toute la plateforme : inscriptions, paiements, bulletins et résultats sont rattachés à une année donnée. C'est donc le tout premier objet à créer dans un nouveau tenant.
 
-Rendez-vous dans `Paramètres → Configuration → Année universitaire` et créez l'année courante en remplissant :
+### 1.1 — Point de départ : votre tableau de bord
 
-- **Libellé** : `2025-2026` (ou la convention que vous utilisez en interne)
-- **Date de début** : 1er septembre par défaut
-- **Date de fin** : 31 juillet par défaut
-- **Année courante** : cochez `is_current = true`
+Une fois connecté en super-administrateur, vous arrivez sur le tableau de bord. L'année universitaire affichée en haut à droite (badge bleu `2025-2026`) correspond à l'année *courante* de votre établissement.
 
-Une seule année peut être marquée comme courante à la fois. C'est elle qui apparaît par défaut dans tous les écrans de saisie.
+![Tableau de bord super-administrateur KLASSCI avec le badge année universitaire en haut à droite](/img/docs/superadmin/onboarding/00-dashboard.png)
+
+### 1.2 — Ouvrir le module Années universitaires
+
+Dans la sidebar gauche, ouvrez le menu **Filières & Classes** (section `GESTION ACADÉMIQUE`). Le sous-menu déroule quatre entrées : Filières, Classes, Niveaux d'études et **Années universitaires**.
+
+![Sidebar avec le dropdown Filières & Classes ouvert montrant l'entrée Années universitaires](/img/docs/superadmin/onboarding/01-sidebar-filieres-classes.png)
+
+Cliquez sur **Années universitaires**. La page liste toutes les années déjà créées avec leur statut. Si c'est votre tout premier paramétrage, le tableau est vide.
+
+![Page liste des années universitaires avec le bouton Nouvelle année universitaire en haut à droite](/img/docs/superadmin/onboarding/02-liste-annees.png)
+
+En haut à droite, cliquez sur le bouton bleu **+ Nouvelle année universitaire**.
+
+### 1.3 — Remplir le formulaire de création
+
+![Formulaire de création d'une nouvelle année universitaire avec les champs nom, description, dates et toggles](/img/docs/superadmin/onboarding/03-formulaire-annee.png)
+
+Renseignez les champs suivants :
+
+- **Nom** *(requis)* — la convention recommandée est `AAAA-AAAA`, par exemple `2025-2026`. C'est le libellé qui apparaîtra partout dans l'application (bulletins, exports, badges).
+- **Description** *(optionnel)* — utile pour distinguer deux campagnes parallèles ou ajouter une note interne.
+- **Date de rentrée** *(requis)* — premier jour officiel de la rentrée (typiquement début octobre en Côte d'Ivoire).
+- **Date de fin** *(requis)* — dernier jour officiel, généralement la date du jury final.
+- **Année universitaire active** — laissez activé. Une année *inactive* ne pourra plus être sélectionnée pour de nouvelles inscriptions (utile uniquement pour archiver une année passée).
+- **Définir comme année universitaire en cours** — laissez désactivé pour le moment. Vous l'activerez à l'étape suivante via le bouton dédié sur la liste.
+
+Cliquez sur **Enregistrer l'année**. Vous êtes redirigé vers la liste, qui contient maintenant votre nouvelle année avec le badge cyan **ACTIVE**.
+
+### 1.4 — Marquer l'année comme courante
+
+Sur la liste, chaque ligne expose une rangée d'actions : œil (consulter), crayon bleu (modifier), **rond jaune avec coche (définir comme courante)**, poubelle rouge (supprimer).
+
+![Boutons d'action sur une ligne d'année universitaire — œil, crayon bleu, rond jaune coche, poubelle rouge](/img/docs/superadmin/onboarding/04-bouton-definir-courante.png)
+
+Cliquez sur le **bouton jaune** de la ligne de l'année que vous venez de créer. Le badge passe de cyan **ACTIVE** à vert **ANNÉE EN COURS**, et la rangée se teinte en vert clair pour signaler le changement.
+
+![Année universitaire 2025-2026 marquée comme année en cours avec le badge vert ANNÉE EN COURS](/img/docs/superadmin/onboarding/05-annee-courante.png)
+
+C'est terminé. À partir de cet instant, toutes les nouvelles inscriptions, paiements et bulletins sont rattachés à cette année par défaut.
+
+<Callout>
+  **Une seule année courante à la fois.** Si vous cliquez sur le bouton jaune d'une autre année, l'ancienne « courante » repasse automatiquement en simple `ACTIVE`. Aucune donnée n'est perdue — les inscriptions de l'année précédente restent rattachées à leur année d'origine.
+</Callout>
 
 ### À savoir sur les inscriptions et l'année
 
-Dans KLASSCI, **une classe n'est PAS attachée à une année universitaire** — c'est l'inscription qui l'est. Cela signifie qu'une même classe (ex. : `BTS Bâtiment 1ère année`) peut accueillir des étudiants de plusieurs années universitaires successives sans devoir être recréée.
+Dans KLASSCI, **une classe n'est PAS attachée à une année universitaire** — c'est l'inscription qui l'est. Cela signifie qu'une même classe (ex. : `BTS Bâtiment 1ère année`) peut accueillir des étudiants de plusieurs années universitaires successives sans devoir être recréée chaque rentrée.
 
 Concrètement, lorsque vous filtrez les étudiants par classe, ce qui les sépare entre 2024-2025 et 2025-2026, c'est la `annee_universitaire_id` de leur inscription, pas la classe elle-même.
 
