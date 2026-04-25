@@ -263,17 +263,88 @@ Cliquez sur les niveaux où la matière doit être enseignée. Chaque clic activ
 
 Cliquez sur **Enregistrer la matière**. Vous êtes redirigé vers la liste, où la nouvelle entrée apparaît avec ses badges de liaison.
 
-### 5.4 — Le cas particulier du système LMD (UE / ECUE)
+### 5.4 — Cas du système LMD : structurer en UE + ECUE
 
-Pour les niveaux LMD (Licence / Master / Doctorat), le catalogue de matières fonctionne en deux temps :
+Pour les niveaux **Licence / Master / Doctorat**, le formulaire matière de l'étape 5.2 ne suffit pas. Le LMD impose une hiérarchie en deux étages — l'**UE** (Unité d'Enseignement) regroupe plusieurs **ECUE** (Éléments Constitutifs d'Unité d'Enseignement, qui sont les vraies matières que suit l'étudiant) — avec un total de crédits ECTS par UE.
 
-1. Vous créez vos **ECUE** (Éléments Constitutifs d'Unité d'Enseignement) via le formulaire ci-dessus — ce sont les *vraies* matières que les étudiants suivent.
-2. Vous regroupez ces ECUE en **UE** (Unités d'Enseignement) dans la section dédiée de la sidebar (**SYSTÈME LMD → LMD**), avec un total de crédits ECTS par UE (typiquement entre 6 et 12).
+Cette structure se construit dans la section **SYSTÈME LMD** de la sidebar.
 
-La modale UE inclut une jauge de validation qui empêche de dépasser le total alloué (tous les ECUE d'une UE doivent additionner exactement le total de crédits prévus). Une même ECUE peut être rattachée à plusieurs UE avec des coefficients contextuels différents.
+![Sidebar avec la section SYSTÈME LMD ouverte montrant Domaines & Parcours, Unités d'Enseignement, Notes LMD, Résultats LMD et Bulletins LMD](/img/docs/superadmin/onboarding/17-sidebar-lmd.png)
 
 <Callout type="warn">
-  **Si votre établissement ne propose que du BTS**, vous pouvez ignorer entièrement la section LMD de la sidebar. Le catalogue de matières seul suffit.
+  **Pré-requis : Domaines & Parcours.** Avant d'accrocher une UE à un cursus, vous devez avoir créé au moins un **parcours** dans `LMD → Domaines & Parcours` (ex : *Licence Marketing & Communication*, *Master Génie Civil*). Sans parcours, l'étape 5.4.4 ne pourra rien lier. Si l'établissement n'a configuré que du BTS pour l'instant (étapes 1 à 5.3), c'est ici qu'il faut commencer la partie LMD.
+</Callout>
+
+#### 5.4.1 — Créer une UE
+
+Dans la sidebar, cliquez sur **Unités d'Enseignement** sous LMD.
+
+![Page Unités d'Enseignement avec stats (1 UE, 0 ECUE, 3 crédits ECTS), filtres Parcours et Type UE, et la liste avec une UE Technologie de construction de type Découverte](/img/docs/superadmin/onboarding/18-ue-liste.png)
+
+Le bandeau bleu résume le catalogue LMD (nombre d'UE, d'ECUE rattachés, total des crédits ECTS distribués). En haut à droite, **+ Nouvelle UE** ouvre la modale de création.
+
+![Modale Nouvelle Unité d'Enseignement avec sections Identité (Intitulé + Code), Paramètres académiques (Crédits CECT + Type UE) et Description](/img/docs/superadmin/onboarding/19-ue-formulaire.png)
+
+Renseignez :
+
+- **Intitulé** *(requis)* — par exemple `Technologie de construction`, `Mathématiques fondamentales`. C'est le libellé qui apparaît sur le bulletin.
+- **Code** *(requis)* — un code court unique au sein du parcours (`UE:BTCB1`, `UE-MATH01`).
+- **Crédits ECTS** *(requis)* — total des crédits que vaut l'UE entière (typiquement 3, 6, 9 ou 12). Sera réparti entre les ECUE à l'étape suivante.
+- **Type UE** *(requis)* — `Fondamentale` (cœur du cursus), `Découverte` (transversale), `Optionnelle`, `Transversale`. Le type ne change pas le calcul, juste la classification visuelle.
+- **Description** *(optionnel)* — texte libre.
+
+<Callout>
+  **Le semestre, la filière et le niveau ne sont PAS dans ce formulaire.** Ils sont définis plus tard via la liaison au parcours (étape 5.4.4). Une même UE peut donc être réutilisée dans plusieurs parcours différents.
+</Callout>
+
+Cliquez sur **Enregistrer**. L'UE apparaît dans la liste avec **0 ECUE**.
+
+#### 5.4.2 — Ajouter des ECUE à l'UE
+
+Sur la liste des UE, chaque ligne expose une rangée d'actions colorées.
+
+![Ligne d'UE avec les boutons d'action : flèche play, vert plus pour ajouter ECUE, bleu chaîne pour lier aux parcours, bleu crayon pour modifier, rouge poubelle pour supprimer](/img/docs/superadmin/onboarding/20-ue-actions-row.png)
+
+De gauche à droite : ▶ déplier la liste des ECUE, **➕ vert** ajouter un ECUE, **🔗 bleu** lier l'UE à des parcours, ✏️ modifier l'UE, 🗑️ supprimer.
+
+Cliquez sur le **bouton vert ➕** pour ouvrir la modale d'ajout d'ECUE.
+
+![Modale Ajouter un ECUE avec jauge Crédits de l'UE, deux onglets Créer un ECUE / Lier un existant, formulaire Nom + Code + paramètres contextuels (Coefficient, Crédits, Ordre)](/img/docs/superadmin/onboarding/21-ecue-formulaire.png)
+
+En haut, la **jauge `Crédits de l'UE 0 / 3`** se remplit au fur et à mesure que vous ajoutez des ECUE — vous saurez d'un coup d'œil si vous avez bien atteint le total de l'UE (ici 3 crédits).
+
+Deux onglets :
+
+- **+ Créer un ECUE** — crée un ECUE complètement nouveau. Champs :
+  - **Nom** (`Résistance des Matériaux`, `Mécanique appliquée`)
+  - **Code** (`RDM101`, `MEC-A2`)
+  - **Coefficient** *(par défaut 1)* — poids de l'ECUE dans la moyenne de l'UE.
+  - **Crédits** *(par défaut 2)* — part des crédits de l'UE attribuée à cet ECUE. La somme des crédits de tous les ECUE doit égaler le total de l'UE.
+  - **Ordre** *(par défaut 0)* — ordre d'affichage dans le bulletin.
+- **🔗 Lier un existant** — réutilise un ECUE déjà créé dans une autre UE (un même ECUE peut appartenir à plusieurs UE avec des valeurs différentes).
+
+<Callout>
+  **Valeurs contextuelles à l'UE.** Le coefficient et les crédits saisis ici ne s'appliquent qu'à *cette* UE. Si vous liez le même ECUE à une autre UE plus tard, vous pourrez lui donner d'autres valeurs sans casser la première liaison.
+</Callout>
+
+Cliquez sur **Créer l'ECUE** (bouton vert). L'ECUE est rattaché à l'UE et la jauge de crédits s'incrémente. Répétez jusqu'à atteindre le total de l'UE.
+
+#### 5.4.3 — Lier l'UE à un ou plusieurs parcours
+
+Une UE seule ne sert à rien tant qu'elle n'est pas accrochée à un parcours et à un semestre — c'est ce qui la rend visible aux étudiants. Sur la ligne UE, cliquez sur le **bouton 🔗 (chaîne bleue)**.
+
+![Modale Lier à des Parcours pour l'UE Technologie de construction, avec une liste vide et le message Aucun parcours trouvé](/img/docs/superadmin/onboarding/22-ue-parcours.png)
+
+Cochez les parcours où l'UE doit apparaître, puis cliquez sur les semestres applicables sur chaque ligne. Cliquez sur **Enregistrer**.
+
+<Callout>
+  **Tous les ECUE suivent automatiquement.** Quand vous liez une UE à un parcours, *tous* les ECUE qu'elle contient deviennent disponibles dans ce parcours. Pas besoin de répéter la liaison ECUE par ECUE.
+</Callout>
+
+Si la modale affiche **« Aucun parcours trouvé »** comme dans la capture, c'est qu'aucun parcours n'a été créé. Allez d'abord dans **LMD → Domaines & Parcours** pour en créer un, puis revenez sur la liste des UE pour faire la liaison.
+
+<Callout type="warn">
+  **Si votre établissement ne propose que du BTS**, vous pouvez ignorer entièrement la section SYSTÈME LMD de la sidebar. Le catalogue de matières (étapes 5.1 à 5.3) suffit.
 </Callout>
 
 ## Étape 6 : configurer les frais
