@@ -104,7 +104,7 @@ export function Testimonials() {
         </p>
         <h2
           id="testimonials-heading"
-          className="font-serif font-light text-section-h2 max-w-[40ch] mx-auto"
+          className="font-serif font-light text-section-h2 text-accent max-w-[40ch] mx-auto"
         >
           {t("title")}
         </h2>

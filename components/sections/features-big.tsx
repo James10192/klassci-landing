@@ -47,7 +47,7 @@ export function FeaturesBig() {
         </p>
         <h2
           id="features-big-title"
-          className="mt-4 font-serif font-light text-section-h2 text-text"
+          className="mt-4 font-serif font-light text-section-h2 text-accent"
         >
           {t("title")}
         </h2>
@@ -70,16 +70,17 @@ export function FeaturesBig() {
               }`}
             >
               <div
-                className={`relative aspect-[16/10] w-full rounded-lg overflow-hidden border border-border bg-bg-alt ${
+                className={`relative w-full rounded-lg overflow-hidden border border-border bg-bg-card ${
                   imageRight ? "lg:order-2" : "lg:order-1"
                 }`}
               >
                 <Image
                   src={feature.image}
                   alt={feature.alt}
-                  fill
+                  width={1920}
+                  height={1200}
                   sizes="(max-width: 1024px) 100vw, 560px"
-                  className="object-cover"
+                  className="w-full h-auto"
                   loading="lazy"
                 />
               </div>

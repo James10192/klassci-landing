@@ -40,7 +40,7 @@ export function Faq() {
         </p>
         <h2
           id="faq-heading"
-          className="font-serif font-light text-section-h2"
+          className="font-serif font-light text-section-h2 text-accent"
         >
           {t("title")}
         </h2>

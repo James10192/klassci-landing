@@ -22,7 +22,7 @@ export function LetterCta() {
 
         <h2
           id="letter-heading"
-          className="font-serif font-light text-section-h2 mt-3 mb-4"
+          className="font-serif font-light text-section-h2 text-accent mt-3 mb-4"
         >
           {t("title")}
         </h2>
