@@ -9,6 +9,8 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { ReactNode } from "react";
 
+import { RootProvider } from "fumadocs-ui/provider";
+
 import { PostHogProvider } from "@/components/analytics/posthog-provider";
 import { MotionConfigProvider } from "@/components/motion-config-provider";
 import { routing } from "@/i18n/routing";
@@ -158,9 +160,15 @@ export default async function LocaleLayout({
       </head>
       <body>
         <NextIntlClientProvider>
-          <PostHogProvider>
-            <MotionConfigProvider>{children}</MotionConfigProvider>
-          </PostHogProvider>
+          {/* Fumadocs RootProvider — disable its own next-themes ThemeProvider
+              since we already manage `html.dark`/`html.light` via the inline
+              theme bootstrap script above. Fumadocs UI just reads the CSS vars
+              we expose under `:root` and `html.dark`. */}
+          <RootProvider theme={{ enabled: false }}>
+            <PostHogProvider>
+              <MotionConfigProvider>{children}</MotionConfigProvider>
+            </PostHogProvider>
+          </RootProvider>
         </NextIntlClientProvider>
         <Analytics />
         <SpeedInsights />

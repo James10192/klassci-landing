@@ -42,3 +42,6 @@ next-env.d.ts
 !.vscode/extensions.json
 
 .vercel
+
+# Fumadocs auto-generated source map
+.source

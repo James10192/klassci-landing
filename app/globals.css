@@ -1,6 +1,54 @@
+@import "fumadocs-ui/style.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ────────────────────────────────────────────────
+   Fumadocs UI brand override — map --fd-* tokens
+   onto KLASSCI palette (#0453cb blue + #f58220 orange)
+   so docs pages match the marketing landing exactly.
+   ──────────────────────────────────────────────── */
+
+:root {
+  --fd-primary: 213 96% 41%;        /* #0453cb in HSL */
+  --fd-primary-foreground: 0 0% 100%;
+  --fd-accent: 27 91% 54%;          /* #f58220 in HSL */
+  --fd-accent-foreground: 0 0% 100%;
+  --fd-background: 39 23% 96%;      /* #f6f4f0 — KLASSCI beige */
+  --fd-foreground: 0 0% 10%;        /* #1a1a1a */
+  --fd-muted: 36 16% 91%;           /* #edeae4 — bg-alt */
+  --fd-muted-foreground: 0 0% 54%;  /* #8a8a8a */
+  --fd-card: 0 0% 100%;             /* white */
+  --fd-card-foreground: 0 0% 10%;
+  --fd-popover: 0 0% 100%;
+  --fd-popover-foreground: 0 0% 10%;
+  --fd-border: 213 11% 86%;         /* #dadde2 */
+  --fd-input: 213 11% 86%;
+  --fd-ring: 213 96% 41%;
+  --fd-secondary: 36 16% 91%;
+  --fd-secondary-foreground: 0 0% 23%;
+}
+
+html.dark {
+  --fd-primary: 213 84% 62%;        /* #4b8af0 */
+  --fd-primary-foreground: 0 0% 4%;
+  --fd-accent: 25 100% 65%;         /* #ff9d4a */
+  --fd-accent-foreground: 0 0% 4%;
+  --fd-background: 220 12% 12%;     /* #1a1d23 */
+  --fd-foreground: 213 18% 88%;     /* #dce0e5 */
+  --fd-muted: 220 11% 14%;          /* #21252b */
+  --fd-muted-foreground: 215 8% 58%;
+  --fd-card: 220 8% 19%;            /* #282c34 */
+  --fd-card-foreground: 213 18% 88%;
+  --fd-popover: 220 8% 19%;
+  --fd-popover-foreground: 213 18% 88%;
+  --fd-border: 218 9% 23%;          /* #363b44 */
+  --fd-input: 218 9% 23%;
+  --fd-ring: 213 84% 62%;
+  --fd-secondary: 220 11% 14%;
+  --fd-secondary-foreground: 213 18% 88%;
+}
 
 /* ────────────────────────────────────────────────
    KLASSCI Design Tokens — light & dark

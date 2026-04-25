@@ -1,6 +1,8 @@
 import createNextIntlPlugin from "next-intl/plugin";
+import { createMDX } from "fumadocs-mdx/next";
 
 const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
+const withMDX = createMDX();
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -50,29 +52,6 @@ const nextConfig = {
     ];
   },
 
-  async rewrites() {
-    // The Laravel app at klassci.com today serves a real /docs hierarchy,
-    // /api-reference and /changelog pages. After the apex moves to Vercel,
-    // those pages must keep working at the same URLs (SEO + indexed content).
-    //
-    // Strategy: cpanel exposes a new CNAME `app.klassci.com` pointing to the
-    // existing Laravel host (91.234.194.113), and Vercel proxies the three
-    // doc/changelog/api-reference path trees back to it. The visitor URL
-    // stays `klassci.com/docs/...` — only the origin changes.
-    //
-    // Set LARAVEL_DOCS_HOST in env (default falls back to docs.klassci.com).
-    const docsHost =
-      process.env.LARAVEL_DOCS_HOST || "https://docs.klassci.com";
-
-    return [
-      { source: "/docs", destination: `${docsHost}/docs` },
-      { source: "/docs/:path*", destination: `${docsHost}/docs/:path*` },
-      { source: "/api-reference", destination: `${docsHost}/api-reference` },
-      { source: "/api-reference/:path*", destination: `${docsHost}/api-reference/:path*` },
-      { source: "/changelog", destination: `${docsHost}/changelog` },
-      { source: "/changelog/:path*", destination: `${docsHost}/changelog/:path*` },
-    ];
-  },
 };
 
-export default withNextIntl(nextConfig);
+export default withNextIntl(withMDX(nextConfig));
