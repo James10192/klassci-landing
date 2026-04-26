@@ -270,95 +270,86 @@
     "image": "/img/sections/students-banner.png"
   },
   "pricing": {
-    "title": "Signature plans",
-    "subtitle": "Three tiers built for Ivorian higher education. Annual rate drops from year two, or fixed monthly billing — your call.",
-    "popularBadge": "Recommended",
-    "fromLabel": "From",
-    "firstYearLabel": "First year",
-    "renewalPrefix": "then",
-    "renewalSuffix": "from year two",
-    "orMonthlyLabel": "Or monthly",
-    "perMonthSuffix": "/ month",
-    "currency": "XOF",
-    "tiers": [
-      {
-        "key": "essentiel",
-        "name": "Essentiel",
-        "tagline": "Emerging higher-education institution",
-        "pricing": {
-          "firstYear": "988,000",
-          "renewal": "700,000",
-          "monthly": "58,400"
+    "title": "One full plan, two alternatives",
+    "subtitle": "Élite covers everything KLASSCI can do. If you're starting smaller, two progressive entry tiers are waiting.",
+    "elite": {
+      "eyebrow": "Our recommended plan",
+      "brand": "KLASSCI",
+      "name": "Élite",
+      "annualPrice": "4,800,000",
+      "currency": "XOF",
+      "perYear": "/ year",
+      "tagline": "The complete suite. Everything included.",
+      "pillars": ["SIS", "LMS", "API", "WhatsApp", "Unlimited student portal"],
+      "ctaPrimary": "Subscribe to Élite",
+      "ctaTrial": "Try for 3 months",
+      "fineprint": "6,000,000 XOF first year · 480,300 XOF / month on monthly billing"
+    },
+    "alternatives": {
+      "intro": "Smaller school or progressive start?",
+      "tiers": [
+        {
+          "key": "pro",
+          "name": "KLASSCI Pro",
+          "capacity": "up to 2,500 learners",
+          "price": "1,150,000 XOF / year"
         },
-        "features": [
-          { "text": "One account per key role: Founder, Director, Studies Director, Bursar, Cashier", "included": true },
-          { "text": "4 educator accounts", "included": true },
-          { "text": "Capacity: 500 learners · 30 teachers", "included": true },
-          { "text": "Yearly maintenance included", "included": true },
-          { "text": "Information relay: Email", "included": true },
-          { "text": "Support 4d/7", "included": true },
-          { "text": "Initial design customisation", "included": true },
-          { "text": "Ergonomics updates", "included": true },
-          { "text": "One onboarding training", "included": true }
-        ],
-        "cta": "Start with Essentiel",
-        "ctaStyle": "outline",
-        "featured": false,
-        "variant": "light"
+        {
+          "key": "essentiel",
+          "name": "KLASSCI Essentiel",
+          "capacity": "up to 500 learners",
+          "price": "700,000 XOF / year"
+        }
+      ],
+      "compareToggle": "Compare all three plans",
+      "compareClose": "Hide comparison"
+    },
+    "comparison": {
+      "subtitle": "Every capability at a glance",
+      "headers": {
+        "feature": "Capability",
+        "essentiel": "Essentiel",
+        "pro": "Pro",
+        "elite": "Élite"
       },
-      {
-        "key": "pro",
-        "name": "Pro",
-        "tagline": "Established higher-education institution",
-        "pricing": {
-          "firstYear": "1,300,000",
-          "renewal": "1,150,000",
-          "monthly": "93,833"
+      "groups": [
+        {
+          "label": "Capacity",
+          "rows": [
+            { "label": "Learners", "essentiel": "500", "pro": "2,500", "elite": "Unlimited" },
+            { "label": "Teachers", "essentiel": "30", "pro": "50", "elite": "Unlimited" },
+            { "label": "Educator accounts", "essentiel": "4", "pro": "10", "elite": "Unlimited" },
+            { "label": "Key-role accounts (Founder, Director, Studies, Bursar, Cashier)", "essentiel": "5", "pro": "5", "elite": "Unlimited" }
+          ]
         },
-        "features": [
-          { "text": "One account per key role: Founder, Director, Studies Director, Bursar, Cashier", "included": true },
-          { "text": "10 educator accounts", "included": true },
-          { "text": "Capacity: 2,500 learners · 50 teachers", "included": true },
-          { "text": "Yearly maintenance included", "included": true },
-          { "text": "Information relay: Email + WhatsApp (5 types)", "included": true },
-          { "text": "Support 5d/7", "included": true },
-          { "text": "Online learning platform", "included": true },
-          { "text": "Ergonomics updates", "included": true },
-          { "text": "Continuous customisation", "included": true },
-          { "text": "One onboarding training", "included": true }
-        ],
-        "cta": "Choose Pro",
-        "ctaStyle": "primary",
-        "featured": true,
-        "variant": "highlight"
+        {
+          "label": "Service",
+          "rows": [
+            { "label": "Yearly maintenance", "essentiel": "Included", "pro": "Included", "elite": "Included" },
+            { "label": "Email relay", "essentiel": "✓", "pro": "✓", "elite": "✓" },
+            { "label": "WhatsApp relay", "essentiel": "—", "pro": "5 types", "elite": "6 types · 5,000 sends/month" },
+            { "label": "Online learning platform", "essentiel": "—", "pro": "✓", "elite": "✓" },
+            { "label": "Support", "essentiel": "4d/7", "pro": "5d/7", "elite": "6d/7" }
+          ]
+        },
+        {
+          "label": "Evolution",
+          "rows": [
+            { "label": "Design customisation", "essentiel": "Initial", "pro": "Continuous", "elite": "Continuous" },
+            { "label": "Ergonomics updates", "essentiel": "✓", "pro": "✓", "elite": "✓" },
+            { "label": "Free access to new features", "essentiel": "—", "pro": "—", "elite": "✓" },
+            { "label": "Onboarding training", "essentiel": "✓", "pro": "✓", "elite": "✓" }
+          ]
+        }
+      ],
+      "pricing": {
+        "label": "Pricing",
+        "annual": { "label": "Annual (from year two)", "essentiel": "700,000 XOF", "pro": "1,150,000 XOF", "elite": "4,800,000 XOF" },
+        "firstYear": { "label": "First year", "essentiel": "988,000 XOF", "pro": "1,300,000 XOF", "elite": "6,000,000 XOF" },
+        "monthly": { "label": "Monthly billing", "essentiel": "58,400 XOF", "pro": "93,833 XOF", "elite": "480,300 XOF" }
       },
-      {
-        "key": "elite",
-        "name": "Élite",
-        "tagline": "University group / network of institutions",
-        "pricing": {
-          "firstYear": "6,000,000",
-          "renewal": "4,800,000",
-          "monthly": "480,300"
-        },
-        "features": [
-          { "text": "Unlimited user accounts", "included": true },
-          { "text": "Unlimited capacity: learners and teachers", "included": true },
-          { "text": "Yearly maintenance included", "included": true },
-          { "text": "Information relay: Email + WhatsApp (6 types · 5,000 sends/month)", "included": true },
-          { "text": "Online learning platform", "included": true },
-          { "text": "Support 6d/7", "included": true },
-          { "text": "Continuous customisation", "included": true },
-          { "text": "Ergonomics updates", "included": true },
-          { "text": "Free access to new features", "included": true },
-          { "text": "One onboarding training", "included": true }
-        ],
-        "cta": "Talk about Élite",
-        "ctaStyle": "dark",
-        "featured": false,
-        "variant": "dark"
-      }
-    ],
+      "ctas": { "essentiel": "Choose Essentiel", "pro": "Choose Pro", "elite": "Choose Élite" }
+    },
     "footer": "Every tier includes hosting, backups and MESRS compliance · Migration of your existing data included at activation"
   },
   "faq": {

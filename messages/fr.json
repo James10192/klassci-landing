@@ -270,95 +270,86 @@
     "image": "/img/sections/students-banner.png"
   },
   "pricing": {
-    "title": "Formule Signature",
-    "subtitle": "Trois tiers pensés pour le supérieur ivoirien. Tarif annuel dégressif dès la 2ᵉ année, ou mensualité fixe — vous choisissez.",
-    "popularBadge": "Recommandé",
-    "fromLabel": "À partir de",
-    "firstYearLabel": "Première année",
-    "renewalPrefix": "puis",
-    "renewalSuffix": "dès la 2ᵉ année",
-    "orMonthlyLabel": "Ou en mensualité",
-    "perMonthSuffix": "/ mois",
-    "currency": "XOF",
-    "tiers": [
-      {
-        "key": "essentiel",
-        "name": "Essentiel",
-        "tagline": "Université / école supérieure émergente",
-        "pricing": {
-          "firstYear": "988 000",
-          "renewal": "700 000",
-          "monthly": "58 400"
+    "title": "Une formule complète, deux alternatives",
+    "subtitle": "Élite couvre tout ce que KLASSCI sait faire. Si vous démarrez plus petit, deux paliers progressifs vous attendent.",
+    "elite": {
+      "eyebrow": "Notre formule recommandée",
+      "brand": "KLASSCI",
+      "name": "Élite",
+      "annualPrice": "4 800 000",
+      "currency": "XOF",
+      "perYear": "/ an",
+      "tagline": "La suite complète. Tout inclus.",
+      "pillars": ["SIS", "LMS", "API", "WhatsApp", "Espace étudiant illimité"],
+      "ctaPrimary": "Souscrire à Élite",
+      "ctaTrial": "Tester 3 mois",
+      "fineprint": "6 000 000 XOF la première année · 480 300 XOF / mois en mensualisation"
+    },
+    "alternatives": {
+      "intro": "École plus petite ou démarrage progressif ?",
+      "tiers": [
+        {
+          "key": "pro",
+          "name": "KLASSCI Pro",
+          "capacity": "jusqu'à 2 500 apprenants",
+          "price": "1 150 000 XOF / an"
         },
-        "features": [
-          { "text": "1 compte par fonction clé : Fondateur, DG, Directeur des études, Comptable, Caissier", "included": true },
-          { "text": "4 comptes éducateurs", "included": true },
-          { "text": "Capacité : 500 apprenants · 30 professeurs", "included": true },
-          { "text": "Maintenance à l'année incluse", "included": true },
-          { "text": "Relais d'information : Mail", "included": true },
-          { "text": "Assistance 4j/7j", "included": true },
-          { "text": "Personnalisation initiale du design", "included": true },
-          { "text": "Mises à jour de l'ergonomie", "included": true },
-          { "text": "Une formation de prise en main", "included": true }
-        ],
-        "cta": "Démarrer en Essentiel",
-        "ctaStyle": "outline",
-        "featured": false,
-        "variant": "light"
+        {
+          "key": "essentiel",
+          "name": "KLASSCI Essentiel",
+          "capacity": "jusqu'à 500 apprenants",
+          "price": "700 000 XOF / an"
+        }
+      ],
+      "compareToggle": "Comparer les 3 formules",
+      "compareClose": "Replier la comparaison"
+    },
+    "comparison": {
+      "subtitle": "Toutes les capacités en un coup d'œil",
+      "headers": {
+        "feature": "Critère",
+        "essentiel": "Essentiel",
+        "pro": "Pro",
+        "elite": "Élite"
       },
-      {
-        "key": "pro",
-        "name": "Pro",
-        "tagline": "Université / école supérieure établie",
-        "pricing": {
-          "firstYear": "1 300 000",
-          "renewal": "1 150 000",
-          "monthly": "93 833"
+      "groups": [
+        {
+          "label": "Capacité",
+          "rows": [
+            { "label": "Apprenants", "essentiel": "500", "pro": "2 500", "elite": "Illimité" },
+            { "label": "Professeurs", "essentiel": "30", "pro": "50", "elite": "Illimité" },
+            { "label": "Comptes éducateurs", "essentiel": "4", "pro": "10", "elite": "Illimité" },
+            { "label": "Comptes fonctions clés (Fondateur, DG, Études, Comptable, Caissier)", "essentiel": "5", "pro": "5", "elite": "Illimité" }
+          ]
         },
-        "features": [
-          { "text": "1 compte par fonction clé : Fondateur, DG, Directeur des études, Comptable, Caissier", "included": true },
-          { "text": "10 comptes éducateurs", "included": true },
-          { "text": "Capacité : 2 500 apprenants · 50 professeurs", "included": true },
-          { "text": "Maintenance à l'année incluse", "included": true },
-          { "text": "Relais d'information : Mail + WhatsApp (5 types)", "included": true },
-          { "text": "Assistance 5j/7j", "included": true },
-          { "text": "Plateforme de cours en ligne", "included": true },
-          { "text": "Mises à jour de l'ergonomie", "included": true },
-          { "text": "Personnalisation continue", "included": true },
-          { "text": "Une formation de prise en main", "included": true }
-        ],
-        "cta": "Choisir Pro",
-        "ctaStyle": "primary",
-        "featured": true,
-        "variant": "highlight"
+        {
+          "label": "Service",
+          "rows": [
+            { "label": "Maintenance annuelle", "essentiel": "Incluse", "pro": "Incluse", "elite": "Incluse" },
+            { "label": "Relais Mail", "essentiel": "✓", "pro": "✓", "elite": "✓" },
+            { "label": "Relais WhatsApp", "essentiel": "—", "pro": "5 types", "elite": "6 types · 5 000 envois/mois" },
+            { "label": "Plateforme de cours en ligne", "essentiel": "—", "pro": "✓", "elite": "✓" },
+            { "label": "Assistance", "essentiel": "4j/7", "pro": "5j/7", "elite": "6j/7" }
+          ]
+        },
+        {
+          "label": "Évolution",
+          "rows": [
+            { "label": "Personnalisation du design", "essentiel": "Initiale", "pro": "Continue", "elite": "Continue" },
+            { "label": "Mises à jour de l'ergonomie", "essentiel": "✓", "pro": "✓", "elite": "✓" },
+            { "label": "Accès gratuit aux nouvelles fonctionnalités", "essentiel": "—", "pro": "—", "elite": "✓" },
+            { "label": "Formation de prise en main", "essentiel": "✓", "pro": "✓", "elite": "✓" }
+          ]
+        }
+      ],
+      "pricing": {
+        "label": "Tarif",
+        "annual": { "label": "Annuel (à partir de la 2ᵉ année)", "essentiel": "700 000 XOF", "pro": "1 150 000 XOF", "elite": "4 800 000 XOF" },
+        "firstYear": { "label": "Première année", "essentiel": "988 000 XOF", "pro": "1 300 000 XOF", "elite": "6 000 000 XOF" },
+        "monthly": { "label": "Mensualisation", "essentiel": "58 400 XOF", "pro": "93 833 XOF", "elite": "480 300 XOF" }
       },
-      {
-        "key": "elite",
-        "name": "Élite",
-        "tagline": "Groupe universitaire / réseau d'écoles supérieures",
-        "pricing": {
-          "firstYear": "6 000 000",
-          "renewal": "4 800 000",
-          "monthly": "480 300"
-        },
-        "features": [
-          { "text": "Comptes utilisateurs illimités", "included": true },
-          { "text": "Capacité illimitée : apprenants et professeurs", "included": true },
-          { "text": "Maintenance à l'année incluse", "included": true },
-          { "text": "Relais d'information : Mail + WhatsApp (6 types · 5 000 envois/mois)", "included": true },
-          { "text": "Plateforme de cours en ligne", "included": true },
-          { "text": "Assistance 6j/7j", "included": true },
-          { "text": "Personnalisation continue", "included": true },
-          { "text": "Mises à jour de l'ergonomie", "included": true },
-          { "text": "Accès gratuit aux nouvelles fonctionnalités", "included": true },
-          { "text": "Une formation de prise en main", "included": true }
-        ],
-        "cta": "Discuter d'Élite",
-        "ctaStyle": "dark",
-        "featured": false,
-        "variant": "dark"
-      }
-    ],
+      "ctas": { "essentiel": "Choisir Essentiel", "pro": "Choisir Pro", "elite": "Choisir Élite" }
+    },
     "footer": "Tous les tiers incluent l'hébergement, les sauvegardes et la conformité MESRS · Migration de vos données existantes incluse à l'activation"
   },
   "faq": {

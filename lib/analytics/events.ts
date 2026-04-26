@@ -12,6 +12,8 @@ export type AnalyticsEventMap = {
       | "pricing_essentiel"
       | "pricing_pro"
       | "pricing_elite"
+      | "pricing_elite_trial"
+      | "pricing_compare_open"
       | "footer";
     locale: "fr" | "en";
   };
