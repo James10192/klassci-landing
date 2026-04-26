@@ -65,6 +65,7 @@ export function Pricing() {
 
   const elite = t.raw("elite") as {
     eyebrow: string;
+    badge: string;
     brand: string;
     name: string;
     annualPrice: string;
@@ -77,12 +78,29 @@ export function Pricing() {
     fineprint: string;
   };
 
+  const common = t.raw("common") as {
+    title: string;
+    items: string[];
+    highlight: string;
+  };
+
   const alternatives = t.raw("alternatives") as {
     intro: string;
     tiers: AlternativeTier[];
     compareToggle: string;
     compareClose: string;
   };
+
+  const partner = t.raw("partner") as {
+    intro: string;
+    name: string;
+    description: string;
+    cta: string;
+  };
+
+  const onPartnerClick = useCallback(() => {
+    track("cta_click", { location: "pricing_partenaire", locale });
+  }, [locale]);
 
   return (
     <section
@@ -113,12 +131,18 @@ export function Pricing() {
         onTrial={() => onCtaClick("pricing_elite_trial")}
       />
 
+      {/* Common banner — what every tier always gets */}
+      <CommonBanner common={common} />
+
       {/* Quiet alternatives + comparison toggle */}
       <Alternatives
         alternatives={alternatives}
         compareOpen={compareOpen}
         onToggle={onCompareToggle}
       />
+
+      {/* Partner plan — third entry door for cash-constrained schools */}
+      <PartnerPlan partner={partner} onClick={onPartnerClick} />
 
       {/* Comparison panel — collapses by default */}
       {compareOpen && (
@@ -151,6 +175,7 @@ export function Pricing() {
 interface EliteHeroProps {
   elite: {
     eyebrow: string;
+    badge: string;
     brand: string;
     name: string;
     annualPrice: string;
@@ -184,6 +209,11 @@ function EliteHero({ elite, onPrimary, onTrial }: EliteHeroProps) {
           backgroundSize: "32px 32px",
         }}
       />
+
+      {/* Recommended badge — pinned top-right */}
+      <span className="absolute top-4 right-4 lg:top-6 lg:right-6 z-10 inline-flex items-center gap-1 bg-brand-orange text-white px-3 py-1 rounded-full font-mono uppercase tracking-[0.10em] text-[0.65rem] shadow-[0_4px_12px_rgba(245,130,32,0.40)]">
+        {elite.badge}
+      </span>
 
       <div className="relative px-7 py-10 lg:px-14 lg:py-14">
         <p className="font-mono uppercase tracking-[0.10em] text-[0.7rem] text-white/65 mb-4">
@@ -244,6 +274,70 @@ function EliteHero({ elite, onPrimary, onTrial }: EliteHeroProps) {
           {elite.fineprint}
         </p>
       </div>
+    </div>
+  );
+}
+
+// ------------------------------------------------------------------ COMMON BANNER
+
+function CommonBanner({
+  common,
+}: {
+  common: { title: string; items: string[]; highlight: string };
+}) {
+  return (
+    <div className="mt-10 max-w-5xl mx-auto rounded-xl bg-bg-alt border border-border px-6 py-7 lg:px-10 lg:py-8">
+      <p className="font-mono uppercase tracking-[0.10em] text-[0.7rem] text-text-muted mb-4">
+        {common.title}
+      </p>
+      <ul className="grid sm:grid-cols-2 gap-x-6 gap-y-2 mb-4">
+        {common.items.map((item) => (
+          <li
+            key={item}
+            className="flex items-start gap-2 text-[0.875rem] text-text-secondary leading-snug"
+          >
+            <Check
+              className="size-3.5 text-accent shrink-0 mt-[0.2rem]"
+              strokeWidth={2.75}
+              aria-hidden
+            />
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+      <p className="text-[0.92rem] text-text font-medium leading-snug border-t border-border pt-4">
+        <span className="text-brand-orange">★</span> {common.highlight}
+      </p>
+    </div>
+  );
+}
+
+// ------------------------------------------------------------------ PARTNER PLAN
+
+function PartnerPlan({
+  partner,
+  onClick,
+}: {
+  partner: { intro: string; name: string; description: string; cta: string };
+  onClick: () => void;
+}) {
+  return (
+    <div className="mt-12 max-w-3xl mx-auto rounded-xl border border-dashed border-border-strong bg-white px-6 py-7 lg:px-8">
+      <h3 className="font-serif font-light text-[1.25rem] text-text mb-2 flex items-center gap-2.5">
+        <span className="text-brand-orange" aria-hidden>▸</span>
+        {partner.intro}
+      </h3>
+      <p className="font-medium text-text mb-2">{partner.name}</p>
+      <p className="text-text-secondary text-[0.9rem] leading-relaxed mb-4">
+        {partner.description}
+      </p>
+      <a
+        href="#contact"
+        onClick={onClick}
+        className="inline-flex items-center gap-2 font-mono uppercase tracking-[0.08em] text-[0.72rem] text-accent hover:text-accent-hover transition-colors"
+      >
+        → {partner.cta}
+      </a>
     </div>
   );
 }

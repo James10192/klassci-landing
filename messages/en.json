@@ -270,42 +270,66 @@
     "image": "/img/sections/students-banner.png"
   },
   "pricing": {
-    "title": "One full plan, two alternatives",
-    "subtitle": "Élite covers everything KLASSCI can do. If you're starting smaller, two progressive entry tiers are waiting.",
+    "title": "One offering, three service tiers",
+    "subtitle": "Every module, every new feature. What changes between tiers is the human service level — engineering days, support, account manager.",
     "elite": {
       "eyebrow": "Our recommended plan",
+      "badge": "★ Recommended",
       "brand": "KLASSCI",
       "name": "Élite",
-      "annualPrice": "4,800,000",
-      "currency": "XOF",
+      "annualPrice": "4.8M",
+      "currency": "FCFA",
       "perYear": "/ year",
-      "tagline": "The complete suite. Everything included.",
-      "pillars": ["SIS", "LMS", "API", "WhatsApp", "Unlimited student portal"],
-      "ctaPrimary": "Subscribe to Élite",
-      "ctaTrial": "Try for 3 months",
-      "fineprint": "6,000,000 XOF first year · 480,300 XOF / month on monthly billing"
+      "tagline": "The complete suite, with no constraints.",
+      "pillars": [
+        "SIS + LMS + API",
+        "WhatsApp 5,000 msg/month",
+        "12 engineering days / year",
+        "Unlimited accounts & students",
+        "Support 6d/7",
+        "Dedicated account manager"
+      ],
+      "ctaPrimary": "Subscribe",
+      "ctaTrial": "Try free for 3 months",
+      "fineprint": "6M FCFA first year · 460k FCFA / month on monthly billing"
+    },
+    "common": {
+      "title": "Included in every plan",
+      "items": [
+        "Every business module: grades, report cards, attendance, schedule, enrollments, accounting, LMD UEMOA",
+        "Web-responsive student portal",
+        "Maintenance, daily backups, security",
+        "Initial onboarding training"
+      ],
+      "highlight": "Every new product feature ships to all tiers."
     },
     "alternatives": {
-      "intro": "Smaller school or progressive start?",
+      "intro": "Smaller institution or progressive start?",
       "tiers": [
         {
           "key": "pro",
-          "name": "KLASSCI Pro",
-          "capacity": "up to 2,500 learners",
-          "price": "1,150,000 XOF / year"
+          "name": "KLASSCI PRO",
+          "capacity": "≤ 1,500 students · LMS included",
+          "price": "1.15M FCFA / year"
         },
         {
           "key": "essentiel",
           "name": "KLASSCI Essentiel",
-          "capacity": "up to 500 learners",
-          "price": "700,000 XOF / year"
+          "capacity": "≤ 500 students · admin only",
+          "price": "700k FCFA / year"
         }
       ],
-      "compareToggle": "Compare all three plans",
+      "compareToggle": "Compare the plans",
       "compareClose": "Hide comparison"
     },
+    "partner": {
+      "intro": "No upfront cash budget?",
+      "name": "Partner Plan (Formule Partenaire)",
+      "description": "500k FCFA installation + 15k FCFA / student / year, paid through parent tuition. Zero working capital required from the school.",
+      "cta": "Learn more"
+    },
     "comparison": {
-      "subtitle": "Every capability at a glance",
+      "subtitle": "Detail of the three service tiers",
       "headers": {
         "feature": "Capability",
         "essentiel": "Essentiel",
@@ -314,39 +338,39 @@
       },
       "groups": [
         {
-          "label": "Capacity",
+          "label": "Product",
           "rows": [
-            { "label": "Learners", "essentiel": "500", "pro": "2,500", "elite": "Unlimited" },
-            { "label": "Teachers", "essentiel": "30", "pro": "50", "elite": "Unlimited" },
-            { "label": "Educator accounts", "essentiel": "4", "pro": "10", "elite": "Unlimited" },
-            { "label": "Key-role accounts (Founder, Director, Studies, Bursar, Cashier)", "essentiel": "5", "pro": "5", "elite": "Unlimited" }
+            { "label": "Online learning platform (LMS)", "essentiel": "—", "pro": "✓", "elite": "✓" },
+            { "label": "Public API", "essentiel": "—", "pro": "✓", "elite": "✓ + early access" },
+            { "label": "Parent WhatsApp", "essentiel": "—", "pro": "Standard (1,000 msg/month)", "elite": "Full (5,000 msg/month)" }
           ]
         },
         {
-          "label": "Service",
+          "label": "Capacities",
           "rows": [
-            { "label": "Yearly maintenance", "essentiel": "Included", "pro": "Included", "elite": "Included" },
-            { "label": "Email relay", "essentiel": "✓", "pro": "✓", "elite": "✓" },
-            { "label": "WhatsApp relay", "essentiel": "—", "pro": "5 types", "elite": "6 types · 5,000 sends/month" },
-            { "label": "Online learning platform", "essentiel": "—", "pro": "✓", "elite": "✓" },
-            { "label": "Support", "essentiel": "4d/7", "pro": "5d/7", "elite": "6d/7" }
+            { "label": "Admin seats (Founder, Director, Studies, Bursar, Cashier)", "essentiel": "5", "pro": "5", "elite": "Unlimited" },
+            { "label": "Teacher seats", "essentiel": "10", "pro": "25", "elite": "Unlimited" },
+            { "label": "Max students", "essentiel": "500", "pro": "1,500", "elite": "Unlimited" },
+            { "label": "Max teachers", "essentiel": "30", "pro": "60", "elite": "Unlimited" }
           ]
         },
         {
-          "label": "Evolution",
+          "label": "Technical service ★",
           "rows": [
-            { "label": "Design customisation", "essentiel": "Initial", "pro": "Continuous", "elite": "Continuous" },
-            { "label": "Ergonomics updates", "essentiel": "✓", "pro": "✓", "elite": "✓" },
-            { "label": "Free access to new features", "essentiel": "—", "pro": "—", "elite": "✓" },
-            { "label": "Onboarding training", "essentiel": "✓", "pro": "✓", "elite": "✓" }
+            { "label": "Support", "essentiel": "Mon-Thu (4d/7)", "pro": "Mon-Fri (5d/7)", "elite": "Mon-Sat (6d/7)" },
+            { "label": "Launch customisation", "essentiel": "Logo + colours", "pro": "+ Report card / receipt templates", "elite": "Tailored setup" },
+            { "label": "Continuous customisation", "essentiel": "—", "pro": "2 engineering days / year", "elite": "1 engineering day / month (12 days/year)" },
+            { "label": "Roadmap influence", "essentiel": "—", "pro": "Vote", "elite": "Priority" },
+            { "label": "Dedicated account manager", "essentiel": "—", "pro": "—", "elite": "✓" },
+            { "label": "Annual usage audit", "essentiel": "—", "pro": "—", "elite": "✓" }
           ]
         }
       ],
       "pricing": {
         "label": "Pricing",
-        "annual": { "label": "Annual (from year two)", "essentiel": "700,000 XOF", "pro": "1,150,000 XOF", "elite": "4,800,000 XOF" },
-        "firstYear": { "label": "First year", "essentiel": "988,000 XOF", "pro": "1,300,000 XOF", "elite": "6,000,000 XOF" },
-        "monthly": { "label": "Monthly billing", "essentiel": "58,400 XOF", "pro": "93,833 XOF", "elite": "480,300 XOF" }
+        "annual": { "label": "Annual (from year two)", "essentiel": "700k FCFA", "pro": "1.15M FCFA", "elite": "4.8M FCFA" },
+        "firstYear": { "label": "First year", "essentiel": "988k FCFA", "pro": "1.3M FCFA", "elite": "6M FCFA" },
+        "monthly": { "label": "Monthly billing", "essentiel": "67k FCFA", "pro": "110k FCFA", "elite": "460k FCFA" }
       },
       "ctas": { "essentiel": "Choose Essentiel", "pro": "Choose Pro", "elite": "Choose Élite" }
     },

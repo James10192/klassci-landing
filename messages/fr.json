@@ -270,42 +270,66 @@
     "image": "/img/sections/students-banner.png"
   },
   "pricing": {
-    "title": "Une formule complète, deux alternatives",
-    "subtitle": "Élite couvre tout ce que KLASSCI sait faire. Si vous démarrez plus petit, deux paliers progressifs vous attendent.",
+    "title": "Une seule offre, trois niveaux de service",
+    "subtitle": "Tous les modules, toutes les nouvelles fonctionnalités. Ce qui change d'un tier à l'autre, c'est le niveau de service humain — jours-dev, support, account manager.",
     "elite": {
       "eyebrow": "Notre formule recommandée",
+      "badge": "★ Recommandé",
       "brand": "KLASSCI",
       "name": "Élite",
-      "annualPrice": "4 800 000",
-      "currency": "XOF",
+      "annualPrice": "4,8 M",
+      "currency": "FCFA",
       "perYear": "/ an",
-      "tagline": "La suite complète. Tout inclus.",
-      "pillars": ["SIS", "LMS", "API", "WhatsApp", "Espace étudiant illimité"],
-      "ctaPrimary": "Souscrire à Élite",
-      "ctaTrial": "Tester 3 mois",
-      "fineprint": "6 000 000 XOF la première année · 480 300 XOF / mois en mensualisation"
+      "tagline": "La suite complète, sans aucune contrainte.",
+      "pillars": [
+        "SIS + LMS + API",
+        "WhatsApp 5 000 msg/mois",
+        "12 jours-dev / an",
+        "Comptes & élèves illimités",
+        "Support 6j/7",
+        "Account manager dédié"
+      ],
+      "ctaPrimary": "Souscrire",
+      "ctaTrial": "Tester gratuitement 3 mois",
+      "fineprint": "6 M FCFA la première année · 460 k FCFA / mois en mensualisation"
+    },
+    "common": {
+      "title": "Inclus dans toutes les formules",
+      "items": [
+        "Tous les modules métier : notes, bulletins, présences, emploi du temps, inscriptions, comptabilité, LMD UEMOA",
+        "Espace étudiant en web responsive",
+        "Maintenance, sauvegardes quotidiennes, sécurité",
+        "Formation prise en main initiale"
+      ],
+      "highlight": "Toutes les nouvelles fonctionnalités produit sont livrées à tous les tiers."
     },
     "alternatives": {
-      "intro": "École plus petite ou démarrage progressif ?",
+      "intro": "Petite structure ou démarrage progressif ?",
       "tiers": [
         {
           "key": "pro",
-          "name": "KLASSCI Pro",
-          "capacity": "jusqu'à 2 500 apprenants",
-          "price": "1 150 000 XOF / an"
+          "name": "KLASSCI PRO",
+          "capacity": "≤ 1 500 élèves · LMS inclus",
+          "price": "1,15 M FCFA / an"
         },
         {
           "key": "essentiel",
           "name": "KLASSCI Essentiel",
-          "capacity": "jusqu'à 500 apprenants",
-          "price": "700 000 XOF / an"
+          "capacity": "≤ 500 élèves · gestion admin",
+          "price": "700 k FCFA / an"
         }
       ],
-      "compareToggle": "Comparer les 3 formules",
-      "compareClose": "Replier la comparaison"
+      "compareToggle": "Comparer les formules",
+      "compareClose": "Masquer la comparaison"
+    },
+    "partner": {
+      "intro": "Pas de budget cash mobilisable ?",
+      "name": "Formule Partenaire",
+      "description": "500 k FCFA d'installation + 15 k FCFA / élève / an, payés via les frais de scolarité parents. Aucune trésorerie à mobiliser côté établissement.",
+      "cta": "En savoir plus"
     },
     "comparison": {
-      "subtitle": "Toutes les capacités en un coup d'œil",
+      "subtitle": "Détail des trois niveaux de service",
       "headers": {
         "feature": "Critère",
         "essentiel": "Essentiel",
@@ -314,39 +338,39 @@
       },
       "groups": [
         {
-          "label": "Capacité",
+          "label": "Produit",
           "rows": [
-            { "label": "Apprenants", "essentiel": "500", "pro": "2 500", "elite": "Illimité" },
-            { "label": "Professeurs", "essentiel": "30", "pro": "50", "elite": "Illimité" },
-            { "label": "Comptes éducateurs", "essentiel": "4", "pro": "10", "elite": "Illimité" },
-            { "label": "Comptes fonctions clés (Fondateur, DG, Études, Comptable, Caissier)", "essentiel": "5", "pro": "5", "elite": "Illimité" }
+            { "label": "Plateforme de cours en ligne (LMS)", "essentiel": "—", "pro": "✓", "elite": "✓" },
+            { "label": "API publique", "essentiel": "—", "pro": "✓", "elite": "✓ + accès anticipé" },
+            { "label": "WhatsApp parents", "essentiel": "—", "pro": "Standard (1 000 msg/mois)", "elite": "Full (5 000 msg/mois)" }
           ]
         },
         {
-          "label": "Service",
+          "label": "Capacités",
           "rows": [
-            { "label": "Maintenance annuelle", "essentiel": "Incluse", "pro": "Incluse", "elite": "Incluse" },
-            { "label": "Relais Mail", "essentiel": "✓", "pro": "✓", "elite": "✓" },
-            { "label": "Relais WhatsApp", "essentiel": "—", "pro": "5 types", "elite": "6 types · 5 000 envois/mois" },
-            { "label": "Plateforme de cours en ligne", "essentiel": "—", "pro": "✓", "elite": "✓" },
-            { "label": "Assistance", "essentiel": "4j/7", "pro": "5j/7", "elite": "6j/7" }
+            { "label": "Comptes admin (Fondateur, DG, Études, Comptable, Caissier)", "essentiel": "5", "pro": "5", "elite": "Illimité" },
+            { "label": "Comptes éducateurs", "essentiel": "10", "pro": "25", "elite": "Illimité" },
+            { "label": "Élèves max", "essentiel": "500", "pro": "1 500", "elite": "Illimité" },
+            { "label": "Professeurs max", "essentiel": "30", "pro": "60", "elite": "Illimité" }
           ]
         },
         {
-          "label": "Évolution",
+          "label": "Service technique ★",
           "rows": [
-            { "label": "Personnalisation du design", "essentiel": "Initiale", "pro": "Continue", "elite": "Continue" },
-            { "label": "Mises à jour de l'ergonomie", "essentiel": "✓", "pro": "✓", "elite": "✓" },
-            { "label": "Accès gratuit aux nouvelles fonctionnalités", "essentiel": "—", "pro": "—", "elite": "✓" },
-            { "label": "Formation de prise en main", "essentiel": "✓", "pro": "✓", "elite": "✓" }
+            { "label": "Assistance", "essentiel": "Lun-Jeu (4j/7)", "pro": "Lun-Ven (5j/7)", "elite": "Lun-Sam (6j/7)" },
+            { "label": "Personnalisation au lancement", "essentiel": "Logo + couleurs", "pro": "+ Templates bulletin/reçu", "elite": "Setup sur-mesure" },
+            { "label": "Personnalisation continue", "essentiel": "—", "pro": "2 jours-dev / an", "elite": "1 jour-dev / mois (12 jours/an)" },
+            { "label": "Influence sur la roadmap", "essentiel": "—", "pro": "Vote", "elite": "Priorité" },
+            { "label": "Account manager dédié", "essentiel": "—", "pro": "—", "elite": "✓" },
+            { "label": "Audit annuel d'usage", "essentiel": "—", "pro": "—", "elite": "✓" }
           ]
         }
       ],
       "pricing": {
         "label": "Tarif",
-        "annual": { "label": "Annuel (à partir de la 2ᵉ année)", "essentiel": "700 000 XOF", "pro": "1 150 000 XOF", "elite": "4 800 000 XOF" },
-        "firstYear": { "label": "Première année", "essentiel": "988 000 XOF", "pro": "1 300 000 XOF", "elite": "6 000 000 XOF" },
-        "monthly": { "label": "Mensualisation", "essentiel": "58 400 XOF", "pro": "93 833 XOF", "elite": "480 300 XOF" }
+        "annual": { "label": "Annuel (à partir de la 2ᵉ année)", "essentiel": "700 k FCFA", "pro": "1,15 M FCFA", "elite": "4,8 M FCFA" },
+        "firstYear": { "label": "Première année", "essentiel": "988 k FCFA", "pro": "1,3 M FCFA", "elite": "6 M FCFA" },
+        "monthly": { "label": "Mensualisation", "essentiel": "67 k FCFA", "pro": "110 k FCFA", "elite": "460 k FCFA" }
       },
       "ctas": { "essentiel": "Choisir Essentiel", "pro": "Choisir Pro", "elite": "Choisir Élite" }
     },
