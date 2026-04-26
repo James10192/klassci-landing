@@ -466,15 +466,15 @@
         "title": "Resources",
         "links": [
           { "label": "Documentation", "href": "/docs" },
-          { "label": "API reference", "href": "/api-reference" },
-          { "label": "Changelog", "href": "/changelog" }
+          { "label": "API reference", "href": "/docs/api-reference" },
+          { "label": "Changelog", "href": "/docs/changelog" }
         ]
       },
       "contact": {
         "title": "Contact",
         "links": [
           { "label": "contact@klassci.com", "href": "mailto:contact@klassci.com" },
-          { "label": "Abidjan, Côte d'Ivoire", "href": "#" }
+          { "label": "Abidjan, Côte d'Ivoire", "href": "#contact" }
         ]
       }
     },
