@@ -322,7 +322,7 @@ function PartnerPlan({
   onClick: () => void;
 }) {
   return (
-    <div className="mt-12 max-w-3xl mx-auto rounded-xl border border-dashed border-border-strong bg-white px-6 py-7 lg:px-8">
+    <div className="mt-12 max-w-3xl mx-auto rounded-xl border border-dashed border-border-strong bg-bg-card px-6 py-7 lg:px-8">
       <h3 className="font-serif font-light text-[1.25rem] text-text mb-2 flex items-center gap-2.5">
         <span className="text-brand-orange" aria-hidden>▸</span>
         {partner.intro}
@@ -505,7 +505,7 @@ function ComparisonPanel({
                     onChoose("pricing_essentiel");
                     document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
                   }}
-                  className="inline-flex items-center justify-center w-full max-w-[180px] border border-border-strong text-text bg-white rounded px-3 py-2 text-[0.8rem] font-medium hover:bg-bg-alt transition-colors"
+                  className="inline-flex items-center justify-center w-full max-w-[180px] border border-border-strong text-text bg-bg-card rounded px-3 py-2 text-[0.8rem] font-medium hover:bg-bg-alt transition-colors"
                 >
                   {ctas.essentiel}
                 </button>
@@ -517,7 +517,7 @@ function ComparisonPanel({
                     onChoose("pricing_pro");
                     document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
                   }}
-                  className="inline-flex items-center justify-center w-full max-w-[180px] border border-border-strong text-text bg-white rounded px-3 py-2 text-[0.8rem] font-medium hover:bg-bg-alt transition-colors"
+                  className="inline-flex items-center justify-center w-full max-w-[180px] border border-border-strong text-text bg-bg-card rounded px-3 py-2 text-[0.8rem] font-medium hover:bg-bg-alt transition-colors"
                 >
                   {ctas.pro}
                 </button>
