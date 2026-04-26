@@ -263,7 +263,7 @@ function EliteHero({ elite, onPrimary, onTrial }: EliteHeroProps) {
           <a
             href="#contact"
             onClick={onTrial}
-            className="inline-flex items-center justify-center border border-white/35 bg-transparent text-white px-6 py-3 rounded text-[0.95rem] font-medium hover:bg-white/10 hover:border-white/55 transition-all"
+            className="inline-flex items-center justify-center border border-white/45 bg-transparent text-white px-6 py-3 rounded text-[0.95rem] font-medium hover:bg-white hover:text-[#0a3d8f] hover:border-white transition-colors"
             style={{ letterSpacing: "-0.01em" }}
           >
             {elite.ctaTrial}
