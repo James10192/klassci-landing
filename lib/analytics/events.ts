@@ -38,16 +38,6 @@ export type AnalyticsEventMap = {
   contact_submit_error: {
     locale: "fr" | "en";
   };
-  tenant_lookup_submit: {
-    has_at_sign: boolean;
-    locale: "fr" | "en";
-  };
-  tenant_lookup_found: {
-    locale: "fr" | "en";
-  };
-  tenant_lookup_not_found: {
-    locale: "fr" | "en";
-  };
   language_switch: {
     from: "fr" | "en";
     to: "fr" | "en";

@@ -9,7 +9,9 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: "*",
         allow: "/",
         // Internal API routes don't need to be indexed.
-        disallow: ["/api/"],
+        // /login lives on tenant subdomains (esbtp-yakro.klassci.com/login etc.),
+        // not on this marketing site — block it so Search Console stops flagging it.
+        disallow: ["/api/", "/login"],
       },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,

@@ -483,16 +483,5 @@
       "facebook": "Facebook",
       "linkedin": "LinkedIn"
     }
-  },
-  "tenantLookup": {
-    "pageTitle": "Sign in to your school",
-    "intro": "Enter your email or username to reach your school's workspace.",
-    "label": "Email or username",
-    "placeholder": "you@school.org or your.username",
-    "submit": "Continue",
-    "submitting": "Searching...",
-    "notFound": "No school was found for this identifier. Please contact your administrator.",
-    "error": "Something went wrong. Please try again in a moment.",
-    "alreadyKnow": "I already know my school's address"
   }
 }

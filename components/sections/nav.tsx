@@ -75,9 +75,6 @@ export function Nav() {
           <div className="flex items-center gap-2">
             <LanguageSwitcher className="hidden sm:inline-flex" />
             <ThemeToggle className="hidden sm:inline-flex" />
-            {/* Pas de "Se connecter" central : chaque tenant a son propre
-                sous-domaine (esbtp-yakro.klassci.com etc.) avec son login Laravel.
-                Le CTA principal du marketing site est "Prendre contact". */}
             <a
               href="#contact"
               onClick={handleContactClick}
