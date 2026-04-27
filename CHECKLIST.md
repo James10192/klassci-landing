@@ -129,16 +129,6 @@ form fields, return a uniform `{ ok: true }` or `{ ok: false, error: '...' }` sh
 Rate-limit to 5 req / 5 min / IP via Vercel KV (or simple in-memory bucket if KV
 isn't provisioned yet).
 
-### `app/api/tenant-lookup/route.ts`
-
-POST `{ identifier: string }`. Proxy to Laravel `/api/tenant-lookup` (TODO: build
-this endpoint in KLASSCIv2 — see Phase 4). Always return 200 with
-`{ found: boolean, subdomain?: string }` to prevent enumeration. Rate-limit
-5 req / min / IP.
-
-The identifier accepts an email **or** a username (per Marcel's requirement). The
-Laravel side already auto-detects via `FILTER_VALIDATE_EMAIL` in `LoginController`.
-
 ---
 
 ## Phase 4 — KLASSCIv2 Laravel changes (separate PR)
@@ -215,7 +205,6 @@ Source for tenant info: existing `GET /api/tenant-info` endpoint, returns
 - [ ] Lower TTL on the apex `A` record at cpanel to 60 s (24 h before)
 - [ ] Confirm Vercel project deployed at `klassci.com` (preview URL works first)
 - [ ] Test smoke: contact form submission round-trips Vercel → Laravel `/contact-demo`
-- [ ] Test smoke: tenant lookup round-trips Vercel → Laravel `/api/tenant-lookup`
 - [ ] Submit new sitemap to Google Search Console (after Phase 1c is complete)
 
 ### Cutover (J-0, Sunday)
@@ -232,7 +221,6 @@ Source for tenant info: existing `GET /api/tenant-info` endpoint, returns
 7. Smoke test:
    - `https://klassci.com` → Vercel landing (FR)
    - `https://klassci.com/en` → Vercel landing (EN)
-   - `https://klassci.com/login` → Vercel tenant lookup
    - `https://klassci.com/docs/getting-started` → Laravel docs (proxied via rewrite)
    - `https://klassci.com/api-reference` → Laravel api ref (proxied)
    - `https://klassci.com/changelog` → Laravel changelog (proxied)
@@ -244,7 +232,6 @@ Source for tenant info: existing `GET /api/tenant-info` endpoint, returns
 
 - [ ] Monitor Vercel logs for unexpected 404s, patch redirects in `next.config.mjs`
 - [ ] Check Google Search Console for crawl errors
-- [ ] Watch PostHog for `tenant_lookup_not_found` spikes (might indicate a missing redirect)
 
 ---
 

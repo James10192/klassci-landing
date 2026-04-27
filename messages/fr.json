@@ -483,16 +483,5 @@
       "facebook": "Facebook",
       "linkedin": "LinkedIn"
     }
-  },
-  "tenantLookup": {
-    "pageTitle": "Connexion à votre établissement",
-    "intro": "Entrez votre email ou nom d'utilisateur pour rejoindre l'espace de votre école.",
-    "label": "Email ou nom d'utilisateur",
-    "placeholder": "vous@etablissement.ci ou votre.username",
-    "submit": "Continuer",
-    "submitting": "Recherche...",
-    "notFound": "Aucun établissement trouvé pour cet identifiant. Contactez votre administrateur.",
-    "error": "Une erreur est survenue. Réessayez dans quelques instants.",
-    "alreadyKnow": "Je connais déjà l'adresse de mon école"
   }
 }

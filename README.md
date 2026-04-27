@@ -71,5 +71,5 @@ etc. all map to the same palette. Dark mode is class-based via `html.dark`.
 ## Status
 
 This is the **scaffold + Phase 1a foundation**. See `CHECKLIST.md` for everything
-that still needs shipping (12 sections + tenant lookup API + image compression +
+that still needs shipping (12 sections + image compression +
 KLASSCIv2 Laravel cleanup PR + login refresh + DNS cutover).
