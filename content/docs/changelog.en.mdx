@@ -48,6 +48,9 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ### Added
 
+- **Premium redesign of the subjects list** (`/esbtp/matieres`) — gradient hero with 4 live KPIs, hybrid filters (3 always-visible selects + collapsible advanced button), sticky bulk actions bar, per-row kebab menu (View / Configure / Edit / Delete), modal confirmations, AJAX bulk delete, premium empty state.
+- **Premium redesign of re-enrollment** (`/esbtp/reinscription`) — tabs and indicators fed from the same source (yearly per-class KPIs), clear status badges (Re-enrolled / To re-enroll / Pending), real-time sort and search, aligned with the visual pattern of other modules.
+
 - **Bulk attendance entry without a course** — the new interface lets you log class hours without assigning a specific course, useful for shared lectures and conferences. `UNIQUE+NULL` pattern, cross-compatible MariaDB/MySQL via a generated column.
 - **Group portal for founders** — cross-tenant aggregation of financial, academic, and operational metrics, with per-school health scoring, automated alerts (plan mismatch, inactive tenant, SSL expiry, enrollment drop), and a transverse subscription banner.
 - **Group member onboarding** — new DGA role, email-based invite flow with auto-generated password and a 24-hour signed URL, forced password change on first login, `username` fallback (auto-generated `firstname.lastname` with collision-handling).
