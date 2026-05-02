@@ -11,6 +11,39 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 
 ---
 
+## Mai 2026
+
+### Ajouts
+
+- **Refonte premium des pages enseignant (création + modification)** — formulaire en une seule page avec hero gradient KLASSCI, trois champs requis pour démarrer (nom, téléphone, spécialisation), section « Régime d'engagement » avec radio cards (Vacataire / Permanent / Consultant) et champs conditionnels selon le régime, panneau « Profil détaillé » pliable pour diplômes et grade, date de début d'activité optionnelle pré-remplie au jour.
+- **Refonte premium de la modification rapide des disponibilités** (`/esbtp/enseignants/bulk-availability`) — chaque item enseignant repensé : avatar gradient avec initiales, stats premium (Préférés / Disponibles / Indisponibles) avec couleurs sémantiques, grille calendrier 7×11 avec gradients par statut, mode édition avec bordure bleue active, légende dans card grise.
+- **Pattern unifié d'export PDF / Excel** avec aperçu, envoi par email du document, et paramètres d'export premium par tenant. Le même flux est utilisé pour les paiements, les listes de classe, les bulletins et les rapports comptables.
+- **Personnalisation PDF par établissement** — paramètres tenant pour couleur d'accent, position du logo, footer signature, marges, et aperçu du rendu en nouvelle tab sans téléchargement intermédiaire.
+- **Chat interactif avec notifications événementielles** — la messagerie réagit en temps réel aux événements métier (paiement validé, inscription validée, paiement créé) et affiche les notifications correspondantes dans la barre latérale du destinataire.
+- **Modale « Nouveau message » premium** sur le chat — header gradient, avatars circulaires des destinataires, recherche temps réel, accessibilité clavier complète.
+- **Polish UI 2026 du chat** — groupement des messages consécutifs du même expéditeur, optimistic UI à l'envoi (le message apparaît immédiatement), bannière « Nouveau » sur les conversations non lues.
+- **Page de recouvrement actionnable** (`/esbtp/comptabilite/relances`) — chaque ligne d'impayé propose un deeplink WhatsApp pré-rempli avec le message de relance personnalisé, plus un widget de précision affichant le taux de réussite des relances par mode de communication.
+- **Workflow gating complet** — chaque rôle (caissier, comptable, secrétaire, coordinateur, enseignant) voit uniquement les sections de la sidebar, les routes et les boutons d'action correspondant à son périmètre. Une commande CLI permet de superviser les permissions accordées par tenant.
+
+### Améliorations
+
+- **Fusion des tables `esbtp_enseignant_profiles` dans `esbtp_teachers`** — un seul écran d'édition, un seul schéma. Les notions de « type de contrat » et « statut d'emploi » sont unifiées dans un champ unique « Régime » (Vacataire / Permanent / Consultant). « Date d'embauche » devient « Date de début d'activité ». Les tables `esbtp_enseignant_profiles`, `esbtp_enseignant_disponibilites`, `esbtp_enseignant_affectations` (jamais réellement alimentées par l'UI moderne) sont supprimées.
+- **Cleanup des champs hors-contexte sur la fiche enseignant** — retrait de Laboratoire, Motivation, Méthodes d'enseignement, Outils pédagogiques, upload CV et photo (à venir via upload progressif). Le filtre et la colonne « Département » sur la liste sont également retirés (KLASSCI cible l'enseignement supérieur sans découpage en départements).
+- **Bandeau « Vue secondaire » sur la liste des enseignants** rappelant que la gestion principale du personnel se fait depuis `/esbtp/personnel/unified`.
+- **Permissions enseignants centralisées sur la nouvelle relation Eloquent** — tous les écrans (dashboard enseignant, présences, notes, attendance, planning) utilisent maintenant la même relation pour accéder au profil de l'enseignant connecté. Les pages ne plantent plus après les changements de schéma.
+
+### Sécurité
+
+- **Throttle sur les routes enseignants** — 60 requêtes par minute sur le groupe enseignants et 5 requêtes par minute sur la réinitialisation de mot de passe (qui crée un mot de passe aléatoire).
+
+### Corrections
+
+- **Erreur `RelationNotFoundException [enseignantProfile]`** sur la page Planning Général et plusieurs endpoints liés aux présences, aux notes et au dashboard enseignant — corrigée. Une nouvelle relation `User → teacherProfile` (alias `teacher` et `enseignant`) est exposée et utilisée par tous les écrans concernés.
+- **Modals « Créer un enseignant » sur `/esbtp/planning-general` et sur le formulaire de création de séance** — affichaient encore les anciens champs (Département, Type de contrat, Statut d'emploi, Date d'embauche) après la fusion DB. Désormais alignés sur le nouveau schéma : Régime + Date de début d'activité.
+- **Champ Téléphone obligatoire sur la modification d'un enseignant** — le formulaire bloquait les enseignants legacy dont le téléphone n'était pas saisi. Le champ est désormais facultatif côté formulaire de modification (la validation serveur l'accepte vide).
+
+---
+
 ## Avril 2026
 
 ### Ajouts

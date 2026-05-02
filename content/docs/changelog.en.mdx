@@ -11,6 +11,39 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ---
 
+## May 2026
+
+### Added
+
+- **Premium redesign of the teacher create / edit pages** — single-page form with KLASSCI gradient hero, three required fields to get started (full name, phone, specialization), a "Contract regime" section with radio cards (Contractor / Permanent / Consultant) and conditional fields per regime, a collapsible "Detailed profile" panel for diplomas and grade, optional start-of-activity date prefilled to today.
+- **Premium redesign of the bulk-availability editor** (`/esbtp/enseignants/bulk-availability`) — every teacher item is repainted: gradient avatar with initials, premium stats (Preferred / Available / Unavailable) with semantic colors, 7×11 calendar grid with per-status gradients, edit mode with active blue outline, legend in a grey card.
+- **Unified PDF / Excel export pattern** with preview, email delivery, and per-tenant premium export settings. The same flow now powers payments, class rosters, bulletins, and accounting reports.
+- **Per-tenant PDF customization** — tenant settings for accent color, logo position, footer signature, margins, and rendering preview in a new tab without intermediate download.
+- **Interactive chat with event-driven notifications** — messaging reacts in real time to business events (payment validated, enrollment validated, payment created) and surfaces matching notifications in the recipient's sidebar.
+- **Premium "New message" modal** in chat — gradient header, circular recipient avatars, real-time search, full keyboard accessibility.
+- **Chat UI 2026 polish** — consecutive messages from the same sender are grouped, optimistic UI on send (the message shows up instantly), "New" banner on unread conversations.
+- **Actionable collections page** (`/esbtp/comptabilite/relances`) — every overdue line offers a pre-filled WhatsApp deeplink with the personalized reminder message, plus an accuracy widget showing the success rate of reminders by communication channel.
+- **Full workflow gating** — every role (cashier, accountant, secretary, coordinator, teacher) sees only the sidebar sections, routes, and action buttons that match their scope. A CLI command lets you supervise permissions granted per tenant.
+
+### Improved
+
+- **Merged `esbtp_enseignant_profiles` into `esbtp_teachers`** — one editing screen, one schema. The "contract type" and "employment status" fields are unified in a single "Regime" field (Contractor / Permanent / Consultant). "Hire date" becomes "Start-of-activity date". The `esbtp_enseignant_profiles`, `esbtp_enseignant_disponibilites`, `esbtp_enseignant_affectations` tables (never actually populated by the modern UI) are dropped.
+- **Cleanup of out-of-context fields on the teacher profile** — Laboratory, Motivation, Teaching Methods, Pedagogical Tools, CV upload and photo (coming via progressive upload) are removed. The "Department" filter and column on the list are also removed (KLASSCI targets higher education without department layering).
+- **"Secondary view" banner on the teacher list** reminding that the primary staff management surface is `/esbtp/personnel/unified`.
+- **Centralized teacher access via the new Eloquent relation** — every screen (teacher dashboard, attendances, grades, planning) now uses the same relation to access the profile of the connected teacher. Pages no longer crash after schema migrations.
+
+### Security
+
+- **Throttling on teacher routes** — 60 requests per minute on the teacher group, and 5 per minute on password reset (which creates a random password).
+
+### Fixed
+
+- **`RelationNotFoundException [enseignantProfile]`** on the Planning Général page and several endpoints related to attendances, grades, and the teacher dashboard — fixed. A new `User → teacherProfile` relation (with `teacher` and `enseignant` aliases) is exposed and used by every affected screen.
+- **"Create teacher" modals on `/esbtp/planning-general` and on the session creation form** — were still displaying the old fields (Department, Contract Type, Employment Status, Hire Date) after the DB merge. Now aligned with the new schema: Regime + Start-of-activity date.
+- **Phone field required on teacher edit** — the form was blocking legacy teachers whose phone was not on file. The field is now optional on the edit form (server validation accepts empty).
+
+---
+
 ## April 2026
 
 ### Added
