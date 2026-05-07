@@ -37,6 +37,11 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 - **Throttling on teacher routes** — 60 requests per minute on the teacher group, and 5 per minute on password reset (which creates a random password).
 
+### Security
+
+- **"Record payment" button now actually works for roles that hold the "create payment" permission** (student profile `/esbtp/etudiants/{id}` and enrollment profile `/esbtp/inscriptions/{id}`) — previously, the "Record a payment", "Make a payment" and "Pay" buttons were rendered (the create-payment permission was granted) but clicking them and submitting the form silently failed with a 403, because the endpoint also required the "validate enrollment" permission which isn't actually used in this flow. The cashier and any custom role with the create-payment permission can now record a payment from those two screens, as expected.
+- **"Validate payment immediately" checkbox restricted to the self-override permission** (payment modals on student profile and enrollment profile) — the checkbox used to show up for everyone, and was even pre-checked on the student profile. Ticking it let a user validate their own payment in one step, bypassing the anti-fraud separation of duties. The checkbox is now visible only for users who explicitly hold the "Self-validate own payments" permission (reserved for very small schools with a single accounting account). For everyone else, the payment is created pending validation and a separate accountant must validate it.
+
 ### Fixed
 
 - **Pre-enrollment of a new student by the cashier** (`/esbtp/inscriptions/pre-inscription`) — the "Save pre-enrollment" button failed with a database integrity error whenever a brand-new student (never previously enrolled) was submitted. Only re-enrollment of an existing student worked. The bug had been there since the very first cashier release. Fixed: pre-enrollment of a new student now goes through and parks the enrollment as a "prospect" with its subscribed fees and any partial down-payment recorded.

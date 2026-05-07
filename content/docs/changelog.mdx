@@ -37,6 +37,11 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 
 - **Throttle sur les routes enseignants** — 60 requêtes par minute sur le groupe enseignants et 5 requêtes par minute sur la réinitialisation de mot de passe (qui crée un mot de passe aléatoire).
 
+### Sécurité
+
+- **Bouton « Effectuer un paiement » désormais accessible aux rôles avec la permission « créer un paiement »** (fiche étudiant `/esbtp/etudiants/{id}` et fiche inscription `/esbtp/inscriptions/{id}`) — auparavant, les boutons « Enregistrer un paiement », « Effectuer un paiement » et « Payer » s'affichaient bien (la permission de création de paiement était attribuée) mais cliquer dessus puis valider le formulaire échouait silencieusement avec une erreur 403, parce que l'endpoint exigeait en plus la permission « valider une inscription » qui ne sert pas dans ce flux. Le caissier et tout rôle personnalisé qui a la permission de saisie de paiement peut désormais ajouter un paiement depuis ces deux écrans, comme attendu.
+- **Case « Valider le paiement immédiatement » réservée à la permission d'auto-validation** (modals de paiement sur fiche étudiant et fiche inscription) — la case à cocher s'affichait pour tout le monde, et était même pré-cochée sur la fiche étudiant. Cliquer dessus permettait à l'utilisateur de valider son propre paiement dans la foulée, en court-circuitant la séparation des tâches anti-fraude. Désormais, la case n'apparaît que pour les utilisateurs ayant explicitement la permission « Auto-valider ses propres paiements » (réservée aux très petites écoles avec un seul compte comptable). Pour tous les autres, le paiement est créé en attente de validation et un comptable doit le valider séparément.
+
 ### Corrections
 
 - **Pré-inscription d'un nouvel étudiant par le caissier** (`/esbtp/inscriptions/pre-inscription`) — le bouton « Enregistrer la pré-inscription » échouait avec une erreur d'intégrité base de données dès qu'il s'agissait d'un nouvel étudiant (jamais inscrit auparavant). Seule la pré-inscription d'un ancien étudiant en réinscription fonctionnait. Le bug remontait à la première version de la fonctionnalité caissier. Corrigé : la pré-inscription d'un nouvel étudiant aboutit désormais comme prévu et bascule l'inscription en statut « prospect » avec ses frais souscrits et son éventuel acompte encaissé.
