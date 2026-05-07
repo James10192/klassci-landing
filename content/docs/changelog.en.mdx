@@ -39,6 +39,7 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ### Fixed
 
+- **Pre-enrollment of a new student by the cashier** (`/esbtp/inscriptions/pre-inscription`) — the "Save pre-enrollment" button failed with a database integrity error whenever a brand-new student (never previously enrolled) was submitted. Only re-enrollment of an existing student worked. The bug had been there since the very first cashier release. Fixed: pre-enrollment of a new student now goes through and parks the enrollment as a "prospect" with its subscribed fees and any partial down-payment recorded.
 - **`RelationNotFoundException [enseignantProfile]`** on the Planning Général page and several endpoints related to attendances, grades, and the teacher dashboard — fixed. A new `User → teacherProfile` relation (with `teacher` and `enseignant` aliases) is exposed and used by every affected screen.
 - **"Create teacher" modals on `/esbtp/planning-general` and on the session creation form** — were still displaying the old fields (Department, Contract Type, Employment Status, Hire Date) after the DB merge. Now aligned with the new schema: Regime + Start-of-activity date.
 - **Phone field required on teacher edit** — the form was blocking legacy teachers whose phone was not on file. The field is now optional on the edit form (server validation accepts empty).
