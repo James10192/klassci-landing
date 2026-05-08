@@ -37,6 +37,10 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 
 - **Throttle sur les routes enseignants** — 60 requêtes par minute sur le groupe enseignants et 5 requêtes par minute sur la réinitialisation de mot de passe (qui crée un mot de passe aléatoire).
 
+### Corrections
+
+- **Logo de l'école qui n'apparaissait pas (zone blanche) sur les listes d'appel, listes complètes de classe, exports étudiants/classes et plusieurs PDF comptables** — sur les bandeaux bleus en tête de ces documents, le logo se transformait en rectangle blanc à cause d'un effet de filtrage CSS hérité, et le chargement du fichier ne tentait qu'un seul emplacement de stockage (donc absent dès qu'un tenant historique avait son logo dans un sous-dossier différent). Le logo s'affiche désormais avec ses vraies couleurs, encadré dans une carte blanche pour rester lisible sur le bandeau coloré, et la résolution du fichier essaie maintenant l'ensemble des emplacements possibles (avec deux logos KLASSCI livrés en dernier recours pour ne jamais se retrouver avec un en-tête sans logo).
+
 ### Sécurité
 
 - **Bouton « Effectuer un paiement » désormais accessible aux rôles avec la permission « créer un paiement »** (fiche étudiant `/esbtp/etudiants/{id}` et fiche inscription `/esbtp/inscriptions/{id}`) — auparavant, les boutons « Enregistrer un paiement », « Effectuer un paiement » et « Payer » s'affichaient bien (la permission de création de paiement était attribuée) mais cliquer dessus puis valider le formulaire échouait silencieusement avec une erreur 403, parce que l'endpoint exigeait en plus la permission « valider une inscription » qui ne sert pas dans ce flux. Le caissier et tout rôle personnalisé qui a la permission de saisie de paiement peut désormais ajouter un paiement depuis ces deux écrans, comme attendu.
