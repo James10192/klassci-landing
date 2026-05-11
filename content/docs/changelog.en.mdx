@@ -15,7 +15,46 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ### Added
 
+- **LMD academic blueprint fully editable inline** — on the LMD Planning page, every cell of the table (lectures, tutorials, lab work, project, supervised work, ECTS credits) becomes editable on a single click. Changes save instantly without page reload, and the total hours recalculate automatically. Assigning a teacher to an ECUE happens through an elegant picker (grouped by role, with profile photos). Every change is traced in the audit log for compliance.
+
+- **Bulk edit of pedagogical volumes** — select multiple ECUEs at once (per-row checkbox or "select all"), an action bar appears at the bottom of the screen. Click "Bulk edit" to open a compact editor where you choose which fields to apply (for example: "Supervised work = 30h for the 12 selected ECUEs, without touching the rest"). Ideal for applying a uniform pedagogical policy across a full cohort in seconds.
+
+- **Ready-to-use UEMOA Licence blueprints** — 5 specialized Licence 3 tracks added on Ephrata (Private Law, Public Law, Economics, Management, Agroeconomics), alongside the Licence 1 and 2 common cores already imported. In total, 9 full tracks (Law, Economic & Management Sciences, Life & Earth Sciences, Modern Letters) covering 232 teaching units and 447 ECUEs, compliant with the UEMOA standard (30 credits per semester). No more manual entry of the pedagogical blueprint — everything is pre-filled, editable, audited.
+
 - **Disability supervision for students** (`/esbtp/accessibility`) — a new dedicated page to oversee the cohort of students with pedagogical accommodations. Per student: official recognition, categories (motor, visual, hearing, cognitive, psychiatric, learning disorders, chronic illness), concrete accommodations (extended time as a configurable percentage, adapted room, large-print materials, sign language interpreter, note-taking aid, laptop allowed, exam breaks), assistant required, validity period. The student profile gains a new "Accessibility &amp; accommodations" section with a premium editor panel (colored chips, toggles, validity dates). A discrete pictogram appears next to the student's name in the students list, in attendance and full class rosters, in grade-entry sheets, and in every PDF / Excel export — so teachers spot affected students at a glance. Class attendance sheets and full class rosters now include a footer "Accommodations to respect" block listing the adaptations for each affected student. Medical detail is strictly separated from the teacher-visible summary: by default only coordinators and secretaries can access it. All edits are tracked in the audit log. Five new permissions configurable per school via the custom roles matrix. Dedicated cohort export (preview + PDF + Excel + email delivery).
+
+### Fixed
+
+- **Level → semester cascade in LMD planning** — the semester filter now automatically adapts to the chosen level (Licence 1 → S1+S2, Licence 2 → S3+S4, Licence 3 → S5+S6) per the UEMOA standard, regardless of which units are already attached to the selected track. The level filter displays every active LMD level.
+
+- **Multi-user editing robustness** — when two people edit the same cell simultaneously, a clear conflict message appears ("This planification was modified by another user, please refresh the page") instead of a generic error. Expired sessions, lost permissions, and server-side validation errors all show precise contextual messages.
+
+### Security
+
+- **Audit log extended to pedagogical blueprints** — every change to teaching hours, credits, coefficient, or assigned teacher is now traced in the audit log accessible from the "Security & Audit" menu (permission `security.audit.view`). You know exactly who changed what, when, and with which before/after values.
+
+### Improved
+
+- **Resilient grade entry, even on flaky wifi** (`/esbtp/notes`, entry modal) — every keystroke is now saved locally in the browser. If the connection drops while the teacher is entering 600 grades in class, nothing is lost: the next time the modal opens for the same class / subject / period, a yellow banner « Unsaved draft detected — 4 min ago · 38 grades pending sync » offers to restore everything in one click. A network badge in the modal header constantly shows the sync state: green « Synced », orange « Saving… », red « Offline — local draft ». If the teacher tries to close the modal while saves are still in flight, a premium confirmation prevents accidental data loss.
+
+- **Excel-like keyboard navigation** (`/esbtp/notes`, entry modal) — `Tab` and `Shift+Tab` move across columns, `Enter` and `Shift+Enter` move across rows, `Ctrl+S` saves all pending grades, `Esc` blurs the cell, `Ctrl+F` opens the search bar. On the very first focus of the first cell, a discreet tooltip surfaces the shortcuts once (auto-dismiss after 6 seconds or on the first `Tab`).
+
+- **Premium redesign of the grade entry modal** (`/esbtp/notes`) — the table header (Students, Semester 1/2, Assessments, Summary) stays sticky at the top while scrolling vertically. An integrated toolbar shows a live student search (filter by name, first name or matricule) and live counters (« 87 students · 6 assessments · 12 visible »). Beyond 80 students per class, the grid renders only the first 50 and a « Load 30 more students » button appears at the bottom to avoid jank. When the table overflows to the right, a subtle gradient and a floating arrow invite horizontal scrolling.
+
+- **More visible save: premium toast instead of row flash** (`/esbtp/notes`) — every saved grade now triggers an elegant toast in the top-right (« Grade saved — Marie Konaté · average 14.25/20 ») which intelligently batches if multiple grades save in less than half a second (« 8 grades saved — Marie, Aïcha, Jean, +5 »). The row flash is also kept for direct visual confirmation.
+
+- **Visually clear absent toggle** (`/esbtp/notes`) — the tiny checkbox is replaced by a red form switch with the « Abs » label. When a student is marked absent, their row is gently tinted red, their name turns italic and an « Absent » badge (or « Absent 3/6 » if only some assessments) appears next to their name.
+
+- **Readable assessment headers + quick edit** (`/esbtp/notes`) — the tiny score-scale and coefficient inputs are replaced by a clean three-line display: assessment title, « / 20 · Coef 1 », type badge. A subtle pencil button appears on hover and opens a mini form to quickly edit the title, score scale (1 to 100) and coefficient (0.1 to 10) without leaving the page.
+
+- **« Save and continue » in assessment creation** (`/esbtp/notes`) — a new button next to « Create assessment » saves the new assessment and keeps the form open with the class, subject, date, time, score scale and coefficient preserved, so teachers can string two or three assessments together in the same session without reopening the modal each time.
+
+### Added
+
+- **Offline grade entry: Excel export + re-import with Before/After preview** (`/esbtp/notes`) — every grade entry modal now offers an "Export to Excel" button (one row per student, one column per assessment with the score scale and coefficient in the header, freeze pane on the student and name columns, autoFilter, matricule kept as text to preserve leading zeros) for offline entry, e.g. in the classroom or at home. On the way back, an "Import Excel" button with drag-and-drop opens a premium preview modal showing, with four colored KPIs (to create, to update, unchanged, errors) and a row-by-row table, exactly what will change before confirmation. Validation is per-cell (score within scale, matricule must exist, French decimal format `12,5` accepted, `ABS` marker recognized for absence) and the apply step is atomic. 5 MB file limit, 10 exports per minute, 5 previews and 3 imports per minute to prevent abuse.
+
+- **Real-time impact preview on the bulletin** (`/esbtp/notes`) — every time a teacher types a grade in the entry grid, a discreet panel appears under the student row and shows in less than a second the new subject average, the new general average, and the CAMES mention change (Outstanding / Very Good / Good / Pass / Insufficient) if the grade tips the student into a different mention bracket. Guard against typos and instant visual confirmation of the academic impact.
+
 - **Premium redesign of the teacher create / edit pages** — single-page form with KLASSCI gradient hero, three required fields to get started (full name, phone, specialization), a "Contract regime" section with radio cards (Contractor / Permanent / Consultant) and conditional fields per regime, a collapsible "Detailed profile" panel for diplomas and grade, optional start-of-activity date prefilled to today.
 - **Premium redesign of the bulk-availability editor** (`/esbtp/enseignants/bulk-availability`) — every teacher item is repainted: gradient avatar with initials, premium stats (Preferred / Available / Unavailable) with semantic colors, 7×11 calendar grid with per-status gradients, edit mode with active blue outline, legend in a grey card.
 - **Unified PDF / Excel export pattern** with preview, email delivery, and per-tenant premium export settings. The same flow now powers payments, class rosters, bulletins, and accounting reports.
