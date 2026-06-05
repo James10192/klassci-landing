@@ -11,6 +11,68 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ---
 
+## June 2026
+
+### Added
+
+- **OHADA Cash Reconciliation module** (`/esbtp/comptabilite/reconciliation`) — full bookkeeping workflow that reconciles physical cash on hand vs. recorded payments in 6 steps (draft → review → approval with separation of duties → close with payment lock → official signable PV PDF, archived 10 years). Per-mode cash count entry (cash, mobile money, wire transfer, cheque, Wave, Orange Money, MTN MoMo, Moov Money) with automatic discrepancy detection and a premium resolution wizard offering four actions: create a corrective payment, adjust an existing payment, cancel a payment, or accept the discrepancy with a justified reason. A "View transactions" button on each mode card lets the accountant tick off line by line against the merchant portal, with a direct link if the portal URL (Orange Money, MTN MoMo, Moov Money, Wave) is configured in Settings. Health dashboard embedded in the Accounting page with a red alert banner whenever a session has been open for too long, KPIs (overdue sessions, drafts + in review, days since last close, % of sessions with no discrepancy over 90 days). Email notifications sent automatically every morning at 8 AM to users who can open a reconciliation. Fully configurable per school (daily / weekly / monthly frequency, discrepancy tolerance threshold in FCFA, merchant portal URLs, overdue delay).
+
+- **SAARI / Sage Ligne 100 accounting export** (`/esbtp/paiements`) — new Excel export format compatible with the Sage Ligne 100 BNI BKE layout, configurable per school (journal code, default account, fee-category → SAARI account JSON mapping, tenant colors for headers). The export faithfully reproduces the structure Sage expects, with a visible thead row and column labels that match.
+
+- **Premium redesign of the Payments page** (`/esbtp/paiements`) — KLASSCI gradient hero, clickable KPIs that instantly filter the list (total collected, validated payments, pending, rejected), infinite scroll instead of classic pagination, subtle animation on new rows, premium pickers everywhere (zero native select).
+
+- **Premium redesign of the Bulletins page** (`/esbtp/bulletins`) — gradient hero, modern click-row table to open a bulletin, bulk actions (publish, export, email the whole class), AJAX without page reload.
+
+- **Premium redesign of the Students page** (`/esbtp/etudiants`) — modern click-row table, infinite scroll, premium edit modal to quickly tweak a student without leaving the page, bulk corrective actions (class reassignment, matricule update, archive).
+
+- **"Universal dropdowns" saga** — cross-cutting technical rule that guarantees every dropdown menu always renders above all other content (cards, modals, hovered KPIs, gradient hero), everywhere in the platform. No more menus clipped at the viewport bottom or hidden behind a neighbour.
+
+### Improved
+
+- **Yakro bulletin PDF** — enlarged font for better legibility, optimized A4 layout (reduced margins and padding, mojibake "MatiÃ¨re" → "Matière" fixed, info rows in a 2-column label/value table), everything now fits on a single A4 page with mentions in a 2-column grid, compacted results and statistics tables, signature and stamp zone with breathing room. The ministry name becomes a configurable multi-line field (no more "Recherche Scientifique" repetition).
+
+- **S1 / S2 coefficients tracked separately** — distinct per-semester coefficient management (each subject can have a different coefficient in S1 vs. S2) with copy across periods (override/merge preview with confirmation) and an enriched coefficient modal (inline S1/S2 switch, completion gauge showing how many subjects are configured, preview of changes before applying).
+
+- **Subject configuration redesigned premium** (`/esbtp/config-matieres`) — full redesign, S1 / S2 / Annual switch as AJAX without reload, copy modal across periods, immediate propagation to the active class.
+
+- **5-tier attendance scale** — the attendance grade becomes more nuanced (instead of a binary bonus/penalty, 5 configurable tiers) with a full premium redesign of the absences edit page (`/esbtp/absences/edit`).
+
+- **Formal accounting audit** — full audit of the Accounting module (dashboard KPIs vs CLI vs UI, safeguards, rendering perf) which revealed and fixed 5 production bugs before any school had to report them.
+
+### Fixed
+
+- **Free decimals in fast grade entry** (BTS and LMD fast entry, single grade edit, Notes page, teacher dashboard, external grading) — the grid was blocking any decimal other than 0.25 / 0.50 / 0.75 (impossible to enter 11.44 or 12.23). Every entry view now accepts free decimals in French format (the backend and the DB already supported that precision).
+
+- **Grade draft banner** (`/esbtp/notes`) — the "Unsaved draft detected" banner now correctly disappears after saving and no longer reappears when reopening the modal for the same class / subject / period.
+
+- **Personnel page** (`/esbtp/personnel/unified`) — the "New staff member" dropdown in the hero was clipped by the section below and a KPI was rendering on top. Hero refactored to free the menu from the surrounding stacking contexts.
+
+- **Universal dropdowns** — menus are now teleported to the page root on open to escape stacking contexts created by some parents (cards, modals, gradient hero).
+
+- **BTS common trunk — hierarchical fallback** — if no orientation target is configured, the class climbs to its parent track to surface the right specializations.
+
+- **Bulletin — canonical training type resolution** — the training type (BTS, LMD, etc.) is now resolved consistently across the subject configuration, the bulletin and the global subject.
+
+- **Results page** — query refactor (union instead of an indirect join that was buggy) and arithmetic-average fallback when coefficients are not yet configured.
+
+- **Absences edit** — fixed the 500 crash on open (missing internal method) and a Blade rendering bug that prevented saving.
+
+- **Special bulletin routes** (`/esbtp-special/bulletins/*`) — now open to the "Configure bulletins" permission (customizable-roles rule: no hardcoded role), instead of being reserved to a fixed role.
+
+- **Subject configuration** — the S1 / S2 switch was missing a selector on `<button>` elements (only `<a>` was wired), fixed. The coefficient modal now shows a "Saving…" state on the Save button.
+
+- **Subject create page** (`/esbtp/matieres/create`) — the JavaScript was never loaded on the page (wrong Blade directive), fixed.
+
+### Security
+
+- **Post-reconciliation lock** — validated payments included in a closed reconciliation session can no longer be modified, cancelled or deleted, except through an explicit superAdmin override (always journalled). Permission `comptabilite.reconciliation.bypass_lock` required and traced in the audit log.
+
+- **OHADA separation of duties on reconciliation** — the user who opens a reconciliation session can no longer approve it themselves (configurable per school via setting `comptabilite.reconciliation.require_separation_of_duties`, enabled by default to align with the OHADA standard).
+
+- **"Manage enrollment specialization" permission** introduced instead of a hardcoded role on the BTS common-trunk workflow — every school now picks which role gets the post-common-trunk specialization (customizable-roles rule: no extra hardcoded role).
+
+---
+
 ## May 2026
 
 ### Added

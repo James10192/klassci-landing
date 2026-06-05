@@ -11,6 +11,68 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 
 ---
 
+## Juin 2026
+
+### Ajouts
+
+- **Module Réconciliation Caisse OHADA** (`/esbtp/comptabilite/reconciliation`) — workflow complet de bouclage caisse physique vs paiements enregistrés en 6 étapes (brouillon → revue → approbation avec séparation des devoirs → clôture avec verrouillage des paiements → PV PDF officiel signable, archivable 10 ans). Saisie des comptages par mode de paiement (espèces, mobile money, virement, chèque, Wave, Orange Money, MTN MoMo, Moov Money) avec détection automatique des écarts et wizard de résolution premium qui propose quatre actions au choix : créer un paiement correctif, ajuster un paiement existant, annuler un paiement, ou accepter l'écart avec motif justifié. Bouton « Voir les transactions » sur chaque carte de mode pour pointer ligne par ligne face au portail merchant, avec lien direct si l'URL du portail (Orange Money, MTN MoMo, Moov Money, Wave) est configurée dans les Réglages. Dashboard santé intégré à la page Comptabilité avec bandeau d'alerte rouge dès qu'une session reste ouverte trop longtemps, KPIs (sessions en retard, brouillons + en revue, jours depuis la dernière clôture, pourcentage de sessions sans écart sur 90 jours). Notifications email envoyées automatiquement chaque matin à 8h aux utilisateurs ayant la permission d'ouvrir une réconciliation. Entièrement configurable par école (fréquence quotidienne / hebdomadaire / mensuelle, seuil de tolérance d'écart en FCFA, URLs des portails merchant, délai au-delà duquel une session est considérée comme en retard).
+
+- **Export comptable SAARI / Sage Ligne 100** (`/esbtp/paiements`) — nouveau format d'export Excel compatible avec le logiciel Sage Ligne 100 au format BNI BKE, configurable par école (code journal, compte par défaut, mapping JSON catégorie de frais → compte SAARI, couleurs tenant pour l'en-tête). L'export reproduit fidèlement la structure attendue par Sage avec en-tête de tableau visible et libellés de colonnes conformes.
+
+- **Refonte premium de la page Paiements** (`/esbtp/paiements`) — hero gradient KLASSCI, KPIs cliquables qui filtrent instantanément la liste (total encaissé, paiements validés, en attente, rejetés), scroll infini au lieu de pagination classique, animation discrète sur les nouvelles lignes, sélecteurs premium partout (zéro select natif).
+
+- **Refonte premium de la page Bulletins** (`/esbtp/bulletins`) — hero gradient, table moderne avec clic-row pour ouvrir le bulletin, actions en masse (publier, exporter, envoyer par email à toute la classe), AJAX sans rechargement de page.
+
+- **Refonte premium de la page Étudiants** (`/esbtp/etudiants`) — table moderne click-row, scroll infini, modal d'édition premium pour modifier rapidement un étudiant sans changer de page, actions de correction en masse (réassignation de classe, mise à jour de matricule, archivage).
+
+- **Saga « dropdowns universels »** — règle technique transversale qui garantit que tous les menus déroulants apparaissent toujours par-dessus le reste du contenu (cartes, modales, KPIs survolés, hero gradient), partout dans la plateforme. Plus aucun menu coupé en bas du viewport ni masqué par un élément voisin.
+
+### Améliorations
+
+- **Bulletin Yakro PDF** — police agrandie pour une meilleure lisibilité, format A4 optimisé (marges et padding réduits, mojibake « MatiÃ¨re » → « Matière » corrigé, lignes d'information en table à 2 colonnes label/valeur alignés), tout tient désormais sur 1 page A4 avec mentions en grille 2 colonnes, tableaux résultats et statistiques compactés, signature et cachet manuel aérés. Le nom du ministère devient paramétrable multi-lignes (fini la répétition « Recherche Scientifique »).
+
+- **Coefficients S1/S2 séparés** — gestion distincte des coefficients par semestre (chaque matière peut avoir un coefficient différent en S1 et S2) avec copie inter-période (preview override/merge avec confirmation) et modal coefficients enrichi (switch S1/S2 inline, jauge de complétude qui indique combien de matières sont configurées, prévisualisation des changements avant validation).
+
+- **Configuration des matières refondue en premium** (`/esbtp/config-matieres`) — refonte complète, switch S1 / S2 / Annuel en AJAX sans rechargement, modal de copie d'une période vers l'autre, propagation immédiate à la classe en cours.
+
+- **Barème assiduité à 5 paliers** — la note d'assiduité devient plus nuancée (au lieu d'un bonus / malus binaire, 5 paliers configurables) avec redesign premium complet de la page d'édition des absences (`/esbtp/absences/edit`).
+
+- **Audit comptable formalisé** — audit complet du module Comptabilité (KPIs dashboard vs CLI vs UI, garde-fous, perf rendering) qui a révélé et corrigé 5 bugs production avant qu'ils ne soient remontés par les écoles.
+
+### Corrections
+
+- **Saisie rapide des notes : décimales libres acceptées** (saisie rapide BTS et LMD, édition de note, page Notes, dashboard enseignant, notation externe) — la grille bloquait toute décimale autre que 0,25 / 0,50 / 0,75 (impossible de saisir 11,44 ou 12,23). Toutes les vues de saisie acceptent désormais les décimales libres au format français (le backend et la base supportaient déjà cette précision).
+
+- **Bannière brouillon notes** (`/esbtp/notes`) — la bannière « Brouillon non sauvegardé détecté » disparaît désormais correctement après enregistrement et ne réapparaît plus à la réouverture du modal pour la même classe / matière / période.
+
+- **Page Personnel** (`/esbtp/personnel/unified`) — le menu déroulant « Nouveau Personnel » du hero était clippé par la section suivante et un KPI passait au-dessus. Hero refactorisé pour libérer le menu des contextes d'empilement.
+
+- **Dropdowns universels** — les menus sont désormais téléportés vers la racine de la page à l'ouverture pour échapper aux contextes d'empilement créés par certains parents (cartes, modales, hero gradient).
+
+- **BTS Tronc commun — fallback hiérarchique** — si aucune cible d'orientation n'est configurée, la classe remonte automatiquement à sa filière mère pour proposer les bonnes spécialisations.
+
+- **Bulletin — résolution canonique du type de formation** — le type de formation (BTS, LMD, etc.) est désormais résolu de manière cohérente entre la configuration des matières, le bulletin et la matière globale.
+
+- **Page Résultats** — refonte de la requête (union au lieu de jointure indirecte qui buguait) et fallback moyenne arithmétique sans coefficients quand les coefficients ne sont pas encore configurés.
+
+- **Édition des absences** — corrigé le crash 500 à l'ouverture (méthode interne manquante) et corrigé un bug de rendu Blade qui empêchait l'enregistrement.
+
+- **Routes spéciales bulletins** (`/esbtp-special/bulletins/*`) — désormais ouvertes à la permission « Configurer les bulletins » (rule customizable-roles : pas de rôle hardcodé), au lieu d'être réservées à un rôle figé.
+
+- **Configuration des matières** — le switch S1 / S2 manquait un sélecteur sur les boutons (en plus des liens), corrigé. Le modal coefficients affiche désormais l'état « En cours d'enregistrement » sur le bouton Enregistrer.
+
+- **Page Création de matière** (`/esbtp/matieres/create`) — le JavaScript n'était jamais chargé sur la page (mauvaise directive Blade), corrigé.
+
+### Sécurité
+
+- **Verrouillage post-réconciliation** — les paiements validés inclus dans une session de réconciliation clôturée ne peuvent plus être modifiés, annulés ni supprimés, sauf dérogation explicite par un superAdmin (toujours journalisée). Permission `comptabilite.reconciliation.bypass_lock` requise et trace dans l'audit log.
+
+- **Séparation des devoirs OHADA sur la réconciliation** — la personne qui ouvre une session de réconciliation ne peut pas l'approuver elle-même (configurable par école via le setting `comptabilite.reconciliation.require_separation_of_duties`, activé par défaut pour respecter le standard OHADA).
+
+- **Permission « Gérer la spécialisation des inscriptions »** introduite au lieu d'un rôle hardcodé sur le workflow BTS Tronc commun — chaque école choisit désormais à quel rôle accorder la gestion de la spécialisation post-tronc commun (rule customizable-roles : aucun rôle hardcodé en plus).
+
+---
+
 ## Mai 2026
 
 ### Ajouts
