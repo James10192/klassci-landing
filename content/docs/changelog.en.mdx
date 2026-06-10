@@ -15,6 +15,10 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ### Added
 
+- **Premium redesign of the grade detail page** (`/esbtp/notes/{id}`) — the single-grade detail page adopts the KLASSCI premium design: gradient hero with the student's identity and the assessment, at-a-glance KPIs (raw score, score out of 20, honors mention, assessment type) and a "Result" panel with a level-colored score, comment and traceability (who entered it, last edit).
+
+- **More readable audit log** (`/esbtp/audit`) — entity types shown in the audit log, per-user activity and PDF / Excel exports no longer display a technical prefix: you now read "Note", "Student", "Payment" instead of technical labels.
+
 - **OHADA Cash Reconciliation module** (`/esbtp/comptabilite/reconciliation`) — full bookkeeping workflow that reconciles physical cash on hand vs. recorded payments in 6 steps (draft → review → approval with separation of duties → close with payment lock → official signable PV PDF, archived 10 years). Per-mode cash count entry (cash, mobile money, wire transfer, cheque, Wave, Orange Money, MTN MoMo, Moov Money) with automatic discrepancy detection and a premium resolution wizard offering four actions: create a corrective payment, adjust an existing payment, cancel a payment, or accept the discrepancy with a justified reason. A "View transactions" button on each mode card lets the accountant tick off line by line against the merchant portal, with a direct link if the portal URL (Orange Money, MTN MoMo, Moov Money, Wave) is configured in Settings. Health dashboard embedded in the Accounting page with a red alert banner whenever a session has been open for too long, KPIs (overdue sessions, drafts + in review, days since last close, % of sessions with no discrepancy over 90 days). Email notifications sent automatically every morning at 8 AM to users who can open a reconciliation. Fully configurable per school (daily / weekly / monthly frequency, discrepancy tolerance threshold in FCFA, merchant portal URLs, overdue delay).
 
 - **SAARI / Sage Ligne 100 accounting export** (`/esbtp/paiements`) — new Excel export format compatible with the Sage Ligne 100 BNI BKE layout, configurable per school (journal code, default account, fee-category → SAARI account JSON mapping, tenant colors for headers). The export faithfully reproduces the structure Sage expects, with a visible thead row and column labels that match.
@@ -40,6 +44,8 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 - **Formal accounting audit** — full audit of the Accounting module (dashboard KPIs vs CLI vs UI, safeguards, rendering perf) which revealed and fixed 5 production bugs before any school had to report them.
 
 ### Fixed
+
+- **Grades visible before the report card is generated** (`/esbtp/etudiants/{id}`) — on a student's profile, the Academic tab showed "No grade recorded for this year" until the report card was generated, even though grades already existed. Provisional results computed from the entered grades now show (clearly flagged as provisional) and are automatically replaced by the official report card once it is generated.
 
 - **Free decimals in fast grade entry** (BTS and LMD fast entry, single grade edit, Notes page, teacher dashboard, external grading) — the grid was blocking any decimal other than 0.25 / 0.50 / 0.75 (impossible to enter 11.44 or 12.23). Every entry view now accepts free decimals in French format (the backend and the DB already supported that precision).
 

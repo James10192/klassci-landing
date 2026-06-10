@@ -15,6 +15,10 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 
 ### Ajouts
 
+- **Refonte premium de la fiche d'une note** (`/esbtp/notes/{id}`) — la page de détail d'une note adopte le design premium KLASSCI : hero gradient avec l'identité de l'étudiant et l'évaluation, indicateurs clés en un coup d'œil (note brute, note ramenée sur 20, mention, type d'évaluation) et un encart « Résultat » avec score coloré selon le niveau, commentaire et traçabilité (auteur de la saisie, dernière modification).
+
+- **Journal d'audit plus lisible** (`/esbtp/audit`) — les types d'entités affichés dans le journal d'audit, l'activité par utilisateur et les exports PDF / Excel n'affichent plus de préfixe technique : on lit désormais « Note », « Étudiant », « Paiement » au lieu de libellés techniques.
+
 - **Module Réconciliation Caisse OHADA** (`/esbtp/comptabilite/reconciliation`) — workflow complet de bouclage caisse physique vs paiements enregistrés en 6 étapes (brouillon → revue → approbation avec séparation des devoirs → clôture avec verrouillage des paiements → PV PDF officiel signable, archivable 10 ans). Saisie des comptages par mode de paiement (espèces, mobile money, virement, chèque, Wave, Orange Money, MTN MoMo, Moov Money) avec détection automatique des écarts et wizard de résolution premium qui propose quatre actions au choix : créer un paiement correctif, ajuster un paiement existant, annuler un paiement, ou accepter l'écart avec motif justifié. Bouton « Voir les transactions » sur chaque carte de mode pour pointer ligne par ligne face au portail merchant, avec lien direct si l'URL du portail (Orange Money, MTN MoMo, Moov Money, Wave) est configurée dans les Réglages. Dashboard santé intégré à la page Comptabilité avec bandeau d'alerte rouge dès qu'une session reste ouverte trop longtemps, KPIs (sessions en retard, brouillons + en revue, jours depuis la dernière clôture, pourcentage de sessions sans écart sur 90 jours). Notifications email envoyées automatiquement chaque matin à 8h aux utilisateurs ayant la permission d'ouvrir une réconciliation. Entièrement configurable par école (fréquence quotidienne / hebdomadaire / mensuelle, seuil de tolérance d'écart en FCFA, URLs des portails merchant, délai au-delà duquel une session est considérée comme en retard).
 
 - **Export comptable SAARI / Sage Ligne 100** (`/esbtp/paiements`) — nouveau format d'export Excel compatible avec le logiciel Sage Ligne 100 au format BNI BKE, configurable par école (code journal, compte par défaut, mapping JSON catégorie de frais → compte SAARI, couleurs tenant pour l'en-tête). L'export reproduit fidèlement la structure attendue par Sage avec en-tête de tableau visible et libellés de colonnes conformes.
@@ -40,6 +44,8 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 - **Audit comptable formalisé** — audit complet du module Comptabilité (KPIs dashboard vs CLI vs UI, garde-fous, perf rendering) qui a révélé et corrigé 5 bugs production avant qu'ils ne soient remontés par les écoles.
 
 ### Corrections
+
+- **Notes visibles avant la génération du bulletin** (`/esbtp/etudiants/{id}`) — sur la fiche d'un étudiant, l'onglet Académique affichait « Aucune note enregistrée pour cette année » tant que le bulletin n'était pas généré, alors que des notes existaient déjà. Les résultats provisoires calculés à partir des notes saisies s'affichent désormais (clairement signalés comme provisoires) et sont automatiquement remplacés par le bulletin officiel dès sa génération.
 
 - **Saisie rapide des notes : décimales libres acceptées** (saisie rapide BTS et LMD, édition de note, page Notes, dashboard enseignant, notation externe) — la grille bloquait toute décimale autre que 0,25 / 0,50 / 0,75 (impossible de saisir 11,44 ou 12,23). Toutes les vues de saisie acceptent désormais les décimales libres au format français (le backend et la base supportaient déjà cette précision).
 
