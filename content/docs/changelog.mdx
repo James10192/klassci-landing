@@ -45,6 +45,10 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 
 ### Corrections
 
+- **Tableau de bord des présences du coordinateur fiabilisé** (`/coordinateur/attendance-dashboard`) — certains indicateurs (cours clôturés, taux d'émargement, alertes de séances non clôturées) pouvaient rester à zéro ou vides à la suite d'une évolution interne. Ils affichent de nouveau les bonnes valeurs.
+- **Page de traitement des justificatifs d'absence à nouveau accessible** (`/esbtp/attendances/justifications`) — l'écran qui liste les justificatifs à traiter renvoyait une page introuvable ; il s'ouvre de nouveau normalement.
+- **Notifications côté étudiant** — correction d'un message d'erreur qui pouvait apparaître à l'ouverture de la cloche de notifications pour un étudiant.
+
 - **Notes visibles avant la génération du bulletin** (`/esbtp/etudiants/{id}`) — sur la fiche d'un étudiant, l'onglet Académique affichait « Aucune note enregistrée pour cette année » tant que le bulletin n'était pas généré, alors que des notes existaient déjà. Les résultats provisoires calculés à partir des notes saisies s'affichent désormais (clairement signalés comme provisoires) et sont automatiquement remplacés par le bulletin officiel dès sa génération.
 
 - **Saisie rapide des notes : décimales libres acceptées** (saisie rapide BTS et LMD, édition de note, page Notes, dashboard enseignant, notation externe) — la grille bloquait toute décimale autre que 0,25 / 0,50 / 0,75 (impossible de saisir 11,44 ou 12,23). Toutes les vues de saisie acceptent désormais les décimales libres au format français (le backend et la base supportaient déjà cette précision).

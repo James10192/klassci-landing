@@ -45,6 +45,10 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ### Fixed
 
+- **Coordinator attendance dashboard made reliable** (`/coordinateur/attendance-dashboard`) — some indicators (closed sessions, sign-in rate, alerts for unclosed sessions) could stay at zero or empty following an internal change. They now show the correct values again.
+- **Absence justification processing page accessible again** (`/esbtp/attendances/justifications`) — the screen listing justifications to process returned a not-found page; it now opens normally.
+- **Student-side notifications** — fixed an error message that could appear when opening the notifications bell for a student.
+
 - **Grades visible before the report card is generated** (`/esbtp/etudiants/{id}`) — on a student's profile, the Academic tab showed "No grade recorded for this year" until the report card was generated, even though grades already existed. Provisional results computed from the entered grades now show (clearly flagged as provisional) and are automatically replaced by the official report card once it is generated.
 
 - **Free decimals in fast grade entry** (BTS and LMD fast entry, single grade edit, Notes page, teacher dashboard, external grading) — the grid was blocking any decimal other than 0.25 / 0.50 / 0.75 (impossible to enter 11.44 or 12.23). Every entry view now accepts free decimals in French format (the backend and the DB already supported that precision).
