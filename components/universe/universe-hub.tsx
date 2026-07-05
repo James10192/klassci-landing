@@ -6,8 +6,11 @@ import BookOpen from "lucide-react/dist/esm/icons/book-open";
 import ChevronDown from "lucide-react/dist/esm/icons/chevron-down";
 import GraduationCap from "lucide-react/dist/esm/icons/graduation-cap";
 import Laptop from "lucide-react/dist/esm/icons/laptop";
+import Menu from "lucide-react/dist/esm/icons/menu";
 import School from "lucide-react/dist/esm/icons/school";
+import X from "lucide-react/dist/esm/icons/x";
 import { useLocale, useTranslations } from "next-intl";
+import { useCallback, useEffect, useState } from "react";
 
 import { Logo } from "@/components/ui/logo";
 import { Link } from "@/i18n/navigation";
@@ -28,7 +31,16 @@ const DOORS: Array<{
 export function UniverseHub() {
   const t = useTranslations("welcome");
   const locale = useLocale() as "fr" | "en";
+  const [mobileOpen, setMobileOpen] = useState(false);
   const docsHref = `/${locale}/docs`;
+  const closeMobile = useCallback(() => setMobileOpen(false), []);
+
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileOpen]);
 
   return (
     <main className="min-h-screen overflow-hidden scroll-smooth bg-bg text-text">
@@ -42,13 +54,50 @@ export function UniverseHub() {
             <Link href="/college" className="hidden px-3 py-2 text-text-secondary hover:text-text sm:inline-flex">
               {t("doors.college.name")}
             </Link>
-            <a href={docsHref} className="inline-flex min-h-11 items-center gap-2 rounded border border-border px-3 text-text-secondary hover:text-text">
+            <a href={docsHref} className="hidden min-h-11 items-center gap-2 rounded border border-border px-3 text-text-secondary hover:text-text sm:inline-flex">
               <BookOpen className="h-4 w-4" aria-hidden />
               {t("docs")}
             </a>
+            <button
+              type="button"
+              onClick={() => setMobileOpen((value) => !value)}
+              className="inline-flex h-11 w-11 items-center justify-center rounded border border-border text-text sm:hidden"
+              aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
+              aria-expanded={mobileOpen}
+            >
+              {mobileOpen ? <X className="h-5 w-5" aria-hidden /> : <Menu className="h-5 w-5" aria-hidden />}
+            </button>
           </div>
         </div>
       </nav>
+
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 z-30 flex flex-col items-center justify-center gap-7 bg-bg px-6 pt-20 sm:hidden"
+          role="dialog"
+          aria-modal="true"
+        >
+          {DOORS.map(({ key, href, Icon }) => (
+            <Link
+              key={key}
+              href={href}
+              onClick={closeMobile}
+              className="inline-flex items-center gap-3 font-serif text-[1.75rem] font-light text-text transition-colors hover:text-accent"
+            >
+              <Icon className="h-6 w-6" aria-hidden />
+              {t(`doors.${key}.name`)}
+            </Link>
+          ))}
+          <a
+            href={docsHref}
+            onClick={closeMobile}
+            className="inline-flex items-center gap-3 font-serif text-[1.75rem] font-light text-text transition-colors hover:text-accent"
+          >
+            <BookOpen className="h-6 w-6" aria-hidden />
+            {t("docs")}
+          </a>
+        </div>
+      )}
 
       <section className="relative flex min-h-screen items-center pt-20">
         <div className="absolute inset-0 opacity-70" aria-hidden>

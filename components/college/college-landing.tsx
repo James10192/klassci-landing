@@ -5,12 +5,14 @@ import ArrowRight from "lucide-react/dist/esm/icons/arrow-right";
 import BookOpen from "lucide-react/dist/esm/icons/book-open";
 import Calculator from "lucide-react/dist/esm/icons/calculator";
 import GraduationCap from "lucide-react/dist/esm/icons/graduation-cap";
+import Menu from "lucide-react/dist/esm/icons/menu";
 import MonitorSmartphone from "lucide-react/dist/esm/icons/monitor-smartphone";
 import ShieldCheck from "lucide-react/dist/esm/icons/shield-check";
 import UserCheck from "lucide-react/dist/esm/icons/user-check";
 import Users from "lucide-react/dist/esm/icons/users";
+import X from "lucide-react/dist/esm/icons/x";
 import { useLocale, useTranslations } from "next-intl";
-import type { ReactNode } from "react";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
 
 import { Footer } from "@/components/sections/footer";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
@@ -74,11 +76,20 @@ function CollegeLogo({
 export function CollegeLanding() {
   const t = useTranslations("college");
   const locale = useLocale() as "fr" | "en";
+  const [mobileOpen, setMobileOpen] = useState(false);
   const roles = t.raw("roles.items") as RoleItem[];
   const modules = t.raw("modules.items") as ModuleItem[];
   const shots = t.raw("showcase.items") as ShotItem[];
   const homeHref = `/${locale}`;
   const docsHref = `/${locale}/docs/college`;
+  const closeMobile = useCallback(() => setMobileOpen(false), []);
+
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileOpen]);
 
   return (
     <>
@@ -87,9 +98,6 @@ export function CollegeLanding() {
           <div className="container flex h-full items-center justify-between gap-6">
             <Link href="/" aria-label="KLASSCI College">
               <CollegeLogo />
-            </Link>
-            <Link href="/" className="text-[0.875rem] font-medium text-text-secondary transition-colors hover:text-text md:hidden">
-              {t("nav.home")}
             </Link>
             <div className="hidden items-center gap-1 md:flex">
               <a href={homeHref} className="px-3 py-2 text-[0.875rem] font-medium text-text-secondary transition-colors hover:text-text">
@@ -115,9 +123,50 @@ export function CollegeLanding() {
               <a href="#contact" className="hidden rounded border border-accent bg-accent px-3.5 py-1.5 text-[0.875rem] font-medium text-white transition-colors hover:bg-accent-hover sm:inline-flex">
                 Contact
               </a>
+              <button
+                type="button"
+                onClick={() => setMobileOpen((value) => !value)}
+                className="inline-flex h-10 w-10 items-center justify-center rounded border border-border text-text md:hidden"
+                aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
+                aria-expanded={mobileOpen}
+              >
+                {mobileOpen ? <X className="h-5 w-5" aria-hidden /> : <Menu className="h-5 w-5" aria-hidden />}
+              </button>
             </div>
           </div>
         </nav>
+
+        {mobileOpen && (
+          <div
+            className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-7 bg-bg px-6 pt-16 md:hidden"
+            role="dialog"
+            aria-modal="true"
+          >
+            <a href={homeHref} onClick={closeMobile} className="font-serif text-[1.75rem] font-light text-text transition-colors hover:text-accent">
+              {t("nav.home")}
+            </a>
+            <a href="#fonctionnalites" onClick={closeMobile} className="font-serif text-[1.75rem] font-light text-text transition-colors hover:text-accent">
+              Fonctionnalités
+            </a>
+            <a href="#interfaces" onClick={closeMobile} className="font-serif text-[1.75rem] font-light text-text transition-colors hover:text-accent">
+              Interfaces
+            </a>
+            <a href="#tarifs" onClick={closeMobile} className="font-serif text-[1.75rem] font-light text-text transition-colors hover:text-accent">
+              Devis
+            </a>
+            <a href={docsHref} onClick={closeMobile} className="inline-flex items-center gap-3 font-serif text-[1.75rem] font-light text-text transition-colors hover:text-accent">
+              <BookOpen className="h-6 w-6" aria-hidden />
+              Docs
+            </a>
+            <a href="#contact" onClick={closeMobile} className="font-serif text-[1.75rem] font-light text-accent">
+              Contact
+            </a>
+            <div className="mt-4 flex items-center gap-4">
+              <LanguageSwitcher />
+              <ThemeToggle />
+            </div>
+          </div>
+        )}
 
         <section className="relative min-h-screen pt-[5.5rem]">
           <div className="absolute inset-0" aria-hidden>
