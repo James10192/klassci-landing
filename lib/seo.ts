@@ -6,6 +6,13 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://klassci.com";
 
 type UniverseKey = "home" | "universite" | "college" | "lms";
 
+const UNIVERSE_IMAGES: Record<UniverseKey, string> = {
+  home: "/img/og/home.png",
+  universite: "/img/og/universite.png",
+  college: "/img/og/college.png",
+  lms: "/img/og/default.png",
+};
+
 interface SeoInput {
   locale: Locale;
   key: UniverseKey;
@@ -21,7 +28,7 @@ export function buildUniverseMetadata({
   title,
   description,
   path,
-  image = "/img/og/default.png",
+  image = UNIVERSE_IMAGES[key],
 }: SeoInput): Metadata {
   const normalizedPath = path === "/" ? "" : path;
   const localizedPath = `/${locale}${normalizedPath}`;
@@ -31,6 +38,7 @@ export function buildUniverseMetadata({
   const englishPath = `/en${normalizedPath}`;
 
   return {
+    metadataBase: new URL(SITE_URL),
     title,
     description,
     alternates: {
@@ -38,6 +46,7 @@ export function buildUniverseMetadata({
       languages: {
         fr: frenchPath,
         en: englishPath,
+        "x-default": frenchPath,
       },
     },
     openGraph: {
@@ -53,6 +62,7 @@ export function buildUniverseMetadata({
           width: 1200,
           height: 630,
           alt: title,
+          type: "image/png",
         },
       ],
     },
@@ -60,16 +70,14 @@ export function buildUniverseMetadata({
       card: "summary_large_image",
       title,
       description,
-      images: [
-        {
-          url: imageUrl,
-          alt: title,
-        },
-      ],
+      images: [imageUrl],
     },
     other: {
       "og:whatsapp:title": title,
       "og:whatsapp:description": description,
+      "og:image:secure_url": imageUrl,
+      "og:image:type": "image/png",
+      "twitter:image:alt": title,
       "klassci:universe": key,
     },
   };
