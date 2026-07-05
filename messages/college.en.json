@@ -57,6 +57,22 @@
         { "title": "Timetable", "caption": "Generation, preview and PDF export grouped in one clear interface.", "image": "/img/college/current-timetable.png", "alt": "KLASSCI College timetable", "format": "desktop" }
       ]
     },
+    "impact": {
+      "eyebrow": "Responsible institution",
+      "title": "Less paper, stronger coordination and clearer school governance.",
+      "intro": "KLASSCI College helps middle and high schools reduce paper-heavy tasks, connect leadership, teachers, parents and students, and run more transparent daily workflows.",
+      "items": [
+        { "number": "04", "name": "Quality education", "text": "More regular tracking of grades, attendance, report cards and family information." },
+        { "number": "05", "name": "Gender equality", "text": "Equal digital access to school information for authorized students, parents and staff." },
+        { "number": "08", "name": "Decent work", "text": "Less re-entry for administrative teams and more time to support families." },
+        { "number": "09", "name": "Innovation", "text": "Progressive digitization of school workflows without multiplying tools." },
+        { "number": "10", "name": "Reduced inequalities", "text": "Information is shared more reliably between school and families through actor-specific accounts." },
+        { "number": "12", "name": "Responsible consumption", "text": "Less paper through digital receipts, report cards, certificates and exports." },
+        { "number": "13", "name": "Climate action", "text": "Lighter administrative processes with fewer repeated printouts." },
+        { "number": "16", "name": "Effective institutions", "text": "Better traceability for payments, attendance, grades and administrative decisions." },
+        { "number": "17", "name": "Partnerships", "text": "Smoother collaboration between school, parents, teachers, students and partners." }
+      ]
+    },
     "quote": {
       "eyebrow": "Pricing",
       "title": "Every institution receives a tailored quote",

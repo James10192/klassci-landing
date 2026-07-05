@@ -102,6 +102,13 @@
         "description": "Administration unifiée de vos coordinateurs, enseignants, secrétaires et comptables. Vue d'ensemble avec filtres par rôle, statut et recherche rapide.",
         "image": "/img/dashboard/personnel.png",
         "alt": "Gestion du personnel KLASSCI"
+      },
+      {
+        "key": "accessibilite",
+        "title": "Accessibilité étudiante",
+        "description": "Suivez les étudiants en situation de handicap, leurs aménagements pédagogiques, tiers-temps, assistants requis et reconnaissances officielles avec des permissions adaptées.",
+        "image": "/img/universite/accessibilite-etudiants.png",
+        "alt": "Suivi accessibilité étudiants KLASSCI"
       }
     ],
     "small": [
@@ -199,6 +206,19 @@
           "Profils détaillés avec coordonnées, date d'embauche et statut"
         ],
         "outro": ""
+      },
+      "accessibilite": {
+        "title": "Accessibilité étudiante",
+        "image": "/img/universite/accessibilite-etudiants.png",
+        "intro": "KLASSCI aide les universités et grandes écoles à suivre les étudiants en situation de handicap avec un cadre clair, confidentiel et opérationnel.",
+        "bullets": [
+          "Cohorte dédiée pour les étudiants suivis et leurs besoins spécifiques",
+          "Gestion des tiers-temps, assistants requis et supports pédagogiques adaptés",
+          "Filtres par catégorie, aménagement, classe, filière et niveau",
+          "Reconnaissances officielles et historique consultables par les équipes autorisées",
+          "Tableau de suivi lisible pour la direction, la scolarité et les responsables pédagogiques"
+        ],
+        "outro": "L'objectif est simple : mieux accompagner chaque étudiant sans disperser les informations sensibles dans des fichiers séparés."
       },
       "ctaPrimary": "Demander une démo",
       "ctaSecondary": "Voir les tarifs",
@@ -452,6 +472,42 @@
     "title": "Prêt à simplifier la gestion de votre établissement ?",
     "text": "Nous avons construit KLASSCI parce que nous croyons que les écoles africaines méritent des outils modernes, simples et fiables. Essayez, c'est gratuit.",
     "cta": "Commencer gratuitement"
+  },
+  "universityImpact": {
+    "accessibility": {
+      "eyebrow": "Accessibilité étudiante",
+      "title": "Les aménagements pédagogiques deviennent visibles, suivis et confidentiels.",
+      "intro": "KLASSCI aide les établissements supérieurs à suivre les étudiants en situation de handicap, leurs aménagements pédagogiques, les tiers-temps, les assistants requis et les reconnaissances officielles, avec une confidentialité gérée par permission.",
+      "imageAlt": "Page de suivi accessibilité étudiants dans KLASSCI",
+      "stats": [
+        { "value": "10", "label": "étudiants suivis" },
+        { "value": "10", "label": "tiers-temps actifs" },
+        { "value": "2", "label": "assistants requis" },
+        { "value": "8", "label": "reconnaissances officielles" }
+      ],
+      "cards": [
+        { "title": "Profil par étudiant", "text": "Catégories, résumé enseignant, période de validité et reconnaissance officielle." },
+        { "title": "Aménagements concrets", "text": "Tiers-temps, supports agrandis, ordinateur autorisé, assistant et notes de mise en œuvre." },
+        { "title": "Confidentialité", "text": "Le résumé utile circule, les détails sensibles restent réservés aux rôles autorisés." },
+        { "title": "Exports et audit", "text": "Les rapports PDF/Excel et l'historique des changements sécurisent le suivi administratif." }
+      ]
+    },
+    "sdg": {
+      "eyebrow": "Impact durable",
+      "title": "Une gestion universitaire plus inclusive, plus traçable et plus responsable.",
+      "intro": "En dématérialisant les processus, en renforçant la gouvernance et en accompagnant mieux chaque étudiant, KLASSCI contribue concrètement à 9 Objectifs de Développement Durable.",
+      "items": [
+        { "number": "04", "name": "Éducation de qualité", "text": "Organisation académique plus fiable, données accessibles et suivi pédagogique renforcé." },
+        { "number": "05", "name": "Égalité entre les sexes", "text": "Services numériques partagés par les apprenants, personnels et responsables habilités." },
+        { "number": "08", "name": "Travail décent", "text": "Équipes administratives moins saturées par les tâches répétitives et les ressaisies." },
+        { "number": "09", "name": "Innovation", "text": "Transformation numérique structurée pour l'enseignement supérieur africain." },
+        { "number": "10", "name": "Inégalités réduites", "text": "Meilleur suivi des besoins spécifiques et des aménagements pédagogiques." },
+        { "number": "12", "name": "Consommation responsable", "text": "Moins de papier grâce aux bulletins, reçus, exports et documents dématérialisés." },
+        { "number": "13", "name": "Action climat", "text": "Des démarches administratives plus légères et moins dépendantes des impressions." },
+        { "number": "16", "name": "Institutions efficaces", "text": "Traçabilité, permissions, audit et gouvernance plus transparents." },
+        { "number": "17", "name": "Partenariats", "text": "Meilleure coordination entre établissement, familles, institutions et partenaires." }
+      ]
+    }
   },
   "footer": {
     "tagline": "Plateforme de gestion scolaire conçue pour les établissements d'enseignement supérieur en Afrique.",

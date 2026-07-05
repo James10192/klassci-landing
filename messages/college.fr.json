@@ -129,6 +129,22 @@
         }
       ]
     },
+    "impact": {
+      "eyebrow": "Établissement responsable",
+      "title": "Moins de papier, plus de coordination et une gouvernance scolaire plus claire.",
+      "intro": "KLASSCI College aide les collèges et lycées à réduire les tâches papier, mieux relier direction, enseignants, parents et élèves, et installer des processus plus transparents au quotidien.",
+      "items": [
+        { "number": "04", "name": "Éducation de qualité", "text": "Suivi plus régulier des notes, présences, bulletins et informations utiles aux familles." },
+        { "number": "05", "name": "Égalité entre les sexes", "text": "Même accès numérique aux informations scolaires pour les élèves, parents et personnels habilités." },
+        { "number": "08", "name": "Travail décent", "text": "Moins de ressaisie pour les équipes administratives et plus de temps pour accompagner les familles." },
+        { "number": "09", "name": "Innovation", "text": "Digitalisation progressive des processus scolaires sans multiplier les outils." },
+        { "number": "10", "name": "Inégalités réduites", "text": "Information mieux partagée entre établissement et familles, avec des comptes adaptés à chaque acteur." },
+        { "number": "12", "name": "Consommation responsable", "text": "Réduction du papier grâce aux reçus, bulletins, attestations et exports numériques." },
+        { "number": "13", "name": "Action climat", "text": "Des démarches administratives plus légères, moins dépendantes des impressions répétées." },
+        { "number": "16", "name": "Institutions efficaces", "text": "Meilleure traçabilité des paiements, présences, notes et décisions administratives." },
+        { "number": "17", "name": "Partenariats", "text": "Collaboration plus fluide entre école, parents, enseignants, élèves et partenaires." }
+      ]
+    },
     "quote": {
       "eyebrow": "Tarification",
       "title": "Chaque établissement reçoit un devis adapté",

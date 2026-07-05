@@ -4,6 +4,7 @@
     "metaDescription": "KLASSCI équipe chaque niveau d'enseignement : universités et grandes écoles, collèges et lycées, apprentissage en ligne. Choisissez votre univers.",
     "badge": "Bienvenue dans KLASSCI",
     "title": "Quel établissement gérez-vous ?",
+    "kicker": "Le SaaS éducatif africain tout-en-un, né en Côte d'Ivoire.",
     "subtitle": "KLASSCI équipe chaque niveau d'enseignement. Choisissez votre univers pour découvrir l'outil pensé pour vous.",
     "doors": {
       "universite": {
@@ -20,8 +21,8 @@
       },
       "lms": {
         "tag": "Bientôt",
-        "name": "Espace d'apprentissage",
-        "desc": "Cours en ligne, devoirs, évaluations. L'apprentissage numérique, en préparation.",
+        "name": "Classe virtuelle",
+        "desc": "Cours en ligne, devoirs, évaluations et suivi pédagogique connectés à votre établissement.",
         "cta": "Être informé"
       }
     },

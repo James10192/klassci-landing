@@ -4,6 +4,7 @@
     "metaDescription": "KLASSCI supports universities, colleges, high schools and digital learning. Choose the product built for your institution.",
     "badge": "Welcome to KLASSCI",
     "title": "Which institution do you run?",
+    "kicker": "The all-in-one African education SaaS, born in Côte d'Ivoire.",
     "subtitle": "KLASSCI brings every school workflow into one clear platform. Choose your universe and see the version designed for your team.",
     "doors": {
       "universite": {
@@ -20,8 +21,8 @@
       },
       "lms": {
         "tag": "Soon",
-        "name": "Learning space",
-        "desc": "Online courses, assignments and assessments. Digital learning is being prepared.",
+        "name": "Virtual classroom",
+        "desc": "Online courses, assignments, assessments and learning follow-up connected to your institution.",
         "cta": "Stay informed"
       }
     },

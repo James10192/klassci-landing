@@ -102,6 +102,13 @@
         "description": "Unified administration of coordinators, teachers, secretaries, and accountants. Overview with role/status filters and fast search.",
         "image": "/img/dashboard/personnel.png",
         "alt": "KLASSCI staff management"
+      },
+      {
+        "key": "accessibilite",
+        "title": "Student accessibility",
+        "description": "Track students with disabilities, learning accommodations, extra time, required assistants and official recognition with adapted permissions.",
+        "image": "/img/universite/accessibilite-etudiants.png",
+        "alt": "KLASSCI student accessibility tracking"
       }
     ],
     "small": [
@@ -199,6 +206,19 @@
           "Detailed profiles with contact details, hire date, and status"
         ],
         "outro": ""
+      },
+      "accessibilite": {
+        "title": "Student accessibility",
+        "image": "/img/universite/accessibilite-etudiants.png",
+        "intro": "KLASSCI helps universities and higher-education schools track students with disabilities through a clear, confidential, operational workflow.",
+        "bullets": [
+          "Dedicated cohort for tracked students and their specific needs",
+          "Extra time, required assistants and adapted learning supports",
+          "Filters by category, accommodation, class, programme and level",
+          "Official recognition and history visible only to authorised teams",
+          "Readable tracking dashboard for leadership, student services and academic teams"
+        ],
+        "outro": "The goal is simple: support every student better without scattering sensitive information across separate files."
       },
       "ctaPrimary": "Request a demo",
       "ctaSecondary": "See pricing",
@@ -452,6 +472,42 @@
     "title": "Ready to simplify your school's operations?",
     "text": "We built KLASSCI because African schools deserve modern, simple, and reliable tools. Try it — it's free.",
     "cta": "Start for free"
+  },
+  "universityImpact": {
+    "accessibility": {
+      "eyebrow": "Student accessibility",
+      "title": "Learning accommodations become visible, tracked and confidential.",
+      "intro": "KLASSCI helps higher-education institutions track students with disabilities, learning accommodations, extra time, required assistants and official recognition, with confidentiality controlled by permissions.",
+      "imageAlt": "Student accessibility tracking page in KLASSCI",
+      "stats": [
+        { "value": "10", "label": "students tracked" },
+        { "value": "10", "label": "extra-time profiles" },
+        { "value": "2", "label": "assistants required" },
+        { "value": "8", "label": "official recognitions" }
+      ],
+      "cards": [
+        { "title": "Student profile", "text": "Categories, teacher summary, validity period and official recognition." },
+        { "title": "Concrete accommodations", "text": "Extra time, enlarged material, authorized computer, assistant and implementation notes." },
+        { "title": "Confidentiality", "text": "Useful summaries circulate while sensitive details stay limited to authorized roles." },
+        { "title": "Exports and audit", "text": "PDF/Excel reports and change history secure administrative follow-up." }
+      ]
+    },
+    "sdg": {
+      "eyebrow": "Sustainable impact",
+      "title": "More inclusive, traceable and responsible university management.",
+      "intro": "By digitizing workflows, strengthening governance and supporting each student better, KLASSCI contributes to 9 Sustainable Development Goals.",
+      "items": [
+        { "number": "04", "name": "Quality education", "text": "More reliable academic organization, accessible data and stronger learning follow-up." },
+        { "number": "05", "name": "Gender equality", "text": "Digital services shared by learners, staff and authorized leaders." },
+        { "number": "08", "name": "Decent work", "text": "Administrative teams spend less time on repetitive work and re-entry." },
+        { "number": "09", "name": "Innovation", "text": "Structured digital transformation for African higher education." },
+        { "number": "10", "name": "Reduced inequalities", "text": "Better tracking of specific needs and learning accommodations." },
+        { "number": "12", "name": "Responsible consumption", "text": "Less paper through digital report cards, receipts, exports and documents." },
+        { "number": "13", "name": "Climate action", "text": "Lighter administrative workflows with fewer print-heavy processes." },
+        { "number": "16", "name": "Effective institutions", "text": "Traceability, permissions, audit and clearer governance." },
+        { "number": "17", "name": "Partnerships", "text": "Better coordination between institutions, families, public bodies and partners." }
+      ]
+    }
   },
   "footer": {
     "tagline": "School management platform built for higher-education institutions in Africa.",

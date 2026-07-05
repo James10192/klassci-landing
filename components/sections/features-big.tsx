@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useState } from "react";
 
@@ -74,13 +73,10 @@ export function FeaturesBig() {
                   imageRight ? "lg:order-2" : "lg:order-1"
                 }`}
               >
-                <Image
+                <img
                   src={feature.image}
                   alt={feature.alt}
-                  width={1872}
-                  height={924}
-                  sizes="(max-width: 1024px) 100vw, 560px"
-                  className="w-full h-auto"
+                  className="h-auto w-full"
                   loading="lazy"
                 />
               </div>

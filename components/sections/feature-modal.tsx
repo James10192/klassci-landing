@@ -11,7 +11,8 @@ export type FeatureKey =
   | "planning"
   | "presences"
   | "lmd"
-  | "personnel";
+  | "personnel"
+  | "accessibilite";
 
 interface ModalPayload {
   title: string;

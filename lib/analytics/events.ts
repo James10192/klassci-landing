@@ -6,6 +6,7 @@ export type AnalyticsEventMap = {
     location:
       | "nav"
       | "nav_docs"
+      | "hub_nav_contact"
       | "hero_primary"
       | "hero_secondary"
       | "letter"
@@ -19,7 +20,7 @@ export type AnalyticsEventMap = {
     locale: "fr" | "en";
   };
   feature_modal_open: {
-    feature: "notes" | "finance" | "planning" | "presences" | "lmd" | "personnel";
+    feature: "notes" | "finance" | "planning" | "presences" | "lmd" | "personnel" | "accessibilite";
     locale: "fr" | "en";
   };
   faq_open: {

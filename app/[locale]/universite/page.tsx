@@ -19,6 +19,7 @@ import { Support } from "@/components/sections/support";
 import { Testimonials } from "@/components/sections/testimonials";
 import { VideoTestimonial } from "@/components/sections/video-testimonial";
 import { StructuredData } from "@/components/seo/structured-data";
+import { UniversityImpact } from "@/components/universe/university-impact";
 import { routing, type Locale } from "@/i18n/routing";
 import { buildUniverseMetadata } from "@/lib/seo";
 
@@ -64,6 +65,7 @@ export default async function UniversitePage({
         <PartnershipBanner />
         <VideoTestimonial />
         <Security />
+        <UniversityImpact />
         <Support />
         <ImageBanner />
         <Pricing />

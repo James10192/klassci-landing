@@ -17,6 +17,7 @@ import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { Footer } from "@/components/sections/footer";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { SdgImpactGrid } from "@/components/universe/sdg-impact-grid";
 import { Link } from "@/i18n/navigation";
 
 interface RoleItem {
@@ -35,6 +36,12 @@ interface ShotItem {
   image: string;
   alt: string;
   format: "desktop" | "mobile";
+}
+
+interface SdgItem {
+  number: string;
+  name: string;
+  text: string;
 }
 
 const ROLE_ICONS = [ShieldCheck, UserCheck, Calculator, GraduationCap, Users, MonitorSmartphone];
@@ -80,6 +87,7 @@ export function CollegeLanding() {
   const roles = t.raw("roles.items") as RoleItem[];
   const modules = t.raw("modules.items") as ModuleItem[];
   const shots = t.raw("showcase.items") as ShotItem[];
+  const sdgs = t.raw("impact.items") as SdgItem[];
   const homeHref = `/${locale}`;
   const docsHref = `/${locale}/docs/college`;
   const closeMobile = useCallback(() => setMobileOpen(false), []);
@@ -287,6 +295,19 @@ export function CollegeLanding() {
                 </div>
               </figure>
             ))}
+          </div>
+        </section>
+
+        <section className="border-y border-border bg-[linear-gradient(135deg,rgba(4,83,203,0.06),rgba(245,130,32,0.08))] py-16" aria-labelledby="college-impact-title">
+          <div className="container">
+            <header className="mb-10 max-w-3xl">
+              <p className="text-sm text-text-muted">{t("impact.eyebrow")}</p>
+              <h2 id="college-impact-title" className="mt-4 font-serif text-4xl font-light text-accent">
+                {t("impact.title")}
+              </h2>
+              <p className="mt-4 leading-relaxed text-text-secondary">{t("impact.intro")}</p>
+            </header>
+            <SdgImpactGrid items={sdgs} />
           </div>
         </section>
 
