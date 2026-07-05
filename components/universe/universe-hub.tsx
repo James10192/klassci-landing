@@ -36,7 +36,7 @@ const DOORS: Array<{
     href: "/universite",
     Icon: GraduationCap,
     image: "/img/dashboard/01-dashboard.png",
-    tone: "from-[#0453cb]/60 to-[#f58220]/40",
+    tone: "from-[#0453cb]/70 to-[#0b1f45]/55",
     accent: "#0453cb",
   },
   {
@@ -63,9 +63,12 @@ export function UniverseHub() {
   const locale = useLocale() as "fr" | "en";
   const [mobileOpen, setMobileOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
+  const [activeDoor, setActiveDoor] = useState<DoorKey | null>(null);
   const docsHref = `/${locale}/docs`;
   const homeHref = `/${locale}`;
   const closeMobile = useCallback(() => setMobileOpen(false), []);
+  const mainDoors = DOORS.filter((door) => door.key !== "lms");
+  const virtualDoor = DOORS.find((door) => door.key === "lms");
   const openContact = useCallback(() => {
     setMobileOpen(false);
     setContactOpen(true);
@@ -239,61 +242,106 @@ export function UniverseHub() {
         </div>
       </section>
 
-      <section id="univers" className="container relative z-10 scroll-mt-24 pb-20">
-        <div className="mb-6 flex items-end justify-between gap-6">
+      <section id="univers" className="relative z-10 scroll-mt-20 px-4 pb-20 md:px-6">
+        <div className="container mb-7 flex items-end justify-between gap-6">
           <div>
-            <p className="font-mono text-[0.72rem] uppercase tracking-[0.08em] text-text-muted">Univers KLASSCI</p>
-            <h2 className="mt-2 font-serif text-3xl font-light text-accent md:text-4xl">Choisissez votre environnement</h2>
+            <p className="font-mono text-[0.72rem] uppercase tracking-[0.08em] text-text-muted">{t("selector.eyebrow")}</p>
+            <h2 className="mt-2 font-serif text-3xl font-light text-accent md:text-5xl">{t("selector.title")}</h2>
           </div>
-          <p className="hidden max-w-sm text-sm leading-relaxed text-text-secondary md:block">
-            Trois portes, une même exigence produit : clarté, rapidité et suivi fiable pour chaque acteur.
-          </p>
+          <p className="hidden max-w-sm text-sm leading-relaxed text-text-secondary md:block">{t("selector.intro")}</p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-3">
-          {DOORS.map(({ key, href, Icon, image, tone, accent }) => (
-            <motion.article
-              key={key}
-              whileHover={{ y: -7, rotateX: 1, rotateY: -1 }}
-              transition={{ type: "spring", stiffness: 240, damping: 22 }}
-              className="group relative min-h-[19rem] overflow-hidden rounded-lg border border-border bg-[#08152d] shadow-[0_20px_60px_rgba(4,83,203,0.10)] [transform-style:preserve-3d]"
+        <div className="mx-auto flex max-w-[118rem] flex-col gap-3 md:h-[58vh] md:min-h-[30rem] md:flex-row">
+          {mainDoors.map(({ key, href, Icon, image, tone, accent }) => {
+            const isActive = activeDoor === key;
+            const isMuted = activeDoor !== null && !isActive;
+            const panelFlex = activeDoor === null ? "1 1 0%" : isActive ? "1.46 1 0%" : "0.74 1 0%";
+
+            return (
+              <motion.article
+                key={key}
+                onMouseEnter={() => setActiveDoor(key)}
+                onMouseLeave={() => setActiveDoor(null)}
+                onFocus={() => setActiveDoor(key)}
+                onBlur={() => setActiveDoor(null)}
+                animate={{ flex: panelFlex }}
+                transition={{ type: "spring", stiffness: 170, damping: 26 }}
+                className="group relative min-h-[28rem] overflow-hidden rounded-lg border border-border bg-[#08152d] shadow-[0_24px_75px_rgba(4,83,203,0.14)] outline-none [transform-style:preserve-3d] md:min-h-0"
+              >
+                <img
+                  src={image}
+                  alt=""
+                  className={[
+                    "absolute inset-0 h-full w-full object-cover object-top transition duration-700",
+                    isMuted ? "scale-[1.01] opacity-45 grayscale" : "scale-100 opacity-75 group-hover:scale-[1.055] group-hover:opacity-95",
+                  ].join(" ")}
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(8,21,45,0.04),rgba(8,21,45,0.86))]" />
+                <div className={`absolute inset-0 bg-gradient-to-br ${tone} transition-opacity duration-500 ${isActive ? "opacity-20" : "opacity-50"}`} />
+
+                <div className="absolute inset-x-5 top-5 flex items-center justify-between">
+                  <span className="rounded border border-white/25 bg-white/15 px-2.5 py-1 text-xs font-semibold text-white backdrop-blur-sm">
+                    {t(`doors.${key}.tag`)}
+                  </span>
+                  <span className="inline-flex h-10 w-10 items-center justify-center rounded border border-white/30 bg-white/15 text-white backdrop-blur-sm">
+                    <Icon className="h-5 w-5" aria-hidden />
+                  </span>
+                </div>
+
+                <div className="relative flex h-full min-h-[28rem] flex-col justify-end p-5 text-white md:min-h-0 md:p-7 lg:p-9">
+                  <p className="mb-3 max-w-sm font-mono text-[0.72rem] uppercase tracking-[0.08em] text-white/70">
+                    {t(`doors.${key}.power`)}
+                  </p>
+                  <h2 className="max-w-[12ch] font-serif text-4xl font-light leading-none text-white md:text-5xl">
+                    {t(`doors.${key}.name`)}
+                  </h2>
+                  <p className="mt-5 max-w-xl text-sm font-medium leading-relaxed text-white/90 md:text-base">
+                    {t(`doors.${key}.desc`)}
+                  </p>
+                  <div className="mt-5 flex flex-wrap items-center gap-2">
+                    <span className="rounded border border-white/22 bg-white/12 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-sm">
+                      {t(`doors.${key}.metric`)}
+                    </span>
+                    <span className="rounded border border-white/22 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white/90 backdrop-blur-sm">
+                      {key === "universite" ? t("selector.compatibleUniversity") : t("selector.compatibleCollege")}
+                    </span>
+                  </div>
+                  <Link
+                    href={href}
+                    className="mt-7 inline-flex min-h-11 w-fit items-center gap-2 rounded border border-white/28 bg-white px-4 text-sm font-semibold text-[#08152d] transition-all group-hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+                    style={{ boxShadow: `0 16px 35px ${accent}2d` }}
+                  >
+                    {t(`doors.${key}.cta`)}
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden />
+                  </Link>
+                </div>
+              </motion.article>
+            );
+          })}
+        </div>
+
+        {virtualDoor && (
+          <div className="container mt-4">
+            <Link
+              href={virtualDoor.href}
+              className="group grid gap-4 rounded-lg border border-border bg-bg-card p-4 shadow-[0_18px_50px_rgba(0,0,0,0.06)] transition-all hover:-translate-y-0.5 hover:border-border-strong md:grid-cols-[auto_1fr_auto] md:items-center md:p-5"
             >
-              <img
-                src={image}
-                alt=""
-                className="absolute inset-0 h-full w-full object-cover object-top opacity-75 transition duration-500 group-hover:scale-[1.055] group-hover:opacity-90"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(8,21,45,0.12),rgba(8,21,45,0.78))]" />
-              <div className={`absolute inset-0 bg-gradient-to-br ${tone} opacity-45 transition-opacity duration-300 group-hover:opacity-25`} />
-              <div className="absolute inset-x-4 top-4 flex items-center justify-between">
-                <span className="rounded border border-white/25 bg-white/15 px-2.5 py-1 text-xs font-medium text-white backdrop-blur-sm">
-                  {t(`doors.${key}.tag`)}
-                </span>
-                <span className="inline-flex h-10 w-10 items-center justify-center rounded border border-white/30 bg-white/15 text-white backdrop-blur-sm">
-                  <Icon className="h-5 w-5" aria-hidden />
-                </span>
-              </div>
-
-              <div className="relative flex min-h-[19rem] flex-col justify-end p-5 text-white">
-                <h2 className="font-serif text-3xl font-light leading-tight text-white">
-                  {t(`doors.${key}.name`)}
-                </h2>
-                <p className="mt-3 text-sm font-medium leading-relaxed text-white/90">
-                  {t(`doors.${key}.desc`)}
-                </p>
-                <Link
-                  href={href}
-                  className="mt-5 inline-flex min-h-11 w-fit items-center gap-2 rounded border border-white/28 bg-white px-4 text-sm font-semibold text-[#08152d] transition-all group-hover:-translate-y-0.5"
-                  style={{ boxShadow: `0 16px 35px ${accent}2d` }}
-                >
-                  {t(`doors.${key}.cta`)}
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden />
-                </Link>
-              </div>
-            </motion.article>
-          ))}
-        </div>
+              <span className="inline-flex h-11 w-11 items-center justify-center rounded border border-border bg-bg-alt text-accent">
+                <virtualDoor.Icon className="h-5 w-5" aria-hidden />
+              </span>
+              <span>
+                <span className="block font-mono text-[0.72rem] uppercase tracking-[0.08em] text-text-muted">{t("selector.virtualTag")}</span>
+                <span className="mt-1 block font-serif text-2xl font-light text-text">{t("selector.virtualTitle")}</span>
+                <span className="mt-1 block text-sm leading-relaxed text-text-secondary">{t("selector.virtualText")}</span>
+              </span>
+              <span className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-accent">
+                {t("selector.virtualPrimary")}
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden />
+              </span>
+            </Link>
+          </div>
+        )}
       </section>
 
       <style jsx>{`

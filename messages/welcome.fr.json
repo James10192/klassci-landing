@@ -11,13 +11,17 @@
         "tag": "Enseignement supérieur",
         "name": "Université & Grandes écoles",
         "desc": "LMD, semestres, crédits, comptabilité. Le système complet pour le supérieur.",
-        "cta": "Découvrir"
+        "cta": "Découvrir",
+        "power": "Pilotage supérieur",
+        "metric": "LMD · crédits · gouvernance"
       },
       "college": {
         "tag": "Collège & Lycée",
         "name": "Collège & Lycée",
         "desc": "Trimestres, bulletins DREN, caisse, présences. Un compte pour chaque acteur de l'école.",
-        "cta": "Découvrir"
+        "cta": "Découvrir",
+        "power": "Terrain scolaire",
+        "metric": "Parents · élèves · équipes"
       },
       "lms": {
         "tag": "Bientôt",
@@ -25,6 +29,17 @@
         "desc": "Cours en ligne, devoirs, évaluations et suivi pédagogique connectés à votre établissement.",
         "cta": "Être informé"
       }
+    },
+    "selector": {
+      "eyebrow": "Univers KLASSCI",
+      "title": "Choisissez votre univers de pilotage",
+      "intro": "Deux expériences métier, une même ambition : donner aux établissements africains une plateforme qui inspire confiance dès le premier écran.",
+      "compatibleUniversity": "Classe virtuelle compatible",
+      "compatibleCollege": "Classe virtuelle compatible",
+      "virtualTag": "Capacité connectée",
+      "virtualTitle": "Classe virtuelle pour prolonger votre univers",
+      "virtualText": "Cours, devoirs, évaluations et suivi pédagogique peuvent accompagner votre établissement, que vous pilotiez une université ou un collège.",
+      "virtualPrimary": "Explorer la classe virtuelle"
     },
     "footNote": "Un compte, une école. Hébergé, sauvegardé, sécurisé.",
     "docs": "Documentation"

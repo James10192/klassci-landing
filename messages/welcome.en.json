@@ -11,13 +11,17 @@
         "tag": "Higher education",
         "name": "University & Grandes écoles",
         "desc": "LMD, semesters, credits, accounting and administration for higher education.",
-        "cta": "Discover"
+        "cta": "Discover",
+        "power": "Higher-ed command",
+        "metric": "LMD · credits · governance"
       },
       "college": {
         "tag": "Middle & high school",
         "name": "College & High school",
         "desc": "Terms, DREN-ready reports, cashier workflows, attendance and accounts for every school actor.",
-        "cta": "Discover"
+        "cta": "Discover",
+        "power": "School operations",
+        "metric": "Parents · students · teams"
       },
       "lms": {
         "tag": "Soon",
@@ -25,6 +29,17 @@
         "desc": "Online courses, assignments, assessments and learning follow-up connected to your institution.",
         "cta": "Stay informed"
       }
+    },
+    "selector": {
+      "eyebrow": "KLASSCI universes",
+      "title": "Choose your operating universe",
+      "intro": "Two business experiences, one ambition: give African institutions a platform that feels trusted from the first screen.",
+      "compatibleUniversity": "Virtual classroom compatible",
+      "compatibleCollege": "Virtual classroom compatible",
+      "virtualTag": "Connected capability",
+      "virtualTitle": "Virtual classroom to extend your universe",
+      "virtualText": "Courses, assignments, assessments and learning follow-up can support your institution, whether you run a university or a school.",
+      "virtualPrimary": "Explore virtual classroom"
     },
     "footNote": "One account, one school. Hosted, backed up and secured.",
     "docs": "Docs"
