@@ -1,0 +1,67 @@
+{
+  "college": {
+    "meta": {
+      "title": "KLASSCI College, complete school management for middle and high schools",
+      "description": "KLASSCI College brings enrollment, fees, grades, report cards, attendance, timetables and parent spaces into one platform."
+    },
+    "nav": {
+      "universite": "University",
+      "interfaces": "Interfaces",
+      "docs": "Docs"
+    },
+    "hero": {
+      "badge": "KLASSCI College",
+      "title": "The whole school, in one platform.",
+      "subtitle": "Leadership, secretariat, accounting, teachers, parents and students work on a clear platform built for daily school operations.",
+      "primaryCta": "Request a quote",
+      "secondaryCta": "View interfaces"
+    },
+    "roles": {
+      "eyebrow": "Accounts by actor",
+      "title": "Each account sees exactly what it must handle",
+      "intro": "KLASSCI College separates responsibilities without fragmenting information. Roles collaborate in the same system with proper permissions.",
+      "items": [
+        { "title": "Leadership", "description": "Global view of enrollment, finances, attendance, results and official documents." },
+        { "title": "Secretariat", "description": "Enrollments, student files, classes, administrative documents and daily requests." },
+        { "title": "Accounting", "description": "Collections, receipts, balances, reminders and financial statements by student or class." },
+        { "title": "Teachers", "description": "Grades, attendance, timetable and class tracking from mobile or desktop." },
+        { "title": "Parents", "description": "Fees, report cards, timetables, documents and useful updates for each child." },
+        { "title": "Students", "description": "Simple access to grades, report cards, attendance, payments, timetable and published documents." }
+      ]
+    },
+    "modules": {
+      "eyebrow": "Core modules",
+      "title": "Every school workflow, without parallel tools",
+      "intro": "The product covers the flows that cost teams time, from intake to report cards.",
+      "items": [
+        { "title": "Enrollments", "description": "Student file, class, status, subscribed fees, documents and validation." },
+        { "title": "Fees and cashier", "description": "Enrollment-based payments, receipts, remaining balances, history and reminders." },
+        { "title": "Grades and reports", "description": "Teacher entry, averages, ranks, report cards and PDF documents." },
+        { "title": "Attendance", "description": "Digital roll call, absences, lateness, justifications and class statistics." },
+        { "title": "Timetable", "description": "Classroom equals class, teachers move, each actor reads a clear schedule." },
+        { "title": "Parents", "description": "Family portal with children, fees, documents, grades and reports." },
+        { "title": "Documents", "description": "Certificates, attestations, financial statements and clean exports." },
+        { "title": "Leadership", "description": "Dashboards that surface priorities before they become emergencies." }
+      ]
+    },
+    "showcase": {
+      "eyebrow": "Product interfaces",
+      "title": "Recent, readable screens shown in real devices",
+      "intro": "Recent screenshots show the real school-management screens without added frames, keeping every interface fully readable.",
+      "items": [
+        { "title": "Live dashboard", "caption": "Current dashboard with blue and orange header, indicators and quick actions.", "image": "/img/college/current-dashboard.png", "alt": "Current KLASSCI College dashboard", "format": "desktop" },
+        { "title": "Mobile dashboard", "caption": "Indicators and actions stay accessible on phone with the same brand identity.", "image": "/img/college/current-mobile-dashboard.png", "alt": "Current KLASSCI College mobile dashboard", "format": "mobile" },
+        { "title": "Assessments and entry", "caption": "Grade supervision with filters by class, subject and term.", "image": "/img/college/current-grades.png", "alt": "KLASSCI College grades", "format": "desktop" },
+        { "title": "Parents and accounts", "caption": "Track guardians, login accounts and useful contacts for each family.", "image": "/img/college/current-parents.png", "alt": "KLASSCI College parents", "format": "desktop" },
+        { "title": "Timetable", "caption": "Generation, preview and PDF export grouped in one clear interface.", "image": "/img/college/current-timetable.png", "alt": "KLASSCI College timetable", "format": "desktop" }
+      ]
+    },
+    "quote": {
+      "eyebrow": "Pricing",
+      "title": "Every institution receives a tailored quote",
+      "text": "Pricing depends on school size, required accounts, onboarding support and customization. We qualify the need, then send a clear offer.",
+      "cta": "Request a quote",
+      "note": "Reply within 24 business hours"
+    }
+  }
+}

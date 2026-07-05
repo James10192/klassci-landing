@@ -111,7 +111,7 @@ export function Pricing() {
       {/* Section header — sober, the hero card carries the weight */}
       <div className="text-center mb-10 lg:mb-12">
         <p className="font-mono uppercase tracking-[0.08em] text-[0.7rem] text-text-muted mb-3">
-          03 — {locale === "fr" ? "Tarifs" : "Pricing"}
+          03 · {locale === "fr" ? "Tarifs" : "Pricing"}
         </p>
         <h2
           id="pricing-heading"

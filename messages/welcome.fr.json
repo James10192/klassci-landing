@@ -1,0 +1,31 @@
+{
+  "welcome": {
+    "metaTitle": "KLASSCI, le logiciel de gestion scolaire",
+    "metaDescription": "KLASSCI équipe chaque niveau d'enseignement : universités et grandes écoles, collèges et lycées, apprentissage en ligne. Choisissez votre univers.",
+    "badge": "Bienvenue dans KLASSCI",
+    "title": "Quel établissement gérez-vous ?",
+    "subtitle": "KLASSCI équipe chaque niveau d'enseignement. Choisissez votre univers pour découvrir l'outil pensé pour vous.",
+    "doors": {
+      "universite": {
+        "tag": "Enseignement supérieur",
+        "name": "Université & Grandes écoles",
+        "desc": "LMD, semestres, crédits, comptabilité. Le système complet pour le supérieur.",
+        "cta": "Découvrir"
+      },
+      "college": {
+        "tag": "Collège & Lycée",
+        "name": "Collège & Lycée",
+        "desc": "Trimestres, bulletins DREN, caisse, présences. Un compte pour chaque acteur de l'école.",
+        "cta": "Découvrir"
+      },
+      "lms": {
+        "tag": "Bientôt",
+        "name": "Espace d'apprentissage",
+        "desc": "Cours en ligne, devoirs, évaluations. L'apprentissage numérique, en préparation.",
+        "cta": "Être informé"
+      }
+    },
+    "footNote": "Un compte, une école. Hébergé, sauvegardé, sécurisé.",
+    "docs": "Documentation"
+  }
+}

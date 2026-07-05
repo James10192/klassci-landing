@@ -31,7 +31,7 @@ export function ClientMarquee() {
       {/* Section header */}
       <div className="container text-center mb-12">
         <p className="font-mono uppercase tracking-[0.08em] text-[0.72rem] text-text-muted mb-4">
-          01 — {eyebrowLabel}
+          01 · {eyebrowLabel}
         </p>
         <h2
           id="clients-heading"

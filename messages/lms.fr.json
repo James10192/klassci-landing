@@ -1,0 +1,27 @@
+{
+  "lms": {
+    "meta": {
+      "title": "KLASSCI LMS, espace d'apprentissage en préparation",
+      "description": "KLASSCI LMS prépare les cours en ligne, devoirs et évaluations pour prolonger la gestion scolaire vers l'apprentissage numérique."
+    },
+    "badge": "KLASSCI LMS",
+    "title": "L'apprentissage numérique arrive dans KLASSCI.",
+    "subtitle": "Le LMS complétera les univers Université et College avec des cours en ligne, devoirs, ressources et évaluations.",
+    "cta": "Être informé",
+    "docs": "Docs",
+    "items": [
+      {
+        "title": "Cours structurés",
+        "description": "Modules, ressources et progression par classe ou promotion."
+      },
+      {
+        "title": "Devoirs et évaluations",
+        "description": "Travaux à rendre, notation et retours centralisés."
+      },
+      {
+        "title": "Connecté au SIS",
+        "description": "Les apprenants, classes et enseignants restent synchronisés avec KLASSCI."
+      }
+    ]
+  }
+}

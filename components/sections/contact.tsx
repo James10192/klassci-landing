@@ -120,7 +120,7 @@ export function Contact() {
       {/* Section header — left-aligned */}
       <div>
         <p className="font-mono uppercase tracking-[0.08em] text-[0.72rem] text-text-muted mb-4">
-          05 — {eyebrowLabel}
+          05 · {eyebrowLabel}
         </p>
         <h2
           id="contact-heading"

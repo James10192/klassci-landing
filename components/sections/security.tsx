@@ -28,7 +28,7 @@ export function Security() {
         {/* Text — right */}
         <div>
           <p className="font-mono uppercase tracking-[0.08em] text-[0.72rem] text-text-muted mb-4">
-            08 — {eyebrowLabel}
+            08 · {eyebrowLabel}
           </p>
           <h2
             id="security-heading"

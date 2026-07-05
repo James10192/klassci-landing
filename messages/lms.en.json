@@ -1,0 +1,18 @@
+{
+  "lms": {
+    "meta": {
+      "title": "KLASSCI LMS, learning space in preparation",
+      "description": "KLASSCI LMS prepares online courses, assignments and assessments to extend school management into digital learning."
+    },
+    "badge": "KLASSCI LMS",
+    "title": "Digital learning is coming to KLASSCI.",
+    "subtitle": "The LMS will complete the University and College universes with online courses, assignments, resources and assessments.",
+    "cta": "Stay informed",
+    "docs": "Docs",
+    "items": [
+      { "title": "Structured courses", "description": "Modules, resources and progress by class or cohort." },
+      { "title": "Assignments and assessments", "description": "Submissions, grading and feedback in one place." },
+      { "title": "Connected to the SIS", "description": "Learners, classes and teachers stay synchronized with KLASSCI." }
+    ]
+  }
+}

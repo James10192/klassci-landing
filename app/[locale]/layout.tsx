@@ -97,7 +97,7 @@ export async function generateMetadata({
     metadataBase: new URL(SITE_URL),
     title: {
       default: t("title"),
-      template: "%s — KLASSCI",
+      template: "%s · KLASSCI",
     },
     description: t("description"),
     keywords: t("keywords"),
@@ -105,9 +105,9 @@ export async function generateMetadata({
     creator: "African Digital Consulting",
     publisher: "KLASSCI",
     alternates: {
-      canonical: locale === routing.defaultLocale ? "/" : `/${locale}`,
+      canonical: `/${locale}`,
       languages: {
-        fr: "/",
+        fr: "/fr",
         en: "/en",
       },
     },
@@ -116,7 +116,7 @@ export async function generateMetadata({
       siteName: t("ogSiteName"),
       title: t("title"),
       description: t("description"),
-      url: locale === routing.defaultLocale ? SITE_URL : `${SITE_URL}/${locale}`,
+      url: `${SITE_URL}/${locale}`,
       locale: locale === "fr" ? "fr_FR" : "en_US",
       images: [
         {

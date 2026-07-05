@@ -8,8 +8,24 @@ export default getRequestConfig(async ({ requestLocale }) => {
     ? requested
     : routing.defaultLocale;
 
+  // Message bundles are modular: the large université namespace lives in
+  // `<locale>.json`, and each edition (welcome splash, collège, lms) ships its
+  // own file so the flagship JSON stays untouched. They merge into one flat
+  // catalogue for next-intl.
+  const [base, welcome, college, lms] = await Promise.all([
+    import(`../messages/${locale}.json`),
+    import(`../messages/welcome.${locale}.json`),
+    import(`../messages/college.${locale}.json`),
+    import(`../messages/lms.${locale}.json`),
+  ]);
+
   return {
     locale,
-    messages: (await import(`../messages/${locale}.json`)).default,
+    messages: {
+      ...base.default,
+      ...welcome.default,
+      ...college.default,
+      ...lms.default,
+    },
   };
 });

@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "title": "KLASSCI — Gestion scolaire, repensée.",
-    "description": "KLASSCI digitalise la gestion de votre établissement scolaire. Notes, emplois du temps, paiements, bulletins — un seul outil, zéro paperasse.",
+    "title": "KLASSCI, gestion scolaire repensée.",
+    "description": "KLASSCI digitalise la gestion de votre établissement scolaire. Notes, emplois du temps, paiements, bulletins, un seul outil, zéro paperasse.",
     "keywords": "gestion scolaire, logiciel école, KLASSCI, notes, bulletins, emploi du temps, paiements, présences, SaaS éducation, Côte d'Ivoire, Afrique",
     "ogSiteName": "KLASSCI"
   },
@@ -24,7 +24,7 @@
     "title": "Gestion scolaire, repensée.",
     "subtitle": "KLASSCI est l'outil qui remplace vos fichiers Excel, vos cahiers de notes et vos tableaux d'affichage. Un seul endroit pour tout gérer.",
     "primaryCta": "Essayer gratuitement",
-    "primaryCtaSub": "— c'est gratuit",
+    "primaryCtaSub": "c'est gratuit",
     "secondaryCta": "Voir comment ça marche",
     "note": "Disponible sur navigateur. Aucune installation requise.",
     "screenshots": [
@@ -47,7 +47,7 @@
       },
       {
         "title": "Complet",
-        "description": "Notes, bulletins, emplois du temps, paiements, présences, inscriptions — tout est intégré. Zéro outil supplémentaire."
+        "description": "Notes, bulletins, emplois du temps, paiements, présences, inscriptions, tout est intégré. Zéro outil supplémentaire."
       },
       {
         "title": "Sécurisé",
@@ -65,7 +65,7 @@
         "title": "Saisie des notes et bulletins",
         "description": "Les enseignants saisissent leurs notes directement depuis leur téléphone. Les moyennes, rangs et appréciations se calculent automatiquement. Les bulletins PDF sont générés en un clic, personnalisés aux couleurs de votre école.",
         "image": "/img/dashboard/notes-bulletins.png",
-        "alt": "Saisie des notes et bulletins — fiche étudiant KLASSCI"
+        "alt": "Saisie des notes et bulletins, fiche étudiant KLASSCI"
       },
       {
         "key": "finance",
@@ -110,7 +110,7 @@
       },
       {
         "title": "Tableau de bord par rôle",
-        "description": "Directeur, secrétaire, enseignant, comptable, coordinateur — chacun voit ce qui le concerne."
+        "description": "Directeur, secrétaire, enseignant, comptable, coordinateur, chacun voit ce qui le concerne."
       },
       {
         "title": "API et intégrations",
@@ -130,7 +130,7 @@
           "Historique complet des notes par étudiant et par semestre",
           "Export en lot pour impression ou archivage"
         ],
-        "outro": "Les enseignants saisissent directement — les secrétaires n'ont plus à recopier. Le temps de production des bulletins passe de 3 semaines à 48 heures."
+        "outro": "Les enseignants saisissent directement, les secrétaires n'ont plus à recopier. Le temps de production des bulletins passe de 3 semaines à 48 heures."
       },
       "finance": {
         "title": "Suivi financier en temps réel",
@@ -144,7 +144,7 @@
           "Rapports financiers par période, classe ou catégorie de frais",
           "Système de frais flexible : inscription, scolarité, examens, etc."
         ],
-        "outro": "Les comptables voient en un coup d'œil qui a payé, qui est en retard, et peuvent agir immédiatement — sans attendre la fin du mois."
+        "outro": "Les comptables voient en un coup d'œil qui a payé, qui est en retard, et peuvent agir immédiatement, sans attendre la fin du mois."
       },
       "planning": {
         "title": "Planning général",
@@ -241,7 +241,7 @@
     ]
   },
   "partnership": {
-    "alt": "Devenez partenaire KLASSCI — 0 FCFA",
+    "alt": "Devenez partenaire KLASSCI, 0 FCFA",
     "image": "/img/sections/partnership.png"
   },
   "video": {
@@ -254,7 +254,7 @@
   "security": {
     "title": "Sécurité et confiance totales",
     "p1": "Nous garantissons la protection optimale de vos données, dans le respect strict des normes RGPD. Notre équipe dédiée à la cybersécurité travaille en continu pour renforcer nos dispositifs de protection.",
-    "p2": "Chaque établissement dispose de sa propre base de données isolée — aucun partage de données entre écoles.",
+    "p2": "Chaque établissement dispose de sa propre base de données isolée, aucun partage de données entre écoles.",
     "image": "/img/sections/security.png",
     "alt": "Sécurité et protection des données KLASSCI"
   },
@@ -263,7 +263,7 @@
     "p1": "Accédez à des informations fiables à tout moment grâce à notre chatbot intégré. Échangez directement avec notre service client par email, WhatsApp ou Telegram.",
     "p2": "Nos agents maîtrisent le français et l'anglais. Temps de réponse moyen : moins de 2 minutes.",
     "image": "/img/sections/support.png",
-    "alt": "Support client KLASSCI — chat et assistance"
+    "alt": "Support client KLASSCI, chat et assistance"
   },
   "imageBanner": {
     "alt": "Étudiants KLASSCI",
@@ -271,7 +271,7 @@
   },
   "pricing": {
     "title": "Une seule offre, trois niveaux de service",
-    "subtitle": "Tous les modules, toutes les nouvelles fonctionnalités. Ce qui change d'un tier à l'autre, c'est le niveau de service humain — jours-dev, support, account manager.",
+    "subtitle": "Tous les modules, toutes les nouvelles fonctionnalités. Ce qui change d'un tier à l'autre, c'est le niveau de service humain, jours-dev, support, account manager.",
     "elite": {
       "eyebrow": "Notre formule recommandée",
       "badge": "★ Recommandé",
@@ -340,9 +340,9 @@
         {
           "label": "Produit",
           "rows": [
-            { "label": "Plateforme de cours en ligne (LMS)", "essentiel": "—", "pro": "✓", "elite": "✓" },
-            { "label": "API publique", "essentiel": "—", "pro": "✓", "elite": "✓ + accès anticipé" },
-            { "label": "WhatsApp parents", "essentiel": "—", "pro": "Standard (1 000 msg/mois)", "elite": "Full (5 000 msg/mois)" }
+            { "label": "Plateforme de cours en ligne (LMS)", "essentiel": "Non inclus", "pro": "✓", "elite": "✓" },
+            { "label": "API publique", "essentiel": "Non inclus", "pro": "✓", "elite": "✓ + accès anticipé" },
+            { "label": "WhatsApp parents", "essentiel": "Non inclus", "pro": "Standard (1 000 msg/mois)", "elite": "Full (5 000 msg/mois)" }
           ]
         },
         {
@@ -359,10 +359,10 @@
           "rows": [
             { "label": "Assistance", "essentiel": "Lun-Jeu (4j/7)", "pro": "Lun-Ven (5j/7)", "elite": "Lun-Sam (6j/7)" },
             { "label": "Personnalisation au lancement", "essentiel": "Logo + couleurs", "pro": "+ Templates bulletin/reçu", "elite": "Setup sur-mesure" },
-            { "label": "Personnalisation continue", "essentiel": "—", "pro": "2 jours-dev / an", "elite": "1 jour-dev / mois (12 jours/an)" },
-            { "label": "Influence sur la roadmap", "essentiel": "—", "pro": "Vote", "elite": "Priorité" },
-            { "label": "Account manager dédié", "essentiel": "—", "pro": "—", "elite": "✓" },
-            { "label": "Audit annuel d'usage", "essentiel": "—", "pro": "—", "elite": "✓" }
+            { "label": "Personnalisation continue", "essentiel": "Non inclus", "pro": "2 jours-dev / an", "elite": "1 jour-dev / mois (12 jours/an)" },
+            { "label": "Influence sur la roadmap", "essentiel": "Non inclus", "pro": "Vote", "elite": "Priorité" },
+            { "label": "Account manager dédié", "essentiel": "Non inclus", "pro": "Non inclus", "elite": "✓" },
+            { "label": "Audit annuel d'usage", "essentiel": "Non inclus", "pro": "Non inclus", "elite": "✓" }
           ]
         }
       ],
@@ -478,7 +478,7 @@
         ]
       }
     },
-    "copyright": "© {year} KLASSCI — African Digital Consulting",
+    "copyright": "© {year} KLASSCI · African Digital Consulting",
     "social": {
       "facebook": "Facebook",
       "linkedin": "LinkedIn"

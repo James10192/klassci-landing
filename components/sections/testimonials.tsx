@@ -100,7 +100,7 @@ export function Testimonials() {
       {/* Section header */}
       <div className="text-center mb-12">
         <p className="font-mono uppercase tracking-[0.08em] text-[0.72rem] text-text-muted mb-4">
-          02 — {eyebrowLabel}
+          02 · {eyebrowLabel}
         </p>
         <h2
           id="testimonials-heading"

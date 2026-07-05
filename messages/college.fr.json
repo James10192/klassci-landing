@@ -1,0 +1,139 @@
+{
+  "college": {
+    "meta": {
+      "title": "KLASSCI College, gestion complète des collèges et lycées",
+      "description": "KLASSCI College centralise inscriptions, frais, notes, bulletins, présences, emploi du temps et espaces parents pour les collèges et lycées."
+    },
+    "nav": {
+      "universite": "Université",
+      "interfaces": "Interfaces",
+      "docs": "Docs"
+    },
+    "hero": {
+      "badge": "KLASSCI College",
+      "title": "Le collège entier, dans un seul logiciel.",
+      "subtitle": "Direction, secrétariat, comptabilité, enseignants, parents et élèves travaillent sur une plateforme claire, rapide et pensée pour les réalités scolaires ivoiriennes.",
+      "primaryCta": "Demander un devis",
+      "secondaryCta": "Voir les interfaces"
+    },
+    "roles": {
+      "eyebrow": "Comptes par acteur",
+      "title": "Chaque compte voit exactement ce qu'il doit traiter",
+      "intro": "KLASSCI College sépare les responsabilités sans fragmenter l'information. Les rôles collaborent dans le même système, avec des permissions propres.",
+      "items": [
+        {
+          "title": "Direction",
+          "description": "Vue globale sur les effectifs, les finances, les présences, les résultats et les documents officiels."
+        },
+        {
+          "title": "Secrétariat",
+          "description": "Inscriptions, dossiers élèves, classes, documents administratifs et suivi quotidien des demandes."
+        },
+        {
+          "title": "Comptabilité",
+          "description": "Encaissements, reçus, soldes, relances et situations financières par élève ou par classe."
+        },
+        {
+          "title": "Enseignants",
+          "description": "Notes, appels, cahier de présence, emploi du temps et suivi des classes depuis mobile ou ordinateur."
+        },
+        {
+          "title": "Parents",
+          "description": "Suivi des frais, bulletins, emplois du temps, documents et informations utiles pour chaque enfant."
+        },
+        {
+          "title": "Élèves",
+          "description": "Accès simple aux notes, bulletins, présences, paiements, emploi du temps et documents publiés."
+        }
+      ]
+    },
+    "modules": {
+      "eyebrow": "Modules clés",
+      "title": "Tout le quotidien scolaire, sans outil parallèle",
+      "intro": "Le produit couvre les flux qui prennent du temps aux équipes, de la rentrée aux bulletins.",
+      "items": [
+        {
+          "title": "Inscriptions",
+          "description": "Création de dossier, classe, statut, frais souscrits, documents et validation."
+        },
+        {
+          "title": "Frais et caisse",
+          "description": "Paiements sur inscription, reçus, soldes restants, historiques et relances."
+        },
+        {
+          "title": "Notes et bulletins",
+          "description": "Saisie par enseignant, moyennes, rangs, bulletins et documents PDF."
+        },
+        {
+          "title": "Présences",
+          "description": "Appel numérique, absences, retards, justificatifs et statistiques par classe."
+        },
+        {
+          "title": "Emploi du temps",
+          "description": "Salles homonymes aux classes, professeurs mobiles, planning lisible par acteur."
+        },
+        {
+          "title": "Parents",
+          "description": "Portail famille avec enfants, frais, documents, notes et bulletins."
+        },
+        {
+          "title": "Documents",
+          "description": "Certificats, attestations, situations financières et exports propres."
+        },
+        {
+          "title": "Pilotage",
+          "description": "Tableaux de bord pour suivre les priorités avant qu'elles deviennent des urgences."
+        }
+      ]
+    },
+    "showcase": {
+      "eyebrow": "Interfaces produit",
+      "title": "Des écrans récents, lisibles et directement exploitables",
+      "intro": "Des captures récentes montrent les écrans réels de gestion scolaire, sans cadre ajouté, pour garder les interfaces pleinement lisibles.",
+      "items": [
+        {
+          "title": "Classes et séries",
+          "caption": "Tableau de bord actuel avec bandeau bleu et orange, indicateurs et actions rapides.",
+          "image": "/img/college/current-dashboard.png",
+          "alt": "Tableau de bord KLASSCI College actuel",
+          "format": "desktop"
+        },
+        {
+          "title": "Dashboard mobile",
+          "caption": "Les indicateurs et actions restent accessibles sur téléphone, avec la même identité de marque.",
+          "image": "/img/college/current-mobile-dashboard.png",
+          "alt": "Dashboard mobile KLASSCI College actuel",
+          "format": "mobile"
+        },
+        {
+          "title": "Évaluations et saisies",
+          "caption": "Supervision des notes, filtres par classe, matière et trimestre.",
+          "image": "/img/college/current-grades.png",
+          "alt": "Gestion des notes KLASSCI College",
+          "format": "desktop"
+        },
+        {
+          "title": "Parents et comptes",
+          "caption": "Suivi des tuteurs, comptes de connexion et contacts utiles pour chaque famille.",
+          "image": "/img/college/current-parents.png",
+          "alt": "Parents KLASSCI College",
+          "format": "desktop"
+        },
+        {
+          "title": "Emploi du temps",
+          "caption": "Génération, aperçu et export PDF regroupés dans une interface claire.",
+          "image": "/img/college/current-timetable.png",
+          "alt": "Emploi du temps KLASSCI College",
+          "format": "desktop"
+        }
+      ]
+    },
+    "quote": {
+      "eyebrow": "Tarification",
+      "title": "Chaque établissement reçoit un devis adapté",
+      "text": "La grille dépend de la taille de l'établissement, des comptes nécessaires, de l'accompagnement et du niveau de personnalisation. On qualifie le besoin, puis on propose une offre claire.",
+      "cta": "Demander un devis",
+      "note": "Réponse sous 24h ouvrées"
+    }
+  }
+}

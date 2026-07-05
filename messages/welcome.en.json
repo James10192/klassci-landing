@@ -1,0 +1,31 @@
+{
+  "welcome": {
+    "metaTitle": "KLASSCI, school management software",
+    "metaDescription": "KLASSCI supports universities, colleges, high schools and digital learning. Choose the product built for your institution.",
+    "badge": "Welcome to KLASSCI",
+    "title": "Which institution do you run?",
+    "subtitle": "KLASSCI brings every school workflow into one clear platform. Choose your universe and see the version designed for your team.",
+    "doors": {
+      "universite": {
+        "tag": "Higher education",
+        "name": "University & Grandes écoles",
+        "desc": "LMD, semesters, credits, accounting and administration for higher education.",
+        "cta": "Discover"
+      },
+      "college": {
+        "tag": "Middle & high school",
+        "name": "College & High school",
+        "desc": "Terms, DREN-ready reports, cashier workflows, attendance and accounts for every school actor.",
+        "cta": "Discover"
+      },
+      "lms": {
+        "tag": "Soon",
+        "name": "Learning space",
+        "desc": "Online courses, assignments and assessments. Digital learning is being prepared.",
+        "cta": "Stay informed"
+      }
+    },
+    "footNote": "One account, one school. Hosted, backed up and secured.",
+    "docs": "Docs"
+  }
+}

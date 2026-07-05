@@ -8,8 +8,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://klassci.com";
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
-  const localePath = (locale: string) =>
-    locale === routing.defaultLocale ? "" : `/${locale}`;
+  const localePath = (locale: string) => `/${locale}`;
 
   const homepages: MetadataRoute.Sitemap = routing.locales.map((locale) => ({
     url: `${SITE_URL}${localePath(locale)}`,
@@ -17,6 +16,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: "weekly",
     priority: 1.0,
   }));
+
+  const universePages: MetadataRoute.Sitemap = routing.locales.flatMap((locale) =>
+    ["/universite", "/college", "/lms"].map((path) => ({
+      url: `${SITE_URL}${localePath(locale)}${path}`,
+      lastModified: now,
+      changeFrequency: "weekly" as const,
+      priority: path === "/lms" ? 0.7 : 0.9,
+    })),
+  );
 
   const docs: MetadataRoute.Sitemap = source.getPages().flatMap((page) =>
     routing.locales.map((locale) => ({
@@ -27,5 +35,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
   );
 
-  return [...homepages, ...docs];
+  return [...homepages, ...universePages, ...docs];
 }

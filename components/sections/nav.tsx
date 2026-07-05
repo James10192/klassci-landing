@@ -21,8 +21,7 @@ export function Nav() {
   const locale = useLocale() as "fr" | "en";
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  // localePrefix is 'as-needed' — FR (default) is unprefixed, EN gets /en/...
-  const docsHref = locale === "fr" ? "/docs" : `/${locale}/docs`;
+  const docsHref = `/${locale}/docs`;
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";

@@ -16,7 +16,7 @@ export function Support() {
         {/* Text — left (reversed direction vs Security for editorial rhythm) */}
         <div className="lg:order-1">
           <p className="font-mono uppercase tracking-[0.08em] text-[0.72rem] text-text-muted mb-4">
-            09 — {eyebrowLabel.toUpperCase()}
+            09 · {eyebrowLabel.toUpperCase()}
           </p>
           <h2
             id="support-heading"

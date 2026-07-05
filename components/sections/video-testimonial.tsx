@@ -111,7 +111,7 @@ export function VideoTestimonial() {
         {/* Text column */}
         <div>
           <p className="font-mono uppercase tracking-[0.08em] text-[0.72rem] text-text-muted mb-4">
-            07 — {eyebrowLabel}
+            07 · {eyebrowLabel}
           </p>
           <h2
             id="video-heading"
