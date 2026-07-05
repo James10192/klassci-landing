@@ -21,6 +21,7 @@ export function Nav() {
   const locale = useLocale() as "fr" | "en";
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  const homeHref = `/${locale}`;
   const docsHref = `/${locale}/docs`;
 
   useEffect(() => {
@@ -51,6 +52,12 @@ export function Nav() {
 
           {/* Desktop links */}
           <div className="hidden md:flex items-center gap-1">
+            <a
+              href={homeHref}
+              className="px-3 py-2 text-[0.875rem] font-medium text-text-secondary hover:text-text transition-colors"
+            >
+              {t("home")}
+            </a>
             {ANCHOR_LINKS.map((link) => (
               <a
                 key={link.key}
@@ -107,6 +114,13 @@ export function Nav() {
           role="dialog"
           aria-modal="true"
         >
+          <a
+            href={homeHref}
+            onClick={closeMobile}
+            className="font-serif font-light text-[1.75rem] text-text hover:text-accent transition-colors"
+          >
+            {t("home")}
+          </a>
           {ANCHOR_LINKS.map((link) => (
             <a
               key={link.key}

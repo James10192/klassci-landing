@@ -77,6 +77,7 @@ export function CollegeLanding() {
   const roles = t.raw("roles.items") as RoleItem[];
   const modules = t.raw("modules.items") as ModuleItem[];
   const shots = t.raw("showcase.items") as ShotItem[];
+  const homeHref = `/${locale}`;
   const docsHref = `/${locale}/docs/college`;
 
   return (
@@ -87,7 +88,13 @@ export function CollegeLanding() {
             <Link href="/" aria-label="KLASSCI College">
               <CollegeLogo />
             </Link>
+            <Link href="/" className="text-[0.875rem] font-medium text-text-secondary transition-colors hover:text-text md:hidden">
+              {t("nav.home")}
+            </Link>
             <div className="hidden items-center gap-1 md:flex">
+              <a href={homeHref} className="px-3 py-2 text-[0.875rem] font-medium text-text-secondary transition-colors hover:text-text">
+                {t("nav.home")}
+              </a>
               <a href="#fonctionnalites" className="px-3 py-2 text-[0.875rem] font-medium text-text-secondary transition-colors hover:text-text">
                 Fonctionnalités
               </a>

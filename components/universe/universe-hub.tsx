@@ -92,22 +92,20 @@ export function UniverseHub() {
                 width={1200}
                 height={760}
                 priority
-                className="absolute left-8 top-8 w-[78%] rounded-lg border border-border bg-bg-card shadow-[0_30px_80px_rgba(4,83,203,0.18)]"
+                className="absolute left-10 top-4 w-[80%] rounded-lg border border-border bg-bg-card shadow-[0_30px_80px_rgba(4,83,203,0.18)]"
               />
               <Image
                 src="/img/college/current-dashboard.png"
                 alt=""
                 width={1200}
                 height={760}
-                className="absolute bottom-10 right-0 w-[66%] rounded-lg border border-border bg-bg-card shadow-[0_24px_70px_rgba(26,26,26,0.16)]"
+                className="absolute bottom-8 right-0 w-[74%] rounded-lg border border-border bg-bg-card shadow-[0_24px_70px_rgba(26,26,26,0.16)]"
               />
-              <div className="absolute bottom-2 left-6 h-48 w-28 rounded-[1.25rem] border border-border bg-bg-card p-2 shadow-[0_24px_60px_rgba(0,0,0,0.18)]">
-                <Image
-                  src="/img/college/current-parents.png"
+              <div className="absolute bottom-1 left-3 h-64 w-32 rounded-[1.5rem] border-[8px] border-[#111827] bg-white shadow-[0_24px_60px_rgba(0,0,0,0.18)]">
+                <img
+                  src="/img/college/current-mobile-dashboard.png"
                   alt=""
-                  width={1440}
-                  height={1000}
-                  className="h-full w-full rounded-[1rem] object-cover"
+                  className="h-full w-full rounded-[1rem] object-cover object-top"
                 />
               </div>
             </div>

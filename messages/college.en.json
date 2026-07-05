@@ -5,6 +5,7 @@
       "description": "KLASSCI College brings enrollment, fees, grades, report cards, attendance, timetables and parent spaces into one platform."
     },
     "nav": {
+      "home": "Home",
       "universite": "University",
       "interfaces": "Interfaces",
       "docs": "Docs"

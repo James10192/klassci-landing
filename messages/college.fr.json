@@ -5,6 +5,7 @@
       "description": "KLASSCI College centralise inscriptions, frais, notes, bulletins, présences, emploi du temps et espaces parents pour les collèges et lycées."
     },
     "nav": {
+      "home": "Accueil",
       "universite": "Université",
       "interfaces": "Interfaces",
       "docs": "Docs"
@@ -12,7 +13,7 @@
     "hero": {
       "badge": "KLASSCI College",
       "title": "Le collège entier, dans un seul logiciel.",
-      "subtitle": "Direction, secrétariat, comptabilité, enseignants, parents et élèves travaillent sur une plateforme claire, rapide et pensée pour les réalités scolaires ivoiriennes.",
+      "subtitle": "Direction, secrétariat, comptabilité, enseignants, parents et élèves travaillent sur une plateforme claire, rapide et pensée pour les réalités scolaires africaines.",
       "primaryCta": "Demander un devis",
       "secondaryCta": "Voir les interfaces"
     },

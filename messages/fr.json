@@ -6,6 +6,7 @@
     "ogSiteName": "KLASSCI"
   },
   "nav": {
+    "home": "Accueil",
     "features": "Fonctionnalités",
     "pricing": "Tarifs",
     "faq": "FAQ",
