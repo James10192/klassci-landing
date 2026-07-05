@@ -1,7 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" fill="none">
-  <rect width="640" height="420" fill="#f4f8ff"/>
-  <path d="M320 76 494 142v92c0 82-62 136-174 162-112-26-174-80-174-162v-92L320 76Z" fill="#fff" stroke="#c7d8f2" stroke-width="6"/>
-  <path d="M320 112 450 162v72c0 58-44 96-130 118-86-22-130-60-130-118v-72l130-50Z" fill="#dceaff"/>
-  <path d="m270 236 34 34 72-88" stroke="#0453cb" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M218 152h204" stroke="#f58220" stroke-width="12" stroke-linecap="round"/>
+  <rect width="640" height="420" fill="#eaf7ff"/>
+  <rect x="34" y="34" width="572" height="352" rx="34" fill="#075985"/>
+  <path d="M320 82 124 168h392L320 82Z" fill="#fff" opacity=".96"/>
+  <rect x="150" y="188" width="54" height="114" rx="8" fill="#fff" opacity=".95"/>
+  <rect x="246" y="188" width="54" height="114" rx="8" fill="#fff" opacity=".95"/>
+  <rect x="340" y="188" width="54" height="114" rx="8" fill="#fff" opacity=".95"/>
+  <rect x="436" y="188" width="54" height="114" rx="8" fill="#fff" opacity=".95"/>
+  <rect x="114" y="318" width="412" height="36" rx="12" fill="#fff" opacity=".96"/>
+  <path d="M284 136h72M232 238h220" stroke="#075985" stroke-width="14" stroke-linecap="round"/>
+  <circle cx="320" cy="134" r="28" fill="#0ea5e9"/>
+  <path d="m306 134 11 11 22-27" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="94" y="64" width="146" height="44" rx="12" fill="#fff" opacity=".94"/>
+  <text x="114" y="93" fill="#075985" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="800">ODD 16</text>
 </svg>

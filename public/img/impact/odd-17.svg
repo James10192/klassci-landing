@@ -1,9 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" fill="none">
-  <rect width="640" height="420" fill="#f4f8ff"/>
-  <rect x="96" y="110" width="448" height="200" rx="28" fill="#fff" stroke="#c7d8f2" stroke-width="5"/>
-  <path d="M164 228c42-48 84-48 126 0l24 28c20 24 54 24 76 0l16-18" stroke="#0453cb" stroke-width="20" stroke-linecap="round"/>
-  <path d="M346 200c42-48 84-48 126 0" stroke="#f58220" stroke-width="20" stroke-linecap="round"/>
-  <circle cx="194" cy="156" r="32" fill="#dceaff" stroke="#0453cb" stroke-width="8"/>
-  <circle cx="446" cy="156" r="32" fill="#fff0df" stroke="#f58220" stroke-width="8"/>
-  <path d="M270 332h100" stroke="#0453cb" stroke-width="14" stroke-linecap="round"/>
+  <rect width="640" height="420" fill="#edf5ff"/>
+  <rect x="34" y="34" width="572" height="352" rx="34" fill="#17417f"/>
+  <path d="M178 226c42-42 86-42 132 0l38 34c34 30 72 30 106 0l48-42" stroke="#fff" stroke-width="30" stroke-linecap="round"/>
+  <path d="M178 226c42-42 86-42 132 0l38 34c34 30 72 30 106 0l48-42" stroke="#f58220" stroke-width="12" stroke-linecap="round"/>
+  <circle cx="158" cy="134" r="48" fill="#fff"/>
+  <circle cx="320" cy="104" r="48" fill="#fff"/>
+  <circle cx="482" cy="134" r="48" fill="#fff"/>
+  <circle cx="224" cy="306" r="48" fill="#fff"/>
+  <circle cx="416" cy="306" r="48" fill="#fff"/>
+  <path d="M202 150 276 116M364 116l74 34M250 282l44-44M390 238l-44 44" stroke="#8fc0ff" stroke-width="10" stroke-linecap="round"/>
+  <rect x="94" y="64" width="146" height="44" rx="12" fill="#fff" opacity=".94"/>
+  <text x="114" y="93" fill="#17417f" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="800">ODD 17</text>
+  <path d="M300 104h40M320 84v40" stroke="#17417f" stroke-width="10" stroke-linecap="round"/>
 </svg>

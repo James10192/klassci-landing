@@ -493,18 +493,18 @@
       ]
     },
     "sdg": {
-      "eyebrow": "Impact durable",
-      "title": "Une gestion universitaire plus inclusive, plus traçable et plus responsable.",
-      "intro": "En dématérialisant les processus, en renforçant la gouvernance et en accompagnant mieux chaque étudiant, KLASSCI contribue concrètement à 9 Objectifs de Développement Durable.",
+      "eyebrow": "Impact ODD",
+      "title": "Moins de papier, plus d'inclusion et une gouvernance universitaire plus responsable.",
+      "intro": "KLASSCI inscrit la gestion universitaire dans une logique d'établissement vert et traçable. En réduisant les impressions, en renforçant l'accessibilité et en structurant la gouvernance, la plateforme contribue concrètement à 9 Objectifs de Développement Durable des Nations Unies.",
       "items": [
         { "number": "04", "name": "Éducation de qualité", "text": "Organisation académique plus fiable, données accessibles et suivi pédagogique renforcé." },
         { "number": "05", "name": "Égalité entre les sexes", "text": "Services numériques partagés par les apprenants, personnels et responsables habilités." },
         { "number": "08", "name": "Travail décent", "text": "Équipes administratives moins saturées par les tâches répétitives et les ressaisies." },
         { "number": "09", "name": "Innovation", "text": "Transformation numérique structurée pour l'enseignement supérieur africain." },
         { "number": "10", "name": "Inégalités réduites", "text": "Meilleur suivi des besoins spécifiques et des aménagements pédagogiques." },
-        { "number": "12", "name": "Consommation responsable", "text": "Moins de papier grâce aux bulletins, reçus, exports et documents dématérialisés." },
-        { "number": "13", "name": "Action climat", "text": "Des démarches administratives plus légères et moins dépendantes des impressions." },
-        { "number": "16", "name": "Institutions efficaces", "text": "Traçabilité, permissions, audit et gouvernance plus transparents." },
+        { "number": "12", "name": "Consommation responsable", "text": "Réduction concrète du papier grâce aux bulletins, reçus, exports et documents dématérialisés." },
+        { "number": "13", "name": "Action climat", "text": "Moins d'impressions, moins de déplacements administratifs inutiles et des processus plus sobres." },
+        { "number": "16", "name": "Institutions efficaces", "text": "Traçabilité, permissions, audit et gouvernance plus lisibles pour les équipes habilitées." },
         { "number": "17", "name": "Partenariats", "text": "Meilleure coordination entre établissement, familles, institutions et partenaires." }
       ]
     }

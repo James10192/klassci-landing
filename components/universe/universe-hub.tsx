@@ -9,7 +9,7 @@ import Laptop from "lucide-react/dist/esm/icons/laptop";
 import Menu from "lucide-react/dist/esm/icons/menu";
 import School from "lucide-react/dist/esm/icons/school";
 import X from "lucide-react/dist/esm/icons/x";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
 
@@ -258,7 +258,7 @@ export function UniverseHub() {
             const panelFlex = activeDoor === null ? "1 1 0%" : isActive ? "1.46 1 0%" : "0.74 1 0%";
 
             return (
-              <motion.article
+              <m.article
                 key={key}
                 onMouseEnter={() => setActiveDoor(key)}
                 onMouseLeave={() => setActiveDoor(null)}
@@ -316,7 +316,7 @@ export function UniverseHub() {
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden />
                   </Link>
                 </div>
-              </motion.article>
+              </m.article>
             );
           })}
         </div>

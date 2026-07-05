@@ -1,9 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" fill="none">
-  <rect width="640" height="420" fill="#edf5ff"/>
-  <rect x="62" y="58" width="516" height="304" rx="26" fill="#fff" stroke="#c7d8f2"/>
-  <path d="M112 130c58-26 112-26 168 0v154c-56-24-110-24-168 0V130Z" fill="#dceaff" stroke="#0453cb" stroke-width="8"/>
-  <path d="M360 130c58-26 112-26 168 0v154c-56-24-110-24-168 0V130Z" fill="#fff0df" stroke="#f58220" stroke-width="8"/>
-  <path d="M280 130v154M360 130v154M138 172h104M138 212h84M386 172h106M386 212h74" stroke="#164b9f" stroke-width="14" stroke-linecap="round"/>
-  <circle cx="320" cy="92" r="34" fill="#0453cb"/>
-  <path d="m302 92 14 14 25-30" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect width="640" height="420" fill="#eaf3ff"/>
+  <rect x="32" y="32" width="576" height="356" rx="34" fill="#0453cb"/>
+  <circle cx="506" cy="92" r="86" fill="#f58220" opacity=".92"/>
+  <path d="M82 300c64-54 128-72 192-54 70 20 126 16 184-16 43-24 77-29 102-16v86H82Z" fill="#0f3f8c"/>
+  <rect x="88" y="72" width="210" height="190" rx="18" fill="#fff" opacity=".96"/>
+  <rect x="342" y="72" width="210" height="190" rx="18" fill="#fff" opacity=".94"/>
+  <path d="M130 124c38-18 76-18 114 0v96c-38-16-76-16-114 0v-96Z" fill="#dbeafe" stroke="#0453cb" stroke-width="9"/>
+  <path d="M388 124c38-18 76-18 114 0v96c-38-16-76-16-114 0v-96Z" fill="#fff3e6" stroke="#f58220" stroke-width="9"/>
+  <path d="M272 115v126M160 160h62M160 190h46M418 160h62M418 190h46" stroke="#164b9f" stroke-width="12" stroke-linecap="round"/>
+  <rect x="92" y="300" width="146" height="44" rx="12" fill="#fff" opacity=".94"/>
+  <text x="112" y="329" fill="#0453cb" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="800">ODD 04</text>
+  <path d="M468 306c-34-28-26-76 20-102 44 27 50 74 18 102h-38Z" fill="#2dd36f"/>
+  <path d="M488 306v-68" stroke="#fff" stroke-width="8" stroke-linecap="round"/>
+  <path d="M488 258c-18 0-33-9-42-26M488 272c20 0 36-10 47-29" stroke="#fff" stroke-width="8" stroke-linecap="round"/>
 </svg>

@@ -298,7 +298,7 @@ export function CollegeLanding() {
           </div>
         </section>
 
-        <section className="border-y border-border bg-[linear-gradient(135deg,rgba(4,83,203,0.06),rgba(245,130,32,0.08))] py-16" aria-labelledby="college-impact-title">
+        <section id="impact" className="scroll-mt-24 border-y border-border bg-[linear-gradient(135deg,rgba(4,83,203,0.06),rgba(245,130,32,0.08))] py-16" aria-labelledby="college-impact-title">
           <div className="container">
             <header className="mb-10 max-w-3xl">
               <p className="text-sm text-text-muted">{t("impact.eyebrow")}</p>
@@ -307,7 +307,7 @@ export function CollegeLanding() {
               </h2>
               <p className="mt-4 leading-relaxed text-text-secondary">{t("impact.intro")}</p>
             </header>
-            <SdgImpactGrid items={sdgs} />
+            <SdgImpactGrid items={sdgs} variant="college" />
           </div>
         </section>
 

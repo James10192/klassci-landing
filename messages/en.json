@@ -493,18 +493,18 @@
       ]
     },
     "sdg": {
-      "eyebrow": "Sustainable impact",
-      "title": "More inclusive, traceable and responsible university management.",
-      "intro": "By digitizing workflows, strengthening governance and supporting each student better, KLASSCI contributes to 9 Sustainable Development Goals.",
+      "eyebrow": "SDG impact",
+      "title": "Less paper, stronger inclusion and more responsible university governance.",
+      "intro": "KLASSCI connects university management to a greener, more traceable operating model. By reducing print-heavy workflows, strengthening accessibility and structuring governance, the platform contributes to 9 United Nations Sustainable Development Goals.",
       "items": [
         { "number": "04", "name": "Quality education", "text": "More reliable academic organization, accessible data and stronger learning follow-up." },
         { "number": "05", "name": "Gender equality", "text": "Digital services shared by learners, staff and authorized leaders." },
         { "number": "08", "name": "Decent work", "text": "Administrative teams spend less time on repetitive work and re-entry." },
         { "number": "09", "name": "Innovation", "text": "Structured digital transformation for African higher education." },
         { "number": "10", "name": "Reduced inequalities", "text": "Better tracking of specific needs and learning accommodations." },
-        { "number": "12", "name": "Responsible consumption", "text": "Less paper through digital report cards, receipts, exports and documents." },
-        { "number": "13", "name": "Climate action", "text": "Lighter administrative workflows with fewer print-heavy processes." },
-        { "number": "16", "name": "Effective institutions", "text": "Traceability, permissions, audit and clearer governance." },
+        { "number": "12", "name": "Responsible consumption", "text": "Concrete paper reduction through digital report cards, receipts, exports and documents." },
+        { "number": "13", "name": "Climate action", "text": "Fewer printouts, fewer unnecessary administrative trips and leaner workflows." },
+        { "number": "16", "name": "Effective institutions", "text": "Traceability, permissions, audit and clearer governance for authorized teams." },
         { "number": "17", "name": "Partnerships", "text": "Better coordination between institutions, families, public bodies and partners." }
       ]
     }
