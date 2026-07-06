@@ -69,7 +69,7 @@ export function SdgImpactGrid({
             ))}
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
             {compactItems.map((item) => (
               <CompactImpactCard key={item.number} item={item} variant={variant} />
             ))}
