@@ -11,15 +11,15 @@ interface SdgItem {
 type SdgVariant = "university" | "college";
 
 const SDG_IMAGES: Record<string, string> = {
-  "04": "/img/impact/odd-04.svg",
-  "05": "/img/impact/odd-05.svg",
-  "08": "/img/impact/odd-08.svg",
-  "09": "/img/impact/odd-09.svg",
-  "10": "/img/impact/odd-10.svg",
-  "12": "/img/impact/odd-12.svg",
-  "13": "/img/impact/odd-13.svg",
-  "16": "/img/impact/odd-16.svg",
-  "17": "/img/impact/odd-17.svg",
+  "04": "/img/impact/odd-04.jpg",
+  "05": "/img/impact/odd-05.jpg",
+  "08": "/img/impact/odd-08.jpg",
+  "09": "/img/impact/odd-09.jpg",
+  "10": "/img/impact/odd-10.jpg",
+  "12": "/img/impact/odd-12.jpg",
+  "13": "/img/impact/odd-13.jpg",
+  "16": "/img/impact/odd-16.jpg",
+  "17": "/img/impact/odd-17.jpg",
 };
 
 const SDG_TONES: Record<string, string> = {
@@ -89,7 +89,7 @@ function HeroImpactCard({ item, variant }: { item: SdgItem; variant: SdgVariant 
     >
       <div className={`absolute inset-x-0 top-0 h-[58%] bg-gradient-to-br ${getTone(item.number, variant)}`} />
       <img
-        src={SDG_IMAGES[item.number] ?? "/img/impact/odd-04.svg"}
+        src={SDG_IMAGES[item.number] ?? "/img/impact/odd-04.jpg"}
         alt=""
         className="absolute inset-x-0 top-0 h-[58%] w-full object-cover opacity-95 transition duration-700 group-hover:scale-[1.045]"
         loading="lazy"
@@ -130,7 +130,7 @@ function SpotlightImpactCard({ item, variant }: { item: SdgItem; variant: SdgVar
       <div className="relative h-36 overflow-hidden">
         <div className={`absolute inset-0 bg-gradient-to-br ${getTone(item.number, variant)} opacity-90`} />
         <img
-          src={SDG_IMAGES[item.number] ?? "/img/impact/odd-04.svg"}
+          src={SDG_IMAGES[item.number] ?? "/img/impact/odd-04.jpg"}
           alt=""
           className="absolute inset-0 h-full w-full object-cover opacity-90 transition duration-700 group-hover:scale-[1.06]"
           loading="lazy"
@@ -163,7 +163,7 @@ function CompactImpactCard({ item, variant }: { item: SdgItem; variant: SdgVaria
       <div className="flex items-start gap-3">
         <div className="relative h-14 w-14 flex-shrink-0 overflow-hidden rounded border border-border bg-bg-alt">
           <img
-            src={SDG_IMAGES[item.number] ?? "/img/impact/odd-04.svg"}
+            src={SDG_IMAGES[item.number] ?? "/img/impact/odd-04.jpg"}
             alt=""
             className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
             loading="lazy"
