@@ -286,6 +286,22 @@
     "image": "/img/sections/support.png",
     "alt": "Support client KLASSCI, chat et assistance"
   },
+  "deployment": {
+    "eyebrow": "Déploiement accompagné",
+    "title": "Un déploiement accompagné de bout en bout",
+    "intro": "Notre équipe prépare votre environnement, sécurise la reprise de vos données et accompagne chaque rôle jusqu'à la mise en ligne.",
+    "steps": {
+      "scoping": { "title": "Cadrage", "text": "Nous définissons le périmètre, les priorités et le calendrier avec votre équipe projet." },
+      "migration": { "title": "Migration", "text": "Vos données structurées sont reprises, contrôlées et préparées pour votre environnement." },
+      "training": { "title": "Formation", "text": "Direction, scolarité, finances et enseignants sont formés selon leurs responsabilités." },
+      "launch": { "title": "Mise en ligne", "text": "Nous validons les parcours essentiels et restons présents pendant la prise en main." }
+    },
+    "assurances": {
+      "backups": { "title": "Sauvegardes quotidiennes", "text": "Vos données sont sauvegardées automatiquement chaque jour." },
+      "support": { "title": "Assistance selon votre formule", "text": "Le niveau d'accompagnement correspond au service choisi." },
+      "adoption": { "title": "Suivi de l'adoption", "text": "Nous suivons l'usage et aidons vos équipes à tirer le meilleur de KLASSCI." }
+    }
+  },
   "imageBanner": {
     "alt": "Étudiants KLASSCI",
     "image": "/img/sections/students-banner.png"
@@ -311,7 +327,7 @@
         "Account manager dédié"
       ],
       "ctaPrimary": "Souscrire",
-      "ctaTrial": "Tester gratuitement 3 mois",
+      "ctaTrial": "Tester gratuitement 1 mois",
       "fineprint": "6 M FCFA la première année · 460 k FCFA / mois en mensualisation"
     },
     "common": {
@@ -414,7 +430,7 @@
       },
       {
         "q": "Combien de temps pour être opérationnel ?",
-        "a": "Pour le plan gratuit (essai de 3 mois), votre compte est créé en 2 à 3 jours. Si vous passez à une formule payante, comptez environ 2 semaines pour la personnalisation complète et le déploiement de votre établissement."
+        "a": "Pour l'essai gratuit d'un mois, votre compte est créé en 2 à 3 jours. Si vous passez à une formule payante, comptez environ 2 semaines pour la personnalisation complète et le déploiement de votre établissement."
       },
       {
         "q": "KLASSCI fonctionne-t-il sur téléphone ?",
@@ -422,7 +438,7 @@
       },
       {
         "q": "Puis-je essayer gratuitement ?",
-        "a": "Le plan Free vous permet de tester KLASSCI pendant 3 mois avec jusqu'à 50 étudiants. Votre compte est créé en 2 à 3 jours. Si vous passez à une formule payante, comptez environ 2 semaines pour la personnalisation et le déploiement complet de votre établissement."
+        "a": "L'essai gratuit vous permet de tester KLASSCI pendant 1 mois avec jusqu'à 50 étudiants. Votre compte est créé en 2 à 3 jours. Si vous passez à une formule payante, comptez environ 2 semaines pour la personnalisation et le déploiement complet de votre établissement."
       }
     ]
   },

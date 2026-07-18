@@ -2,9 +2,10 @@
 
 import { AlertCircle, Check, Mail, MapPin } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import { useCallback, useId, useState, type FormEvent } from "react";
+import { useCallback, useId, type FormEvent } from "react";
 
-import { track } from "@/lib/analytics/track";
+import { CONTACT_ENDPOINT, useContactSubmission } from "@/hooks/use-contact-submission";
+import { CONTACT_FIELD_LIMITS } from "@/lib/contact";
 
 interface ContactInfo {
   email: string;
@@ -44,12 +45,6 @@ interface ContactForm {
   responseNote: string;
 }
 
-type Status = "idle" | "submitting" | "success" | "error";
-
-// TODO: Create a Vercel API route at app/api/contact/route.ts to handle this POST.
-// Until then, the form posts to /api/contact and we surface a clean error state.
-const CONTACT_ENDPOINT = "/api/contact";
-
 const FIELD_CLS =
   "block w-full border border-border rounded bg-bg-card text-text px-3.5 py-2.5 text-[0.875rem] " +
   "focus:border-accent focus:ring-2 focus:ring-accent-light outline-none transition-colors " +
@@ -67,46 +62,15 @@ export function Contact() {
   const success = t.raw("success") as { title: string; text: string };
   const error = t.raw("error") as { title: string; text: string };
 
-  const [status, setStatus] = useState<Status>("idle");
+  const { status, submitContact } = useContactSubmission(locale);
   const errorBannerId = useId();
 
   const onSubmit = useCallback(
-    async (e: FormEvent<HTMLFormElement>) => {
+    (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      const formEl = e.currentTarget;
-      const formData = new FormData(formEl);
-
-      const schoolType = String(formData.get("school_type") ?? "");
-      const phone = String(formData.get("phone") ?? "").trim();
-      const message = String(formData.get("message") ?? "").trim();
-
-      track("contact_submit", {
-        school_type: schoolType || "unspecified",
-        has_phone: phone.length > 0,
-        has_message: message.length > 0,
-        locale,
-      });
-
-      setStatus("submitting");
-
-      try {
-        const response = await fetch(CONTACT_ENDPOINT, {
-          method: "POST",
-          body: formData,
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}`);
-        }
-
-        track("contact_submit_success", { locale });
-        setStatus("success");
-      } catch {
-        track("contact_submit_error", { locale });
-        setStatus("error");
-      }
+      void submitContact(e.currentTarget);
     },
-    [locale],
+    [submitContact],
   );
 
   const eyebrowLabel = locale === "fr" ? "Contact" : "Contact";
@@ -203,7 +167,6 @@ export function Contact() {
               method="POST"
               action={CONTACT_ENDPOINT}
               onSubmit={onSubmit}
-              noValidate
               className="space-y-5"
             >
               {/* Name + Email row */}
@@ -218,6 +181,7 @@ export function Contact() {
                     name="name"
                     placeholder={form.name.placeholder}
                     autoComplete="name"
+                    maxLength={CONTACT_FIELD_LIMITS.name}
                     required
                     aria-required="true"
                     className={FIELD_CLS}
@@ -233,6 +197,7 @@ export function Contact() {
                     name="email"
                     placeholder={form.email.placeholder}
                     autoComplete="email"
+                    maxLength={CONTACT_FIELD_LIMITS.email}
                     required
                     aria-required="true"
                     className={FIELD_CLS}
@@ -252,6 +217,7 @@ export function Contact() {
                     name="school"
                     placeholder={form.school.placeholder}
                     autoComplete="organization"
+                    maxLength={CONTACT_FIELD_LIMITS.school}
                     required
                     aria-required="true"
                     className={FIELD_CLS}
@@ -267,6 +233,7 @@ export function Contact() {
                     name="phone"
                     placeholder={form.phone.placeholder}
                     autoComplete="tel"
+                    maxLength={CONTACT_FIELD_LIMITS.phone}
                     className={FIELD_CLS}
                   />
                 </div>
@@ -310,6 +277,7 @@ export function Contact() {
                   name="message"
                   placeholder={form.message.placeholder}
                   rows={5}
+                  maxLength={CONTACT_FIELD_LIMITS.message}
                   className={FIELD_CLS + " min-h-[120px] resize-y"}
                 />
               </div>
@@ -343,7 +311,7 @@ export function Contact() {
                   disabled={status === "submitting"}
                   aria-describedby={status === "error" ? errorBannerId : undefined}
                   className={[
-                    "inline-flex items-center justify-center gap-2",
+                    "inline-flex min-h-11 items-center justify-center gap-2",
                     "bg-accent text-white px-5 py-2.5 rounded text-[0.875rem] font-medium",
                     "border border-accent",
                     "transition-all duration-200 ease-klassci",
@@ -351,7 +319,6 @@ export function Contact() {
                     "disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none",
                     "w-full md:w-auto order-1 md:order-2",
                   ].join(" ")}
-                  style={{ letterSpacing: "-0.02em" }}
                 >
                   <span>
                     {status === "submitting" ? form.submitting : form.submit}

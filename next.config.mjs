@@ -63,4 +63,9 @@ const nextConfig = {
   },
 };
 
-export default withNextIntl(withMDX(nextConfig));
+const configuredNext = withNextIntl(withMDX(nextConfig));
+
+// fumadocs-mdx exposes this Next 15+ option, while this project still runs Next 14.
+delete configuredNext.turbopack;
+
+export default configuredNext;

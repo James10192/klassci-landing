@@ -286,6 +286,22 @@
     "image": "/img/sections/support.png",
     "alt": "KLASSCI customer support — chat and assistance"
   },
+  "deployment": {
+    "eyebrow": "Guided deployment",
+    "title": "Guided deployment from start to finish",
+    "intro": "Our team prepares your environment, secures the migration of your data and supports every role through go-live.",
+    "steps": {
+      "scoping": { "title": "Scoping", "text": "We define scope, priorities and schedule with your project team." },
+      "migration": { "title": "Migration", "text": "Your structured data is imported, checked and prepared for your environment." },
+      "training": { "title": "Training", "text": "Leadership, administration, finance and teaching teams are trained for their roles." },
+      "launch": { "title": "Go-live", "text": "We validate critical journeys and stay alongside your teams during adoption." }
+    },
+    "assurances": {
+      "backups": { "title": "Daily backups", "text": "Your data is backed up automatically every day." },
+      "support": { "title": "Support for your plan", "text": "The level of assistance matches the service you choose." },
+      "adoption": { "title": "Adoption follow-up", "text": "We track usage and help your teams get the most from KLASSCI." }
+    }
+  },
   "imageBanner": {
     "alt": "KLASSCI students",
     "image": "/img/sections/students-banner.png"
@@ -311,7 +327,7 @@
         "Dedicated account manager"
       ],
       "ctaPrimary": "Subscribe",
-      "ctaTrial": "Try free for 3 months",
+      "ctaTrial": "Try free for 1 month",
       "fineprint": "6M FCFA first year · 460k FCFA / month on monthly billing"
     },
     "common": {
@@ -414,7 +430,7 @@
       },
       {
         "q": "How long until we're up and running?",
-        "a": "On the free plan (3-month trial), your account is created in 2 to 3 days. On a paid plan, expect about 2 weeks for full customisation and deployment."
+        "a": "For the one-month free trial, your account is created in 2 to 3 days. On a paid plan, expect about 2 weeks for full customisation and deployment."
       },
       {
         "q": "Does KLASSCI work on mobile?",
@@ -422,7 +438,7 @@
       },
       {
         "q": "Can I try KLASSCI for free?",
-        "a": "The Free plan lets you test KLASSCI for 3 months with up to 50 students. Your account is ready in 2 to 3 days. On a paid plan, expect about 2 weeks for full customisation and deployment."
+        "a": "The free trial lets you test KLASSCI for 1 month with up to 50 students. Your account is ready in 2 to 3 days. On a paid plan, expect about 2 weeks for full customisation and deployment."
       }
     ]
   },

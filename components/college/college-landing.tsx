@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import ArrowRight from "lucide-react/dist/esm/icons/arrow-right";
 import BookOpen from "lucide-react/dist/esm/icons/book-open";
 import Calculator from "lucide-react/dist/esm/icons/calculator";
@@ -12,13 +11,17 @@ import UserCheck from "lucide-react/dist/esm/icons/user-check";
 import Users from "lucide-react/dist/esm/icons/users";
 import X from "lucide-react/dist/esm/icons/x";
 import { useLocale, useTranslations } from "next-intl";
-import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useState } from "react";
 
+import { CollegeCommercial } from "@/components/college/college-commercial";
+import { CollegeMockupStage } from "@/components/college/college-mockup-stage";
+import { CollegeQuoteDialog } from "@/components/college/college-quote-dialog";
 import { Footer } from "@/components/sections/footer";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { SdgImpactGrid } from "@/components/universe/sdg-impact-grid";
 import { Link } from "@/i18n/navigation";
+import type { CollegePlanKey } from "@/lib/college-pricing";
 
 interface RoleItem {
   title: string;
@@ -47,12 +50,12 @@ interface SdgItem {
 const ROLE_ICONS = [ShieldCheck, UserCheck, Calculator, GraduationCap, Users, MonitorSmartphone];
 
 const HERO_STRIP = [
-  { src: "/img/college/current-dashboard.png", label: "Dashboard" },
-  { src: "/img/college/current-parents.png", label: "Parents" },
-  { src: "/img/college/current-grades.png", label: "Notes" },
-  { src: "/img/college/current-timetable.png", label: "Emploi du temps" },
-  { src: "/img/college/current-settings.png", label: "Paramètres" },
-];
+  { src: "/img/college/current-dashboard.png", key: "dashboard" },
+  { src: "/img/college/current-parents.png", key: "parents" },
+  { src: "/img/college/current-grades.png", key: "grades" },
+  { src: "/img/college/current-timetable.png", key: "timetable" },
+  { src: "/img/college/current-settings.png", key: "settings" },
+] as const;
 
 function CollegeLogo({
   className = "",
@@ -84,6 +87,9 @@ export function CollegeLanding() {
   const t = useTranslations("college");
   const locale = useLocale() as "fr" | "en";
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [quoteOpen, setQuoteOpen] = useState(false);
+  const [quotePlan, setQuotePlan] = useState<CollegePlanKey | null>(null);
+  const [quoteStudentCount, setQuoteStudentCount] = useState(600);
   const roles = t.raw("roles.items") as RoleItem[];
   const modules = t.raw("modules.items") as ModuleItem[];
   const shots = t.raw("showcase.items") as ShotItem[];
@@ -91,6 +97,11 @@ export function CollegeLanding() {
   const homeHref = `/${locale}`;
   const docsHref = `/${locale}/docs/college`;
   const closeMobile = useCallback(() => setMobileOpen(false), []);
+  const openQuote = useCallback((plan: CollegePlanKey | null, studentCount: number) => {
+    setQuotePlan(plan);
+    setQuoteStudentCount(studentCount);
+    setQuoteOpen(true);
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
@@ -112,30 +123,34 @@ export function CollegeLanding() {
                 {t("nav.home")}
               </a>
               <a href="#fonctionnalites" className="px-3 py-2 text-[0.875rem] font-medium text-text-secondary transition-colors hover:text-text">
-                Fonctionnalités
+                {t("nav.features")}
               </a>
               <a href="#interfaces" className="px-3 py-2 text-[0.875rem] font-medium text-text-secondary transition-colors hover:text-text">
-                Interfaces
+                {t("nav.interfaces")}
               </a>
               <a href="#tarifs" className="px-3 py-2 text-[0.875rem] font-medium text-text-secondary transition-colors hover:text-text">
-                Devis
+                {t("nav.quote")}
               </a>
               <a href={docsHref} className="inline-flex items-center gap-1.5 px-3 py-2 text-[0.875rem] font-medium text-text-secondary transition-colors hover:text-text">
                 <BookOpen className="h-4 w-4" aria-hidden />
-                Docs
+                {t("nav.docs")}
               </a>
             </div>
             <div className="flex items-center gap-2">
               <LanguageSwitcher className="hidden sm:inline-flex" />
               <ThemeToggle className="hidden sm:inline-flex" />
-              <a href="#contact" className="hidden rounded border border-accent bg-accent px-3.5 py-1.5 text-[0.875rem] font-medium text-white transition-colors hover:bg-accent-hover sm:inline-flex">
-                Contact
-              </a>
+              <button
+                type="button"
+                onClick={() => openQuote(null, 600)}
+                className="hidden min-h-11 items-center rounded border border-accent bg-accent px-3.5 text-[0.875rem] font-medium text-white transition-colors hover:bg-accent-hover sm:inline-flex"
+              >
+                {t("nav.contact")}
+              </button>
               <button
                 type="button"
                 onClick={() => setMobileOpen((value) => !value)}
-                className="inline-flex h-10 w-10 items-center justify-center rounded border border-border text-text md:hidden"
-                aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
+                className="inline-flex h-11 w-11 items-center justify-center rounded border border-border text-text md:hidden"
+                aria-label={mobileOpen ? t("nav.menuClose") : t("nav.menuOpen")}
                 aria-expanded={mobileOpen}
               >
                 {mobileOpen ? <X className="h-5 w-5" aria-hidden /> : <Menu className="h-5 w-5" aria-hidden />}
@@ -154,21 +169,28 @@ export function CollegeLanding() {
               {t("nav.home")}
             </a>
             <a href="#fonctionnalites" onClick={closeMobile} className="font-serif text-[1.75rem] font-light text-text transition-colors hover:text-accent">
-              Fonctionnalités
+              {t("nav.features")}
             </a>
             <a href="#interfaces" onClick={closeMobile} className="font-serif text-[1.75rem] font-light text-text transition-colors hover:text-accent">
-              Interfaces
+              {t("nav.interfaces")}
             </a>
             <a href="#tarifs" onClick={closeMobile} className="font-serif text-[1.75rem] font-light text-text transition-colors hover:text-accent">
-              Devis
+              {t("nav.quote")}
             </a>
             <a href={docsHref} onClick={closeMobile} className="inline-flex items-center gap-3 font-serif text-[1.75rem] font-light text-text transition-colors hover:text-accent">
               <BookOpen className="h-6 w-6" aria-hidden />
-              Docs
+              {t("nav.docs")}
             </a>
-            <a href="#contact" onClick={closeMobile} className="font-serif text-[1.75rem] font-light text-accent">
-              Contact
-            </a>
+            <button
+              type="button"
+              onClick={() => {
+                closeMobile();
+                openQuote(null, 600);
+              }}
+              className="min-h-11 font-serif text-[1.75rem] font-light text-accent"
+            >
+              {t("nav.contact")}
+            </button>
             <div className="mt-4 flex items-center gap-4">
               <LanguageSwitcher />
               <ThemeToggle />
@@ -186,6 +208,12 @@ export function CollegeLanding() {
               <div className="mb-7 flex items-center gap-4">
                 <CollegeLogo imageWidth={180} imageHeight={74} className="[&_span]:text-[1rem]" />
               </div>
+              <a
+                href="#tarifs"
+                className="mb-6 inline-flex min-h-11 items-center rounded border border-brand-orange/45 bg-brand-orange-light px-3 py-2 font-mono text-[0.68rem] uppercase tracking-[0.06em] text-brand-orange transition-colors hover:border-brand-orange"
+              >
+                {t("sales.offer.hero")}
+              </a>
               <h1 className="max-w-[12ch] font-serif text-[clamp(2.7rem,7vw,5.3rem)] font-light leading-none text-[#0f3f8c] dark:text-white">
                 {t("hero.title")}
               </h1>
@@ -193,13 +221,14 @@ export function CollegeLanding() {
                 {t("hero.subtitle")}
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <a
-                  href="#tarifs"
+                <button
+                  type="button"
+                  onClick={() => openQuote(null, 600)}
                   className="inline-flex min-h-11 items-center justify-center gap-2 rounded bg-[#f58220] px-5 text-sm font-semibold text-white shadow-[0_16px_38px_rgba(245,130,32,0.28)] hover:bg-[#e87512]"
                 >
                   {t("hero.primaryCta")}
                   <ArrowRight className="h-4 w-4" aria-hidden />
-                </a>
+                </button>
                 <a
                   href="#interfaces"
                   className="inline-flex min-h-11 items-center justify-center rounded border border-border bg-bg-card px-5 text-sm font-medium text-text hover:border-border-strong"
@@ -209,11 +238,11 @@ export function CollegeLanding() {
               </div>
             </div>
 
-            <MockupStage />
+            <CollegeMockupStage />
           </div>
         </section>
 
-        <section className="-mt-10 pb-10" aria-label="Aperçu des interfaces KLASSCI College">
+        <section className="-mt-10 pb-10" aria-label={t("heroStrip.ariaLabel")}>
           <div className="relative -mx-[calc(50vw-50%)] w-screen overflow-hidden py-4 marquee-fade">
             <div className="college-strip-track flex w-fit gap-5">
               {[...HERO_STRIP, ...HERO_STRIP].map((item, index) => (
@@ -225,7 +254,7 @@ export function CollegeLanding() {
                     <img src={item.src} alt="" className="h-full w-full object-contain" />
                   </div>
                   <figcaption className="border-t border-border px-4 py-2 text-[0.78rem] font-mono uppercase tracking-[0.06em] text-text-muted">
-                    {item.label}
+                    {t(`heroStrip.items.${item.key}`)}
                   </figcaption>
                 </figure>
               ))}
@@ -298,6 +327,8 @@ export function CollegeLanding() {
           </div>
         </section>
 
+        <CollegeCommercial onRequestQuote={openQuote} />
+
         <section id="impact" className="scroll-mt-24 border-y border-border bg-[linear-gradient(135deg,rgba(4,83,203,0.06),rgba(245,130,32,0.08))] py-16" aria-labelledby="college-impact-title">
           <div className="container">
             <header className="mb-10 max-w-3xl">
@@ -310,31 +341,14 @@ export function CollegeLanding() {
             <SdgImpactGrid items={sdgs} variant="college" />
           </div>
         </section>
-
-        <section id="tarifs" className="container scroll-mt-24 py-16" aria-labelledby="quote-title">
-          <div className="grid gap-8 rounded-lg border border-border bg-bg-card p-8 lg:grid-cols-[1fr_0.8fr] lg:p-10">
-            <div>
-              <p className="text-sm text-text-muted">{t("quote.eyebrow")}</p>
-              <h2 id="quote-title" className="mt-4 font-serif text-4xl font-light text-text">
-                {t("quote.title")}
-              </h2>
-              <p className="mt-4 max-w-2xl leading-relaxed text-text-secondary">{t("quote.text")}</p>
-            </div>
-            <div className="flex flex-col justify-center gap-3">
-              <a
-                id="contact"
-                href="mailto:contact@klassci.com?subject=Demande%20de%20devis%20KLASSCI%20College"
-                className="inline-flex min-h-11 items-center justify-center gap-2 rounded bg-[#f58220] px-5 text-sm font-semibold text-white shadow-[0_16px_38px_rgba(245,130,32,0.24)] hover:bg-[#e87512]"
-              >
-                {t("quote.cta")}
-                <ArrowRight className="h-4 w-4" aria-hidden />
-              </a>
-              <p className="text-center text-sm text-text-muted">{t("quote.note")}</p>
-            </div>
-          </div>
-        </section>
       </main>
       <Footer />
+      <CollegeQuoteDialog
+        open={quoteOpen}
+        plan={quotePlan}
+        studentCount={quoteStudentCount}
+        onClose={() => setQuoteOpen(false)}
+      />
 
       <style jsx>{`
         .college-grid {
@@ -392,88 +406,5 @@ function SectionIntro({
       </h2>
       <p className="mt-4 leading-relaxed text-text-secondary">{intro}</p>
     </header>
-  );
-}
-
-function MockupStage() {
-  return (
-    <div className="relative min-h-[38rem] [perspective:1300px]">
-      <div className="college-orbit absolute inset-0 [transform-style:preserve-3d]">
-        <div className="absolute left-0 top-8 w-[88%] [transform:translateZ(70px)_rotateY(-7deg)]">
-          <LaptopFrame>
-            <img
-              src="/img/college/current-dashboard.png"
-              alt=""
-              className="h-full w-full object-contain"
-            />
-          </LaptopFrame>
-        </div>
-
-        <div className="absolute bottom-4 right-3 w-[28%] min-w-[9.5rem] [transform:translateZ(190px)_rotateY(11deg)]">
-          <PhoneFrame>
-            <img
-              src="/img/college/current-mobile-dashboard.png"
-              alt=""
-              className="h-full w-full object-contain"
-            />
-          </PhoneFrame>
-        </div>
-
-      </div>
-
-      <style jsx>{`
-        .college-orbit {
-          animation: collegeOrbit 13s ease-in-out infinite;
-        }
-
-        @keyframes collegeOrbit {
-          0%, 100% {
-            transform: rotateX(7deg) rotateY(-8deg);
-          }
-          50% {
-            transform: rotateX(10deg) rotateY(5deg);
-          }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-          .college-orbit {
-            animation: none;
-          }
-        }
-      `}</style>
-    </div>
-  );
-}
-
-function LaptopFrame({
-  children,
-  compact = false,
-}: {
-  children: ReactNode;
-  compact?: boolean;
-}) {
-  return (
-    <div className="rounded-[1.1rem] border border-border bg-[#111827] p-2 shadow-[0_34px_90px_rgba(4,83,203,0.22)]">
-      <div className="flex h-5 items-center gap-1.5 px-2">
-        <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
-        <span className="h-2.5 w-2.5 rounded-full bg-[#ffbd2e]" />
-        <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
-      </div>
-      <div className={compact ? "aspect-[16/9] overflow-hidden rounded-md bg-white" : "aspect-[16/9] overflow-hidden rounded-md bg-white"}>
-        {children}
-      </div>
-      <div className="mx-auto mt-2 h-2 w-1/3 rounded-full bg-white/18" />
-    </div>
-  );
-}
-
-function PhoneFrame({ children }: { children: ReactNode }) {
-  return (
-    <div className="rounded-[2rem] border border-black/20 bg-[#111827] p-2 shadow-[0_28px_70px_rgba(0,0,0,0.28)]">
-      <div className="mx-auto mb-1 h-1.5 w-14 rounded-full bg-white/18" />
-      <div className="aspect-[390/844] overflow-hidden rounded-[1.45rem] bg-white">
-        {children}
-      </div>
-    </div>
   );
 }

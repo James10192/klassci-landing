@@ -2,11 +2,10 @@
 
 import { AlertCircle, Check, Mail, MapPin, Send, X } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import { useCallback, useEffect, useId, useRef, useState, type FormEvent, type MouseEvent } from "react";
+import { useCallback, useEffect, useId, useRef, type FormEvent, type MouseEvent } from "react";
 
-import { track } from "@/lib/analytics/track";
-
-type Status = "idle" | "submitting" | "success" | "error";
+import { CONTACT_ENDPOINT, useContactSubmission } from "@/hooks/use-contact-submission";
+import { CONTACT_FIELD_LIMITS } from "@/lib/contact";
 
 interface ContactInfo {
   email: string;
@@ -43,8 +42,6 @@ interface UniverseContactDialogProps {
   onClose: () => void;
 }
 
-const CONTACT_ENDPOINT = "/api/contact";
-
 const fieldClass =
   "block min-h-11 w-full rounded border border-border bg-bg-card px-3.5 py-2.5 text-sm text-text outline-none transition-colors placeholder:text-text-muted focus:border-accent focus:ring-2 focus:ring-accent-light";
 
@@ -56,7 +53,7 @@ export function UniverseContactDialog({ open, onClose }: UniverseContactDialogPr
   const locale = useLocale() as "fr" | "en";
   const dialogRef = useRef<HTMLDialogElement>(null);
   const errorBannerId = useId();
-  const [status, setStatus] = useState<Status>("idle");
+  const { status, reset, submitContact } = useContactSubmission(locale);
 
   const info = t.raw("info") as ContactInfo;
   const form = t.raw("form") as ContactForm;
@@ -68,13 +65,13 @@ export function UniverseContactDialog({ open, onClose }: UniverseContactDialogPr
     if (!dialog) return;
 
     if (open && !dialog.open) {
-      setStatus("idle");
+      reset();
       dialog.showModal();
     }
     if (!open && dialog.open) {
       dialog.close();
     }
-  }, [open]);
+  }, [open, reset]);
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -93,7 +90,9 @@ export function UniverseContactDialog({ open, onClose }: UniverseContactDialogPr
     };
   }, [open]);
 
-  const close = useCallback(() => dialogRef.current?.close(), []);
+  const close = useCallback(() => {
+    if (status !== "submitting") dialogRef.current?.close();
+  }, [status]);
 
   const handleBackdropClick = useCallback((event: MouseEvent<HTMLDialogElement>) => {
     if (event.target === dialogRef.current) {
@@ -102,41 +101,19 @@ export function UniverseContactDialog({ open, onClose }: UniverseContactDialogPr
   }, [close]);
 
   const onSubmit = useCallback(
-    async (event: FormEvent<HTMLFormElement>) => {
+    (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
-      const formData = new FormData(event.currentTarget);
-      const phone = String(formData.get("phone") ?? "").trim();
-      const message = String(formData.get("message") ?? "").trim();
-
-      track("contact_submit", {
-        school_type: String(formData.get("school_type") ?? "") || "unspecified",
-        has_phone: phone.length > 0,
-        has_message: message.length > 0,
-        locale,
-      });
-
-      setStatus("submitting");
-
-      try {
-        const response = await fetch(CONTACT_ENDPOINT, {
-          method: "POST",
-          body: formData,
-        });
-
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        setStatus("success");
-        track("contact_submit_success", { locale });
-      } catch {
-        setStatus("error");
-        track("contact_submit_error", { locale });
-      }
+      void submitContact(event.currentTarget);
     },
-    [locale],
+    [submitContact],
   );
 
   return (
     <dialog
       ref={dialogRef}
+      onCancel={(event) => {
+        if (status === "submitting") event.preventDefault();
+      }}
       onClick={handleBackdropClick}
       aria-labelledby="hub-contact-title"
       className="m-0 h-full max-h-none w-full max-w-none border-0 bg-transparent p-0 backdrop:bg-black/40 backdrop:backdrop-blur-sm"
@@ -149,8 +126,9 @@ export function UniverseContactDialog({ open, onClose }: UniverseContactDialogPr
           <button
             type="button"
             onClick={close}
+            disabled={status === "submitting"}
             aria-label={nav("menuClose")}
-            className="absolute right-3 top-3 z-10 inline-flex h-10 w-10 items-center justify-center rounded border border-border bg-bg-card/90 text-text-secondary backdrop-blur-sm transition-colors hover:text-text"
+            className="absolute right-3 top-3 z-10 inline-flex h-11 w-11 items-center justify-center rounded border border-border bg-bg-card/90 text-text-secondary backdrop-blur-sm transition-colors hover:text-text disabled:cursor-not-allowed disabled:opacity-50"
           >
             <X className="h-4 w-4" aria-hidden />
           </button>
@@ -197,26 +175,26 @@ export function UniverseContactDialog({ open, onClose }: UniverseContactDialogPr
                 <p className="max-w-xl leading-relaxed text-text-secondary">{success.text}</p>
               </div>
             ) : (
-              <form method="POST" action={CONTACT_ENDPOINT} onSubmit={onSubmit} noValidate className="space-y-5">
+              <form method="POST" action={CONTACT_ENDPOINT} onSubmit={onSubmit} className="space-y-5">
                 <div className="grid gap-4 md:grid-cols-2">
                   <div>
                     <label htmlFor="hub-contact-name" className={labelClass}>{form.name.label}</label>
-                    <input id="hub-contact-name" name="name" required autoComplete="name" placeholder={form.name.placeholder} className={fieldClass} />
+                    <input id="hub-contact-name" name="name" required maxLength={CONTACT_FIELD_LIMITS.name} autoComplete="name" placeholder={form.name.placeholder} className={fieldClass} />
                   </div>
                   <div>
                     <label htmlFor="hub-contact-email" className={labelClass}>{form.email.label}</label>
-                    <input id="hub-contact-email" name="email" type="email" required autoComplete="email" placeholder={form.email.placeholder} className={fieldClass} />
+                    <input id="hub-contact-email" name="email" type="email" required maxLength={CONTACT_FIELD_LIMITS.email} autoComplete="email" placeholder={form.email.placeholder} className={fieldClass} />
                   </div>
                 </div>
 
                 <div className="grid gap-4 md:grid-cols-2">
                   <div>
                     <label htmlFor="hub-contact-school" className={labelClass}>{form.school.label}</label>
-                    <input id="hub-contact-school" name="school" required autoComplete="organization" placeholder={form.school.placeholder} className={fieldClass} />
+                    <input id="hub-contact-school" name="school" required maxLength={CONTACT_FIELD_LIMITS.school} autoComplete="organization" placeholder={form.school.placeholder} className={fieldClass} />
                   </div>
                   <div>
                     <label htmlFor="hub-contact-phone" className={labelClass}>{form.phone.label}</label>
-                    <input id="hub-contact-phone" name="phone" type="tel" autoComplete="tel" placeholder={form.phone.placeholder} className={fieldClass} />
+                    <input id="hub-contact-phone" name="phone" type="tel" maxLength={CONTACT_FIELD_LIMITS.phone} autoComplete="tel" placeholder={form.phone.placeholder} className={fieldClass} />
                   </div>
                 </div>
 
@@ -232,7 +210,7 @@ export function UniverseContactDialog({ open, onClose }: UniverseContactDialogPr
 
                 <div>
                   <label htmlFor="hub-contact-message" className={labelClass}>{form.message.labelOptional}</label>
-                  <textarea id="hub-contact-message" name="message" rows={4} placeholder={form.message.placeholder} className={`${fieldClass} min-h-[112px] resize-y`} />
+                  <textarea id="hub-contact-message" name="message" rows={4} maxLength={CONTACT_FIELD_LIMITS.message} placeholder={form.message.placeholder} className={`${fieldClass} min-h-[112px] resize-y`} />
                 </div>
 
                 {status === "error" && (

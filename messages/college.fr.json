@@ -7,8 +7,23 @@
     "nav": {
       "home": "Accueil",
       "universite": "Université",
+      "features": "Fonctionnalités",
       "interfaces": "Interfaces",
-      "docs": "Docs"
+      "quote": "Devis",
+      "docs": "Docs",
+      "contact": "Contact",
+      "menuOpen": "Ouvrir le menu",
+      "menuClose": "Fermer le menu"
+    },
+    "heroStrip": {
+      "ariaLabel": "Aperçu des interfaces KLASSCI College",
+      "items": {
+        "dashboard": "Tableau de bord",
+        "parents": "Parents",
+        "grades": "Notes",
+        "timetable": "Emploi du temps",
+        "settings": "Paramètres"
+      }
     },
     "hero": {
       "badge": "KLASSCI College",
@@ -145,12 +160,168 @@
         { "number": "17", "name": "Partenariats", "text": "Collaboration plus fluide entre école, parents, enseignants, élèves et partenaires." }
       ]
     },
-    "quote": {
-      "eyebrow": "Tarification",
-      "title": "Chaque établissement reçoit un devis adapté",
-      "text": "La grille dépend de la taille de l'établissement, des comptes nécessaires, de l'accompagnement et du niveau de personnalisation. On qualifie le besoin, puis on propose une offre claire.",
-      "cta": "Demander un devis",
-      "note": "Réponse sous 24h ouvrées"
+    "sales": {
+      "offer": {
+        "hero": "Offre de lancement · -30 % la première année · 50 établissements",
+        "badge": "-30 % · Lancement",
+        "limit": "Réservée aux 50 premiers établissements"
+      },
+      "calculator": {
+        "eyebrow": "Projection",
+        "title": "Calculez votre rentabilité",
+        "intro": "Comparez votre organisation actuelle à une licence KLASSCI College adaptée à votre effectif.",
+        "students": "Nombre d'élèves",
+        "paperBudget": "Budget papier annuel",
+        "adminHours": "Heures administratives par semaine",
+        "recommended": "Formule recommandée",
+        "plans": {
+          "essentielle": "Essentielle",
+          "pro": "Pro",
+          "elite": "Élite",
+          "partenaire": "Partenaire"
+        },
+        "paperShare": "Votre budget papier représente {percentage}% du tarif de lancement.",
+        "annualHours": "{hours} heures administratives par an à optimiser.",
+        "partnerNote": "Votre effectif nécessite une configuration sur mesure.",
+        "disclaimer": "Projection basée uniquement sur les informations saisies. Le diagnostic complet est réalisé pendant la démonstration.",
+        "cta": "Recevoir mon devis"
+      },
+      "pricing": {
+        "eyebrow": "Tarifs",
+        "title": "Une licence annuelle, trois niveaux d'ambition",
+        "subtitle": "Choisissez selon votre effectif et votre niveau de pilotage. La formule Élite concentre l'accompagnement et les capacités les plus avancées.",
+        "elite": {
+          "eyebrow": "La formule la plus complète",
+          "brand": "KLASSCI College",
+          "name": "Élite",
+          "currency": "FCFA",
+          "period": "la première année",
+          "tagline": "Pilotez un établissement ambitieux sans limite opérationnelle.",
+          "features": [
+            "Tout KLASSCI College PRO",
+            "Tableaux de bord avancés",
+            "Gestion RH et personnalisation",
+            "API et archivage avancé",
+            "Accompagnement prioritaire"
+          ],
+          "cta": "Choisir Élite",
+          "fineprint": "{price} FCFA/an à partir de la 2e année · offre limitée aux 50 premiers établissements"
+        },
+        "common": {
+          "title": "Inclus dans toutes les formules",
+          "items": [
+            "Configuration de l'établissement",
+            "Migration initiale des données",
+            "Formation des équipes",
+            "Maintenance et sauvegardes quotidiennes"
+          ],
+          "highlight": "30 % de réduction sur la première année de licence."
+        },
+        "alternatives": {
+          "intro": "Un effectif plus compact ?",
+          "tiers": [
+            {
+              "key": "pro",
+              "name": "KLASSCI College PRO"
+            },
+            {
+              "key": "essentielle",
+              "name": "KLASSCI College Essentielle"
+            }
+          ],
+          "firstYear": "{price} FCFA la première année",
+          "regular": "puis {price} FCFA/an",
+          "compare": "Comparer les formules",
+          "compareClose": "Masquer la comparaison",
+          "cta": "Choisir"
+        },
+        "comparison": {
+          "title": "Comparaison des formules",
+          "headers": {
+            "feature": "Critère",
+            "essentielle": "Essentielle",
+            "pro": "Pro",
+            "elite": "Élite"
+          },
+          "rows": [
+            { "key": "capacity", "label": "Effectif conseillé", "essentielle": "", "pro": "", "elite": "" },
+            { "label": "Élèves, inscriptions, notes et bulletins", "essentielle": "Inclus", "pro": "Inclus", "elite": "Inclus" },
+            { "label": "Paiements et comptabilité", "essentielle": "Simplifiée", "pro": "Complète", "elite": "Complète" },
+            { "label": "Emplois du temps et présences", "essentielle": "Essentiel", "pro": "Inclus", "elite": "Inclus" },
+            { "label": "Application parents", "essentielle": "Standard", "pro": "Incluse", "elite": "Incluse" },
+            { "label": "Tableaux de bord et statistiques", "essentielle": "Standard", "pro": "Avancés", "elite": "Sur mesure" },
+            { "label": "Gestion RH, API et archivage avancé", "essentielle": "Non inclus", "pro": "Non inclus", "elite": "Inclus" },
+            { "label": "Assistance", "essentielle": "6j/7", "pro": "6j/7", "elite": "6j/7 prioritaire" }
+          ]
+        },
+        "perStudent": {
+          "value": "Dès {price} FCFA par élève/mois",
+          "note": "Exemple calculé pour 1 500 élèves sur le tarif annuel normal de la formule Élite."
+        },
+        "partner": {
+          "intro": "Groupe scolaire ou besoin particulier ?",
+          "name": "Formule Partenaire",
+          "description": "Une configuration Élite sur mesure pour les groupes, les déploiements multi-sites et les périmètres spécifiques.",
+          "price": "Sur devis",
+          "cta": "Étudier mon projet"
+        },
+        "footer": "Tous les tarifs sont annuels. L'offre de lancement s'applique uniquement à la première année et aux 50 premiers établissements éligibles."
+      },
+      "assurance": {
+        "eyebrow": "Déploiement",
+        "title": "Votre déploiement, sans friction",
+        "intro": "L'effort est réparti dans le temps, pendant que notre équipe prépare votre établissement et accompagne vos équipes.",
+        "paymentTitle": "Paiement échelonné",
+        "paymentSteps": [
+          { "value": "40 %", "label": "À la signature" },
+          { "value": "30 %", "label": "Au déploiement" },
+          { "value": "30 %", "label": "Trente jours après" }
+        ],
+        "items": {
+          "configuration": "Configuration",
+          "migration": "Migration initiale",
+          "training": "Formation des équipes",
+          "backups": "Sauvegardes quotidiennes",
+          "support": "Assistance 6j/7",
+          "onboarding": "Accompagnement prioritaire 60 jours"
+        },
+        "ctaTitle": "Prêt à simplifier votre gestion ?",
+        "ctaText": "Votre simulation et la formule choisie seront reprises dans votre demande.",
+        "cta": "Demander un devis"
+      },
+      "form": {
+        "eyebrow": "Demande de devis",
+        "title": "Parlons de votre établissement",
+        "intro": "Partagez-nous votre contexte. Notre équipe vous répond avec un périmètre clair et une proposition adaptée.",
+        "close": "Fermer le formulaire",
+        "name": "Nom et prénom",
+        "namePlaceholder": "Votre nom complet",
+        "email": "Email professionnel",
+        "emailPlaceholder": "vous@etablissement.ci",
+        "school": "Établissement",
+        "schoolPlaceholder": "Nom de l'établissement",
+        "phone": "Téléphone",
+        "phonePlaceholder": "+225 00 00 00 00 00",
+        "type": "Type d'établissement",
+        "typePlaceholder": "Sélectionner",
+        "types": [
+          { "value": "college", "label": "Collège" },
+          { "value": "lycee", "label": "Lycée" },
+          { "value": "groupe_scolaire", "label": "Groupe scolaire" }
+        ],
+        "students": "Nombre d'élèves",
+        "plan": "Formule envisagée",
+        "planDefault": "À déterminer",
+        "message": "Contexte ou besoin particulier",
+        "messagePlaceholder": "Multi-sites, reprise de données, calendrier souhaité...",
+        "submit": "Recevoir mon devis",
+        "submitting": "Envoi en cours...",
+        "responseNote": "Étude personnalisée de votre demande",
+        "successTitle": "Votre demande est transmise",
+        "successText": "Notre équipe étudie votre contexte et vous recontactera avec les prochaines étapes.",
+        "errorTitle": "La demande n'a pas pu être envoyée",
+        "errorText": "Réessayez ou écrivez directement à contact@klassci.com."
+      }
     }
   }
 }

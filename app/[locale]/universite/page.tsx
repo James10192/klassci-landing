@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { ClientMarquee } from "@/components/sections/client-marquee";
 import { Contact } from "@/components/sections/contact";
+import { Deployment } from "@/components/sections/deployment";
 import { Faq } from "@/components/sections/faq";
 import { FeaturesBig } from "@/components/sections/features-big";
 import { FeaturesSmall } from "@/components/sections/features-small";
@@ -69,6 +70,7 @@ export default async function UniversitePage({
         <UniversityImpact />
         <Support />
         <ImageBanner />
+        <Deployment />
         <Pricing />
         <Faq />
         <Contact />

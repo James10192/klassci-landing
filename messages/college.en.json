@@ -7,8 +7,23 @@
     "nav": {
       "home": "Home",
       "universite": "University",
+      "features": "Features",
       "interfaces": "Interfaces",
-      "docs": "Docs"
+      "quote": "Quote",
+      "docs": "Docs",
+      "contact": "Contact",
+      "menuOpen": "Open menu",
+      "menuClose": "Close menu"
+    },
+    "heroStrip": {
+      "ariaLabel": "Preview of KLASSCI College interfaces",
+      "items": {
+        "dashboard": "Dashboard",
+        "parents": "Parents",
+        "grades": "Grades",
+        "timetable": "Timetable",
+        "settings": "Settings"
+      }
     },
     "hero": {
       "badge": "KLASSCI College",
@@ -73,12 +88,168 @@
         { "number": "17", "name": "Partnerships", "text": "Smoother collaboration between school, parents, teachers, students and partners." }
       ]
     },
-    "quote": {
-      "eyebrow": "Pricing",
-      "title": "Every institution receives a tailored quote",
-      "text": "Pricing depends on school size, required accounts, onboarding support and customization. We qualify the need, then send a clear offer.",
-      "cta": "Request a quote",
-      "note": "Reply within 24 business hours"
+    "sales": {
+      "offer": {
+        "hero": "Launch offer · 30% off the first year · 50 institutions",
+        "badge": "30% off · Launch",
+        "limit": "Reserved for the first 50 institutions"
+      },
+      "calculator": {
+        "eyebrow": "Projection",
+        "title": "Calculate your return",
+        "intro": "Compare your current operating model with a KLASSCI College licence sized for your enrolment.",
+        "students": "Number of students",
+        "paperBudget": "Annual paper budget",
+        "adminHours": "Administrative hours per week",
+        "recommended": "Recommended plan",
+        "plans": {
+          "essentielle": "Essential",
+          "pro": "Pro",
+          "elite": "Elite",
+          "partenaire": "Partner"
+        },
+        "paperShare": "Your annual paper budget represents {percentage}% of the launch price.",
+        "annualHours": "{hours} administrative hours per year to optimise.",
+        "partnerNote": "Your enrolment requires a tailored configuration.",
+        "disclaimer": "Projection based only on the information entered. The complete assessment is carried out during the demo.",
+        "cta": "Get my quote"
+      },
+      "pricing": {
+        "eyebrow": "Pricing",
+        "title": "One annual licence, three levels of ambition",
+        "subtitle": "Choose according to enrolment and management depth. Elite brings together the strongest capabilities and support.",
+        "elite": {
+          "eyebrow": "The most complete plan",
+          "brand": "KLASSCI College",
+          "name": "Elite",
+          "currency": "FCFA",
+          "period": "for the first year",
+          "tagline": "Run an ambitious institution without operational limits.",
+          "features": [
+            "Everything in KLASSCI College PRO",
+            "Advanced dashboards",
+            "HR management and customisation",
+            "API and advanced archiving",
+            "Priority onboarding"
+          ],
+          "cta": "Choose Elite",
+          "fineprint": "{price} FCFA/year from year two · offer limited to the first 50 institutions"
+        },
+        "common": {
+          "title": "Included in every plan",
+          "items": [
+            "Institution configuration",
+            "Initial data migration",
+            "Team training",
+            "Maintenance and daily backups"
+          ],
+          "highlight": "30% off the first year of the licence."
+        },
+        "alternatives": {
+          "intro": "A more compact enrolment?",
+          "tiers": [
+            {
+              "key": "pro",
+              "name": "KLASSCI College PRO"
+            },
+            {
+              "key": "essentielle",
+              "name": "KLASSCI College Essential"
+            }
+          ],
+          "firstYear": "{price} FCFA for the first year",
+          "regular": "then {price} FCFA/year",
+          "compare": "Compare plans",
+          "compareClose": "Hide comparison",
+          "cta": "Choose"
+        },
+        "comparison": {
+          "title": "Plan comparison",
+          "headers": {
+            "feature": "Criterion",
+            "essentielle": "Essential",
+            "pro": "Pro",
+            "elite": "Elite"
+          },
+          "rows": [
+            { "key": "capacity", "label": "Recommended enrolment", "essentielle": "", "pro": "", "elite": "" },
+            { "label": "Students, enrolment, grades and reports", "essentielle": "Included", "pro": "Included", "elite": "Included" },
+            { "label": "Payments and accounting", "essentielle": "Simplified", "pro": "Complete", "elite": "Complete" },
+            { "label": "Timetables and attendance", "essentielle": "Essential", "pro": "Included", "elite": "Included" },
+            { "label": "Parent application", "essentielle": "Standard", "pro": "Included", "elite": "Included" },
+            { "label": "Dashboards and statistics", "essentielle": "Standard", "pro": "Advanced", "elite": "Tailored" },
+            { "label": "HR, API and advanced archiving", "essentielle": "Not included", "pro": "Not included", "elite": "Included" },
+            { "label": "Support", "essentielle": "6 days/week", "pro": "6 days/week", "elite": "Priority 6 days/week" }
+          ]
+        },
+        "perStudent": {
+          "value": "From {price} FCFA per student/month",
+          "note": "Example based on 1,500 students at the regular annual Elite price."
+        },
+        "partner": {
+          "intro": "School group or specific requirement?",
+          "name": "Partner plan",
+          "description": "A tailored Elite configuration for groups, multi-site rollouts and specific scopes.",
+          "price": "On request",
+          "cta": "Discuss my project"
+        },
+        "footer": "All prices are annual. The launch offer applies only to the first year and the first 50 eligible institutions."
+      },
+      "assurance": {
+        "eyebrow": "Deployment",
+        "title": "A frictionless deployment",
+        "intro": "The effort is spread over time while our team configures your institution and supports your teams.",
+        "paymentTitle": "Staged payment",
+        "paymentSteps": [
+          { "value": "40%", "label": "On signature" },
+          { "value": "30%", "label": "On deployment" },
+          { "value": "30%", "label": "Thirty days later" }
+        ],
+        "items": {
+          "configuration": "Configuration",
+          "migration": "Initial migration",
+          "training": "Team training",
+          "backups": "Daily backups",
+          "support": "Support 6 days/week",
+          "onboarding": "Priority onboarding for 60 days"
+        },
+        "ctaTitle": "Ready to simplify your operations?",
+        "ctaText": "Your simulation and selected plan will be carried into your request.",
+        "cta": "Request a quote"
+      },
+      "form": {
+        "eyebrow": "Quote request",
+        "title": "Tell us about your institution",
+        "intro": "Share your context. Our team will reply with a clear scope and tailored proposal.",
+        "close": "Close the form",
+        "name": "Full name",
+        "namePlaceholder": "Your full name",
+        "email": "Work email",
+        "emailPlaceholder": "you@institution.ci",
+        "school": "Institution",
+        "schoolPlaceholder": "Institution name",
+        "phone": "Phone",
+        "phonePlaceholder": "+225 00 00 00 00 00",
+        "type": "Institution type",
+        "typePlaceholder": "Select",
+        "types": [
+          { "value": "college", "label": "Middle school" },
+          { "value": "lycee", "label": "High school" },
+          { "value": "groupe_scolaire", "label": "School group" }
+        ],
+        "students": "Number of students",
+        "plan": "Plan considered",
+        "planDefault": "To be determined",
+        "message": "Context or specific requirement",
+        "messagePlaceholder": "Multi-site, data migration, preferred timeline...",
+        "submit": "Get my quote",
+        "submitting": "Sending...",
+        "responseNote": "A tailored review of your request",
+        "successTitle": "Your request has been sent",
+        "successText": "Our team will review your context and contact you with the next steps.",
+        "errorTitle": "The request could not be sent",
+        "errorText": "Try again or email contact@klassci.com directly."
+      }
     }
   }
 }
