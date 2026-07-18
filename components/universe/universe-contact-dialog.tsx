@@ -4,7 +4,7 @@ import { AlertCircle, Check, Mail, MapPin, Send, X } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useEffect, useId, useRef, type FormEvent, type MouseEvent } from "react";
 
-import { CONTACT_ENDPOINT, useContactSubmission } from "@/hooks/use-contact-submission";
+import { CONTACT_ENDPOINT, WEB3FORMS_ACCESS_KEY, useContactSubmission } from "@/hooks/use-contact-submission";
 import { CONTACT_FIELD_LIMITS } from "@/lib/contact";
 
 interface ContactInfo {
@@ -176,6 +176,7 @@ export function UniverseContactDialog({ open, onClose }: UniverseContactDialogPr
               </div>
             ) : (
               <form method="POST" action={CONTACT_ENDPOINT} onSubmit={onSubmit} className="space-y-5">
+                <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY} />
                 <div className="grid gap-4 md:grid-cols-2">
                   <div>
                     <label htmlFor="hub-contact-name" className={labelClass}>{form.name.label}</label>

@@ -4,7 +4,9 @@ import { useCallback, useState } from "react";
 
 import { track } from "@/lib/analytics/track";
 
-export const CONTACT_ENDPOINT = "/api/contact";
+export const CONTACT_ENDPOINT = "https://api.web3forms.com/submit";
+export const WEB3FORMS_ACCESS_KEY =
+  process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY ?? "";
 
 export type ContactStatus = "idle" | "submitting" | "success" | "error";
 
@@ -36,8 +38,21 @@ export function useContactSubmission(locale: "fr" | "en") {
       setStatus("submitting");
 
       try {
-        const response = await fetch(CONTACT_ENDPOINT, { method: "POST", body: formData });
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        if (!WEB3FORMS_ACCESS_KEY) throw new Error("Web3Forms is not configured");
+
+        formData.set("access_key", WEB3FORMS_ACCESS_KEY);
+        formData.set("subject", `Nouvelle demande KLASSCI · ${String(formData.get("school") ?? "")}`);
+        formData.set("from_name", "KLASSCI.com");
+
+        const response = await fetch(CONTACT_ENDPOINT, {
+          method: "POST",
+          body: formData,
+          headers: { Accept: "application/json" },
+        });
+        const result = (await response.json()) as { success?: boolean };
+        if (!response.ok || result.success !== true) {
+          throw new Error(`Web3Forms rejected the submission (${response.status})`);
+        }
         setStatus("success");
         track("contact_submit_success", { locale });
       } catch {

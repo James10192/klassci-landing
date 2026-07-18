@@ -8,7 +8,7 @@ import X from "lucide-react/dist/esm/icons/x";
 import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useEffect, useId, useRef, type FormEvent, type MouseEvent, type ReactNode } from "react";
 
-import { useContactSubmission } from "@/hooks/use-contact-submission";
+import { CONTACT_ENDPOINT, WEB3FORMS_ACCESS_KEY, useContactSubmission } from "@/hooks/use-contact-submission";
 import type { CollegePlanKey } from "@/lib/college-pricing";
 import { CONTACT_FIELD_LIMITS } from "@/lib/contact";
 
@@ -143,7 +143,8 @@ export function CollegeQuoteDialog({ open, plan, studentCount, onClose }: Colleg
                 <p className="max-w-xl leading-relaxed text-text-secondary">{t("successText")}</p>
               </div>
             ) : (
-              <form key={`${plan ?? "none"}-${studentCount}`} onSubmit={submit} className="space-y-5">
+              <form key={`${plan ?? "none"}-${studentCount}`} method="POST" action={CONTACT_ENDPOINT} onSubmit={submit} className="space-y-5">
+                <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY} />
                 <input type="checkbox" name="botcheck" className="hidden" tabIndex={-1} autoComplete="off" />
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Field id="college-quote-name" label={t("name")}>

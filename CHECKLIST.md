@@ -33,7 +33,7 @@ below is the remaining work.
   - [x] components/sections/testimonials.tsx — 3 cards, featured top-edge highlight, monogram avatar fallback for missing photos
   - [x] components/sections/pricing.tsx — 4-tier border-grid, popular badge, all CTAs → #contact
   - [x] components/sections/faq.tsx — native `<details>`/`<summary>` accordion with onToggle analytics
-  - [x] components/sections/contact.tsx — full form, success/error states, /api/contact + native fallback
+- [x] components/sections/contact.tsx — full form, success/error states, Web3Forms + native fallback
   - [x] components/sections/letter-cta.tsx — single-card centered CTA
   - [x] app/[locale]/page.tsx — wired all sections in DOM order (Hero → Pillars → FeaturesBig → FeaturesSmall → Testimonials → Pricing → Faq → Contact → LetterCta)
 
@@ -122,14 +122,8 @@ wordmark + tagline, dark KLASSCI blue overlay.
 
 ## Phase 3 — API routes
 
-### `app/api/contact/route.ts`
-
-Validate and deliver form submissions through Web3Forms using
-`WEB3FORMS_ACCESS_KEY`. Keep `CONTACT_DEMO_URL` only as an optional legacy fallback.
-Return a uniform `{ ok, error?, requestId }` shape, enforce an 8-second provider
-timeout, and log failures without personal data. Before production, configure a
-Vercel WAF rule limiting `POST /api/contact`; the in-memory bucket is only a bounded
-per-instance fallback.
+Web3Forms is submitted directly from the browser, as required by its free plan.
+The public access key is injected with `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY`.
 
 ---
 
@@ -206,8 +200,7 @@ Source for tenant info: existing `GET /api/tenant-info` endpoint, returns
 - [ ] Email all 5 active tenants (ESBTP Abidjan, ESBTP Yamoussoukro, Institut Pascal, San Andrea, ITS): "Migrating klassci.com landing to a new platform — your `<tenant>.klassci.com` access stays the same."
 - [ ] Lower TTL on the apex `A` record at cpanel to 60 s (24 h before)
 - [ ] Confirm Vercel project deployed at `klassci.com` (preview URL works first)
-- [ ] Set `WEB3FORMS_ACCESS_KEY` in Vercel Preview and Production, then verify a real contact submission reaches `contact@klassci.com`
-- [ ] Enable and test the Vercel WAF rate-limit rule for `POST /api/contact`
+- [ ] Set `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY` in Vercel Preview and Production, then verify a real contact submission reaches the linked KLASSCI inbox
 - [ ] Submit new sitemap to Google Search Console (after Phase 1c is complete)
 
 ### Cutover (J-0, Sunday)

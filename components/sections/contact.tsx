@@ -4,7 +4,7 @@ import { AlertCircle, Check, Mail, MapPin } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useId, type FormEvent } from "react";
 
-import { CONTACT_ENDPOINT, useContactSubmission } from "@/hooks/use-contact-submission";
+import { CONTACT_ENDPOINT, WEB3FORMS_ACCESS_KEY, useContactSubmission } from "@/hooks/use-contact-submission";
 import { CONTACT_FIELD_LIMITS } from "@/lib/contact";
 
 interface ContactInfo {
@@ -169,6 +169,7 @@ export function Contact() {
               onSubmit={onSubmit}
               className="space-y-5"
             >
+              <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY} />
               {/* Name + Email row */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
