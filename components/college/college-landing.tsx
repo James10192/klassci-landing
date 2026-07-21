@@ -90,7 +90,6 @@ export function CollegeLanding() {
   const [quoteOpen, setQuoteOpen] = useState(false);
   const [quotePlan, setQuotePlan] = useState<CollegePlanKey | null>(null);
   const [quoteStudentCount, setQuoteStudentCount] = useState(600);
-  const [showFloatingOffer, setShowFloatingOffer] = useState(false);
   const roles = t.raw("roles.items") as RoleItem[];
   const modules = t.raw("modules.items") as ModuleItem[];
   const shots = t.raw("showcase.items") as ShotItem[];
@@ -110,30 +109,6 @@ export function CollegeLanding() {
       document.body.style.overflow = "";
     };
   }, [mobileOpen]);
-
-  useEffect(() => {
-    const revealTimer = window.setTimeout(() => {
-      setShowFloatingOffer(true);
-    }, 800);
-
-    const hideTimer = window.setTimeout(() => {
-      setShowFloatingOffer(false);
-    }, 9800);
-
-    const hideOnScroll = () => {
-      if (window.scrollY > 120) {
-        setShowFloatingOffer(false);
-      }
-    };
-
-    window.addEventListener("scroll", hideOnScroll, { passive: true });
-
-    return () => {
-      window.clearTimeout(revealTimer);
-      window.clearTimeout(hideTimer);
-      window.removeEventListener("scroll", hideOnScroll);
-    };
-  }, []);
 
   return (
     <>
@@ -381,13 +356,6 @@ export function CollegeLanding() {
           </div>
         </section>
       </main>
-      <a
-        href="#tarifs"
-        aria-label={locale === "en" ? "Offer in page, get pricing details" : "Voir le détail de l'offre"}
-        className={`offer-ribbon fixed left-1/2 top-[5.6rem] z-40 -translate-x-1/2 items-center rounded-full border border-accent/35 bg-bg-card px-5 py-2.5 text-xs font-semibold tracking-[0.03em] text-accent transition-[opacity,transform] md:text-sm ${showFloatingOffer ? "offer-ribbon-visible" : "offer-ribbon-hidden"}`}
-      >
-        {locale === "en" ? "Available now · 30% first year" : "Disponible maintenant · 30% la première année"} • {t("sales.offer.limit")}
-      </a>
       <Footer />
       <CollegeQuoteDialog
         open={quoteOpen}
