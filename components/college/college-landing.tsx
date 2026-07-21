@@ -90,6 +90,7 @@ export function CollegeLanding() {
   const [quoteOpen, setQuoteOpen] = useState(false);
   const [quotePlan, setQuotePlan] = useState<CollegePlanKey | null>(null);
   const [quoteStudentCount, setQuoteStudentCount] = useState(600);
+  const [showFloatingOffer, setShowFloatingOffer] = useState(false);
   const roles = t.raw("roles.items") as RoleItem[];
   const modules = t.raw("modules.items") as ModuleItem[];
   const shots = t.raw("showcase.items") as ShotItem[];
@@ -109,6 +110,30 @@ export function CollegeLanding() {
       document.body.style.overflow = "";
     };
   }, [mobileOpen]);
+
+  useEffect(() => {
+    const revealTimer = window.setTimeout(() => {
+      setShowFloatingOffer(true);
+    }, 800);
+
+    const hideTimer = window.setTimeout(() => {
+      setShowFloatingOffer(false);
+    }, 9800);
+
+    const hideOnScroll = () => {
+      if (window.scrollY > 120) {
+        setShowFloatingOffer(false);
+      }
+    };
+
+    window.addEventListener("scroll", hideOnScroll, { passive: true });
+
+    return () => {
+      window.clearTimeout(revealTimer);
+      window.clearTimeout(hideTimer);
+      window.removeEventListener("scroll", hideOnScroll);
+    };
+  }, []);
 
   return (
     <>
@@ -209,10 +234,24 @@ export function CollegeLanding() {
                 <CollegeLogo imageWidth={180} imageHeight={74} className="[&_span]:text-[1rem]" />
               </div>
               <a
+                id="college-launch-offer"
+                data-offer="launch"
                 href="#tarifs"
-                className="mb-6 inline-flex min-h-11 items-center rounded border border-brand-orange/45 bg-brand-orange-light px-3 py-2 font-mono text-[0.68rem] uppercase tracking-[0.06em] text-brand-orange transition-colors hover:border-brand-orange"
+                className="offer-spotlight mb-4 inline-flex w-full max-w-full flex-col rounded-2xl border border-brand-orange/35 bg-[linear-gradient(110deg,#eaf3ff_0%,#fff7ed_60%,#f5f8ff_100%)] bg-blend-multiply px-4 py-3 text-left shadow-[0_18px_35px_rgba(4,83,203,0.18)] md:max-w-[42rem] md:p-4"
               >
-                {t("sales.offer.hero")}
+                <span className="offer-pill inline-flex items-center gap-2 rounded-full border border-brand-orange/50 bg-brand-orange px-2.5 py-1 text-[0.65rem] font-semibold text-white uppercase tracking-[0.08em]">
+                  {locale === "en" ? "Now live" : "Disponible maintenant"}
+                </span>
+                <span aria-live="polite" className="mt-2 block font-serif text-[1.02rem] font-light leading-tight text-[#0f3f8c] md:text-[1.2rem]">
+                  {t("sales.offer.hero")}
+                </span>
+                <span className="mt-1 block text-[0.73rem] font-sans uppercase tracking-[0.07em] text-text-muted">
+                  {t("sales.offer.badge")} · {t("sales.offer.limit")}
+                </span>
+                <span className="mt-3 inline-flex min-h-11 w-fit items-center gap-1.5 rounded bg-[#0453cb] px-4 py-2 text-xs font-semibold text-white shadow-[0_10px_22px_rgba(4,83,203,0.24)]">
+                  {locale === "en" ? "See pricing now" : "Voir l'offre en détail"}
+                  <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+                </span>
               </a>
               <h1 className="max-w-[12ch] font-serif text-[clamp(2.7rem,7vw,5.3rem)] font-light leading-none text-[#0f3f8c] dark:text-white">
                 {t("hero.title")}
@@ -342,6 +381,13 @@ export function CollegeLanding() {
           </div>
         </section>
       </main>
+      <a
+        href="#tarifs"
+        aria-label={locale === "en" ? "Offer in page, get pricing details" : "Voir le détail de l'offre"}
+        className={`offer-ribbon fixed left-1/2 top-[5.6rem] z-40 -translate-x-1/2 items-center rounded-full border border-accent/35 bg-bg-card px-5 py-2.5 text-xs font-semibold tracking-[0.03em] text-accent transition-[opacity,transform] md:text-sm ${showFloatingOffer ? "offer-ribbon-visible" : "offer-ribbon-hidden"}`}
+      >
+        {locale === "en" ? "Available now · 30% first year" : "Disponible maintenant · 30% la première année"} • {t("sales.offer.limit")}
+      </a>
       <Footer />
       <CollegeQuoteDialog
         open={quoteOpen}

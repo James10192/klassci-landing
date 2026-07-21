@@ -236,6 +236,92 @@ a:hover {
 .reveal-d2 { transition-delay: 160ms; }
 .reveal-d3 { transition-delay: 240ms; }
 
+.offer-spotlight {
+  position: relative;
+  overflow: hidden;
+  animation: offer-pop 0.72s cubic-bezier(0.16, 1, 0.48, 1) both, offer-glow 4s ease-in-out infinite;
+}
+
+.offer-spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-120%);
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.34), transparent);
+  animation: offer-shimmer 3.3s linear infinite;
+  pointer-events: none;
+}
+
+.offer-pill {
+  animation: offer-pop 0.5s cubic-bezier(0.16, 1, 0.48, 1) both, offer-blink 3.2s linear forwards;
+  width: fit-content;
+}
+
+.offer-ribbon {
+  display: inline-flex;
+  opacity: 0;
+  transform: translate(-50%, -12px) scale(0.96);
+  animation: offer-pop 0.6s cubic-bezier(0.16, 1, 0.48, 1) both;
+  pointer-events: none;
+  text-align: center;
+}
+
+.offer-ribbon-visible {
+  pointer-events: auto;
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.offer-ribbon-hidden {
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -12px);
+}
+
+@keyframes offer-pop {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.94);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes offer-glow {
+  0%,
+  100% {
+    box-shadow: 0 10px 24px rgba(4, 83, 203, 0.18);
+  }
+  50% {
+    box-shadow: 0 14px 28px rgba(245, 130, 32, 0.28);
+  }
+}
+
+@keyframes offer-shimmer {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+@keyframes offer-blink {
+  0%,
+  14% {
+    opacity: 1;
+  }
+  55% {
+    opacity: 0.22;
+  }
+  72%,
+  100% {
+    opacity: 1;
+  }
+}
+
 .gradient-text {
   background: linear-gradient(
     90deg,
@@ -299,5 +385,15 @@ html.dark .gradient-text {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  .offer-spotlight,
+  .offer-pill,
+  .offer-ribbon {
+    animation: none !important;
+  }
+
+  .offer-spotlight::before {
+    display: none;
   }
 }
