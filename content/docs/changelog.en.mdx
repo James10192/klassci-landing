@@ -11,6 +11,16 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ---
 
+## August 2026
+
+### Added
+
+- **Bulk bulletin export to a single PDF** (`/esbtp/bulletins`) — an "Export grouped PDF" button gathers every bulletin matching the applied filters (year, class, term, status, search) into one PDF document, **in the order you choose**: by class, name, student ID, average or rank, ascending or descending. The export **still works even when some bulletins haven't been generated yet**: those are simply left out of the document, you're **warned before downloading** (how many are included / left out), and a **summary page** at the front of the PDF lists the bulletins that weren't included. Perfect for printing a whole class at once, ready to hand out.
+
+### Fixed
+
+- **More robust bulletin printing** — a bulletin whose subject had no coefficient set could remain impossible to print. This case is now handled automatically, for both individual downloads and the bulk export, and the bulletin prints normally.
+
 ## July 2026
 
 ### Added

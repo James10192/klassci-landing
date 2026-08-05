@@ -11,6 +11,16 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 
 ---
 
+## Août 2026
+
+### Ajouts
+
+- **Export groupé des bulletins en un seul PDF** (`/esbtp/bulletins`) — un bouton « Exporter PDF groupé » réunit tous les bulletins correspondant aux filtres appliqués (année, classe, période, statut, recherche) dans un seul document PDF, **dans l'ordre de votre choix** : par classe, nom, matricule, moyenne ou rang, en ordre croissant ou décroissant. L'export **reste possible même si certains bulletins ne sont pas encore générés** : ceux-ci sont simplement absents du document, vous en êtes **averti avant le téléchargement** (nombre inclus / nombre absent), et une **page de récapitulatif** en tête du PDF liste les bulletins non inclus. Idéal pour imprimer toute une classe en une seule fois, prête à distribuer.
+
+### Corrections
+
+- **Impression des bulletins plus robuste** — un bulletin dont une matière n'avait pas de coefficient défini pouvait rester impossible à imprimer. Ce cas est désormais géré automatiquement, en téléchargement individuel comme en export groupé, et le bulletin s'imprime normalement.
+
 ## Juillet 2026
 
 ### Ajouts
