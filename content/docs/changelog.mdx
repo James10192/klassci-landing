@@ -17,9 +17,23 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 
 - **Export groupé des bulletins en un seul PDF** (`/esbtp/bulletins`) — un bouton « Exporter PDF groupé » réunit tous les bulletins correspondant aux filtres appliqués (année, classe, période, statut, recherche) dans un seul document PDF, **dans l'ordre de votre choix** : par classe, nom, matricule, moyenne ou rang, en ordre croissant ou décroissant. L'export **reste possible même si certains bulletins ne sont pas encore générés** : ceux-ci sont simplement absents du document, vous en êtes **averti avant le téléchargement** (nombre inclus / nombre absent), et une **page de récapitulatif** en tête du PDF liste les bulletins non inclus. Idéal pour imprimer toute une classe en une seule fois, prête à distribuer.
 
+### Améliorations
+
+- **Détail par semestre sur la vue annuelle des résultats** (`/esbtp/resultats`) — pour un étudiant passé du tronc commun à une spécialité, l'onglet Annuel présente désormais un tableau par semestre : le semestre 1 avec sa classe de tronc commun, le semestre 2 avec sa classe de spécialité, chacun accompagné de ses matières, de son total de coefficients et de sa moyenne. Chaque tableau correspond ainsi exactement aux lignes qu'il affiche, là où l'écran mêlait auparavant la moyenne annuelle en haut et la moyenne d'un seul semestre juste en dessous. La mention « Admis » ou « Ajourné » reste réservée à la décision annuelle, un tableau semestriel se contentant d'indiquer si la moyenne du semestre se situe au-dessus ou en dessous de 10.
+
 ### Corrections
 
 - **Impression des bulletins plus robuste** — un bulletin dont une matière n'avait pas de coefficient défini pouvait rester impossible à imprimer. Ce cas est désormais géré automatiquement, en téléchargement individuel comme en export groupé, et le bulletin s'imprime normalement.
+
+- **Résultats corrects après un changement de classe de spécialité** — un étudiant réorienté vers une autre spécialité en cours d'année voyait sa moyenne affichée à 0,00 avec la mention « Ajourné » et aucune note pour le semestre 2. Ses résultats suivent désormais sa classe de spécialité en cours, et la moyenne annuelle combine correctement le semestre 1 du tronc commun et le semestre 2 de la spécialité.
+
+- **Bulletins non finalisés signalés comme tels** — un bulletin dont la moyenne n'a pas encore été générée n'écrase plus les notes déjà saisies et n'affiche plus 0,00 ni « Ajourné » par défaut. L'espace personnel de l'étudiant indique clairement que le bulletin est en attente de génération.
+
+- **Finalisation annuelle des classes de tronc commun** — quand tous les étudiants d'une classe de tronc commun ont été orientés en spécialité, la génération des bulletins affiche un message explicite invitant à lancer l'opération depuis les classes de spécialité, où le semestre 1 du tronc commun est repris automatiquement, au lieu du message « Aucun étudiant actif » qui prêtait à confusion.
+
+- **Export Excel de la liste d'une classe** — la colonne Prénoms est de nouveau renseignée, et les informations du parent ou tuteur (nom, prénoms, téléphone, adresse électronique, profession) ainsi que l'adresse électronique de l'étudiant s'affichent au lieu de « N/A ».
+
+- **Aperçus PDF de l'analyse comptable et du bulletin** — ces deux pages pouvaient refuser de s'ouvrir. Elles s'affichent de nouveau normalement.
 
 ## Juillet 2026
 

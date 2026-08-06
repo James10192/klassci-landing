@@ -17,9 +17,23 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 - **Bulk bulletin export to a single PDF** (`/esbtp/bulletins`) — an "Export grouped PDF" button gathers every bulletin matching the applied filters (year, class, term, status, search) into one PDF document, **in the order you choose**: by class, name, student ID, average or rank, ascending or descending. The export **still works even when some bulletins haven't been generated yet**: those are simply left out of the document, you're **warned before downloading** (how many are included / left out), and a **summary page** at the front of the PDF lists the bulletins that weren't included. Perfect for printing a whole class at once, ready to hand out.
 
+### Improved
+
+- **Per-term breakdown on the annual results view** (`/esbtp/resultats`) — for a student who moved from the common core to a specialisation, the Annual tab now shows one table per term: term 1 with its common-core class, term 2 with its specialisation class, each with its own subjects, coefficient total and average. Every table now matches exactly the rows it displays, whereas the screen previously mixed the annual average at the top with a single term's average right below it. "Passed" or "Failed" stays reserved for the annual decision, a term table simply showing whether that term's average sits above or below 10.
+
 ### Fixed
 
 - **More robust bulletin printing** — a bulletin whose subject had no coefficient set could remain impossible to print. This case is now handled automatically, for both individual downloads and the bulk export, and the bulletin prints normally.
+
+- **Correct results after a change of specialisation class** — a student reassigned to another specialisation mid-year saw their average shown as 0.00 with a "Failed" label and no grades for term 2. Their results now follow their current specialisation class, and the annual average correctly combines term 1 from the common core with term 2 from the specialisation.
+
+- **Unfinalised bulletins flagged as such** — a bulletin whose average hasn't been generated yet no longer hides the grades already entered, and no longer defaults to 0.00 or "Failed". The student portal now clearly states that the bulletin is awaiting generation.
+
+- **Year-end finalisation for common-core classes** — once every student in a common-core class has moved on to a specialisation, bulletin generation now shows an explicit message pointing you to the specialisation classes, where term 1 from the common core is carried over automatically, instead of the confusing "No active student" message.
+
+- **Excel export of a class list** — the First names column is filled in again, and the parent or guardian details (surname, first names, phone, email, occupation) along with the student's email now appear instead of "N/A".
+
+- **PDF previews for the accounting analysis and the bulletin** — both pages could refuse to open. They now display normally again.
 
 ## July 2026
 
