@@ -239,10 +239,10 @@ export function ReinscriptionFlow({
           >
             <Carte>
               <motion.div {...entree(0)}>
-                <h2 className="text-balance text-xl font-semibold tracking-tight text-[var(--text)]">
+                <h2 className="text-balance text-xl font-semibold tracking-tight text-text">
                   {t("identification.titre")}
                 </h2>
-                <p className="mt-1.5 text-pretty text-sm text-[var(--text-secondary)]">
+                <p className="mt-1.5 text-pretty text-sm text-text-secondary">
                   {t("identification.aide")}
                 </p>
               </motion.div>
@@ -250,7 +250,7 @@ export function ReinscriptionFlow({
               <motion.div {...entree(1)} className="mt-6">
                 <label
                   htmlFor={`${idBase}-matricule`}
-                  className="block text-sm font-medium text-[var(--text)]"
+                  className="block text-sm font-medium text-text"
                 >
                   {t("identification.matricule.label")}
                 </label>
@@ -267,13 +267,13 @@ export function ReinscriptionFlow({
                   spellCheck={false}
                   className={champ}
                 />
-                <p className="mt-1.5 text-xs text-[var(--text-muted)]">
+                <p className="mt-1.5 text-xs text-text-muted">
                   {t("identification.matricule.aide")}
                 </p>
               </motion.div>
 
               <motion.div {...entree(2)} className="mt-5">
-                <span className="block text-sm font-medium text-[var(--text)]">
+                <span className="block text-sm font-medium text-text">
                   {t("identification.naissance.label")}
                 </span>
                 {/* Trois champs plutot qu'un selecteur natif : sur telephone,
@@ -335,7 +335,7 @@ export function ReinscriptionFlow({
             <Carte>
               <motion.h2
                 {...entree(0)}
-                className="text-balance text-xl font-semibold tracking-tight text-[var(--text)]"
+                className="text-balance text-xl font-semibold tracking-tight text-text"
               >
                 {situation.prenom
                   ? t("confirmation.salutation", { prenom: situation.prenom })
@@ -344,7 +344,7 @@ export function ReinscriptionFlow({
 
               <motion.dl
                 {...entree(1)}
-                className="mt-5 divide-y divide-[var(--border)] overflow-hidden rounded-xl bg-[var(--bg-alt)]"
+                className="mt-5 divide-y divide-border overflow-hidden rounded-xl bg-bg-alt"
               >
                 <Ligne intitule={t("confirmation.classe")} valeur={situation.classe_actuelle} />
                 <Ligne intitule={t("confirmation.annee")} valeur={situation.annee_cible} />
@@ -352,15 +352,15 @@ export function ReinscriptionFlow({
 
               <motion.label
                 {...entree(2)}
-                className="mt-5 flex cursor-pointer items-start gap-3 rounded-xl p-3 transition-colors duration-200 hover:bg-[var(--accent-light)]"
+                className="mt-5 flex cursor-pointer items-start gap-3 rounded-xl p-3 transition-colors duration-200 hover:bg-accent-light"
               >
                 <input
                   type="checkbox"
                   checked={consentement}
                   onChange={(e) => setConsentement(e.target.checked)}
-                  className="mt-0.5 h-5 w-5 shrink-0 cursor-pointer rounded border-[var(--border-strong)] text-[var(--accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
+                  className="mt-0.5 h-5 w-5 shrink-0 cursor-pointer rounded border-border-strong text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                 />
-                <span className="text-pretty text-sm leading-relaxed text-[var(--text-secondary)]">
+                <span className="text-pretty text-sm leading-relaxed text-text-secondary">
                   {t("confirmation.consentement")}
                 </span>
               </motion.label>
@@ -378,7 +378,7 @@ export function ReinscriptionFlow({
                 <button
                   type="button"
                   onClick={recommencer}
-                  className="mx-auto min-h-[40px] px-3 text-sm text-[var(--text-muted)] underline-offset-4 transition-colors duration-200 hover:text-[var(--text)] hover:underline"
+                  className="mx-auto min-h-[40px] px-3 text-sm text-text-muted underline-offset-4 transition-colors duration-200 hover:text-text hover:underline"
                 >
                   {t("confirmation.retour")}
                 </button>
@@ -400,7 +400,7 @@ export function ReinscriptionFlow({
                 initial={{ scale: 0.25, opacity: 0, filter: "blur(4px)" }}
                 animate={{ scale: 1, opacity: 1, filter: "blur(0px)" }}
                 transition={RESSORT}
-                className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[var(--accent-light)]"
+                className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-accent-light"
               >
                 <svg
                   viewBox="0 0 24 24"
@@ -409,7 +409,7 @@ export function ReinscriptionFlow({
                   strokeWidth={2.2}
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className="h-7 w-7 text-[var(--accent)]"
+                  className="h-7 w-7 text-accent"
                   aria-hidden="true"
                 >
                   <path d="M20 6 9 17l-5-5" />
@@ -418,19 +418,19 @@ export function ReinscriptionFlow({
 
               <motion.h2
                 {...entree(1)}
-                className="mt-5 text-balance text-center text-xl font-semibold tracking-tight text-[var(--text)]"
+                className="mt-5 text-balance text-center text-xl font-semibold tracking-tight text-text"
               >
                 {t("succes.titre")}
               </motion.h2>
               <motion.p
                 {...entree(2)}
-                className="mt-2 text-pretty text-center text-sm leading-relaxed text-[var(--text-secondary)]"
+                className="mt-2 text-pretty text-center text-sm leading-relaxed text-text-secondary"
               >
                 {t("succes.texte")}
               </motion.p>
               <motion.p
                 {...entree(3)}
-                className="mt-4 rounded-xl bg-[var(--bg-alt)] p-3 text-pretty text-center text-xs leading-relaxed text-[var(--text-muted)]"
+                className="mt-4 rounded-xl bg-bg-alt p-3 text-pretty text-center text-xs leading-relaxed text-text-muted"
               >
                 {t("succes.rappel")}
               </motion.p>
@@ -439,7 +439,7 @@ export function ReinscriptionFlow({
                 <button
                   type="button"
                   onClick={recommencer}
-                  className="min-h-[40px] px-3 text-sm text-[var(--accent)] underline-offset-4 transition-colors duration-200 hover:underline"
+                  className="min-h-[40px] px-3 text-sm text-accent underline-offset-4 transition-colors duration-200 hover:underline"
                 >
                   {t("succes.action")}
                 </button>
@@ -457,16 +457,16 @@ export function ReinscriptionFlow({
 /** Rayon concentrique : la carte à 20px, les champs internes à 12px pour 8px de marge. */
 function Carte({ children }: { children: React.ReactNode }) {
   return (
-    <div className="rounded-[20px] bg-[var(--bg-card)] p-6 shadow-[0_1px_2px_rgba(16,24,40,0.04),0_4px_12px_rgba(16,24,40,0.04),0_16px_40px_-12px_rgba(16,24,40,0.10)] sm:p-8">
+    <div className="rounded-[20px] bg-bg-card p-6 shadow-[0_1px_2px_rgba(16,24,40,0.04),0_4px_12px_rgba(16,24,40,0.04),0_16px_40px_-12px_rgba(16,24,40,0.10)] sm:p-8">
       {children}
     </div>
   );
 }
 
 const champ =
-  "mt-2 block w-full rounded-xl border border-[var(--border)] bg-[var(--bg)] px-3.5 py-2.5 text-[16px] text-[var(--text)] " +
-  "placeholder:text-[var(--text-muted)] transition-[border-color,box-shadow] duration-200 " +
-  "focus:border-[var(--accent)] focus:outline-none focus:ring-4 focus:ring-[var(--accent-light)]";
+  "mt-2 block w-full rounded-xl border border-border bg-bg px-3.5 py-2.5 text-[16px] text-text " +
+  "placeholder:text-text-muted transition-[border-color,box-shadow] duration-200 " +
+  "focus:border-accent focus:outline-none focus:ring-4 focus:ring-accent-light";
 
 type ProprietesCaseDate = {
   label: string;
@@ -490,7 +490,7 @@ const CaseDate = forwardRef<HTMLInputElement, ProprietesCaseDate>(function CaseD
 ) {
   return (
     <label className="block">
-      <span className="block text-xs font-medium text-[var(--text-muted)]">{label}</span>
+      <span className="block text-xs font-medium text-text-muted">{label}</span>
       <input
         ref={ref}
         value={value}
@@ -513,8 +513,8 @@ function Ligne({ intitule, valeur }: { intitule: string; valeur?: string | null 
 
   return (
     <div className="flex items-baseline justify-between gap-4 px-4 py-3">
-      <dt className="text-sm text-[var(--text-muted)]">{intitule}</dt>
-      <dd className="text-right text-sm font-semibold text-[var(--text)]">{valeur}</dd>
+      <dt className="text-sm text-text-muted">{intitule}</dt>
+      <dd className="text-right text-sm font-semibold text-text">{valeur}</dd>
     </div>
   );
 }
@@ -536,7 +536,7 @@ function BoutonPrincipal({
       onClick={onClick}
       disabled={disabled}
       aria-busy={occupe}
-      className="flex min-h-[48px] w-full items-center justify-center rounded-xl bg-[var(--accent)] px-5 text-[15px] font-semibold text-white transition-[background-color,scale,opacity] duration-200 hover:bg-[var(--accent-hover)] active:scale-[0.96] disabled:cursor-not-allowed disabled:opacity-40 disabled:active:scale-100"
+      className="flex min-h-[48px] w-full items-center justify-center rounded-xl bg-accent px-5 text-[15px] font-semibold text-white transition-[background-color,scale,opacity] duration-200 hover:bg-accent-hover active:scale-[0.96] disabled:cursor-not-allowed disabled:opacity-40 disabled:active:scale-100"
     >
       {children}
     </button>
@@ -557,10 +557,10 @@ function Alerte({ etat }: { etat: CleEtat | null }) {
           transition={RESSORT}
           role="status"
           aria-live="polite"
-          className="mt-5 rounded-xl border border-[var(--border)] bg-[var(--bg-alt)] p-4"
+          className="mt-5 rounded-xl border border-border bg-bg-alt p-4"
         >
-          <p className="text-sm font-semibold text-[var(--text)]">{t(`${etat}.titre`)}</p>
-          <p className="mt-1 text-pretty text-sm leading-relaxed text-[var(--text-secondary)]">
+          <p className="text-sm font-semibold text-text">{t(`${etat}.titre`)}</p>
+          <p className="mt-1 text-pretty text-sm leading-relaxed text-text-secondary">
             {t(`${etat}.texte`)}
           </p>
         </motion.div>
