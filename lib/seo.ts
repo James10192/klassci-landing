@@ -15,11 +15,18 @@ const UNIVERSE_IMAGES: Record<UniverseKey, string> = {
 
 interface SeoInput {
   locale: Locale;
-  key: UniverseKey;
+  /**
+   * L'edition du produit. Absente pour les pages qui n'en sont pas une : la
+   * reinscription est une fonction, pas une edition, et l'inscrire dans cette
+   * enumeration fermee fausserait la segmentation d'audience.
+   */
+  key?: UniverseKey;
   title: string;
   description: string;
   path: string;
   image?: string;
+  /** Retire la page des moteurs. Voir l'usage sur le portail de reinscription. */
+  noindex?: boolean;
 }
 
 export function buildUniverseMetadata({
@@ -28,7 +35,8 @@ export function buildUniverseMetadata({
   title,
   description,
   path,
-  image = UNIVERSE_IMAGES[key],
+  image = key ? UNIVERSE_IMAGES[key] : "/img/og/default.png",
+  noindex = false,
 }: SeoInput): Metadata {
   const normalizedPath = path === "/" ? "" : path;
   const localizedPath = `/${locale}${normalizedPath}`;
@@ -72,13 +80,14 @@ export function buildUniverseMetadata({
       description,
       images: [imageUrl],
     },
+    ...(noindex ? { robots: { index: false, follow: false } } : {}),
     other: {
       "og:whatsapp:title": title,
       "og:whatsapp:description": description,
       "og:image:secure_url": imageUrl,
       "og:image:type": "image/png",
       "twitter:image:alt": title,
-      "klassci:universe": key,
+      ...(key ? { "klassci:universe": key } : {}),
     },
   };
 }

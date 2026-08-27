@@ -1,0 +1,96 @@
+{
+  "reinscription": {
+    "meta": {
+      "title": "Réinscription en ligne",
+      "description": "Réinscrivez-vous en quelques minutes auprès de votre établissement, sans vous déplacer."
+    },
+    "hero": {
+      "eyebrow": "Réinscription",
+      "title": "Votre réinscription, en trois minutes.",
+      "subtitle": "Munissez-vous de votre matricule et de votre date de naissance. Nous transmettons votre demande à votre établissement, qui vous répondra."
+    },
+    "choix": {
+      "title": "Votre établissement",
+      "aide": "Choisissez l'établissement où vous êtes inscrit cette année.",
+      "aucun": {
+        "titre": "Aucun établissement n'a encore ouvert la réinscription en ligne.",
+        "texte": "Rapprochez-vous de votre scolarité : elle vous indiquera la marche à suivre."
+      }
+    },
+    "identification": {
+      "titre": "Retrouvons votre dossier",
+      "aide": "Ces deux informations figurent sur votre carte d'étudiant et sur vos bulletins.",
+      "matricule": {
+        "label": "Matricule",
+        "placeholder": "Ex. 2024-0413",
+        "aide": "Tel qu'il figure sur votre carte d'étudiant."
+      },
+      "naissance": {
+        "label": "Date de naissance",
+        "jour": "Jour",
+        "mois": "Mois",
+        "annee": "Année"
+      },
+      "action": "Retrouver mon dossier",
+      "chargement": "Recherche en cours…"
+    },
+    "confirmation": {
+      "salutation": "Bonjour {prenom}.",
+      "salutationSansPrenom": "Nous avons retrouvé votre dossier.",
+      "classe": "Classe actuelle",
+      "annee": "Année visée",
+      "consentement": "J'autorise la transmission de ces informations à mon établissement pour le traitement de ma réinscription.",
+      "action": "Confirmer ma demande",
+      "chargement": "Transmission…",
+      "retour": "Ce n'est pas moi"
+    },
+    "succes": {
+      "titre": "Votre demande est transmise.",
+      "texte": "Votre établissement l'examinera et reviendra vers vous. Aucune démarche supplémentaire n'est nécessaire de votre côté.",
+      "rappel": "Conservez votre matricule : il vous servira à suivre votre dossier auprès de la scolarité.",
+      "action": "Faire une autre demande"
+    },
+    "etats": {
+      "dejaDeposee": {
+        "titre": "Votre demande est déjà enregistrée.",
+        "texte": "Votre établissement l'a bien reçue et l'examine. Inutile de la renvoyer."
+      },
+      "nonEligible": {
+        "titre": "Votre réinscription est déjà faite.",
+        "texte": "Votre établissement vous a déjà réinscrit pour cette année. Rapprochez-vous de la scolarité si cela vous surprend."
+      },
+      "introuvable": {
+        "titre": "Aucun dossier ne correspond.",
+        "texte": "Vérifiez votre matricule et votre date de naissance. S'ils sont exacts, rapprochez-vous de votre scolarité : votre dossier n'est peut-être pas encore éligible à la réinscription en ligne."
+      },
+      "ferme": {
+        "titre": "Les réinscriptions ne sont pas ouvertes.",
+        "texte": "Votre établissement n'a pas encore ouvert la période de réinscription en ligne, ou elle est terminée. Rapprochez-vous de votre scolarité."
+      },
+      "tropDeTentatives": {
+        "titre": "Trop de tentatives.",
+        "texte": "Patientez quelques minutes avant de réessayer."
+      },
+      "indisponible": {
+        "titre": "Service momentanément indisponible.",
+        "texte": "Nous n'arrivons pas à joindre votre établissement. Réessayez dans quelques minutes."
+      },
+      "champsInvalides": {
+        "titre": "Informations incomplètes.",
+        "texte": "Renseignez votre matricule et votre date de naissance complète."
+      },
+      "refus": {
+        "titre": "Votre demande n'a pas pu être enregistrée.",
+        "texte": "Rapprochez-vous de votre scolarité : elle seule peut vous dire pourquoi et vous indiquer la marche à suivre."
+      }
+    },
+    "confiance": {
+      "titre": "Ce que nous faisons de vos informations",
+      "points": [
+        "Votre matricule et votre date de naissance servent uniquement à retrouver votre dossier.",
+        "Aucune information financière ne transite par cette page, ni dans un sens ni dans l'autre.",
+        "Votre demande n'est pas une inscription : c'est votre établissement qui décide et qui vous répond."
+      ]
+    }
+  }
+}
