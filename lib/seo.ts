@@ -4,13 +4,14 @@ import { routing, type Locale } from "@/i18n/routing";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://klassci.com";
 
-type UniverseKey = "home" | "universite" | "college" | "lms";
+type UniverseKey = "home" | "universite" | "college" | "lms" | "reinscription";
 
 const UNIVERSE_IMAGES: Record<UniverseKey, string> = {
   home: "/img/og/home.png",
   universite: "/img/og/universite.png",
   college: "/img/og/college.png",
   lms: "/img/og/default.png",
+  reinscription: "/img/og/default.png",
 };
 
 interface SeoInput {

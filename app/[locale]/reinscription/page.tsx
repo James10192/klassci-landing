@@ -1,0 +1,49 @@
+import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+
+import { ReinscriptionPage } from "@/components/reinscription/reinscription-page";
+import { routing, type Locale } from "@/i18n/routing";
+import { etablissementsOuverts } from "@/lib/reinscription/tenants";
+import { buildUniverseMetadata } from "@/lib/seo";
+
+// La liste des etablissements servis vient des variables d'environnement :
+// elle change sans redeploiement, donc la page ne se met pas en cache.
+export const dynamic = "force-dynamic";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const safeLocale = routing.locales.includes(locale) ? locale : routing.defaultLocale;
+  const t = await getTranslations({ locale: safeLocale, namespace: "reinscription.meta" });
+
+  return buildUniverseMetadata({
+    locale: safeLocale,
+    key: "reinscription",
+    title: t("title"),
+    description: t("description"),
+    path: "/reinscription",
+  });
+}
+
+export default async function Reinscription({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
+  const etablissements = etablissementsOuverts();
+
+  // Une seule ecole servie : lui demander de la choisir dans une liste d'un
+  // element serait une etape pour rien.
+  if (etablissements.length === 1) {
+    redirect(`/${locale}/reinscription/${etablissements[0].code}`);
+  }
+
+  return <ReinscriptionPage locale={locale} etablissements={etablissements} />;
+}

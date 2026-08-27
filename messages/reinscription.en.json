@@ -1,0 +1,92 @@
+{
+  "reinscription": {
+    "meta": {
+      "title": "Online re-enrolment",
+      "description": "Re-enrol with your school in a few minutes, without travelling."
+    },
+    "hero": {
+      "eyebrow": "Re-enrolment",
+      "title": "Your re-enrolment, in three minutes.",
+      "subtitle": "Have your student number and date of birth to hand. We pass your request to your school, and they get back to you."
+    },
+    "choix": {
+      "title": "Your school",
+      "aide": "Pick the school where you are enrolled this year.",
+      "aucun": {
+        "titre": "No school has opened online re-enrolment yet.",
+        "texte": "Get in touch with your registrar, who will tell you how to proceed."
+      }
+    },
+    "identification": {
+      "titre": "Let's find your file",
+      "aide": "Both details appear on your student card and on your report cards.",
+      "matricule": {
+        "label": "Student number",
+        "placeholder": "e.g. 2024-0413",
+        "aide": "Exactly as printed on your student card."
+      },
+      "naissance": {
+        "label": "Date of birth",
+        "jour": "Day",
+        "mois": "Month",
+        "annee": "Year"
+      },
+      "action": "Find my file",
+      "chargement": "Searching…"
+    },
+    "confirmation": {
+      "salutation": "Hello {prenom}.",
+      "salutationSansPrenom": "We found your file.",
+      "classe": "Current class",
+      "annee": "Target year",
+      "consentement": "I allow these details to be sent to my school so my re-enrolment can be processed.",
+      "action": "Confirm my request",
+      "chargement": "Sending…",
+      "retour": "This isn't me"
+    },
+    "succes": {
+      "titre": "Your request has been sent.",
+      "texte": "Your school will review it and get back to you. Nothing further is required on your side.",
+      "rappel": "Keep your student number: you will need it to follow up with the registrar.",
+      "action": "Make another request"
+    },
+    "etats": {
+      "dejaDeposee": {
+        "titre": "Your request is already on file.",
+        "texte": "Your school has received it and is reviewing it. No need to send it again."
+      },
+      "nonEligible": {
+        "titre": "You are already re-enrolled.",
+        "texte": "Your school has already re-enrolled you for this year. Contact the registrar if that surprises you."
+      },
+      "introuvable": {
+        "titre": "No matching file.",
+        "texte": "Check your student number and date of birth. If they are correct, contact your registrar: your file may not yet be eligible for online re-enrolment."
+      },
+      "ferme": {
+        "titre": "Re-enrolment is not open.",
+        "texte": "Your school has not opened the online re-enrolment window yet, or it has closed. Contact your registrar."
+      },
+      "tropDeTentatives": {
+        "titre": "Too many attempts.",
+        "texte": "Please wait a few minutes before trying again."
+      },
+      "indisponible": {
+        "titre": "Service temporarily unavailable.",
+        "texte": "We cannot reach your school right now. Please try again in a few minutes."
+      },
+      "champsInvalides": {
+        "titre": "Incomplete details.",
+        "texte": "Enter your student number and your full date of birth."
+      }
+    },
+    "confiance": {
+      "titre": "What we do with your details",
+      "points": [
+        "Your student number and date of birth are used only to find your file.",
+        "No financial information passes through this page, in either direction.",
+        "Your request is not an enrolment: your school decides, and your school replies."
+      ]
+    }
+  }
+}
