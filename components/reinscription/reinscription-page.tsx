@@ -12,17 +12,23 @@ import { ReinscriptionFlow } from "./reinscription-flow";
  * seul morceau interactif. Tout le reste arrive avec la page, ce qui compte sur
  * une connexion lente : le visiteur lit pendant que le formulaire s'hydrate.
  */
+
+/**
+ * Exactement l'une des deux formes, jamais les deux, jamais aucune : soit
+ * l'école est déterminée et on va droit au formulaire, soit le visiteur doit
+ * la choisir. Deux props optionnelles auraient laissé passer « aucune des
+ * deux », qui se serait affiché en silence comme « aucun établissement ».
+ */
+type ProprietesReinscriptionPage = { locale: string } & (
+  | { etablissement: EtablissementReinscription; etablissements?: never }
+  | { etablissements: EtablissementReinscription[]; etablissement?: never }
+);
+
 export async function ReinscriptionPage({
   locale,
   etablissement,
   etablissements,
-}: {
-  locale: string;
-  /** Renseigné quand l'école est déterminée : on va droit au formulaire. */
-  etablissement?: EtablissementReinscription;
-  /** Renseigné sinon : le visiteur choisit d'abord son école. */
-  etablissements?: EtablissementReinscription[];
-}) {
+}: ProprietesReinscriptionPage) {
   const t = await getTranslations({ locale, namespace: "reinscription" });
 
   return (
@@ -49,7 +55,7 @@ export async function ReinscriptionPage({
           {etablissement ? (
             <ReinscriptionFlow etablissement={etablissement} />
           ) : (
-            <ChoixEtablissement locale={locale} etablissements={etablissements ?? []} />
+            <ChoixEtablissement locale={locale} etablissements={etablissements!} />
           )}
         </div>
 

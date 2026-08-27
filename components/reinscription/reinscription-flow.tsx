@@ -33,7 +33,8 @@ type CleEtat =
   | "ferme"
   | "tropDeTentatives"
   | "indisponible"
-  | "champsInvalides";
+  | "champsInvalides"
+  | "refus";
 
 const RESSORT = { type: "spring", duration: 0.3, bounce: 0 } as const;
 
@@ -114,7 +115,7 @@ export function ReinscriptionFlow({
         return null;
       }
 
-      if (!reponse.ok && reponse.status !== 200 && reponse.status !== 201) {
+      if (!reponse.ok) {
         setEtat("indisponible");
         return null;
       }
@@ -200,10 +201,13 @@ export function ReinscriptionFlow({
         return;
       }
 
-      // KLASSCI rend « introuvable » aussi bien pour un matricule inconnu que
-      // pour un dossier qu'il refuse de servir. À ce stade du parcours, la
-      // seconde cause est la seule plausible.
-      setEtat("nonEligible");
+      // KLASSCI refuse DÉLIBÉRÉMENT de dire pourquoi il ne sert pas un
+      // dossier : déjà réinscrit, plus d'année courante, rien à réinscrire —
+      // une seule et même réponse. Deviner ici la raison, et écrire à une
+      // famille « votre réinscription est déjà faite » alors que le serveur
+      // ne l'a jamais affirmé, l'enverrait à la scolarité avec la mauvaise
+      // question. On dit ce qu'on sait : ça n'a pas abouti.
+      setEtat("refus");
     } catch {
       setEtat("indisponible");
     } finally {

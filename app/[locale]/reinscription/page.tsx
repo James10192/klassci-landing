@@ -22,7 +22,9 @@ export async function generateMetadata({
 
   return buildUniverseMetadata({
     locale: safeLocale,
-    key: "reinscription",
+    // Retire des moteurs : la liste des ecoles servies, et le calendrier de
+    // leurs fenetres de reinscription, n'ont pas a se retrouver dans un index.
+    noindex: true,
     title: t("title"),
     description: t("description"),
     path: "/reinscription",

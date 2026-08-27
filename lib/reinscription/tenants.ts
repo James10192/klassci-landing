@@ -11,8 +11,14 @@ import "server-only";
  * Convention de nommage — pour un établissement de code `esbtp-yakro` :
  *
  *   REINSCRIPTION_SECRET_ESBTP_YAKRO   (requis)  le secret partagé, 32 car. min
+ *   REINSCRIPTION_BASE_ESBTP_YAKRO     (requis)  l'URL de l'instance
  *   REINSCRIPTION_LABEL_ESBTP_YAKRO    (option)  le nom affiché
- *   REINSCRIPTION_BASE_ESBTP_YAKRO     (option)  l'URL de l'instance
+ *
+ * L'URL est exigée plutôt que déduite du code. Elle ne se déduit déjà pas
+ * toujours — l'établissement `rostan` est servi par `islg.klassci.com` — et
+ * surtout, la déduire figerait ici une hypothèse sur un seul produit. Ce
+ * module n'a pas à savoir que KLASSCI Université loge ses instances sur des
+ * sous-domaines : c'est la configuration qui le dit, école par école.
  *
  * La liste des codes vient de REINSCRIPTION_TENANTS, séparés par des virgules.
  * Sans elle, aucune école n'est servie — un oubli de configuration ferme le
@@ -44,14 +50,6 @@ function suffixeEnv(code: string): string {
   return code.replace(/-/g, "_").toUpperCase();
 }
 
-/**
- * Le sous-domaine ne se déduit pas toujours du code : l'établissement
- * `rostan` est servi par `islg.klassci.com`. D'où l'écrasement possible.
- */
-function baseParDefaut(code: string): string {
-  return `https://${code}.klassci.com`;
-}
-
 function libelleParDefaut(code: string): string {
   return code
     .split("-")
@@ -81,7 +79,15 @@ function lire(code: string): EtablissementInterne | null {
     return null;
   }
 
-  const base = process.env[`REINSCRIPTION_BASE_${suffixe}`] ?? baseParDefaut(code);
+  const base = process.env[`REINSCRIPTION_BASE_${suffixe}`];
+
+  if (typeof base !== "string" || !base.startsWith("https://")) {
+    console.warn(
+      `[reinscription] REINSCRIPTION_BASE_${suffixe} absent ou non https, ` +
+        `l'etablissement ${code} n'est pas servi.`,
+    );
+    return null;
+  }
 
   return {
     code,

@@ -1,6 +1,6 @@
 import "server-only";
 
-import { NextResponse } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 
 import { preparerAppel } from "./signature";
 import { etablissementAvecSecret } from "./tenants";
@@ -18,8 +18,8 @@ import { etablissementAvecSecret } from "./tenants";
  *    champ par champ à partir de ce que le visiteur a saisi — jamais son objet
  *    tel quel. Sans cela, un champ ajouté par l'appelant traverserait le relais
  *    et entrerait dans la charge signée, avec notre secret pour l'authentifier.
- * 2. L'adresse transmise est celle que Vercel a constatée, pas celle que
- *    l'appelant déclare. C'est cette adresse qui borne la limitation de débit
+ * 2. L'adresse transmise est celle que la plateforme a constatée, pas celle
+ *    que l'appelant déclare. C'est cette adresse qui borne la limitation de débit
  *    côté KLASSCI ; la laisser au choix de l'appelant reviendrait à supprimer
  *    la limitation tout en la croyant en place.
  */
@@ -55,13 +55,20 @@ function indisponible(): NextResponse {
 /**
  * L'adresse du visiteur, telle que la plateforme l'a constatée.
  *
- * `x-forwarded-for` peut porter une chaîne de mandataires ; le premier élément
- * est le client d'origine. On ne fait confiance à cet en-tête que parce que
- * Vercel le réécrit à l'entrée — il n'est pas modifiable par l'appelant.
+ * `requete.ip` est renseigné par la plateforme et n'est atteignable par aucun
+ * en-tête : c'est la seule valeur qu'un appelant ne peut pas choisir. Elle
+ * compte, parce que c'est elle qui borne la limitation par adresse côté
+ * KLASSCI. Lire un en-tête à sa place — `x-real-ip` en particulier, le moins
+ * spécifié des deux — laisserait n'importe qui s'attribuer un compteur neuf à
+ * chaque requête en incrémentant une valeur, et supprimerait donc la borne
+ * tout en la laissant croire en place.
+ *
+ * `x-forwarded-for` ne sert que de repli hors plateforme (développement,
+ * exécution derrière un mandataire tiers) ; son premier élément est le client
+ * d'origine.
  */
-function adresseVisiteur(entetes: Headers): string | null {
-  const brute =
-    entetes.get("x-real-ip") ?? entetes.get("x-forwarded-for")?.split(",")[0] ?? "";
+function adresseVisiteur(requete: NextRequest): string | null {
+  const brute = requete.ip ?? requete.headers.get("x-forwarded-for")?.split(",")[0] ?? "";
 
   const adresse = brute.trim();
 
@@ -93,7 +100,7 @@ export async function relayer(
   code: string,
   point: Point,
   champs: ChampsVisiteur,
-  entetes: Headers,
+  requete: NextRequest,
 ): Promise<NextResponse> {
   const etablissement = etablissementAvecSecret(code);
 
@@ -111,10 +118,10 @@ export async function relayer(
     );
   }
 
-  const adresse = adresseVisiteur(entetes);
+  const adresse = adresseVisiteur(requete);
 
   if (adresse === null) {
-    console.error("[reinscription] Adresse du visiteur introuvable dans les en-tetes");
+    console.error("[reinscription] Adresse du visiteur indeterminable");
 
     return indisponible();
   }
@@ -137,6 +144,17 @@ export async function relayer(
       cache: "no-store",
       signal: AbortSignal.timeout(DELAI_MAX_MS),
     });
+
+    // Un 401 ne vient jamais du visiteur : il signifie que notre signature a
+    // ete refusee — secret tourne d'un seul cote, ou horloge derivee au-dela
+    // de la fenetre de cinq minutes. Sans cette ligne, la panne est
+    // parfaitement muette : le portail d'une ecole entiere se ferme et
+    // l'utilisateur ne lit que « service momentanement indisponible ».
+    if (reponse.status === 401) {
+      console.error(
+        `[reinscription] ${etablissement.code} refuse notre signature — secret desynchronise ou horloge derivee`,
+      );
+    }
 
     const texte = await reponse.text();
 

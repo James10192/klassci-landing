@@ -25,6 +25,6 @@ export async function POST(
     params.ecole,
     "submit",
     { matricule, dateNaissance, consentement: consentement === true },
-    requete.headers,
+    requete,
   );
 }

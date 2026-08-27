@@ -23,5 +23,5 @@ export async function POST(
     return Response.json({ erreur: "champs_manquants" }, { status: 422 });
   }
 
-  return relayer(params.ecole, "lookup", { matricule, dateNaissance }, requete.headers);
+  return relayer(params.ecole, "lookup", { matricule, dateNaissance }, requete);
 }

@@ -78,6 +78,10 @@
       "champsInvalides": {
         "titre": "Incomplete details.",
         "texte": "Enter your student number and your full date of birth."
+      },
+      "refus": {
+        "titre": "Your request could not be recorded.",
+        "texte": "Contact your registrar: only they can tell you why and what to do next."
       }
     },
     "confiance": {

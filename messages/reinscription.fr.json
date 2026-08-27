@@ -78,6 +78,10 @@
       "champsInvalides": {
         "titre": "Informations incomplètes.",
         "texte": "Renseignez votre matricule et votre date de naissance complète."
+      },
+      "refus": {
+        "titre": "Votre demande n'a pas pu être enregistrée.",
+        "texte": "Rapprochez-vous de votre scolarité : elle seule peut vous dire pourquoi et vous indiquer la marche à suivre."
       }
     },
     "confiance": {
