@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "tsc": "tsc --noEmit"
+    "tsc": "tsc --noEmit",
+    "verifier:amortisseur": "node --experimental-strip-types --conditions=react-server scripts/verifier-amortisseur.mjs"
   },
   "dependencies": {
     "@types/mdx": "^2.0.13",

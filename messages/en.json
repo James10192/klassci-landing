@@ -19,7 +19,9 @@
     "themeToggleAria": "Toggle theme",
     "menuOpen": "Open menu",
     "menuClose": "Close menu",
-    "languageSwitcherAria": "Switch language"
+    "languageSwitcherAria": "Switch language",
+    "inscription": "Apply",
+    "inscriptionAria": "Apply to one of our schools"
   },
   "hero": {
     "title": "School management, reimagined.",

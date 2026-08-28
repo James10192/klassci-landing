@@ -19,7 +19,9 @@
     "themeToggleAria": "Changer le thème",
     "menuOpen": "Ouvrir le menu",
     "menuClose": "Fermer le menu",
-    "languageSwitcherAria": "Changer de langue"
+    "languageSwitcherAria": "Changer de langue",
+    "inscription": "S'inscrire",
+    "inscriptionAria": "S'inscrire dans un de nos établissements"
   },
   "hero": {
     "title": "Gestion scolaire, repensée.",

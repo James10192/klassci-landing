@@ -1,22 +1,5 @@
 {
   "reinscription": {
-    "meta": {
-      "title": "Réinscription en ligne",
-      "description": "Réinscrivez-vous en quelques minutes auprès de votre établissement, sans vous déplacer."
-    },
-    "hero": {
-      "eyebrow": "Réinscription",
-      "title": "Votre réinscription, en trois minutes.",
-      "subtitle": "Munissez-vous de votre matricule et de votre date de naissance. Nous transmettons votre demande à votre établissement, qui vous répondra."
-    },
-    "choix": {
-      "title": "Votre établissement",
-      "aide": "Choisissez l'établissement où vous êtes inscrit cette année.",
-      "aucun": {
-        "titre": "Aucun établissement n'a encore ouvert la réinscription en ligne.",
-        "texte": "Rapprochez-vous de votre scolarité : elle vous indiquera la marche à suivre."
-      }
-    },
     "identification": {
       "titre": "Retrouvons votre dossier",
       "aide": "Ces deux informations figurent sur votre carte d'étudiant et sur vos bulletins.",
@@ -82,14 +65,178 @@
       "refus": {
         "titre": "Votre demande n'a pas pu être enregistrée.",
         "texte": "Rapprochez-vous de votre scolarité : elle seule peut vous dire pourquoi et vous indiquer la marche à suivre."
+      },
+      "affluence": {
+        "titre": "Beaucoup de demandes en ce moment.",
+        "texte": "L'établissement reçoit un grand nombre de demandes simultanées. Réessayez dans quelques minutes, ou rapprochez-vous de lui directement."
+      },
+      "identificationBloquee": {
+        "titre": "Ce dossier est momentanément bloqué.",
+        "texte": "Trop d'essais infructueux ont été faits sur ce dossier. Réessayez plus tard, ou rapprochez-vous de votre établissement."
+      }
+    }
+  },
+  "inscription": {
+    "meta": {
+      "title": "Inscription en ligne",
+      "description": "Inscrivez-vous ou réinscrivez-vous en ligne auprès de votre établissement."
+    },
+    "hero": {
+      "eyebrow": "Inscription",
+      "title": "Rejoignez votre établissement, en ligne.",
+      "subtitle": "Que vous soyez nouveau bachelier ou déjà étudiant chez nous, tout commence ici."
+    },
+    "choix": {
+      "titre": "Vous êtes…",
+      "nouveau": {
+        "titre": "Nouvel étudiant",
+        "texte": "Vous n'avez jamais été inscrit dans cet établissement. Vous n'avez donc pas encore de matricule : il vous sera attribué à votre inscription."
+      },
+      "ancien": {
+        "titre": "Déjà étudiant ici",
+        "texte": "Vous étiez inscrit cette année et vous vous réinscrivez. Munissez-vous de votre matricule."
+      },
+      "retour": "Ce n'est pas mon cas"
+    },
+    "formulaire": {
+      "titre": "Votre candidature",
+      "aide": "L'établissement vous rappellera. Le dossier complet se constitue sur place, avec les pièces.",
+      "identite": "Vous",
+      "nom": "Nom",
+      "prenoms": "Prénoms",
+      "naissance": "Date de naissance",
+      "jour": "Jour",
+      "mois": "Mois",
+      "annee": "Année",
+      "sexe": "Sexe",
+      "masculin": "Masculin",
+      "feminin": "Féminin",
+      "nonPrecise": "Non précisé",
+      "lieuNaissance": "Lieu de naissance",
+      "nationalite": "Nationalité",
+      "contact": "Pour vous joindre",
+      "telephone": "Téléphone",
+      "telephoneAide": "C'est par ce numéro que l'établissement vous rappellera. Numéro mobile ivoirien, par exemple 07 07 12 12 34.",
+      "email": "Email (facultatif)",
+      "ville": "Ville de résidence",
+      "commune": "Commune / quartier",
+      "voeu": "Ce que vous voulez faire",
+      "filiere": "Filière",
+      "niveau": "Niveau",
+      "choisir": "Choisir…",
+      "champInvalide": "Vérifiez ce champ.",
+      "voeuLibre": "Ou décrivez la formation qui vous intéresse",
+      "parcours": "Votre parcours (facultatif)",
+      "serieBac": "Série du bac",
+      "etablissementOrigine": "Établissement d'origine",
+      "anneeBac": "Année du bac",
+      "affectation": "Affectation de l'État",
+      "affectationInconnue": "Je ne sais pas encore",
+      "affectationAide": "L'établissement vérifiera. Si vous n'êtes pas sûr, laissez « je ne sais pas ».",
+      "tuteur": "Parent ou tuteur",
+      "tuteurAide": "Facultatif, mais c'est souvent la personne que l'établissement joint le plus facilement.",
+      "tuteurNom": "Nom et prénoms",
+      "tuteurLien": "Lien avec vous",
+      "tuteurTelephone": "Téléphone",
+      "tuteurProfession": "Profession",
+      "message": "Un mot pour l'établissement (facultatif)",
+      "consentement": "J'autorise la transmission de ces informations à l'établissement pour le traitement de ma candidature.",
+      "action": "Envoyer ma candidature",
+      "chargement": "Envoi…",
+      "reessayer": "Réessayer",
+      "requis": "Cette information est nécessaire.",
+      "voeuRequis": "Indiquez la filière, le niveau, ou décrivez la formation qui vous intéresse."
+    },
+    "succes": {
+      "titre": "Votre candidature est transmise.",
+      "texte": "L'établissement l'examinera et vous rappellera au numéro que vous avez indiqué.",
+      "surPlace": "Le dossier se termine à l'établissement : présentez-vous avec vos pièces pour finaliser votre inscription et régler les frais.",
+      "surPlaceOuvert": "Les inscriptions sur place sont ouvertes : rendez-vous à l'établissement avec vos pièces pour terminer votre dossier et régler les frais.",
+      "surPlaceDate": "Les inscriptions sur place commencent le {date}. Présentez-vous à l'établissement à partir de cette date, avec vos pièces, pour terminer votre dossier et régler les frais.",
+      "rappel": "Aucun matricule ne vous est attribué à ce stade : il vous sera donné au moment de votre inscription effective."
+    },
+    "etats": {
+      "ferme": {
+        "titre": "Les inscriptions ne sont pas ouvertes.",
+        "texte": "Cet établissement n'a pas encore ouvert les candidatures en ligne, ou la période est terminée. Rapprochez-vous de lui directement."
+      },
+      "nonConfigure": {
+        "titre": "Inscriptions pas encore paramétrées",
+        "texte": "L'établissement n'a pas terminé la configuration de cette rentrée. Cela ne se débloquera pas en patientant : appelez-le directement."
+      },
+      "dejaInscrit": {
+        "titre": "Une inscription existe déjà pour ce numéro",
+        "texte": "Ce numéro de téléphone porte déjà une inscription pour cette rentrée. Si vous candidatez pour une autre personne, utilisez son propre numéro."
+      },
+      "autrePersonne": {
+        "titre": "Ce numéro porte déjà une candidature",
+        "texte": "Une candidature enregistrée sous un autre nom utilise déjà ce numéro de téléphone. Si c'est la vôtre, ressaisissez vos nom, prénoms et date de naissance exactement comme la première fois. Sinon, utilisez un autre numéro."
+      },
+      "dejaTraitee": {
+        "titre": "Votre candidature a déjà été acceptée",
+        "texte": "L'établissement a déjà accepté cette candidature : vous n'avez pas besoin de la renvoyer. Présentez-vous sur place pour finaliser votre inscription. Si vous candidatez pour une autre personne, utilisez son propre numéro."
+      },
+      "accepteePourUnAutre": {
+        "titre": "Ce numéro porte une candidature déjà acceptée",
+        "texte": "Une candidature enregistrée sous un autre nom, déjà acceptée par l'établissement, utilise ce numéro de téléphone. Si c'est votre dossier, l'établissement l'a accepté : présentez-vous sur place. Sinon, utilisez un autre numéro."
+      },
+      "etatInattendu": {
+        "titre": "Cette candidature ne peut pas être renvoyée",
+        "texte": "Une candidature existe déjà pour ce numéro et ne peut pas être renvoyée depuis ce formulaire. Contactez l'établissement, ou utilisez un autre numéro si vous candidatez pour une autre personne."
+      },
+      "invalide": {
+        "titre": "Informations incomplètes.",
+        "texte": "Vérifiez les champs signalés et renvoyez le formulaire."
+      },
+      "tropDeTentatives": {
+        "titre": "Trop de tentatives.",
+        "texte": "Patientez quelques minutes avant de réessayer."
+      },
+      "indisponible": {
+        "titre": "Service momentanément indisponible.",
+        "texte": "Nous n'arrivons pas à joindre l'établissement. Réessayez dans quelques minutes."
+      },
+      "chargement": {
+        "titre": "Chargement des formations…",
+        "texte": "Nous récupérons les filières et les niveaux proposés par l'établissement."
+      },
+      "affluence": {
+        "titre": "Beaucoup de demandes en ce moment.",
+        "texte": "L'établissement reçoit un grand nombre de demandes simultanées. Réessayez dans quelques minutes, ou rapprochez-vous de lui directement."
+      },
+      "incomplet": {
+        "titre": "Il manque quelques informations.",
+        "texte": "Les champs signalés doivent être renseignés avant l'envoi."
+      },
+      "surPlaceDate": "Les inscriptions sur place commencent le {date}.",
+      "surPlaceOuvert": "Les inscriptions sur place sont ouvertes."
+    },
+    "edition": {
+      "titre": "Votre établissement",
+      "aide": "Choisissez le type d'établissement que vous visez.",
+      "universite": {
+        "titre": "Université et grandes écoles",
+        "texte": "BTS, Licence, Master. Les établissements d'enseignement supérieur qui utilisent KLASSCI."
+      },
+      "college": {
+        "titre": "Collège et lycée",
+        "texte": "Le collège et le lycée sont gérés sur KLASSCI College. Vous serez redirigé vers son site."
+      }
+    },
+    "etablissement": {
+      "title": "Choisissez votre établissement",
+      "aide": "Sélectionnez l'établissement où vous souhaitez vous inscrire ou vous réinscrire.",
+      "aucun": {
+        "titre": "Aucun établissement disponible",
+        "texte": "Aucun établissement n'a encore ouvert ses inscriptions en ligne. Rapprochez-vous directement du vôtre."
       }
     },
     "confiance": {
       "titre": "Ce que nous faisons de vos informations",
       "points": [
-        "Votre matricule et votre date de naissance servent uniquement à retrouver votre dossier.",
+        "Elles servent uniquement à préparer votre dossier et à vous rappeler.",
         "Aucune information financière ne transite par cette page, ni dans un sens ni dans l'autre.",
-        "Votre demande n'est pas une inscription : c'est votre établissement qui décide et qui vous répond."
+        "Votre demande n'est pas une inscription : c'est l'établissement qui décide et qui vous répond."
       ]
     }
   }

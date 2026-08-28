@@ -23,6 +23,7 @@ export function Nav() {
 
   const homeHref = `/${locale}`;
   const docsHref = `/${locale}/docs`;
+  const inscriptionHref = `/${locale}/inscription`;
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
@@ -35,6 +36,10 @@ export function Nav() {
 
   const handleContactClick = useCallback(() => {
     track("cta_click", { location: "nav", locale });
+  }, [locale]);
+
+  const handleInscriptionClick = useCallback(() => {
+    track("cta_click", { location: "nav_inscription", locale });
   }, [locale]);
 
   const handleDocsClick = useCallback(() => {
@@ -75,6 +80,17 @@ export function Nav() {
             >
               <BookOpen className="h-4 w-4" aria-hidden />
               {t("docs")}
+            </a>
+            {/* L'inscription en ligne se rejoint par la navigation, pas
+                seulement par un lien qu'on nous a transmis : une famille qui
+                arrive sur klassci.com doit pouvoir la trouver seule. */}
+            <a
+              href={inscriptionHref}
+              onClick={handleInscriptionClick}
+              aria-label={t("inscriptionAria")}
+              className="px-3 py-2 text-[0.875rem] font-medium text-accent hover:text-accent-hover transition-colors"
+            >
+              {t("inscription")}
             </a>
           </div>
 
@@ -120,6 +136,21 @@ export function Nav() {
             className="font-serif font-light text-[1.75rem] text-text hover:text-accent transition-colors"
           >
             {t("home")}
+          </a>
+          {/* La même mesure que sur le bureau : sans elle, `nav_inscription`
+              ne compterait presque rien sur un marché où le trafic est très
+              majoritairement mobile, et se lirait comme « personne ne clique
+              sur cette entrée » — une donnée fausse sur laquelle on pourrait
+              décider de la retirer. */}
+          <a
+            href={inscriptionHref}
+            onClick={() => {
+              handleInscriptionClick();
+              closeMobile();
+            }}
+            className="font-serif font-light text-[1.75rem] text-text hover:text-accent transition-colors"
+          >
+            {t("inscription")}
           </a>
           {ANCHOR_LINKS.map((link) => (
             <a

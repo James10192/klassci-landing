@@ -15,9 +15,19 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ### Added
 
+- **Online applications from new students** — school leavers can now submit an application from klassci.com: identity, address, chosen programme, secondary-school details, state placement status and a guardian's contact details. Each file arrives in a dedicated inbox where the school accepts or rejects it with a reason, and accepting opens the enrolment form already filled in with what the applicant entered. The channel is closed by default: each school opens it when it chooses, over the same period as re-enrolment.
+
+- **On-site enrolment start date** — a new setting announces the day the desk opens. Applicants read it on their submission confirmation instead of calling the school to ask when to come.
+
 - **Bulk bulletin export to a single PDF** (`/esbtp/bulletins`) — an "Export grouped PDF" button gathers every bulletin matching the applied filters (year, class, term, status, search) into one PDF document, **in the order you choose**: by class, name, student ID, average or rank, ascending or descending. The export **still works even when some bulletins haven't been generated yet**: those are simply left out of the document, you're **warned before downloading** (how many are included / left out), and a **summary page** at the front of the PDF lists the bulletins that weren't included. Perfect for printing a whole class at once, ready to hand out.
 
 ### Improved
+
+- **The portal now says exactly why a submission was refused** — an enrolment already exists, an application is recorded under a different name, the school has already accepted the file: each situation has its own wording and its own way forward. Two of them address the applicant and a relative sharing the same phone number equally, and are written to stay true for both.
+
+- **A rush on applications no longer closes re-enrolment** — the two portals now have their own limits, and browsing the list of programmes no longer uses up the quota reserved for submissions.
+
+- **Guardian details carried over** — in the enrolment form, one button copies the guardian the applicant declared online and names what is left to fill in.
 
 - **Per-term breakdown on the annual results view** (`/esbtp/resultats`) — for a student who moved from the common core to a specialisation, the Annual tab now shows one table per term: term 1 with its common-core class, term 2 with its specialisation class, each with its own subjects, coefficient total and average. Every table now matches exactly the rows it displays, whereas the screen previously mixed the annual average at the top with a single term's average right below it. "Passed" or "Failed" stays reserved for the annual decision, a term table simply showing whether that term's average sits above or below 10.
 

@@ -1,22 +1,5 @@
 {
   "reinscription": {
-    "meta": {
-      "title": "Online re-enrolment",
-      "description": "Re-enrol with your school in a few minutes, without travelling."
-    },
-    "hero": {
-      "eyebrow": "Re-enrolment",
-      "title": "Your re-enrolment, in three minutes.",
-      "subtitle": "Have your student number and date of birth to hand. We pass your request to your school, and they get back to you."
-    },
-    "choix": {
-      "title": "Your school",
-      "aide": "Pick the school where you are enrolled this year.",
-      "aucun": {
-        "titre": "No school has opened online re-enrolment yet.",
-        "texte": "Get in touch with your registrar, who will tell you how to proceed."
-      }
-    },
     "identification": {
       "titre": "Let's find your file",
       "aide": "Both details appear on your student card and on your report cards.",
@@ -82,14 +65,178 @@
       "refus": {
         "titre": "Your request could not be recorded.",
         "texte": "Contact your registrar: only they can tell you why and what to do next."
+      },
+      "affluence": {
+        "titre": "A lot of requests right now.",
+        "texte": "The school is receiving a large number of requests at once. Try again in a few minutes, or contact the school directly."
+      },
+      "identificationBloquee": {
+        "titre": "This record is temporarily locked.",
+        "texte": "Too many unsuccessful attempts were made on this record. Try again later, or contact your school."
+      }
+    }
+  },
+  "inscription": {
+    "meta": {
+      "title": "Online enrolment",
+      "description": "Enrol or re-enrol online with your school."
+    },
+    "hero": {
+      "eyebrow": "Enrolment",
+      "title": "Join your school, online.",
+      "subtitle": "Whether you are a new school-leaver or already a student here, it starts here."
+    },
+    "choix": {
+      "titre": "You are…",
+      "nouveau": {
+        "titre": "New student",
+        "texte": "You have never been enrolled at this school, so you do not have a student number yet. One will be issued when you enrol."
+      },
+      "ancien": {
+        "titre": "Already a student here",
+        "texte": "You were enrolled this year and are re-enrolling. Have your student number to hand."
+      },
+      "retour": "That's not me"
+    },
+    "formulaire": {
+      "titre": "Your application",
+      "aide": "The school will call you back. The full file is put together on site, with the documents.",
+      "identite": "You",
+      "nom": "Surname",
+      "prenoms": "First names",
+      "naissance": "Date of birth",
+      "jour": "Day",
+      "mois": "Month",
+      "annee": "Year",
+      "sexe": "Sex",
+      "masculin": "Male",
+      "feminin": "Female",
+      "nonPrecise": "Not specified",
+      "lieuNaissance": "Place of birth",
+      "nationalite": "Nationality",
+      "contact": "How to reach you",
+      "telephone": "Phone",
+      "telephoneAide": "The school will call you back on this number. Ivorian mobile number, for example 07 07 12 12 34.",
+      "email": "Email (optional)",
+      "ville": "City of residence",
+      "commune": "District / neighbourhood",
+      "voeu": "What you want to study",
+      "filiere": "Programme",
+      "niveau": "Level",
+      "choisir": "Choose…",
+      "champInvalide": "Please check this field.",
+      "voeuLibre": "Or describe the course you are interested in",
+      "parcours": "Your background (optional)",
+      "serieBac": "Baccalaureate stream",
+      "etablissementOrigine": "Previous school",
+      "anneeBac": "Year of baccalaureate",
+      "affectation": "State placement",
+      "affectationInconnue": "I don't know yet",
+      "affectationAide": "The school will verify this. If you are unsure, leave “I don't know”.",
+      "tuteur": "Parent or guardian",
+      "tuteurAide": "Optional, but often the person the school reaches most easily.",
+      "tuteurNom": "Full name",
+      "tuteurLien": "Relationship to you",
+      "tuteurTelephone": "Phone",
+      "tuteurProfession": "Occupation",
+      "message": "A word for the school (optional)",
+      "consentement": "I allow these details to be sent to the school so my application can be processed.",
+      "action": "Send my application",
+      "chargement": "Sending…",
+      "reessayer": "Try again",
+      "requis": "This information is required.",
+      "voeuRequis": "Choose a programme, a level, or describe the course you are interested in."
+    },
+    "succes": {
+      "titre": "Your application has been sent.",
+      "texte": "The school will review it and call you on the number you provided.",
+      "surPlace": "Your file is completed at the school: bring your documents to finalise your enrolment and pay the fees.",
+      "surPlaceOuvert": "On-site enrolment is open: go to the school with your documents to complete your file and pay the fees.",
+      "surPlaceDate": "On-site enrolment starts on {date}. Come to the school from that date, with your documents, to complete your file and pay the fees.",
+      "rappel": "No student number is issued at this stage: you will receive one when you actually enrol."
+    },
+    "etats": {
+      "ferme": {
+        "titre": "Enrolment is not open.",
+        "texte": "This school has not opened online applications yet, or the window has closed. Contact them directly."
+      },
+      "nonConfigure": {
+        "titre": "Enrolment not set up yet",
+        "texte": "The school has not finished configuring this intake. Waiting will not resolve it: please contact the school directly."
+      },
+      "dejaInscrit": {
+        "titre": "An enrolment already exists for this number",
+        "texte": "This phone number already carries an enrolment for this intake. If you are applying for someone else, use their own number."
+      },
+      "autrePersonne": {
+        "titre": "This number already carries an application",
+        "texte": "An application registered under a different name already uses this phone number. If it is yours, re-enter your surname, first names and date of birth exactly as you did the first time. Otherwise, use another number."
+      },
+      "dejaTraitee": {
+        "titre": "Your application has already been accepted",
+        "texte": "The school has already accepted this application, so there is no need to send it again. Come to the school to complete your enrolment. If you are applying for someone else, please use their own phone number."
+      },
+      "accepteePourUnAutre": {
+        "titre": "This number carries an application already accepted",
+        "texte": "An application under a different name, already accepted by the school, uses this phone number. If it is your file, the school has accepted it: come to the school in person. Otherwise, please use a different number."
+      },
+      "etatInattendu": {
+        "titre": "This application cannot be resubmitted",
+        "texte": "An application already exists for this number and cannot be resubmitted from this form. Please contact the school, or use a different phone number if you are applying for someone else."
+      },
+      "invalide": {
+        "titre": "Incomplete details.",
+        "texte": "Check the fields flagged and send the form again."
+      },
+      "tropDeTentatives": {
+        "titre": "Too many attempts.",
+        "texte": "Please wait a few minutes before trying again."
+      },
+      "indisponible": {
+        "titre": "Service temporarily unavailable.",
+        "texte": "We cannot reach the school right now. Please try again in a few minutes."
+      },
+      "chargement": {
+        "titre": "Loading the programmes…",
+        "texte": "We are fetching the programmes and levels offered by the school."
+      },
+      "affluence": {
+        "titre": "A lot of requests right now.",
+        "texte": "The school is receiving a large number of requests at once. Try again in a few minutes, or contact the school directly."
+      },
+      "incomplet": {
+        "titre": "Some information is missing.",
+        "texte": "The flagged fields must be filled in before sending."
+      },
+      "surPlaceDate": "On-site enrolment starts on {date}.",
+      "surPlaceOuvert": "On-site enrolment is open."
+    },
+    "edition": {
+      "titre": "Your school",
+      "aide": "Choose the kind of school you are applying to.",
+      "universite": {
+        "titre": "University and higher education",
+        "texte": "BTS, Bachelor, Master. Higher-education institutions running on KLASSCI."
+      },
+      "college": {
+        "titre": "Secondary school",
+        "texte": "Secondary education runs on KLASSCI College. You will be taken to its site."
+      }
+    },
+    "etablissement": {
+      "title": "Choose your school",
+      "aide": "Select the school where you want to apply or re-enrol.",
+      "aucun": {
+        "titre": "No school available",
+        "texte": "No school has opened online enrolment yet. Contact yours directly."
       }
     },
     "confiance": {
       "titre": "What we do with your details",
       "points": [
-        "Your student number and date of birth are used only to find your file.",
+        "They are used only to prepare your file and to call you back.",
         "No financial information passes through this page, in either direction.",
-        "Your request is not an enrolment: your school decides, and your school replies."
+        "Your request is not an enrolment: the school decides, and the school replies."
       ]
     }
   }

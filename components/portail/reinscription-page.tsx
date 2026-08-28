@@ -2,10 +2,10 @@ import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 
 import { Footer } from "@/components/sections/footer";
-import type { EtablissementReinscription } from "@/lib/reinscription/tenants";
+import type { EtablissementVisible } from "@/lib/portail/tenants";
 
 import { ReinscriptionChrome } from "./reinscription-chrome";
-import { ReinscriptionFlow } from "./reinscription-flow";
+import { PortailEcole } from "./portail-ecole";
 
 /**
  * L'habillage du portail : la barre du site, le parcours, le bloc de confiance,
@@ -23,8 +23,8 @@ import { ReinscriptionFlow } from "./reinscription-flow";
  * deux », qui se serait affiché en silence comme « aucun établissement ».
  */
 type ProprietesReinscriptionPage = { locale: string } & (
-  | { etablissement: EtablissementReinscription; etablissements?: never }
-  | { etablissements: EtablissementReinscription[]; etablissement?: never }
+  | { etablissement: EtablissementVisible; etablissements?: never }
+  | { etablissements: EtablissementVisible[]; etablissement?: never }
 );
 
 export async function ReinscriptionPage({
@@ -32,7 +32,7 @@ export async function ReinscriptionPage({
   etablissement,
   etablissements,
 }: ProprietesReinscriptionPage) {
-  const t = await getTranslations({ locale, namespace: "reinscription" });
+  const t = await getTranslations({ locale, namespace: "inscription" });
 
   return (
     <>
@@ -61,7 +61,7 @@ export async function ReinscriptionPage({
 
             <div className="mt-10">
               {etablissement ? (
-                <ReinscriptionFlow etablissement={etablissement} />
+                <PortailEcole etablissement={etablissement} />
               ) : (
                 <ChoixEtablissement locale={locale} etablissements={etablissements!} />
               )}
@@ -97,9 +97,15 @@ async function ChoixEtablissement({
   etablissements,
 }: {
   locale: string;
-  etablissements: EtablissementReinscription[];
+  etablissements: EtablissementVisible[];
 }) {
-  const t = await getTranslations({ locale, namespace: "reinscription.choix" });
+  // Espace `inscription`, pas `reinscription` : cet ecran est le premier que
+  // voit un NOUVEAU bachelier arrivant par « S'inscrire », et les textes de la
+  // reinscription lui disaient « choisissez l'etablissement ou vous etes
+  // inscrit cette année », juste sous un titre qui l'accueille comme
+  // nouveau. La page entiere a ete reecrite pour les deux publics ; ce bloc
+  // avait ete oublie.
+  const t = await getTranslations({ locale, namespace: "inscription.etablissement" });
 
   if (etablissements.length === 0) {
     return (
@@ -121,7 +127,7 @@ async function ChoixEtablissement({
         {etablissements.map((etablissement) => (
           <li key={etablissement.code}>
             <Link
-              href={`/${locale}/reinscription/${etablissement.code}`}
+              href={`/${locale}/inscription/universite/${etablissement.code}`}
               className="flex min-h-[56px] items-center justify-between gap-3 rounded-xl border border-border px-4 py-3 transition-[border-color,background-color,scale] duration-200 hover:border-accent hover:bg-accent-light active:scale-[0.96]"
             >
               <span className="font-medium">{etablissement.libelle}</span>

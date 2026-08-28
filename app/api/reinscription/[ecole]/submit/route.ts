@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 
-import { relayer } from "@/lib/reinscription/relais";
+import { CHEMINS, relayer } from "@/lib/portail/relais";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -21,10 +21,16 @@ export async function POST(
     return Response.json({ erreur: "champs_manquants" }, { status: 422 });
   }
 
+  // Obligation de la loi ivoirienne 2013-450 : le consentement se verifie ici,
+  // ou le 422 a du sens pour l'appelant.
+  if (consentement !== true) {
+    return Response.json({ erreur: "consentement_requis" }, { status: 422 });
+  }
+
   return relayer(
     params.ecole,
-    "submit",
-    { matricule, dateNaissance, consentement: consentement === true },
+    CHEMINS.reinscriptionSubmit,
+    { matricule: matricule.trim(), date_naissance: dateNaissance.trim(), consentement: true },
     requete,
   );
 }

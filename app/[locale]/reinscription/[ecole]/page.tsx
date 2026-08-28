@@ -1,55 +1,22 @@
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { getTranslations, setRequestLocale } from "next-intl/server";
-
-import { ReinscriptionPage } from "@/components/reinscription/reinscription-page";
-import { routing, type Locale } from "@/i18n/routing";
-import { etablissementsOuverts } from "@/lib/reinscription/tenants";
-import { buildUniverseMetadata } from "@/lib/seo";
+import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
-function trouver(code: string) {
-  return etablissementsOuverts().find((etablissement) => etablissement.code === code.toLowerCase());
-}
-
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: Locale; ecole: string }>;
-}): Promise<Metadata> {
-  const { locale, ecole } = await params;
-  const safeLocale = routing.locales.includes(locale) ? locale : routing.defaultLocale;
-  const t = await getTranslations({ locale: safeLocale, namespace: "reinscription.meta" });
-  const etablissement = trouver(ecole);
-
-  return buildUniverseMetadata({
-    locale: safeLocale,
-    // Retire des moteurs : la liste des ecoles servies, et le calendrier de
-    // leurs fenetres de reinscription, n'ont pas a se retrouver dans un index.
-    noindex: true,
-    title: etablissement ? `${t("title")} — ${etablissement.libelle}` : t("title"),
-    description: t("description"),
-    path: `/reinscription/${ecole}`,
-  });
-}
-
-export default async function ReinscriptionEcole({
+/**
+ * L'ancien chemin d'une école, conservé en redirection.
+ *
+ * C'est celui-ci qui compte le plus, davantage que /reinscription tout court :
+ * quand le site ne sert qu'une école, /reinscription redirige déjà vers
+ * /reinscription/{ecole}. L'adresse que les familles ont dans leur historique,
+ * dans un SMS ou sur une affiche est donc celle qui porte le code école — et
+ * c'est exactement celle que le rangement de ce dossier aurait cassée.
+ */
+export default async function AncienCheminEcole({
   params,
 }: {
   params: Promise<{ locale: string; ecole: string }>;
 }) {
   const { locale, ecole } = await params;
-  setRequestLocale(locale);
 
-  const etablissement = trouver(ecole);
-
-  // Une ecole qui n'a pas ouvert le canal n'existe pas pour ce portail. Un 404
-  // plutot qu'un message : rien ne justifie de confirmer qu'un etablissement
-  // est client de KLASSCI a qui devine des codes dans l'URL.
-  if (!etablissement) {
-    notFound();
-  }
-
-  return <ReinscriptionPage locale={locale} etablissement={etablissement} />;
+  redirect(`/${locale}/inscription/universite/${ecole}`);
 }

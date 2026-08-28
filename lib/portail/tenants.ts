@@ -1,7 +1,13 @@
 import "server-only";
 
 /**
- * Les établissements qui ont ouvert la réinscription en ligne.
+ * Les établissements joignables depuis klassci.com.
+ *
+ * Un seul registre pour les DEUX canaux : la réinscription, qui l'a fait
+ * naître, et la candidature, arrivée ensuite. Les variables d'environnement
+ * gardent le préfixe `REINSCRIPTION_` de leur premier usage — elles sont posées
+ * sur les déploiements de production, et les renommer fermerait le portail des
+ * six écoles le temps d'un déploiement, pour une question de vocabulaire.
  *
  * Rien n'est codé en dur ici : une école apparaît sur klassci.com le jour où
  * son secret est posé dans les variables d'environnement, et disparaît le jour
@@ -25,7 +31,8 @@ import "server-only";
  * portail, il ne l'ouvre pas.
  */
 
-export type EtablissementReinscription = {
+/** La forme complete, interne au module : voir EtablissementVisible en dessous. */
+type EtablissementPortail = {
   /** Code de l'établissement, tel qu'il sert de segment d'URL. */
   code: string;
   /** Nom affiché au visiteur. */
@@ -34,8 +41,19 @@ export type EtablissementReinscription = {
   base: string;
 };
 
+/**
+ * Ce que le navigateur recoit.
+ *
+ * `base` n'en fait pas partie : aucun composant client ne la lit — ils
+ * s'adressent au relais par le `code` — et la serialiser l'envoyait dans la
+ * charge de chaque page. Ce n'est pas un secret, c'est du poids mort sur une
+ * page souvent servie en 2G, et une adresse interne qui n'a aucune raison de
+ * circuler.
+ */
+export type EtablissementVisible = Pick<EtablissementPortail, "code" | "libelle">;
+
 /** Le secret ne quitte jamais le serveur, donc jamais ce module. */
-type EtablissementInterne = EtablissementReinscription & { secret: string };
+type EtablissementInterne = EtablissementPortail & { secret: string };
 
 const LONGUEUR_MINIMALE_SECRET = 32;
 
@@ -60,7 +78,7 @@ function libelleParDefaut(code: string): string {
 function lire(code: string): EtablissementInterne | null {
   if (!CODE_VALIDE.test(code)) {
     console.warn(
-      `[reinscription] Code d'etablissement ignore, format invalide : ${code}`,
+      `[portail] Code d'etablissement ignore, format invalide : ${code}`,
     );
     return null;
   }
@@ -73,7 +91,7 @@ function lire(code: string): EtablissementInterne | null {
     // erreur de configuration, pas un choix. La taire afficherait l'école au
     // visiteur pour lui rendre une erreur au premier envoi.
     console.warn(
-      `[reinscription] REINSCRIPTION_SECRET_${suffixe} absent ou trop court, ` +
+      `[portail] REINSCRIPTION_SECRET_${suffixe} absent ou trop court, ` +
         `l'etablissement ${code} n'est pas servi.`,
     );
     return null;
@@ -83,7 +101,7 @@ function lire(code: string): EtablissementInterne | null {
 
   if (typeof base !== "string" || !base.startsWith("https://")) {
     console.warn(
-      `[reinscription] REINSCRIPTION_BASE_${suffixe} absent ou non https, ` +
+      `[portail] REINSCRIPTION_BASE_${suffixe} absent ou non https, ` +
         `l'etablissement ${code} n'est pas servi.`,
     );
     return null;
@@ -108,10 +126,18 @@ function tous(): EtablissementInterne[] {
     .filter((etablissement): etablissement is EtablissementInterne => etablissement !== null);
 }
 
-/** Les établissements servis, sans leur secret. Sûr à rendre au navigateur. */
-export function etablissementsOuverts(): EtablissementReinscription[] {
+/**
+ * Les établissements servis, réduits à ce que le navigateur peut voir.
+ *
+ * Le tri est ici : ces listes s'affichent, et l'ordre d'une variable
+ * d'environnement n'est l'ordre de personne.
+ *
+ * Rendre `EtablissementVisible` plutôt que d'écarter `base` chez chaque
+ * appelant : ainsi aucun appelant ne peut la laisser filer, il ne l'a pas.
+ */
+export function etablissementsOuverts(): EtablissementVisible[] {
   return tous()
-    .map(({ code, libelle, base }) => ({ code, libelle, base }))
+    .map(({ code, libelle }) => ({ code, libelle }))
     .sort((a, b) => a.libelle.localeCompare(b.libelle, "fr"));
 }
 

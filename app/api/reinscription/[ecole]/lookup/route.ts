@@ -1,9 +1,7 @@
 import { NextRequest } from "next/server";
 
-import { relayer } from "@/lib/reinscription/relais";
+import { CHEMINS, relayer } from "@/lib/portail/relais";
 
-// Le relais signe avec le secret de l'etablissement : il lui faut Node, et il
-// ne doit jamais etre mis en cache.
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
@@ -23,5 +21,12 @@ export async function POST(
     return Response.json({ erreur: "champs_manquants" }, { status: 422 });
   }
 
-  return relayer(params.ecole, "lookup", { matricule, dateNaissance }, requete);
+  // Corps reconstruit champ par champ : un champ ajoute par l'appelant
+  // n'atteint jamais l'ecole, et n'entre donc jamais dans la charge signee.
+  return relayer(
+    params.ecole,
+    CHEMINS.reinscriptionLookup,
+    { matricule: matricule.trim(), date_naissance: dateNaissance.trim() },
+    requete,
+  );
 }

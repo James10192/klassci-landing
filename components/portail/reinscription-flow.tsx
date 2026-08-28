@@ -1,10 +1,22 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import { useTranslations } from "next-intl";
-import { forwardRef, useCallback, useId, useMemo, useRef, useState } from "react";
+import { useCallback, useId, useMemo, useRef, useState } from "react";
 
-import type { EtablissementReinscription } from "@/lib/reinscription/tenants";
+import type { EtablissementVisible } from "@/lib/portail/tenants";
+
+import {
+  Alerte,
+  BoutonPrincipal,
+  Carte,
+  CaseDate,
+  RESSORT,
+  champ,
+  dateNaissanceValide,
+  entree,
+} from "./pieces";
+import { classer, ecranDe, type Classement, type RegleEcran } from "./reponses";
 
 /**
  * Le parcours de réinscription, d'un bout à l'autre, sans changer de page.
@@ -32,31 +44,55 @@ type CleEtat =
   | "introuvable"
   | "ferme"
   | "tropDeTentatives"
+  | "affluence"
+  | "identificationBloquee"
   | "indisponible"
   | "champsInvalides"
   | "refus";
 
-const RESSORT = { type: "spring", duration: 0.3, bounce: 0 } as const;
-
-/** Chaque bloc entre décalé du précédent : l'écran se compose au lieu d'apparaître. */
-function entree(rang: number) {
-  return {
-    initial: { opacity: 0, y: 8 },
-    animate: { opacity: 1, y: 0 },
-    transition: { ...RESSORT, delay: rang * 0.06 },
-  };
-}
-
-function estNombre(valeur: string, min: number, max: number): boolean {
-  if (!/^\d+$/.test(valeur)) return false;
-  const n = Number(valeur);
-  return n >= min && n <= max;
-}
+/**
+ * Ce que chaque genre de réponse donne comme écran, ici.
+ *
+ * La même table que la candidature, avec le vocabulaire de CE parcours :
+ * « année non configurée » et « conflit » n'ont pas de sens pour une
+ * réinscription, ils retombent donc sur ce que le visiteur peut comprendre.
+ *
+ * Elle était écrite en ternaire imbriqué à quatre niveaux, qui ré-implémentait
+ * à la main la règle « code inconnu → indisponible ». Deux écritures de la même
+ * règle finissent toujours par diverger — celle-ci avait déjà commencé.
+ */
+const ECRANS: Partial<Record<Classement["genre"], RegleEcran<CleEtat>>> = {
+  ferme: { sansCode: "ferme" },
+  invalide: { sansCode: "champsInvalides" },
+  tropDeTentatives: {
+    // Trois seaux, trois phrases. Celui d'une adresse dit vrai en parlant de
+    // tentatives ; le plafond de l'établissement se remplit du trafic de tout
+    // le monde ; et le seau du matricule peut avoir été rempli par un TIERS,
+    // avec une fenêtre d'un quart d'heure. Les confondre accuse le visiteur de
+    // ce qu'il n'a pas fait, et lui promet un délai qui n'est pas le bon.
+    codes: {
+      affluence: "affluence",
+      trop_de_tentatives: "tropDeTentatives",
+      identification_bloquee: "identificationBloquee",
+    },
+    sansCode: "tropDeTentatives",
+  },
+};
 
 export function ReinscriptionFlow({
   etablissement,
+  onAboutir,
 }: {
-  etablissement: EtablissementReinscription;
+  etablissement: EtablissementVisible;
+  /**
+   * Signale au portail que le parcours a abouti.
+   *
+   * Il n'affiche « Ce n'est pas mon cas » que tant qu'on peut encore s'être
+   * trompé de porte. Sous l'écran de succès, ce bouton proposerait d'annuler
+   * une réinscription déjà enregistrée — et doublerait l'action « faire une
+   * autre demande » que cet écran propose déjà.
+   */
+  onAboutir?: (abouti: boolean) => void;
 }) {
   const t = useTranslations("reinscription");
   const idBase = useId();
@@ -71,11 +107,17 @@ export function ReinscriptionFlow({
   const [enCours, setEnCours] = useState(false);
   const [consentement, setConsentement] = useState(false);
 
+  // Résolu ici, où l'espace de messages est écrit en dur : c'est la seule
+  // façon pour next-intl de vérifier que la clé existe vraiment.
+  const messageEtat = etat
+    ? { cle: etat, titre: t(`etats.${etat}.titre`), texte: t(`etats.${etat}.texte`) }
+    : null;
+
   const refMois = useRef<HTMLInputElement>(null);
   const refAnnee = useRef<HTMLInputElement>(null);
 
   const dateComplete = useMemo(
-    () => estNombre(jour, 1, 31) && estNombre(mois, 1, 12) && estNombre(annee, 1900, 2100),
+    () => dateNaissanceValide(jour, mois, annee),
     [jour, mois, annee],
   );
 
@@ -89,45 +131,28 @@ export function ReinscriptionFlow({
   /**
    * Traduit la réponse du relais en un état d'écran.
    *
-   * Volontairement centralisé : c'est le seul endroit où l'on décide de ce que
-   * le visiteur voit, et le laisser s'éparpiller dans les deux appels
-   * produirait tôt ou tard deux messages différents pour la même situation.
+   * Le classement des codes HTTP est partagé avec la candidature
+   * (`reponses.ts`) : c'était la même table écrite en trois exemplaires, et
+   * les trois ne couvraient pas les mêmes cas — celle de la candidature
+   * perdait le `!ok` et le corps illisible, donc un 401, ce silence-là même
+   * que le relais journalise comme une panne d'école entière.
+   *
+   * Ce qui reste ici, et qui doit y rester, c'est la traduction vers le
+   * vocabulaire d'écrans de CE parcours : « année non configurée » et
+   * « conflit » n'ont pas de sens pour une réinscription, ils retombent donc
+   * sur ce que le visiteur peut comprendre.
    */
   const interpreter = useCallback(
     async (reponse: Response): Promise<Situation | null> => {
-      if (reponse.status === 503) {
-        // 503 recouvre deux causes : le canal fermé par l'école (KLASSCI rend
-        // `ouvert: false`) et l'instance injoignable (le relais rend `erreur`).
-        // Les confondre enverrait la famille attendre une ouverture qui a
-        // peut-être déjà eu lieu.
-        const corps = await reponse.json().catch(() => null);
-        setEtat(corps && corps.ouvert === false ? "ferme" : "indisponible");
-        return null;
+      const classement = await classer(reponse);
+
+      if (classement.genre === "ok") {
+        return classement.corps as Situation;
       }
 
-      if (reponse.status === 429) {
-        setEtat("tropDeTentatives");
-        return null;
-      }
+      setEtat(ecranDe(classement, ECRANS, "indisponible"));
 
-      if (reponse.status === 422 || reponse.status === 400) {
-        setEtat("champsInvalides");
-        return null;
-      }
-
-      if (!reponse.ok) {
-        setEtat("indisponible");
-        return null;
-      }
-
-      const corps = (await reponse.json().catch(() => null)) as Situation | null;
-
-      if (corps === null) {
-        setEtat("indisponible");
-        return null;
-      }
-
-      return corps;
+      return null;
     },
     [],
   );
@@ -198,6 +223,7 @@ export function ReinscriptionFlow({
 
       if ((corps as { enregistre?: boolean }).enregistre === true) {
         setEtape("succes");
+        onAboutir?.(true);
         return;
       }
 
@@ -213,9 +239,10 @@ export function ReinscriptionFlow({
     } finally {
       setEnCours(false);
     }
-  }, [consentement, enCours, etablissement.code, matricule, dateISO, interpreter]);
+  }, [consentement, enCours, etablissement.code, matricule, dateISO, interpreter, onAboutir]);
 
   const recommencer = useCallback(() => {
+    onAboutir?.(false);
     setEtape("identification");
     setSituation(null);
     setEtat(null);
@@ -224,13 +251,13 @@ export function ReinscriptionFlow({
     setJour("");
     setMois("");
     setAnnee("");
-  }, []);
+  }, [onAboutir]);
 
   return (
     <div className="mx-auto w-full max-w-xl">
       <AnimatePresence mode="wait" initial={false}>
         {etape === "identification" && (
-          <motion.div
+          <m.div
             key="identification"
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -238,16 +265,16 @@ export function ReinscriptionFlow({
             transition={RESSORT}
           >
             <Carte>
-              <motion.div {...entree(0)}>
+              <m.div {...entree(0)}>
                 <h2 className="text-balance text-xl font-semibold tracking-tight text-text">
                   {t("identification.titre")}
                 </h2>
                 <p className="mt-1.5 text-pretty text-sm text-text-secondary">
                   {t("identification.aide")}
                 </p>
-              </motion.div>
+              </m.div>
 
-              <motion.div {...entree(1)} className="mt-6">
+              <m.div {...entree(1)} className="mt-6">
                 <label
                   htmlFor={`${idBase}-matricule`}
                   className="block text-sm font-medium text-text"
@@ -270,9 +297,9 @@ export function ReinscriptionFlow({
                 <p className="mt-1.5 text-xs text-text-muted">
                   {t("identification.matricule.aide")}
                 </p>
-              </motion.div>
+              </m.div>
 
-              <motion.div {...entree(2)} className="mt-5">
+              <m.div {...entree(2)} className="mt-5">
                 <span className="block text-sm font-medium text-text">
                   {t("identification.naissance.label")}
                 </span>
@@ -311,21 +338,21 @@ export function ReinscriptionFlow({
                     onEnter={chercher}
                   />
                 </div>
-              </motion.div>
+              </m.div>
 
-              <Alerte etat={etat} />
+              <Alerte etat={messageEtat} />
 
-              <motion.div {...entree(3)} className="mt-6">
+              <m.div {...entree(3)} className="mt-6">
                 <BoutonPrincipal onClick={chercher} disabled={!peutChercher} occupe={enCours}>
                   {enCours ? t("identification.chargement") : t("identification.action")}
                 </BoutonPrincipal>
-              </motion.div>
+              </m.div>
             </Carte>
-          </motion.div>
+          </m.div>
         )}
 
         {etape === "confirmation" && situation && (
-          <motion.div
+          <m.div
             key="confirmation"
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -333,24 +360,24 @@ export function ReinscriptionFlow({
             transition={RESSORT}
           >
             <Carte>
-              <motion.h2
+              <m.h2
                 {...entree(0)}
                 className="text-balance text-xl font-semibold tracking-tight text-text"
               >
                 {situation.prenom
                   ? t("confirmation.salutation", { prenom: situation.prenom })
                   : t("confirmation.salutationSansPrenom")}
-              </motion.h2>
+              </m.h2>
 
-              <motion.dl
+              <m.dl
                 {...entree(1)}
                 className="mt-5 divide-y divide-border overflow-hidden rounded-xl bg-bg-alt"
               >
                 <Ligne intitule={t("confirmation.classe")} valeur={situation.classe_actuelle} />
                 <Ligne intitule={t("confirmation.annee")} valeur={situation.annee_cible} />
-              </motion.dl>
+              </m.dl>
 
-              <motion.label
+              <m.label
                 {...entree(2)}
                 className="mt-5 flex cursor-pointer items-start gap-3 rounded-xl p-3 transition-colors duration-200 hover:bg-accent-light"
               >
@@ -363,11 +390,11 @@ export function ReinscriptionFlow({
                 <span className="text-pretty text-sm leading-relaxed text-text-secondary">
                   {t("confirmation.consentement")}
                 </span>
-              </motion.label>
+              </m.label>
 
-              <Alerte etat={etat} />
+              <Alerte etat={messageEtat} />
 
-              <motion.div {...entree(3)} className="mt-5 flex flex-col gap-3">
+              <m.div {...entree(3)} className="mt-5 flex flex-col gap-3">
                 <BoutonPrincipal
                   onClick={confirmer}
                   disabled={!consentement || enCours}
@@ -382,13 +409,13 @@ export function ReinscriptionFlow({
                 >
                   {t("confirmation.retour")}
                 </button>
-              </motion.div>
+              </m.div>
             </Carte>
-          </motion.div>
+          </m.div>
         )}
 
         {etape === "succes" && (
-          <motion.div
+          <m.div
             key="succes"
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -396,7 +423,7 @@ export function ReinscriptionFlow({
             transition={RESSORT}
           >
             <Carte>
-              <motion.div
+              <m.div
                 initial={{ scale: 0.25, opacity: 0, filter: "blur(4px)" }}
                 animate={{ scale: 1, opacity: 1, filter: "blur(0px)" }}
                 transition={RESSORT}
@@ -414,28 +441,28 @@ export function ReinscriptionFlow({
                 >
                   <path d="M20 6 9 17l-5-5" />
                 </svg>
-              </motion.div>
+              </m.div>
 
-              <motion.h2
+              <m.h2
                 {...entree(1)}
                 className="mt-5 text-balance text-center text-xl font-semibold tracking-tight text-text"
               >
                 {t("succes.titre")}
-              </motion.h2>
-              <motion.p
+              </m.h2>
+              <m.p
                 {...entree(2)}
                 className="mt-2 text-pretty text-center text-sm leading-relaxed text-text-secondary"
               >
                 {t("succes.texte")}
-              </motion.p>
-              <motion.p
+              </m.p>
+              <m.p
                 {...entree(3)}
                 className="mt-4 rounded-xl bg-bg-alt p-3 text-pretty text-center text-xs leading-relaxed text-text-muted"
               >
                 {t("succes.rappel")}
-              </motion.p>
+              </m.p>
 
-              <motion.div {...entree(4)} className="mt-5 text-center">
+              <m.div {...entree(4)} className="mt-5 text-center">
                 <button
                   type="button"
                   onClick={recommencer}
@@ -443,9 +470,9 @@ export function ReinscriptionFlow({
                 >
                   {t("succes.action")}
                 </button>
-              </motion.div>
+              </m.div>
             </Carte>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </div>
@@ -453,60 +480,6 @@ export function ReinscriptionFlow({
 }
 
 /* ────────── pièces ────────── */
-
-/** Rayon concentrique : la carte à 20px, les champs internes à 12px pour 8px de marge. */
-function Carte({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="rounded-[20px] bg-bg-card p-6 shadow-[0_1px_2px_rgba(16,24,40,0.04),0_4px_12px_rgba(16,24,40,0.04),0_16px_40px_-12px_rgba(16,24,40,0.10)] sm:p-8">
-      {children}
-    </div>
-  );
-}
-
-const champ =
-  "mt-2 block w-full rounded-xl border border-border bg-bg px-3.5 py-2.5 text-[16px] text-text " +
-  "placeholder:text-text-muted transition-[border-color,box-shadow] duration-200 " +
-  "focus:border-accent focus:outline-none focus:ring-4 focus:ring-accent-light";
-
-type ProprietesCaseDate = {
-  label: string;
-  value: string;
-  onChange: (v: string) => void;
-  max: number;
-  placeholder: string;
-  onEnter?: () => void;
-};
-
-/**
- * Une case de date.
- *
- * Elle porte une `ref` parce que le jour passe la main au mois, et le mois à
- * l'année, dès que la case est pleine : on tape sa date de naissance d'un
- * trait, sans jamais viser un champ.
- */
-const CaseDate = forwardRef<HTMLInputElement, ProprietesCaseDate>(function CaseDate(
-  { label, value, onChange, max, placeholder, onEnter },
-  ref,
-) {
-  return (
-    <label className="block">
-      <span className="block text-xs font-medium text-text-muted">{label}</span>
-      <input
-        ref={ref}
-        value={value}
-        onChange={(e) => onChange(e.target.value.replace(/\D/g, "").slice(0, max))}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") onEnter?.();
-        }}
-        placeholder={placeholder}
-        inputMode="numeric"
-        autoComplete="off"
-        // Chiffres a chasse fixe : la largeur ne saute pas pendant la frappe.
-        className={`${champ} mt-1 text-center tabular-nums`}
-      />
-    </label>
-  );
-});
 
 function Ligne({ intitule, valeur }: { intitule: string; valeur?: string | null }) {
   if (!valeur) return null;
@@ -516,55 +489,5 @@ function Ligne({ intitule, valeur }: { intitule: string; valeur?: string | null 
       <dt className="text-sm text-text-muted">{intitule}</dt>
       <dd className="text-right text-sm font-semibold text-text">{valeur}</dd>
     </div>
-  );
-}
-
-function BoutonPrincipal({
-  children,
-  onClick,
-  disabled,
-  occupe,
-}: {
-  children: React.ReactNode;
-  onClick: () => void;
-  disabled?: boolean;
-  occupe?: boolean;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      aria-busy={occupe}
-      className="flex min-h-[48px] w-full items-center justify-center rounded-xl bg-accent px-5 text-[15px] font-semibold text-white transition-[background-color,scale,opacity] duration-200 hover:bg-accent-hover active:scale-[0.96] disabled:cursor-not-allowed disabled:opacity-40 disabled:active:scale-100"
-    >
-      {children}
-    </button>
-  );
-}
-
-function Alerte({ etat }: { etat: CleEtat | null }) {
-  const t = useTranslations("reinscription.etats");
-
-  return (
-    <AnimatePresence initial={false}>
-      {etat && (
-        <motion.div
-          key={etat}
-          initial={{ opacity: 0, y: 6 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -6 }}
-          transition={RESSORT}
-          role="status"
-          aria-live="polite"
-          className="mt-5 rounded-xl border border-border bg-bg-alt p-4"
-        >
-          <p className="text-sm font-semibold text-text">{t(`${etat}.titre`)}</p>
-          <p className="mt-1 text-pretty text-sm leading-relaxed text-text-secondary">
-            {t(`${etat}.texte`)}
-          </p>
-        </motion.div>
-      )}
-    </AnimatePresence>
   );
 }

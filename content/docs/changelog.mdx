@@ -15,9 +15,19 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 
 ### Ajouts
 
+- **Inscription en ligne des nouveaux étudiants** — un bachelier peut désormais déposer sa candidature depuis klassci.com : identité, résidence, vœu de formation, série et établissement d'origine, statut d'affectation et coordonnées d'un tuteur. L'établissement retrouve chaque dossier dans une corbeille dédiée, l'accepte ou le rejette avec un motif, et l'acceptation ouvre le formulaire d'inscription déjà rempli de ce que le candidat a saisi. Le canal est fermé par défaut : chaque établissement l'ouvre quand il le décide, et la période est celle déjà renseignée pour la réinscription.
+
+- **Date d'ouverture des inscriptions sur place** — un nouveau réglage permet d'annoncer le jour où le guichet ouvre. Le candidat le lit sur sa confirmation de dépôt, au lieu d'appeler l'établissement pour demander quand venir.
+
 - **Export groupé des bulletins en un seul PDF** (`/esbtp/bulletins`) — un bouton « Exporter PDF groupé » réunit tous les bulletins correspondant aux filtres appliqués (année, classe, période, statut, recherche) dans un seul document PDF, **dans l'ordre de votre choix** : par classe, nom, matricule, moyenne ou rang, en ordre croissant ou décroissant. L'export **reste possible même si certains bulletins ne sont pas encore générés** : ceux-ci sont simplement absents du document, vous en êtes **averti avant le téléchargement** (nombre inclus / nombre absent), et une **page de récapitulatif** en tête du PDF liste les bulletins non inclus. Idéal pour imprimer toute une classe en une seule fois, prête à distribuer.
 
 ### Améliorations
+
+- **Le portail dit précisément pourquoi un dépôt est refusé** — une inscription existe déjà, une candidature est enregistrée sous un autre nom, l'établissement a déjà accepté le dossier : chaque situation a sa phrase et son issue. Deux d'entre elles s'adressent aussi bien au candidat qu'à un proche qui partage le même téléphone, et sont écrites pour rester vraies dans les deux cas.
+
+- **Une affluence sur les candidatures ne ferme plus la réinscription** — les deux portails ont désormais leurs propres limites, et consulter la liste des formations ne consomme plus le quota réservé aux envois.
+
+- **Reprise du tuteur déclaré en ligne** — dans le formulaire d'inscription, un bouton recopie le tuteur saisi par le candidat et indique ce qu'il reste à compléter.
 
 - **Détail par semestre sur la vue annuelle des résultats** (`/esbtp/resultats`) — pour un étudiant passé du tronc commun à une spécialité, l'onglet Annuel présente désormais un tableau par semestre : le semestre 1 avec sa classe de tronc commun, le semestre 2 avec sa classe de spécialité, chacun accompagné de ses matières, de son total de coefficients et de sa moyenne. Chaque tableau correspond ainsi exactement aux lignes qu'il affiche, là où l'écran mêlait auparavant la moyenne annuelle en haut et la moyenne d'un seul semestre juste en dessous. La mention « Admis » ou « Ajourné » reste réservée à la décision annuelle, un tableau semestriel se contentant d'indiquer si la moyenne du semestre se situe au-dessus ou en dessous de 10.
 
