@@ -331,6 +331,7 @@ export function CandidatureFlow({
           filieres: (classement.corps.filieres as Choix[]) ?? [],
           niveaux: (classement.corps.niveaux as Choix[]) ?? [],
           affectations: (classement.corps.affectations as Option[]) ?? [],
+          liens_tuteur: (classement.corps.liens_tuteur as Option[]) ?? [],
           nationalites: (classement.corps.nationalites as Option[]) ?? [],
         };
 

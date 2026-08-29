@@ -137,7 +137,6 @@ const LONGUEURS = {
   serie_bac: 60,
   etablissement_origine: 150,
   tuteur_nom: 100,
-  tuteur_lien: 60,
   tuteur_telephone: 30,
   tuteur_profession: 120,
 } as const;
@@ -147,6 +146,15 @@ export type ChoixPublies = {
   filieres: Choix[];
   niveaux: Choix[];
   affectations: Option[];
+  /**
+   * Les liens de parenté que l'école accepte pour un tuteur.
+   *
+   * Publiés par l'école, pas écrits ici : son formulaire d'inscription n'en
+   * accepte que quatre, et le champ était libre côté portail. « Grand-père »
+   * ou « oncle » arrivaient donc dans un menu déroulant qui ne les connaît
+   * pas, et il fallait deviner lequel des quatre ils voulaient dire.
+   */
+  liens_tuteur: Option[];
   nationalites: Option[];
 };
 
@@ -162,7 +170,7 @@ export function ChampsCandidature({
   form,
   set,
   messagesDe,
-  choix: { filieres, niveaux, affectations, nationalites },
+  choix: { filieres, niveaux, affectations, liens_tuteur, nationalites },
 }: ProprietesChamps) {
   const t = useTranslations("inscription");
 
@@ -288,8 +296,14 @@ export function ChampsCandidature({
         <div className="grid gap-3 sm:grid-cols-2">
           <Champ label={t("formulaire.tuteurNom")} value={form.tuteur_nom} onChange={set("tuteur_nom")}
                  maxLength={LONGUEURS.tuteur_nom} erreurs={messagesDe("tuteur_nom")} />
-          <Champ label={t("formulaire.tuteurLien")} value={form.tuteur_lien} onChange={set("tuteur_lien")}
-                 maxLength={LONGUEURS.tuteur_lien} erreurs={messagesDe("tuteur_lien")} />
+          {/* Masqué si l'école ne publie pas la liste : une liste déroulante
+              vide ne se remplit pas, et ce champ est facultatif. Même garde que
+              pour l'affectation, juste au-dessus. */}
+          {liens_tuteur.length > 0 && (
+            <Liste label={t("formulaire.tuteurLien")} vide={t("formulaire.choisir")}
+                   value={form.tuteur_lien} onChange={set("tuteur_lien")}
+                   erreurs={messagesDe("tuteur_lien")} options={liens_tuteur} />
+          )}
         </div>
         <div className="mt-3 grid gap-3 sm:grid-cols-2">
           {/* Pas d'indice de remplissage sur ce téléphone-ci : le tuteur est une

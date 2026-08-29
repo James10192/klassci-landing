@@ -7,6 +7,7 @@ export type AnalyticsEventMap = {
       | "nav"
       | "nav_docs"
       | "nav_inscription"
+  | "hub_inscription"
       | "hub_nav_contact"
       | "hero_primary"
       | "hero_secondary"

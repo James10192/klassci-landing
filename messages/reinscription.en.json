@@ -29,9 +29,12 @@
     },
     "succes": {
       "titre": "Your request has been sent.",
-      "texte": "Your school will review it and get back to you. Nothing further is required on your side.",
+      "texte": "Your school will review it and get back to you.",
       "rappel": "Keep your student number: you will need it to follow up with the registrar.",
-      "action": "Make another request"
+      "action": "Make another request",
+      "surPlace": "Your file is completed at the school: come in with your documents to finalise your re-enrolment and pay the fees.",
+      "surPlaceOuvert": "On-site enrolment is open: come to the school with your documents to complete your file and pay the fees.",
+      "surPlaceDate": "On-site enrolment starts on {date}. Come to the school from that date, with your documents, to complete your file and pay the fees."
     },
     "etats": {
       "dejaDeposee": {

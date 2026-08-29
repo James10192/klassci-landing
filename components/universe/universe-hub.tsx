@@ -204,13 +204,27 @@ export function UniverseHub() {
             <p className="mt-8 max-w-md text-sm text-text-muted">
               {t("footNote")}
             </p>
-            <a
-              href="#univers"
-              className="mt-8 inline-flex min-h-11 items-center justify-center gap-2 rounded bg-[#f58220] px-5 text-sm font-semibold text-white shadow-[0_16px_38px_rgba(245,130,32,0.28)] transition-transform hover:-translate-y-0.5"
-            >
-              Voir les univers
-              <ChevronDown className="h-4 w-4" aria-hidden />
-            </a>
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <a
+                href="#univers"
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded bg-[#f58220] px-5 text-sm font-semibold text-white shadow-[0_16px_38px_rgba(245,130,32,0.28)] transition-transform hover:-translate-y-0.5"
+              >
+                Voir les univers
+                <ChevronDown className="h-4 w-4" aria-hidden />
+              </a>
+              {/* La porte des familles. Elle ne vivait que dans la barre de
+                  navigation, c'est-a-dire nulle part sur mobile tant que le
+                  menu reste ferme. */}
+              <a
+                href={`/${locale}/inscription`}
+                onClick={() => track("cta_click", { location: "hub_inscription", locale })}
+                aria-label={nav("inscriptionAria")}
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded border border-accent px-5 text-sm font-semibold text-accent transition-colors hover:bg-accent hover:text-white"
+              >
+                <GraduationCap className="h-4 w-4" aria-hidden />
+                {nav("inscription")}
+              </a>
+            </div>
           </div>
 
           <div className="relative min-h-[34rem] [perspective:1200px]">

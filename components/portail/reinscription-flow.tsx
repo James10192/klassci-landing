@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, m } from "framer-motion";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useId, useMemo, useRef, useState } from "react";
 
 import type { EtablissementVisible } from "@/lib/portail/tenants";
@@ -16,6 +16,7 @@ import {
   dateNaissanceValide,
   entree,
 } from "./pieces";
+import type { Physiques } from "./candidature-echanges";
 import { classer, ecranDe, type Classement, type RegleEcran } from "./reponses";
 
 /**
@@ -95,9 +96,11 @@ export function ReinscriptionFlow({
   onAboutir?: (abouti: boolean) => void;
 }) {
   const t = useTranslations("reinscription");
+  const locale = useLocale();
   const idBase = useId();
 
   const [etape, setEtape] = useState<Etape>("identification");
+  const [physiques, setPhysiques] = useState<Physiques | null>(null);
   const [matricule, setMatricule] = useState("");
   const [jour, setJour] = useState("");
   const [mois, setMois] = useState("");
@@ -109,6 +112,30 @@ export function ReinscriptionFlow({
 
   // Résolu ici, où l'espace de messages est écrit en dur : c'est la seule
   // façon pour next-intl de vérifier que la clé existe vraiment.
+  /**
+   * Ce qui se passe après la demande.
+   *
+   * Trois cas, comme pour une candidature : l'école n'a pas annoncé de date,
+   * elle en a annoncé une à venir, ou le guichet est ouvert.
+   */
+  const suiteDuParcours = (() => {
+    if (physiques === null || physiques.debut === null) {
+      return t("succes.surPlace");
+    }
+
+    if (physiques.ouvertes) {
+      return t("succes.surPlaceOuvert");
+    }
+
+    return t("succes.surPlaceDate", {
+      date: new Intl.DateTimeFormat(locale, {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }).format(new Date(`${physiques.debut}T00:00:00`)),
+    });
+  })();
+
   const messageEtat = etat
     ? { cle: etat, titre: t(`etats.${etat}.titre`), texte: t(`etats.${etat}.texte`) }
     : null;
@@ -222,6 +249,11 @@ export function ReinscriptionFlow({
       if (corps === null) return;
 
       if ((corps as { enregistre?: boolean }).enregistre === true) {
+        // Une réinscription se finalise SUR PLACE, comme une première
+        // inscription : l'étudiant existe déjà en base, mais les pièces se
+        // remettent et les frais se règlent au guichet. L'école renvoie donc
+        // la date d'ouverture avec la confirmation.
+        setPhysiques((corps as { inscriptions_physiques?: Physiques }).inscriptions_physiques ?? null);
         setEtape("succes");
         onAboutir?.(true);
         return;
@@ -454,6 +486,15 @@ export function ReinscriptionFlow({
                 className="mt-2 text-pretty text-center text-sm leading-relaxed text-text-secondary"
               >
                 {t("succes.texte")}
+              </m.p>
+              {/* Ce qui reste à faire, et il en reste. La phrase précédente
+                  disait « aucune démarche supplémentaire n'est nécessaire » :
+                  c'était faux, les frais se règlent au guichet. */}
+              <m.p
+                {...entree(2)}
+                className="mt-2 text-pretty text-center text-sm leading-relaxed text-text-secondary"
+              >
+                {suiteDuParcours}
               </m.p>
               <m.p
                 {...entree(3)}
