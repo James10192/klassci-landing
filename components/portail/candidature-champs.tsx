@@ -7,6 +7,7 @@ import {
   CaseDate,
   Champ,
   champ,
+  ChoixBinaire,
   Erreurs,
   Liste,
   Section,
@@ -63,6 +64,13 @@ export type Formulaire = {
   etablissement_origine: string;
   annee_bac: string;
   affectation_status: string;
+  /** Seul booléen du formulaire : il commande l'affichage du bloc suivant. */
+  est_transfert: boolean;
+  etablissement_sup_origine: string;
+  formation_origine: string;
+  niveau_atteint_origine: string;
+  annee_derniere_inscription: string;
+  motif_transfert: string;
   tuteur_nom: string;
   tuteur_lien: string;
   tuteur_telephone: string;
@@ -77,6 +85,9 @@ export const FORMULAIRE_VIDE: Formulaire = {
   telephone: "", email: "", ville: "", commune: "",
   filiere_id: "", niveau_id: "", voeu_libre: "",
   serie_bac: "", etablissement_origine: "", annee_bac: "", affectation_status: "",
+  est_transfert: false,
+  etablissement_sup_origine: "", formation_origine: "", niveau_atteint_origine: "",
+  annee_derniere_inscription: "", motif_transfert: "",
   tuteur_nom: "", tuteur_lien: "", tuteur_telephone: "", tuteur_profession: "",
   message: "",
 };
@@ -136,6 +147,10 @@ const LONGUEURS = {
   voeu_libre: 255,
   serie_bac: 60,
   etablissement_origine: 150,
+  etablissement_sup_origine: 150,
+  formation_origine: 150,
+  niveau_atteint_origine: 60,
+  motif_transfert: 1000,
   tuteur_nom: 100,
   tuteur_telephone: 30,
   tuteur_profession: 120,
@@ -160,7 +175,7 @@ export type ChoixPublies = {
 
 export type ProprietesChamps = {
   form: Formulaire;
-  set: (cle: keyof Formulaire) => (valeur: string) => void;
+  set: (cle: keyof Formulaire) => (valeur: string | boolean) => void;
   /** Les messages d'erreur du serveur pour un champ, déjà localisés. */
   messagesDe: (champ: string) => string[] | undefined;
   choix: ChoixPublies;
@@ -266,7 +281,30 @@ export function ChampsCandidature({
 
       <m.div {...entree(4)}>
         <Section titre={t("formulaire.parcours")} />
-        <div className="grid gap-3 sm:grid-cols-3">
+
+        {/* La question vient AVANT le bac, parce qu'elle décide de la suite.
+            Posée après, le candidat transféré aurait déjà rempli trois champs
+            de lycée en se demandant s'il était au bon endroit.
+
+            C'est aussi la question que le formulaire de l'école ne peut pas
+            poser ici : là-bas elle se déduit de la classe choisie, et le
+            candidat ne choisit pas de classe — il exprime un vœu. La
+            déclaration directe est donc la seule source, et c'est la
+            meilleure : personne ne connaît mieux son parcours que lui. */}
+        <ChoixBinaire
+          label={t("formulaire.provenance")}
+          value={form.est_transfert}
+          onChange={set("est_transfert")}
+          erreurs={messagesDe("est_transfert")}
+          options={[
+            { valeur: false, libelle: t("formulaire.provenanceLycee"), aide: t("formulaire.provenanceLyceeAide") },
+            { valeur: true, libelle: t("formulaire.provenanceTransfert"), aide: t("formulaire.provenanceTransfertAide") },
+          ]}
+        />
+
+        {/* Le bac reste demandé dans les deux cas : un transféré en a un, et
+            c'est la pièce que l'école vérifie en premier. */}
+        <div className="mt-3 grid gap-3 sm:grid-cols-3">
           <Champ label={t("formulaire.serieBac")} value={form.serie_bac} onChange={set("serie_bac")}
                  maxLength={LONGUEURS.serie_bac} erreurs={messagesDe("serie_bac")} />
           <Champ label={t("formulaire.anneeBac")} value={form.annee_bac} onChange={set("annee_bac")}
@@ -284,6 +322,42 @@ export function ChampsCandidature({
                    value={form.affectation_status} onChange={set("affectation_status")}
                    aide={t("formulaire.affectationAide")} erreurs={messagesDe("affectation_status")}
                    options={affectations} />
+          </div>
+        )}
+
+        {/* Rendu conditionnel, et non masqué en CSS : les champs d'un
+            transfert n'ont pas de sens pour un bachelier, et les garder
+            montés les laisserait dans l'état du formulaire après un
+            changement d'avis. Le serveur les efface aussi de son côté — ce
+            point d'entrée est public, l'interface ne peut pas en être la
+            seule garante. */}
+        {form.est_transfert && (
+          <div className="mt-4 rounded-xl border border-border bg-bg-subtle/60 p-4">
+            <p className="mb-3 text-xs leading-relaxed text-text-muted">
+              {t("formulaire.transfertAide")}
+            </p>
+            <Champ label={t("formulaire.etablissementSup")} value={form.etablissement_sup_origine}
+                   onChange={set("etablissement_sup_origine")}
+                   maxLength={LONGUEURS.etablissement_sup_origine}
+                   erreurs={messagesDe("etablissement_sup_origine")} />
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              <Champ label={t("formulaire.formationOrigine")} value={form.formation_origine}
+                     onChange={set("formation_origine")} maxLength={LONGUEURS.formation_origine}
+                     erreurs={messagesDe("formation_origine")} />
+              <Champ label={t("formulaire.niveauAtteint")} value={form.niveau_atteint_origine}
+                     onChange={set("niveau_atteint_origine")} maxLength={LONGUEURS.niveau_atteint_origine}
+                     erreurs={messagesDe("niveau_atteint_origine")} />
+            </div>
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              <Champ label={t("formulaire.anneeDerniereInscription")}
+                     value={form.annee_derniere_inscription}
+                     onChange={set("annee_derniere_inscription")}
+                     inputMode="numeric" chiffresSeulement maxLength={4}
+                     erreurs={messagesDe("annee_derniere_inscription")} />
+              <Champ label={t("formulaire.motifTransfert")} value={form.motif_transfert}
+                     onChange={set("motif_transfert")} maxLength={LONGUEURS.motif_transfert}
+                     erreurs={messagesDe("motif_transfert")} />
+            </div>
           </div>
         )}
       </m.div>

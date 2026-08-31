@@ -140,6 +140,75 @@ export function Champ({
   );
 }
 
+/**
+ * Un choix entre deux situations, pas une case à cocher.
+ *
+ * La différence n'est pas cosmétique. Une case cochable a un état par défaut,
+ * et ce défaut répond à la place du candidat : décochée, elle dit « je sors du
+ * lycée » sans que personne ne l'ait affirmé. Or c'est exactement ce que
+ * l'école a besoin de savoir, et une réponse par omission ne vaut rien pour
+ * instruire un dossier.
+ *
+ * Deux options côte à côte forcent la lecture des deux, et le candidat qui
+ * vient d'ailleurs voit sa situation nommée au lieu d'avoir à se reconnaître
+ * dans la négation de l'autre.
+ *
+ * Le champ reste facultatif au sens du serveur — l'absence de réponse vaut
+ * « pas un transfert », comme pour les candidatures déposées avant que la
+ * question n'existe.
+ */
+export function ChoixBinaire({
+  label,
+  options,
+  value,
+  onChange,
+  erreurs,
+}: {
+  label: string;
+  /** Deux entrées, dans l'ordre de lecture : le cas courant d'abord. */
+  options: [{ valeur: boolean; libelle: string; aide?: string }, { valeur: boolean; libelle: string; aide?: string }];
+  value: boolean;
+  onChange: (v: boolean) => void;
+  erreurs?: string[];
+}) {
+  return (
+    <fieldset>
+      <legend className="block text-sm font-medium">{label}</legend>
+      <div className="mt-2 grid gap-2 sm:grid-cols-2">
+        {options.map((option) => {
+          const choisi = option.valeur === value;
+
+          return (
+            <label
+              key={String(option.valeur)}
+              className={
+                "flex cursor-pointer gap-2.5 rounded-xl border px-3.5 py-3 transition-colors duration-200 " +
+                (choisi
+                  ? "border-accent bg-accent-light/40"
+                  : "border-border bg-bg hover:border-accent/40")
+              }
+            >
+              <input
+                type="radio"
+                checked={choisi}
+                onChange={() => onChange(option.valeur)}
+                className="mt-0.5 h-4 w-4 shrink-0 accent-accent"
+              />
+              <span className="block">
+                <span className="block text-sm font-medium leading-snug">{option.libelle}</span>
+                {option.aide && (
+                  <span className="mt-0.5 block text-xs leading-snug text-text-muted">{option.aide}</span>
+                )}
+              </span>
+            </label>
+          );
+        })}
+      </div>
+      <Erreurs messages={erreurs} />
+    </fieldset>
+  );
+}
+
 type ProprietesCaseDate = {
   label: string;
   value: string;

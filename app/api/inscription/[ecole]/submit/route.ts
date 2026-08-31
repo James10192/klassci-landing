@@ -11,9 +11,22 @@ const TEXTES = [
   "telephone", "email", "ville", "commune",
   "voeu_libre", "serie_bac", "etablissement_origine", "affectation_status", "message",
   "tuteur_nom", "tuteur_telephone", "tuteur_lien", "tuteur_profession",
+  "etablissement_sup_origine", "formation_origine", "niveau_atteint_origine", "motif_transfert",
 ] as const;
 
-const ENTIERS = ["filiere_id", "niveau_id", "annee_bac"] as const;
+const ENTIERS = ["filiere_id", "niveau_id", "annee_bac", "annee_derniere_inscription"] as const;
+
+/**
+ * Les drapeaux, transportés tels quels.
+ *
+ * `est_transfert` ne peut passer ni par TEXTES — qui n'accepte que des chaînes
+ * non vides, et « false » n'en est pas une — ni par ENTIERS, qui exige un
+ * entier strictement positif : les deux jettent silencieusement la valeur
+ * `false`. Or c'est justement celle qui doit voyager, puisque KLASSCI efface
+ * le bloc de transfert quand le drapeau est baissé. Sans elle, un candidat
+ * qui coche puis se ravise verrait sa déclaration partir quand même.
+ */
+const BOOLEENS = ["est_transfert"] as const;
 
 export async function POST(
   requete: NextRequest,
@@ -42,6 +55,12 @@ export async function POST(
 
     if (typeof valeur === "string" && valeur.trim() !== "") {
       corps[champ] = valeur.trim();
+    }
+  }
+
+  for (const champ of BOOLEENS) {
+    if (typeof source[champ] === "boolean") {
+      corps[champ] = source[champ];
     }
   }
 

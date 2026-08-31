@@ -122,7 +122,11 @@ export function CandidatureFlow({
   const demande = useRef(0);
   const { form, setForm, consentement, setConsentement } = saisie;
 
-  const set = (cle: keyof Formulaire) => (valeur: string) =>
+  // `string | boolean` depuis que le formulaire porte un choix binaire
+  // (`est_transfert`). Élargir ici plutôt qu'ajouter un second setter : la
+  // signature suit la forme réelle de `Formulaire`, et un composant qui
+  // n'accepte qu'une chaîne reste servi sans changement.
+  const set = (cle: keyof Formulaire) => (valeur: string | boolean) =>
     setForm((f) => ({ ...f, [cle]: valeur }));
 
   /**
