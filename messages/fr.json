@@ -31,15 +31,42 @@
     "secondaryCta": "Voir comment ça marche",
     "note": "Disponible sur navigateur. Aucune installation requise.",
     "screenshots": [
-      { "label": "Tableau de bord", "alt": "Tableau de bord KLASSCI" },
-      { "label": "Gestion des étudiants", "alt": "Page de gestion des étudiants KLASSCI" },
-      { "label": "Nouvelle inscription", "alt": "Formulaire de nouvelle inscription KLASSCI" },
-      { "label": "Résultats et bulletins", "alt": "Résultats et bulletins KLASSCI" },
-      { "label": "Planning général", "alt": "Planning général KLASSCI" },
-      { "label": "Gestion des présences", "alt": "Gestion des présences KLASSCI" },
-      { "label": "Parcours LMD", "alt": "Parcours LMD KLASSCI" },
-      { "label": "Gestion du personnel", "alt": "Gestion du personnel KLASSCI" },
-      { "label": "Code d'émargement", "alt": "Code d'émargement KLASSCI" }
+      {
+        "label": "Tableau de bord",
+        "alt": "Tableau de bord KLASSCI"
+      },
+      {
+        "label": "Gestion des étudiants",
+        "alt": "Page de gestion des étudiants KLASSCI"
+      },
+      {
+        "label": "Nouvelle inscription",
+        "alt": "Formulaire de nouvelle inscription KLASSCI"
+      },
+      {
+        "label": "Résultats et bulletins",
+        "alt": "Résultats et bulletins KLASSCI"
+      },
+      {
+        "label": "Planning général",
+        "alt": "Planning général KLASSCI"
+      },
+      {
+        "label": "Gestion des présences",
+        "alt": "Gestion des présences KLASSCI"
+      },
+      {
+        "label": "Parcours LMD",
+        "alt": "Parcours LMD KLASSCI"
+      },
+      {
+        "label": "Gestion du personnel",
+        "alt": "Gestion du personnel KLASSCI"
+      },
+      {
+        "label": "Code d'émargement",
+        "alt": "Code d'émargement KLASSCI"
+      }
     ]
   },
   "pillars": {
@@ -231,11 +258,33 @@
     "eyebrow": "01 · Confiance",
     "title": "Adopté par des établissements qui forment des milliers d'étudiants",
     "clients": [
-      { "name": "ESBTP Abidjan", "code": "esbtp-abidjan", "detail": "2 600+ étudiants · Plan Élite", "logo": "/img/clients/esbtp.png" },
-      { "name": "ESBTP Yamoussoukro", "code": "esbtp-yakro", "detail": "2 000+ étudiants · Plan Élite", "logo": "/img/clients/esbtp.png" },
-      { "name": "Institut Pascal", "detail": "1 000+ étudiants · Plan Élite", "logo": "/img/clients/institut-pascal.jpg" },
-      { "name": "San Andrea School", "detail": "1 200+ étudiants · Plan Élite", "logo": "/img/clients/san-andrea.jpg" },
-      { "name": "ITS", "detail": "800+ étudiants · Plan Pro", "logo": "/img/clients/its.jpg" }
+      {
+        "name": "ESBTP Abidjan",
+        "code": "esbtp-abidjan",
+        "detail": "2 600+ étudiants · Plan Élite",
+        "logo": "/img/clients/esbtp.png"
+      },
+      {
+        "name": "ESBTP Yamoussoukro",
+        "code": "esbtp-yakro",
+        "detail": "2 000+ étudiants · Plan Élite",
+        "logo": "/img/clients/esbtp.png"
+      },
+      {
+        "name": "Institut Pascal",
+        "detail": "1 000+ étudiants · Plan Élite",
+        "logo": "/img/clients/institut-pascal.jpg"
+      },
+      {
+        "name": "San Andrea School",
+        "detail": "1 200+ étudiants · Plan Élite",
+        "logo": "/img/clients/san-andrea.jpg"
+      },
+      {
+        "name": "ITS",
+        "detail": "800+ étudiants · Plan Pro",
+        "logo": "/img/clients/its.jpg"
+      }
     ],
     "testimonials": [
       {
@@ -294,15 +343,36 @@
     "title": "Un déploiement accompagné de bout en bout",
     "intro": "Notre équipe prépare votre environnement, sécurise la reprise de vos données et accompagne chaque rôle jusqu'à la mise en ligne.",
     "steps": {
-      "scoping": { "title": "Cadrage", "text": "Nous définissons le périmètre, les priorités et le calendrier avec votre équipe projet." },
-      "migration": { "title": "Migration", "text": "Vos données structurées sont reprises, contrôlées et préparées pour votre environnement." },
-      "training": { "title": "Formation", "text": "Direction, scolarité, finances et enseignants sont formés selon leurs responsabilités." },
-      "launch": { "title": "Mise en ligne", "text": "Nous validons les parcours essentiels et restons présents pendant la prise en main." }
+      "scoping": {
+        "title": "Cadrage",
+        "text": "Nous définissons le périmètre, les priorités et le calendrier avec votre équipe projet."
+      },
+      "migration": {
+        "title": "Migration",
+        "text": "Vos données structurées sont reprises, contrôlées et préparées pour votre environnement."
+      },
+      "training": {
+        "title": "Formation",
+        "text": "Direction, scolarité, finances et enseignants sont formés selon leurs responsabilités."
+      },
+      "launch": {
+        "title": "Mise en ligne",
+        "text": "Nous validons les parcours essentiels et restons présents pendant la prise en main."
+      }
     },
     "assurances": {
-      "backups": { "title": "Sauvegardes quotidiennes", "text": "Vos données sont sauvegardées automatiquement chaque jour." },
-      "support": { "title": "Assistance selon votre formule", "text": "Le niveau d'accompagnement correspond au service choisi." },
-      "adoption": { "title": "Suivi de l'adoption", "text": "Nous suivons l'usage et aidons vos équipes à tirer le meilleur de KLASSCI." }
+      "backups": {
+        "title": "Sauvegardes quotidiennes",
+        "text": "Vos données sont sauvegardées automatiquement chaque jour."
+      },
+      "support": {
+        "title": "Assistance selon votre formule",
+        "text": "Le niveau d'accompagnement correspond au service choisi."
+      },
+      "adoption": {
+        "title": "Suivi de l'adoption",
+        "text": "Nous suivons l'usage et aidons vos équipes à tirer le meilleur de KLASSCI."
+      }
     }
   },
   "imageBanner": {
@@ -380,39 +450,123 @@
         {
           "label": "Produit",
           "rows": [
-            { "label": "Plateforme de cours en ligne (LMS)", "essentiel": "Non inclus", "pro": "✓", "elite": "✓" },
-            { "label": "API publique", "essentiel": "Non inclus", "pro": "✓", "elite": "✓ + accès anticipé" },
-            { "label": "WhatsApp parents", "essentiel": "Non inclus", "pro": "Standard (1 000 msg/mois)", "elite": "Full (5 000 msg/mois)" }
+            {
+              "label": "Plateforme de cours en ligne (LMS)",
+              "essentiel": "Non inclus",
+              "pro": "✓",
+              "elite": "✓"
+            },
+            {
+              "label": "API publique",
+              "essentiel": "Non inclus",
+              "pro": "✓",
+              "elite": "✓ + accès anticipé"
+            },
+            {
+              "label": "WhatsApp parents",
+              "essentiel": "Non inclus",
+              "pro": "Standard (1 000 msg/mois)",
+              "elite": "Full (5 000 msg/mois)"
+            }
           ]
         },
         {
           "label": "Capacités",
           "rows": [
-            { "label": "Comptes admin (Fondateur, DG, Études, Comptable, Caissier)", "essentiel": "5", "pro": "5", "elite": "Illimité" },
-            { "label": "Comptes éducateurs", "essentiel": "10", "pro": "25", "elite": "Illimité" },
-            { "label": "Élèves max", "essentiel": "500", "pro": "1 500", "elite": "Illimité" },
-            { "label": "Professeurs max", "essentiel": "30", "pro": "60", "elite": "Illimité" }
+            {
+              "label": "Comptes admin (Fondateur, DG, Études, Comptable, Caissier)",
+              "essentiel": "5",
+              "pro": "5",
+              "elite": "Illimité"
+            },
+            {
+              "label": "Comptes éducateurs",
+              "essentiel": "10",
+              "pro": "25",
+              "elite": "Illimité"
+            },
+            {
+              "label": "Élèves max",
+              "essentiel": "500",
+              "pro": "1 500",
+              "elite": "Illimité"
+            },
+            {
+              "label": "Professeurs max",
+              "essentiel": "30",
+              "pro": "60",
+              "elite": "Illimité"
+            }
           ]
         },
         {
           "label": "Service technique ★",
           "rows": [
-            { "label": "Assistance", "essentiel": "Lun-Jeu (4j/7)", "pro": "Lun-Ven (5j/7)", "elite": "Lun-Sam (6j/7)" },
-            { "label": "Personnalisation au lancement", "essentiel": "Logo + couleurs", "pro": "+ Templates bulletin/reçu", "elite": "Setup sur-mesure" },
-            { "label": "Personnalisation continue", "essentiel": "Non inclus", "pro": "2 jours-dev / an", "elite": "1 jour-dev / mois (12 jours/an)" },
-            { "label": "Influence sur la roadmap", "essentiel": "Non inclus", "pro": "Vote", "elite": "Priorité" },
-            { "label": "Account manager dédié", "essentiel": "Non inclus", "pro": "Non inclus", "elite": "✓" },
-            { "label": "Audit annuel d'usage", "essentiel": "Non inclus", "pro": "Non inclus", "elite": "✓" }
+            {
+              "label": "Assistance",
+              "essentiel": "Lun-Jeu (4j/7)",
+              "pro": "Lun-Ven (5j/7)",
+              "elite": "Lun-Sam (6j/7)"
+            },
+            {
+              "label": "Personnalisation au lancement",
+              "essentiel": "Logo + couleurs",
+              "pro": "+ Templates bulletin/reçu",
+              "elite": "Setup sur-mesure"
+            },
+            {
+              "label": "Personnalisation continue",
+              "essentiel": "Non inclus",
+              "pro": "2 jours-dev / an",
+              "elite": "1 jour-dev / mois (12 jours/an)"
+            },
+            {
+              "label": "Influence sur la roadmap",
+              "essentiel": "Non inclus",
+              "pro": "Vote",
+              "elite": "Priorité"
+            },
+            {
+              "label": "Account manager dédié",
+              "essentiel": "Non inclus",
+              "pro": "Non inclus",
+              "elite": "✓"
+            },
+            {
+              "label": "Audit annuel d'usage",
+              "essentiel": "Non inclus",
+              "pro": "Non inclus",
+              "elite": "✓"
+            }
           ]
         }
       ],
       "pricing": {
         "label": "Tarif",
-        "annual": { "label": "Annuel (à partir de la 2ᵉ année)", "essentiel": "700 k FCFA", "pro": "1,15 M FCFA", "elite": "4,8 M FCFA" },
-        "firstYear": { "label": "Première année", "essentiel": "988 k FCFA", "pro": "1,3 M FCFA", "elite": "6 M FCFA" },
-        "monthly": { "label": "Mensualisation", "essentiel": "67 k FCFA", "pro": "110 k FCFA", "elite": "460 k FCFA" }
+        "annual": {
+          "label": "Annuel (à partir de la 2ᵉ année)",
+          "essentiel": "700 k FCFA",
+          "pro": "1,15 M FCFA",
+          "elite": "4,8 M FCFA"
+        },
+        "firstYear": {
+          "label": "Première année",
+          "essentiel": "988 k FCFA",
+          "pro": "1,3 M FCFA",
+          "elite": "6 M FCFA"
+        },
+        "monthly": {
+          "label": "Mensualisation",
+          "essentiel": "67 k FCFA",
+          "pro": "110 k FCFA",
+          "elite": "460 k FCFA"
+        }
       },
-      "ctas": { "essentiel": "Choisir Essentiel", "pro": "Choisir Pro", "elite": "Choisir Élite" }
+      "ctas": {
+        "essentiel": "Choisir Essentiel",
+        "pro": "Choisir Pro",
+        "elite": "Choisir Élite"
+      }
     },
     "footer": "Tous les tiers incluent l'hébergement, les sauvegardes et la conformité MESRS · Migration de vos données existantes incluse à l'activation"
   },
@@ -455,23 +609,57 @@
       "locationLabel": "Localisation"
     },
     "form": {
-      "name": { "label": "Nom complet", "placeholder": "Votre nom" },
-      "email": { "label": "Email", "placeholder": "vous@exemple.com" },
-      "school": { "label": "Établissement", "placeholder": "Nom de votre établissement" },
-      "phone": { "label": "Téléphone", "placeholder": "+225 07 00 00 00 00" },
+      "name": {
+        "label": "Nom complet",
+        "placeholder": "Votre nom"
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "vous@exemple.com"
+      },
+      "school": {
+        "label": "Établissement",
+        "placeholder": "Nom de votre établissement"
+      },
+      "phone": {
+        "label": "Téléphone",
+        "placeholder": "+225 07 00 00 00 00"
+      },
       "type": {
         "label": "Type d'établissement",
         "placeholder": "Sélectionnez",
         "options": [
-          { "value": "ecole_superieure", "label": "École supérieure" },
-          { "value": "universite", "label": "Université" },
-          { "value": "lycee", "label": "Lycée" },
-          { "value": "college", "label": "Collège" },
-          { "value": "centre_formation", "label": "Centre de formation" },
-          { "value": "autre", "label": "Autre" }
+          {
+            "value": "ecole_superieure",
+            "label": "École supérieure"
+          },
+          {
+            "value": "universite",
+            "label": "Université"
+          },
+          {
+            "value": "lycee",
+            "label": "Lycée"
+          },
+          {
+            "value": "college",
+            "label": "Collège"
+          },
+          {
+            "value": "centre_formation",
+            "label": "Centre de formation"
+          },
+          {
+            "value": "autre",
+            "label": "Autre"
+          }
         ]
       },
-      "message": { "label": "Message", "labelOptional": "Message (optionnel)", "placeholder": "Dites-nous en quoi KLASSCI peut vous aider..." },
+      "message": {
+        "label": "Message",
+        "labelOptional": "Message (optionnel)",
+        "placeholder": "Dites-nous en quoi KLASSCI peut vous aider..."
+      },
       "submit": "Envoyer la demande",
       "submitArrow": "→",
       "submitting": "Envoi...",
@@ -499,16 +687,40 @@
       "intro": "KLASSCI aide les établissements supérieurs à suivre les étudiants en situation de handicap, leurs aménagements pédagogiques, les tiers-temps, les assistants requis et les reconnaissances officielles, avec une confidentialité gérée par permission.",
       "imageAlt": "Page de suivi accessibilité étudiants dans KLASSCI",
       "stats": [
-        { "value": "10", "label": "étudiants suivis" },
-        { "value": "10", "label": "tiers-temps actifs" },
-        { "value": "2", "label": "assistants requis" },
-        { "value": "8", "label": "reconnaissances officielles" }
+        {
+          "value": "10",
+          "label": "étudiants suivis"
+        },
+        {
+          "value": "10",
+          "label": "tiers-temps actifs"
+        },
+        {
+          "value": "2",
+          "label": "assistants requis"
+        },
+        {
+          "value": "8",
+          "label": "reconnaissances officielles"
+        }
       ],
       "cards": [
-        { "title": "Profil par étudiant", "text": "Catégories, résumé enseignant, période de validité et reconnaissance officielle." },
-        { "title": "Aménagements concrets", "text": "Tiers-temps, supports agrandis, ordinateur autorisé, assistant et notes de mise en œuvre." },
-        { "title": "Confidentialité", "text": "Le résumé utile circule, les détails sensibles restent réservés aux rôles autorisés." },
-        { "title": "Exports et audit", "text": "Les rapports PDF/Excel et l'historique des changements sécurisent le suivi administratif." }
+        {
+          "title": "Profil par étudiant",
+          "text": "Catégories, résumé enseignant, période de validité et reconnaissance officielle."
+        },
+        {
+          "title": "Aménagements concrets",
+          "text": "Tiers-temps, supports agrandis, ordinateur autorisé, assistant et notes de mise en œuvre."
+        },
+        {
+          "title": "Confidentialité",
+          "text": "Le résumé utile circule, les détails sensibles restent réservés aux rôles autorisés."
+        },
+        {
+          "title": "Exports et audit",
+          "text": "Les rapports PDF/Excel et l'historique des changements sécurisent le suivi administratif."
+        }
       ]
     },
     "sdg": {
@@ -516,15 +728,51 @@
       "title": "Moins de papier, plus d'inclusion et une gouvernance universitaire plus responsable.",
       "intro": "KLASSCI inscrit la gestion universitaire dans une logique d'établissement vert et traçable. En réduisant les impressions, en renforçant l'accessibilité et en structurant la gouvernance, la plateforme contribue concrètement à 9 Objectifs de Développement Durable des Nations Unies.",
       "items": [
-        { "number": "04", "name": "Éducation de qualité", "text": "Organisation académique plus fiable, données accessibles et suivi pédagogique renforcé." },
-        { "number": "05", "name": "Égalité entre les sexes", "text": "Services numériques partagés par les apprenants, personnels et responsables habilités." },
-        { "number": "08", "name": "Travail décent", "text": "Équipes administratives moins saturées par les tâches répétitives et les ressaisies." },
-        { "number": "09", "name": "Innovation", "text": "Transformation numérique structurée pour l'enseignement supérieur africain." },
-        { "number": "10", "name": "Inégalités réduites", "text": "Meilleur suivi des besoins spécifiques et des aménagements pédagogiques." },
-        { "number": "12", "name": "Consommation responsable", "text": "Réduction concrète du papier grâce aux bulletins, reçus, exports et documents dématérialisés." },
-        { "number": "13", "name": "Action climat", "text": "Moins d'impressions, moins de déplacements administratifs inutiles et des processus plus sobres." },
-        { "number": "16", "name": "Institutions efficaces", "text": "Traçabilité, permissions, audit et gouvernance plus lisibles pour les équipes habilitées." },
-        { "number": "17", "name": "Partenariats", "text": "Meilleure coordination entre établissement, familles, institutions et partenaires." }
+        {
+          "number": "04",
+          "name": "Éducation de qualité",
+          "text": "Organisation académique plus fiable, données accessibles et suivi pédagogique renforcé."
+        },
+        {
+          "number": "05",
+          "name": "Égalité entre les sexes",
+          "text": "Services numériques partagés par les apprenants, personnels et responsables habilités."
+        },
+        {
+          "number": "08",
+          "name": "Travail décent",
+          "text": "Équipes administratives moins saturées par les tâches répétitives et les ressaisies."
+        },
+        {
+          "number": "09",
+          "name": "Innovation",
+          "text": "Transformation numérique structurée pour l'enseignement supérieur africain."
+        },
+        {
+          "number": "10",
+          "name": "Inégalités réduites",
+          "text": "Meilleur suivi des besoins spécifiques et des aménagements pédagogiques."
+        },
+        {
+          "number": "12",
+          "name": "Consommation responsable",
+          "text": "Réduction concrète du papier grâce aux bulletins, reçus, exports et documents dématérialisés."
+        },
+        {
+          "number": "13",
+          "name": "Action climat",
+          "text": "Moins d'impressions, moins de déplacements administratifs inutiles et des processus plus sobres."
+        },
+        {
+          "number": "16",
+          "name": "Institutions efficaces",
+          "text": "Traçabilité, permissions, audit et gouvernance plus lisibles pour les équipes habilitées."
+        },
+        {
+          "number": "17",
+          "name": "Partenariats",
+          "text": "Meilleure coordination entre établissement, familles, institutions et partenaires."
+        }
       ]
     }
   },
@@ -534,24 +782,48 @@
       "product": {
         "title": "Produit",
         "links": [
-          { "label": "Fonctionnalités", "href": "#fonctionnalites" },
-          { "label": "Tarifs", "href": "#tarifs" },
-          { "label": "S'inscrire en ligne", "href": "/inscription" }
+          {
+            "label": "Fonctionnalités",
+            "href": "#fonctionnalites"
+          },
+          {
+            "label": "Tarifs",
+            "href": "#tarifs"
+          },
+          {
+            "label": "S'inscrire en ligne",
+            "href": "/inscription"
+          }
         ]
       },
       "resources": {
         "title": "Ressources",
         "links": [
-          { "label": "Documentation", "href": "/docs" },
-          { "label": "API Reference", "href": "/docs/api-reference" },
-          { "label": "Changelog", "href": "/docs/changelog" }
+          {
+            "label": "Documentation",
+            "href": "/docs"
+          },
+          {
+            "label": "API Reference",
+            "href": "/docs/api-reference"
+          },
+          {
+            "label": "Changelog",
+            "href": "/docs/changelog"
+          }
         ]
       },
       "contact": {
         "title": "Contact",
         "links": [
-          { "label": "contact@klassci.com", "href": "mailto:contact@klassci.com" },
-          { "label": "Abidjan, Côte d'Ivoire", "href": "#contact" }
+          {
+            "label": "contact@klassci.com",
+            "href": "mailto:contact@klassci.com"
+          },
+          {
+            "label": "Abidjan, Côte d'Ivoire",
+            "href": "#contact"
+          }
         ]
       }
     },
@@ -559,6 +831,29 @@
     "social": {
       "facebook": "Facebook",
       "linkedin": "LinkedIn"
+    }
+  },
+  "notFound": {
+    "titre": "Cette page n'existe pas",
+    "texte": "L'adresse demandee n'existe plus, ou n'a jamais existe. Voici par ou reprendre.",
+    "aria": "Ou aller ensuite",
+    "liens": {
+      "universite": {
+        "titre": "KLASSCI Universite",
+        "texte": "Grandes ecoles et universites, BTS et LMD."
+      },
+      "college": {
+        "titre": "KLASSCI College",
+        "texte": "Colleges et lycees, de l'inscription au bulletin."
+      },
+      "docs": {
+        "titre": "Documentation",
+        "texte": "Prise en main, roles, modules, API."
+      },
+      "accueil": {
+        "titre": "Accueil",
+        "texte": "Choisir l'edition adaptee a votre etablissement."
+      }
     }
   }
 }

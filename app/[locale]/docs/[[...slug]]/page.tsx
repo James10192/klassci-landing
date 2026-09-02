@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
 
 import { source } from "@/lib/source";
+import { SITE_URL } from "@/lib/site-url";
 import { getMDXComponents } from "@/mdx-components";
 
 interface PageParams {
@@ -26,9 +27,53 @@ export async function generateMetadata({
   const page = source.getPage(slug, locale);
   if (!page) return {};
 
+  const description = (page.data as { description?: string }).description;
+
+  // Sans ce bloc, la documentation heritait des metadonnees du layout de
+  // locale : les vingt-quatre pages declaraient toutes
+  // `<link rel="canonical" href="https://klassci.com/fr">`, c'est-a-dire
+  // qu'elles se presentaient a Google comme des doublons de la page
+  // d'accueil. Le titre etait bien le leur, mais l'adresse canonique, l'og:url
+  // et l'og:title etaient ceux de l'accueil. Autant de contenu ecrit pour
+  // rien.
+  const chemin = (slug ?? []).join("/");
+  const suffixe = chemin ? `/${chemin}` : "";
+  const cheminSansLangue = `/docs${suffixe}`;
+
   return {
     title: page.data.title,
-    description: (page.data as { description?: string }).description,
+    description,
+    alternates: {
+      canonical: `/${locale}${cheminSansLangue}`,
+      languages: {
+        fr: `/fr${cheminSansLangue}`,
+        en: `/en${cheminSansLangue}`,
+        "x-default": `/fr${cheminSansLangue}`,
+      },
+    },
+    openGraph: {
+      type: "article",
+      siteName: "KLASSCI",
+      title: page.data.title,
+      description,
+      url: `${SITE_URL}/${locale}${cheminSansLangue}`,
+      locale: locale === "fr" ? "fr_FR" : "en_US",
+      images: [
+        {
+          url: `${SITE_URL}/img/og/default.png`,
+          width: 1200,
+          height: 630,
+          alt: page.data.title,
+          type: "image/png",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: page.data.title,
+      description,
+      images: [`${SITE_URL}/img/og/default.png`],
+    },
   };
 }
 

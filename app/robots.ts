@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://klassci.com";
+import { SITE_URL } from "@/lib/site-url";
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -8,27 +8,23 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        // Internal API routes don't need to be indexed.
-        // /login lives on tenant subdomains (esbtp-yakro.klassci.com/login etc.),
-        // not on this marketing site — block it so Search Console stops flagging it.
+        // Les routes d'API n'ont rien a faire dans un index.
+        // /login vit sur les sous-domaines des etablissements
+        // (esbtp-yakro.klassci.com/login), pas sur ce site vitrine.
         //
-        // The enrolment portal lists, by design, exactly which schools are
-        // customers and when their window is open. The per-school page answers
-        // 404 for anything else precisely so that stays private; indexing the
-        // index page would hand the same list to anyone via a site: query.
+        // Le portail d'inscription liste, par construction, quels
+        // etablissements sont clients et quand leur guichet est ouvert. La
+        // page par etablissement repond 404 pour tout le reste precisement
+        // pour que cela reste prive ; indexer la page d'index rendrait la
+        // meme liste accessible par une simple requete `site:`.
         //
-        // It moved from /reinscription to /inscription when it started serving
-        // new applicants too, and it gained a link in the site-wide nav — so it
-        // is now reachable by crawling, which it wasn't before. The old paths
-        // stay listed: they are 307 redirects, and a crawler that already knows
-        // them should not follow them in.
-        //
-        // This file is the outer lock, and the two work in sequence, not in
-        // parallel: a crawler that honours a Disallow never fetches the page,
-        // so it never reads the `noindex` inside it. The `robots: { index:
-        // false }` that buildUniverseMetadata puts on every portal page
-        // therefore covers what is still fetched — a direct link someone
-        // shared, a crawler that ignores this file — not what is listed here.
+        // Ce fichier est le verrou exterieur, et les deux protections
+        // agissent en serie, pas en parallele : un robot qui respecte un
+        // Disallow ne recupere jamais la page, donc ne lit jamais le
+        // `noindex` qu'elle contient. Le `robots: { index: false }` pose par
+        // buildUniverseMetadata couvre ce qui est malgre tout recupere — un
+        // lien partage, un robot qui ignore ce fichier — pas ce qui est
+        // liste ici.
         disallow: [
           "/api/",
           "/login",
@@ -40,6 +36,9 @@ export default function robots(): MetadataRoute.Robots {
       },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,
-    host: SITE_URL,
+    // La directive `Host` n'est comprise que par Yandex et n'a jamais rien
+    // apporte ici ; elle a en revanche affiche pendant des mois une adresse
+    // coupee en deux par un saut de ligne dans la variable d'environnement.
+    // Le canonique se declare par les balises `link rel=canonical`, pas la.
   };
 }

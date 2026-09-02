@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 
 import { routing, type Locale } from "@/i18n/routing";
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://klassci.com";
+import { SITE_URL } from "@/lib/site-url";
 
 type UniverseKey = "home" | "universite" | "college" | "lms";
 
