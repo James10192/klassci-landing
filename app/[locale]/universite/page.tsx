@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
-import { ClientMarquee } from "@/components/sections/client-marquee";
 import { Contact } from "@/components/sections/contact";
 import { Deployment } from "@/components/sections/deployment";
 import { Faq } from "@/components/sections/faq";
@@ -21,8 +20,10 @@ import { Testimonials } from "@/components/sections/testimonials";
 import { VideoTestimonial } from "@/components/sections/video-testimonial";
 import { StructuredData } from "@/components/seo/structured-data";
 import { UniversityImpact } from "@/components/universe/university-impact";
+import { LogosEtablissements } from "@/components/vitrine/logos-etablissements";
 import { routing, type Locale } from "@/i18n/routing";
 import { buildUniverseMetadata } from "@/lib/seo";
+import { etablissementsVitrine } from "@/lib/vitrine/etablissements";
 
 export async function generateMetadata({
   params,
@@ -52,6 +53,7 @@ export default async function UniversitePage({
   setRequestLocale(locale);
 
   const t = await getTranslations({ locale, namespace: "metadata" });
+  const etablissements = await etablissementsVitrine();
 
   return (
     <>
@@ -59,10 +61,13 @@ export default async function UniversitePage({
       <Nav />
       <main>
         <Hero />
+        {/* Les references viennent AVANT l'argumentaire : « qui vous fait
+            deja confiance » se lit en deux secondes, la liste des
+            fonctionnalites demande de s'installer. */}
+        <LogosEtablissements etablissements={etablissements} locale={locale} />
         <Pillars />
         <FeaturesBig />
         <FeaturesSmall />
-        <ClientMarquee />
         <Testimonials />
         <PartnershipBanner />
         <VideoTestimonial />

@@ -41,6 +41,11 @@
       "virtualText": "Cours, devoirs, évaluations et suivi pédagogique peuvent accompagner votre établissement, que vous pilotiez une université ou un collège.",
       "virtualPrimary": "Explorer la classe virtuelle"
     },
+    "demo": {
+      "pilotage": "Pilotage LMD, notes et bulletins",
+      "caisse": "Caisse, paiements et relances",
+      "mobile": "Parents et élèves sur mobile"
+    },
     "footNote": "Un compte, une école. Hébergé, sauvegardé, sécurisé.",
     "docs": "Documentation"
   }

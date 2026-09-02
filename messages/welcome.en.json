@@ -41,6 +41,11 @@
       "virtualText": "Courses, assignments, assessments and learning follow-up can support your institution, whether you run a university or a school.",
       "virtualPrimary": "Explore virtual classroom"
     },
+    "demo": {
+      "pilotage": "LMD tracking, grades and report cards",
+      "caisse": "Cash desk, payments and reminders",
+      "mobile": "Parents and students on mobile"
+    },
     "footNote": "One account, one school. Hosted, backed up and secured.",
     "docs": "Docs"
   }

@@ -4,21 +4,18 @@ import ArrowRight from "lucide-react/dist/esm/icons/arrow-right";
 import BookOpen from "lucide-react/dist/esm/icons/book-open";
 import Calculator from "lucide-react/dist/esm/icons/calculator";
 import GraduationCap from "lucide-react/dist/esm/icons/graduation-cap";
-import Menu from "lucide-react/dist/esm/icons/menu";
 import MonitorSmartphone from "lucide-react/dist/esm/icons/monitor-smartphone";
 import ShieldCheck from "lucide-react/dist/esm/icons/shield-check";
 import UserCheck from "lucide-react/dist/esm/icons/user-check";
 import Users from "lucide-react/dist/esm/icons/users";
-import X from "lucide-react/dist/esm/icons/x";
 import { useLocale, useTranslations } from "next-intl";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 import { CollegeCommercial } from "@/components/college/college-commercial";
 import { CollegeMockupStage } from "@/components/college/college-mockup-stage";
 import { CollegeQuoteDialog } from "@/components/college/college-quote-dialog";
+import { SiteNav } from "@/components/sections/site-nav";
 import { Footer } from "@/components/sections/footer";
-import { LanguageSwitcher } from "@/components/ui/language-switcher";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { SdgImpactGrid } from "@/components/universe/sdg-impact-grid";
 import { Link } from "@/i18n/navigation";
 import type { CollegePlanKey } from "@/lib/college-pricing";
@@ -86,7 +83,6 @@ function CollegeLogo({
 export function CollegeLanding() {
   const t = useTranslations("college");
   const locale = useLocale() as "fr" | "en";
-  const [mobileOpen, setMobileOpen] = useState(false);
   const [quoteOpen, setQuoteOpen] = useState(false);
   const [quotePlan, setQuotePlan] = useState<CollegePlanKey | null>(null);
   const [quoteStudentCount, setQuoteStudentCount] = useState(600);
@@ -96,107 +92,46 @@ export function CollegeLanding() {
   const sdgs = t.raw("impact.items") as SdgItem[];
   const homeHref = `/${locale}`;
   const docsHref = `/${locale}/docs/college`;
-  const closeMobile = useCallback(() => setMobileOpen(false), []);
   const openQuote = useCallback((plan: CollegePlanKey | null, studentCount: number) => {
     setQuotePlan(plan);
     setQuoteStudentCount(studentCount);
     setQuoteOpen(true);
   }, []);
 
-  useEffect(() => {
-    document.body.style.overflow = mobileOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [mobileOpen]);
-
   return (
     <>
       <main className="overflow-hidden bg-bg text-text">
-        <nav className="fixed left-0 right-0 top-0 z-50 h-[57px] border-b border-border bg-[var(--nav-bg)] backdrop-blur-md backdrop-saturate-150">
-          <div className="container flex h-full items-center justify-between gap-6">
+        <SiteNav
+          logo={
             <Link href="/" aria-label="KLASSCI College">
               <CollegeLogo />
             </Link>
-            <div className="hidden items-center gap-1 md:flex">
-              <a href={homeHref} className="px-3 py-2 text-[0.875rem] font-medium text-text-secondary transition-colors hover:text-text">
-                {t("nav.home")}
-              </a>
-              <a href="#fonctionnalites" className="px-3 py-2 text-[0.875rem] font-medium text-text-secondary transition-colors hover:text-text">
-                {t("nav.features")}
-              </a>
-              <a href="#interfaces" className="px-3 py-2 text-[0.875rem] font-medium text-text-secondary transition-colors hover:text-text">
-                {t("nav.interfaces")}
-              </a>
-              <a href="#tarifs" className="px-3 py-2 text-[0.875rem] font-medium text-text-secondary transition-colors hover:text-text">
-                {t("nav.quote")}
-              </a>
-              <a href={docsHref} className="inline-flex items-center gap-1.5 px-3 py-2 text-[0.875rem] font-medium text-text-secondary transition-colors hover:text-text">
-                <BookOpen className="h-4 w-4" aria-hidden />
-                {t("nav.docs")}
-              </a>
-            </div>
-            <div className="flex items-center gap-2">
-              <LanguageSwitcher className="hidden sm:inline-flex" />
-              <ThemeToggle className="hidden sm:inline-flex" />
-              <button
-                type="button"
-                onClick={() => openQuote(null, 600)}
-                className="hidden min-h-11 items-center rounded border border-accent bg-accent px-3.5 text-[0.875rem] font-medium text-white transition-colors hover:bg-accent-hover sm:inline-flex"
-              >
-                {t("nav.contact")}
-              </button>
-              <button
-                type="button"
-                onClick={() => setMobileOpen((value) => !value)}
-                className="inline-flex h-11 w-11 items-center justify-center rounded border border-border text-text md:hidden"
-                aria-label={mobileOpen ? t("nav.menuClose") : t("nav.menuOpen")}
-                aria-expanded={mobileOpen}
-              >
-                {mobileOpen ? <X className="h-5 w-5" aria-hidden /> : <Menu className="h-5 w-5" aria-hidden />}
-              </button>
-            </div>
-          </div>
-        </nav>
-
-        {mobileOpen && (
-          <div
-            className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-7 bg-bg px-6 pt-16 md:hidden"
-            role="dialog"
-            aria-modal="true"
-          >
-            <a href={homeHref} onClick={closeMobile} className="font-serif text-[1.75rem] font-light text-text transition-colors hover:text-accent">
-              {t("nav.home")}
-            </a>
-            <a href="#fonctionnalites" onClick={closeMobile} className="font-serif text-[1.75rem] font-light text-text transition-colors hover:text-accent">
-              {t("nav.features")}
-            </a>
-            <a href="#interfaces" onClick={closeMobile} className="font-serif text-[1.75rem] font-light text-text transition-colors hover:text-accent">
-              {t("nav.interfaces")}
-            </a>
-            <a href="#tarifs" onClick={closeMobile} className="font-serif text-[1.75rem] font-light text-text transition-colors hover:text-accent">
-              {t("nav.quote")}
-            </a>
-            <a href={docsHref} onClick={closeMobile} className="inline-flex items-center gap-3 font-serif text-[1.75rem] font-light text-text transition-colors hover:text-accent">
-              <BookOpen className="h-6 w-6" aria-hidden />
-              {t("nav.docs")}
-            </a>
+          }
+          libelles={{ ouvrirMenu: t("nav.menuOpen"), fermerMenu: t("nav.menuClose") }}
+          liens={[
+            { cle: "home", libelle: t("nav.home"), href: homeHref },
+            { cle: "features", libelle: t("nav.features"), href: "#fonctionnalites" },
+            { cle: "interfaces", libelle: t("nav.interfaces"), href: "#interfaces" },
+            { cle: "quote", libelle: t("nav.quote"), href: "#tarifs" },
+            { cle: "docs", libelle: t("nav.docs"), href: docsHref, icone: BookOpen },
+          ]}
+          action={({ fermerMenu, contexte }) => (
             <button
               type="button"
               onClick={() => {
-                closeMobile();
+                fermerMenu();
                 openQuote(null, 600);
               }}
-              className="min-h-11 font-serif text-[1.75rem] font-light text-accent"
+              className={
+                contexte === "barre"
+                  ? "hidden min-h-11 items-center rounded border border-accent bg-accent px-3.5 text-[0.875rem] font-medium text-white transition-colors hover:bg-accent-hover sm:inline-flex"
+                  : "min-h-11 font-serif text-[1.75rem] font-light text-accent"
+              }
             >
               {t("nav.contact")}
             </button>
-            <div className="mt-4 flex items-center gap-4">
-              <LanguageSwitcher />
-              <ThemeToggle />
-            </div>
-          </div>
-        )}
+          )}
+        />
 
         <section className="relative min-h-screen pt-[5.5rem]">
           <div className="absolute inset-0" aria-hidden>

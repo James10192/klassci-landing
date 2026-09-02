@@ -5,6 +5,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ReinscriptionPage } from "@/components/portail/reinscription-page";
 import { routing, type Locale } from "@/i18n/routing";
 import { etablissementsOuverts } from "@/lib/portail/tenants";
+import { identiteEtablissement } from "@/lib/vitrine/etablissements";
 import { buildUniverseMetadata } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
@@ -51,5 +52,11 @@ export default async function PortailEcolePage({
     notFound();
   }
 
-  return <ReinscriptionPage locale={locale} etablissement={etablissement} />;
+  // L'identite est demandee APRES le 404 : une ecole que ce portail ne sert pas
+  // ne doit pas etre interrogee, meme sur un point d'entree public.
+  const identite = await identiteEtablissement(etablissement.code);
+
+  return (
+    <ReinscriptionPage locale={locale} etablissement={etablissement} identite={identite} />
+  );
 }
