@@ -38,6 +38,15 @@ export type LienNav = {
   href: string;
   interne?: boolean;
   icone?: ComponentType<{ className?: string }>;
+  /**
+   * Montre l'icone jusque dans la barre.
+   *
+   * Fausse par defaut : une icone ne coute rien dans un menu vertical, mais
+   * elle coute de la largeur dans une barre horizontale. L'accueil porte six
+   * liens dont trois aux libelles longs (« Universite & Grandes ecoles ») —
+   * avec leurs icones, la barre passait sur deux lignes.
+   */
+  iconeDansLaBarre?: boolean;
   /** Met le lien en avant, pour l'entrée des familles. */
   enAvant?: boolean;
   onClick?: () => void;
@@ -51,26 +60,57 @@ export type LienNav = {
  * fois avec des classes conditionnelles le faisait disparaître du menu sur les
  * petits écrans — là où il est pourtant la seule façon d'y accéder.
  */
+/**
+ * A partir de quelle largeur les liens s'affichent cote a cote.
+ *
+ * L'accueil porte six entrees dont trois aux libelles longs, plus les reglages
+ * et un bouton : a 1024 pixels le bouton sortait de l'ecran. Les pages
+ * produit, avec des libelles courts, tiennent des 1024. Les classes sont
+ * ecrites en toutes lettres — Tailwind ne compile que ce qu'il lit.
+ */
+const SEUILS = {
+  lg: {
+    liens: "hidden items-center gap-1 lg:flex",
+    bascule:
+      "inline-flex h-11 w-11 items-center justify-center rounded border border-border text-text lg:hidden",
+    menu: "fixed inset-0 z-[99] flex flex-col items-center justify-center gap-7 overflow-y-auto bg-bg px-6 py-24 lg:hidden",
+  },
+  xl: {
+    liens: "hidden items-center gap-1 xl:flex",
+    bascule:
+      "inline-flex h-11 w-11 items-center justify-center rounded border border-border text-text xl:hidden",
+    menu: "fixed inset-0 z-[99] flex flex-col items-center justify-center gap-7 overflow-y-auto bg-bg px-6 py-24 xl:hidden",
+  },
+} as const;
+
 type RenduAction = (options: {
   fermerMenu: () => void;
   contexte: "barre" | "menu";
 }) => ReactNode;
 
+/**
+ * `whitespace-nowrap` : un libelle comme « Universite & Grandes ecoles » se
+ * coupait en deux lignes des que la barre se serrait, et la barre fait 57
+ * pixels de haut.
+ */
 const CLASSE_LIEN =
-  "px-3 py-2 text-[0.875rem] font-medium transition-colors";
+  "whitespace-nowrap px-3 py-2 text-[0.875rem] font-medium transition-colors";
 
 export function SiteNav({
   logo,
   liens,
   action,
   libelles,
+  seuilLiens = "lg",
 }: {
   logo: ReactNode;
   liens: LienNav[];
   action?: RenduAction;
   libelles: { ouvrirMenu: string; fermerMenu: string };
+  seuilLiens?: keyof typeof SEUILS;
 }) {
   const [menuOuvert, setMenuOuvert] = useState(false);
+  const seuil = SEUILS[seuilLiens];
 
   useEffect(() => {
     document.body.style.overflow = menuOuvert ? "hidden" : "";
@@ -84,10 +124,11 @@ export function SiteNav({
 
   function contenuLien(lien: LienNav, taille: "barre" | "menu") {
     const Icone = lien.icone;
+    const avecIcone = Icone && (taille === "menu" || lien.iconeDansLaBarre);
 
     return (
       <>
-        {Icone ? (
+        {avecIcone ? (
           <Icone className={taille === "barre" ? "h-4 w-4" : "h-6 w-6"} aria-hidden />
         ) : null}
         {lien.libelle}
@@ -132,9 +173,11 @@ export function SiteNav({
         aria-label="Principale"
       >
         <div className="container flex items-center justify-between gap-6">
-          {logo}
+          {/* shrink-0 : sans lui, le logo est la premiere victime quand la
+              rangee de liens se serre, et il se retrouve rogne. */}
+          <span className="shrink-0">{logo}</span>
 
-          <div className="hidden items-center gap-1 md:flex">
+          <div className={seuil.liens}>
             {liens.map((lien) => rendreLien(lien, "barre"))}
           </div>
 
@@ -147,7 +190,7 @@ export function SiteNav({
             <button
               type="button"
               onClick={() => setMenuOuvert((ouvert) => !ouvert)}
-              className="inline-flex h-11 w-11 items-center justify-center rounded border border-border text-text md:hidden"
+              className={seuil.bascule}
               aria-label={menuOuvert ? libelles.fermerMenu : libelles.ouvrirMenu}
               aria-expanded={menuOuvert}
             >
@@ -163,7 +206,7 @@ export function SiteNav({
 
       {menuOuvert && (
         <div
-          className="fixed inset-0 z-[99] flex flex-col items-center justify-center gap-7 bg-bg px-6 pt-20 md:hidden"
+          className={seuil.menu}
           role="dialog"
           aria-modal="true"
         >

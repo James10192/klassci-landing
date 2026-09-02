@@ -113,7 +113,7 @@ export function CollegeLanding() {
             { cle: "features", libelle: t("nav.features"), href: "#fonctionnalites" },
             { cle: "interfaces", libelle: t("nav.interfaces"), href: "#interfaces" },
             { cle: "quote", libelle: t("nav.quote"), href: "#tarifs" },
-            { cle: "docs", libelle: t("nav.docs"), href: docsHref, icone: BookOpen },
+            { cle: "docs", libelle: t("nav.docs"), href: docsHref, icone: BookOpen, iconeDansLaBarre: true },
           ]}
           action={({ fermerMenu, contexte }) => (
             <button

@@ -80,6 +80,7 @@ export function UniverseHub({ bandeauEtablissements }: { bandeauEtablissements?:
       <SiteNav
         logo={<Logo className="[&_img]:h-9" />}
         libelles={{ ouvrirMenu: nav("menuOpen"), fermerMenu: nav("menuClose") }}
+        seuilLiens="xl"
         liens={[
           { cle: "accueil", libelle: nav("home"), href: homeHref },
           ...DOORS.map(({ key, href, Icon }) => ({
@@ -89,7 +90,7 @@ export function UniverseHub({ bandeauEtablissements }: { bandeauEtablissements?:
             interne: true,
             icone: Icon,
           })),
-          { cle: "docs", libelle: nav("docs"), href: docsHref, icone: BookOpen },
+          { cle: "docs", libelle: nav("docs"), href: docsHref, icone: BookOpen, iconeDansLaBarre: true },
           {
             cle: "inscription",
             libelle: nav("inscription"),

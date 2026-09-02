@@ -40,6 +40,7 @@ export function Nav() {
       libelle: t("docs"),
       href: `/${locale}/docs`,
       icone: BookOpen,
+      iconeDansLaBarre: true,
       onClick: suivre("nav_docs"),
     },
     {
