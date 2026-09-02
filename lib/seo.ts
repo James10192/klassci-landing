@@ -26,6 +26,15 @@ interface SeoInput {
   image?: string;
   /** Retire la page des moteurs. Voir l'usage sur le portail de reinscription. */
   noindex?: boolean;
+  /**
+   * Les langues dans lesquelles cette page existe reellement.
+   *
+   * Par defaut, les deux : la vitrine et la documentation sont traduites. Le
+   * blog, lui, est publie en francais seulement. Declarer une version anglaise
+   * qui n'existe pas romprait la reciprocite qu'exige hreflang — et une grappe
+   * dont un maillon ne repond pas est ecartee en entier.
+   */
+  languesDisponibles?: readonly Locale[];
 }
 
 export function buildUniverseMetadata({
@@ -36,13 +45,19 @@ export function buildUniverseMetadata({
   path,
   image = key ? UNIVERSE_IMAGES[key] : "/img/og/default.png",
   noindex = false,
+  languesDisponibles = routing.locales,
 }: SeoInput): Metadata {
   const normalizedPath = path === "/" ? "" : path;
   const localizedPath = `/${locale}${normalizedPath}`;
   const url = new URL(localizedPath, SITE_URL).toString();
   const imageUrl = new URL(image, SITE_URL).toString();
-  const frenchPath = `/fr${normalizedPath}`;
-  const englishPath = `/en${normalizedPath}`;
+  const langues: Record<string, string> = {};
+  for (const langue of languesDisponibles) {
+    langues[langue] = `/${langue}${normalizedPath}`;
+  }
+  // x-default vise le francais : c'est la langue du marche principal, et
+  // c'est la seule version disponible quand une page n'est pas traduite.
+  langues["x-default"] = langues.fr ?? `/${languesDisponibles[0]}${normalizedPath}`;
 
   return {
     metadataBase: new URL(SITE_URL),
@@ -50,11 +65,7 @@ export function buildUniverseMetadata({
     description,
     alternates: {
       canonical: localizedPath,
-      languages: {
-        fr: frenchPath,
-        en: englishPath,
-        "x-default": frenchPath,
-      },
+      languages: langues,
     },
     openGraph: {
       type: "website",

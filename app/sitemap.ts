@@ -3,7 +3,8 @@ import { join } from "node:path";
 
 import type { MetadataRoute } from "next";
 
-import { source } from "@/lib/source";
+import { articles } from "@/lib/blog";
+import { LANGUE_BLOG, source } from "@/lib/source";
 import { routing } from "@/i18n/routing";
 import { SITE_URL } from "@/lib/site-url";
 
@@ -61,6 +62,7 @@ function alternates(chemin: string) {
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const maintenant = new Date();
+  const liste = articles();
 
   const pagesVitrine = ["", "/universite", "/college", "/lms"];
 
@@ -95,5 +97,27 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }),
   );
 
-  return [...vitrine, ...documentation];
+  // Le blog n'est publie qu'en francais : il n'a donc pas d'alternates. En
+  // declarer un vers une page anglaise inexistante ferait echouer la
+  // verification de reciprocite, et la grappe entiere serait ecartee.
+  const blog: MetadataRoute.Sitemap = [
+    {
+      url: `${SITE_URL}/${LANGUE_BLOG}/blog`,
+      lastModified: liste[0]
+        ? new Date(`${liste[0].donnees.date}T00:00:00Z`)
+        : maintenant,
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
+    },
+    ...liste.map((item) => ({
+      url: `${SITE_URL}/${LANGUE_BLOG}${item.chemin}`,
+      lastModified: new Date(
+        `${item.donnees.dateRevision ?? item.donnees.date}T00:00:00Z`,
+      ),
+      changeFrequency: "monthly" as const,
+      priority: 0.75,
+    })),
+  ];
+
+  return [...vitrine, ...documentation, ...blog];
 }

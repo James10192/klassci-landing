@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { JsonLd } from "@/components/seo/json-ld";
+import { Footer } from "@/components/sections/footer";
 import { UniverseHub } from "@/components/universe/universe-hub";
 import { LogosEtablissements } from "@/components/vitrine/logos-etablissements";
 import { routing, type Locale } from "@/i18n/routing";
@@ -60,6 +61,10 @@ export default async function HomePage({
           <LogosEtablissements etablissements={etablissements} locale={locale} />
         }
       />
+      {/* La page d'accueil n'avait pas de pied de page : la page de plus
+          haute priorite du site ne diffusait son autorite que par cinq liens,
+          contre une vingtaine partout ailleurs. */}
+      <Footer />
     </>
   );
 }

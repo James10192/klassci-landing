@@ -80,11 +80,15 @@ export function buildTechArticle({
     inLanguage: baliseLangue(locale),
     articleSection: rubrique,
     about: aPropos?.map((sujet) => ({ "@type": "Thing", name: sujet })),
-    // A defaut de signature, l'auteur est l'organisation : inventer une
-    // personne serait aussi faux qu'un avis fabrique.
-    author: auteur
-      ? { "@type": "Organization", name: auteur, url: ORGANISATION_ID }
-      : ref(ORGANISATION_ID),
+    // L'auteur. « Equipe KLASSCI » n'est pas une signature : c'est
+    // l'organisation elle-meme, et elle a deja son noeud dans le graphe — la
+    // dupliquer sans identifiant en creerait une seconde, homonyme et
+    // orpheline. Une vraie signature, en revanche, merite un noeud `Person` :
+    // sur un sujet reglementaire, savoir qui ecrit compte.
+    author:
+      auteur && !/klassci/i.test(auteur)
+        ? { "@type": "Person", name: auteur }
+        : ref(ORGANISATION_ID),
     publisher: ref(ORGANISATION_ID),
     datePublished: datePublication,
     dateModified: dateModification ?? datePublication,

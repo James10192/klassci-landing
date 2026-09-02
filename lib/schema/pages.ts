@@ -250,3 +250,130 @@ export async function buildDocGraph(
     buildTechArticle({ ...article, locale, image: IMAGES.default }),
   );
 }
+
+/* ------------------------------------------------------------------ blog */
+
+/**
+ * Ce que le blog ajoute au graphe.
+ *
+ * L'index est une `CollectionPage` qui porte la liste de ses articles : c'est
+ * la forme qui dit « voici un ensemble », et elle permet a un moteur de suivre
+ * la liste sans avoir a la deviner en explorant les liens.
+ *
+ * Chaque article est un `Article` — pas un `TechArticle` : ces textes ne
+ * documentent pas un logiciel, ils expliquent une reglementation et une
+ * pratique de metier. Le type doit dire ce que la page est.
+ */
+
+export interface ArticleBlog {
+  slug: string;
+  chemin: string;
+  donnees: {
+    title: string;
+    description?: string;
+    date: string;
+    dateRevision?: string;
+    auteur: string;
+    theme: string;
+    resume?: string;
+    sources: string[];
+  };
+}
+
+const LIBELLE_RUBRIQUE: Record<string, string> = {
+  lmd: "LMD et enseignement superieur",
+  finance: "Frais et comptabilite",
+  reglementation: "Reglementation",
+  operations: "Operations quotidiennes",
+  achat: "Choisir un outil",
+};
+
+export async function buildBlogIndexGraph(
+  locale: Locale,
+  titre: string,
+  description: string,
+  liste: ArticleBlog[],
+): Promise<JsonLdGraphe> {
+  return graphe(
+    ...(await socle(locale)),
+    buildWebPage({
+      locale,
+      chemin: "/blog",
+      nom: titre,
+      description,
+      image: IMAGES.default,
+      type: "CollectionPage",
+      avecFilAriane: true,
+      // La page n'est pas datee par elle-meme : sa fraicheur est celle de son
+      // article le plus recent, ce qui est vrai et verifiable.
+      dateModification: liste[0]?.donnees.date,
+      mentions: [
+        {
+          "@type": "ItemList",
+          numberOfItems: liste.length,
+          itemListOrder: "https://schema.org/ItemListOrderDescending",
+          itemListElement: liste.map((item, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            url: urlPage(locale, item.chemin),
+            name: item.donnees.title,
+          })),
+        },
+      ],
+    }),
+    buildBreadcrumb(locale, "/blog", [{ nom: "Ressources" }]),
+  );
+}
+
+export async function buildArticleGraph(
+  locale: Locale,
+  article: ArticleBlog,
+): Promise<JsonLdGraphe> {
+  const { donnees, chemin } = article;
+  const rubrique = LIBELLE_RUBRIQUE[donnees.theme] ?? donnees.theme;
+
+  // Les sources citees sont declarees en `citation` : c'est la propriete qui
+  // dit « ce texte s'appuie sur celui-la ». Sur un sujet reglementaire, c'est
+  // le signal d'autorite le plus direct qu'une page puisse emettre — et le
+  // seul que les moteurs de reponse reprennent tel quel.
+  const citations = donnees.sources
+    .map((brut) => {
+      const trouve = brut.match(/^(.*?)\s*[\u2014\u2013-]\s*(https?:\/\/\S+)$/);
+      if (!trouve) return { "@type": "CreativeWork", name: brut };
+      return { "@type": "CreativeWork", name: trouve[1].trim(), url: trouve[2] };
+    })
+    .slice(0, 25);
+
+  return graphe(
+    ...(await socle(locale)),
+    buildWebPage({
+      locale,
+      chemin,
+      nom: donnees.title,
+      description: donnees.description ?? donnees.resume ?? "",
+      image: IMAGES.default,
+      datePublication: donnees.date,
+      dateModification: donnees.dateRevision ?? donnees.date,
+      avecFilAriane: true,
+    }),
+    buildBreadcrumb(locale, chemin, [
+      { nom: "Ressources", chemin: "/blog" },
+      { nom: donnees.title },
+    ]),
+    {
+      ...buildTechArticle({
+        locale,
+        chemin,
+        titre: donnees.title,
+        description: donnees.description ?? donnees.resume,
+        rubrique,
+        datePublication: donnees.date,
+        dateModification: donnees.dateRevision ?? donnees.date,
+        image: IMAGES.default,
+        type: "Article",
+        auteur: donnees.auteur,
+      }),
+      citation: citations.length > 0 ? citations : undefined,
+    },
+  );
+}

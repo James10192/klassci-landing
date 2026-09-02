@@ -783,15 +783,19 @@
         "title": "Product",
         "links": [
           {
-            "label": "Features",
-            "href": "#fonctionnalites"
+            "label": "University and higher education",
+            "href": "/universite"
           },
           {
-            "label": "Pricing",
-            "href": "#tarifs"
+            "label": "Middle and high school",
+            "href": "/college"
           },
           {
-            "label": "Apply online",
+            "label": "Online learning",
+            "href": "/lms"
+          },
+          {
+            "label": "Enrol online",
             "href": "/inscription"
           }
         ]

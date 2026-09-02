@@ -1,5 +1,5 @@
 import { loader } from "fumadocs-core/source";
-import { docs } from "@/.source";
+import { blog, docs } from "@/.source";
 import { i18n } from "@/lib/i18n";
 
 // Fumadocs source loader — exposes getPage / getPages / pageTree.
@@ -14,3 +14,17 @@ export const source = loader({
   source: docs.toFumadocsSource(),
   i18n,
 });
+
+// Le blog. Volontairement sans i18n : le corpus est francais, et il le reste
+// tant qu'il n'est pas traduit par quelqu'un qui connait le sujet. Brancher
+// l'i18n ici ferait servir les memes articles sous `/en/blog/...` par repli —
+// c'est-a-dire du contenu duplique entre deux langues, exactement ce que les
+// balises hreflang sont censees empecher. Un article reglementaire ivoirien
+// mal traduit dessert l'autorite qu'il est cense construire.
+export const sourceBlog = loader({
+  baseUrl: "/blog",
+  source: blog.toFumadocsSource(),
+});
+
+/** La langue dans laquelle le blog est publie. */
+export const LANGUE_BLOG = "fr" as const;

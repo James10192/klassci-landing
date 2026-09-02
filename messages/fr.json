@@ -783,12 +783,16 @@
         "title": "Produit",
         "links": [
           {
-            "label": "Fonctionnalités",
-            "href": "#fonctionnalites"
+            "label": "Université et grandes écoles",
+            "href": "/universite"
           },
           {
-            "label": "Tarifs",
-            "href": "#tarifs"
+            "label": "Collège et lycée",
+            "href": "/college"
+          },
+          {
+            "label": "Apprentissage en ligne",
+            "href": "/lms"
           },
           {
             "label": "S'inscrire en ligne",
@@ -800,15 +804,19 @@
         "title": "Ressources",
         "links": [
           {
+            "label": "Guides et ressources",
+            "href": "/blog"
+          },
+          {
             "label": "Documentation",
             "href": "/docs"
           },
           {
-            "label": "API Reference",
+            "label": "Référence API",
             "href": "/docs/api-reference"
           },
           {
-            "label": "Changelog",
+            "label": "Journal des versions",
             "href": "/docs/changelog"
           }
         ]
