@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 
+import { ChromeBlog } from "@/components/blog/chrome-blog";
 import { Footer } from "@/components/sections/footer";
 import { JsonLd } from "@/components/seo/json-ld";
 import { routing, type Locale } from "@/i18n/routing";
@@ -68,6 +69,7 @@ export default async function IndexBlog({
   return (
     <>
       <JsonLd graph={graphe} />
+      <ChromeBlog locale={LANGUE_BLOG} />
       <main className="container py-section">
         <header className="max-w-[52rem]">
           <p className="font-mono text-[0.72rem] uppercase tracking-[0.08em] text-text-muted">

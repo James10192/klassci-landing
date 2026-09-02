@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 
 import { composantsBlog } from "@/components/blog/mdx";
+import { ChromeBlog } from "@/components/blog/chrome-blog";
 import { Footer } from "@/components/sections/footer";
 import { JsonLd } from "@/components/seo/json-ld";
 import {
@@ -75,6 +76,7 @@ export default async function PageArticle({ params }: Params) {
     <>
       <JsonLd graph={graphe} />
 
+      <ChromeBlog locale={LANGUE_BLOG} />
       <main className="container py-section">
         <nav aria-label="Fil d'Ariane" className="font-mono text-[0.72rem] uppercase tracking-[0.06em] text-text-muted">
           <Link href={`/${LANGUE_BLOG}`} className="hover:text-accent">
