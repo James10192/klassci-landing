@@ -23,7 +23,7 @@
  */
 
 import { readFileSync, readdirSync, statSync, existsSync } from "node:fs";
-import { join, relative } from "node:path";
+import { join, relative, sep as sepChemin } from "node:path";
 
 const RACINE = new URL("..", import.meta.url).pathname;
 
@@ -186,6 +186,84 @@ function controlerTextesAlternatifs() {
     }
   }
   if (!manquants) ok("toutes les images portent un attribut alt");
+}
+
+
+/**
+ * Les liens internes du contenu editorial.
+ *
+ * Un lien casse dans un article n'echoue nulle part : la page se construit,
+ * elle s'affiche, et seul le lecteur qui clique tombe sur un 404. Or ces liens
+ * sont ecrits a la main dans du MDX, souvent par quelqu'un — ou quelque chose
+ * — qui n'a pas la carte du site en tete.
+ *
+ * Le prefixe de langue est verifie au passage : `/docs/x` sans prefixe repond
+ * 307, ce qui dilue le lien et coute un aller-retour au lecteur.
+ */
+function controlerLiensInternes() {
+  const routesFixes = new Set([
+    "/fr", "/en",
+    "/fr/universite", "/en/universite",
+    "/fr/college", "/en/college",
+    "/fr/lms", "/en/lms",
+    "/fr/blog", "/fr/docs", "/en/docs",
+    "/fr/inscription", "/en/inscription",
+  ]);
+
+  const ajouterDepuis = (dossier, prefixe, langues) => {
+    for (const fichier of fichiers(dossier, /\.mdx$/)) {
+      const relatif = relative(join(RACINE, dossier), fichier)
+        .split(sepChemin)
+        .join("/")
+        .replace(/\.en\.mdx$/, "")
+        .replace(/\.mdx$/, "")
+        .replace(/\/index$/, "");
+      for (const langue of langues) {
+        routesFixes.add(`/${langue}${prefixe}${relatif ? `/${relatif}` : ""}`);
+      }
+    }
+  };
+  ajouterDepuis("content/docs", "/docs", ["fr", "en"]);
+  ajouterDepuis("content/blog", "/blog", ["fr"]);
+  ajouterDepuis("content/institutionnel", "", ["fr", "en"]);
+
+  let casses = 0;
+  let liensVerifies = 0;
+  let actifsVerifies = 0;
+
+  for (const fichier of [
+    ...fichiers("content/blog", /\.mdx$/),
+    ...fichiers("content/docs", /\.mdx$/),
+  ]) {
+    const source = lire(fichier);
+
+    for (const trouve of source.matchAll(/(!?)\[[^\]]*\]\((\/[^)#\s]*)(#[^)]*)?\)/g)) {
+      const estImage = trouve[1] === "!";
+      const cible = trouve[2].replace(/\/$/, "");
+
+      // Une ressource — image, video, fichier — se verifie sur le disque, pas
+      // dans la table des routes. Une capture manquante dans un guide est un
+      // cadre vide chez le lecteur, et rien ne l'aurait signale.
+      if (estImage || /\.(png|jpe?g|svg|webp|avif|gif|pdf|mp4|xlsx?|csv)$/i.test(cible)) {
+        actifsVerifies += 1;
+        if (!existsSync(join(RACINE, "public", cible))) {
+          casses += 1;
+          echec("liens", `${court(fichier)} affiche ${cible}, absent de public/`);
+        }
+        continue;
+      }
+
+      liensVerifies += 1;
+      if (!routesFixes.has(cible)) {
+        casses += 1;
+        echec("liens", `${court(fichier)} pointe vers ${cible}, qui ne correspond a aucune page`);
+      }
+    }
+  }
+
+  if (!casses) {
+    ok(`${liensVerifies} liens internes et ${actifsVerifies} ressources du contenu resolvent tous`);
+  }
 }
 
 /* ------------------------------------------------------ controles en ligne */
@@ -352,6 +430,7 @@ async function principal() {
   controlerSitemapEtRobots();
   controlerFichiersAttendus();
   controlerTextesAlternatifs();
+  controlerLiensInternes();
 
   if (base) await controlerEnLigne(base);
 
