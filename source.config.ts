@@ -51,6 +51,38 @@ export const blog = defineDocs({
   },
 });
 
+/**
+ * Les pages institutionnelles.
+ *
+ * A propos, securite, mentions legales, confidentialite : quatre pages qui ne
+ * sont ni de la documentation produit ni des articles. Elles ont leur propre
+ * collection plutot qu'un dossier de plus sous `content/docs`, parce qu'elles
+ * ne partagent rien avec la documentation — ni la barre laterale, ni le plan,
+ * ni le fil de lecture — et qu'elles se rendent dans la colonne de lecture du
+ * blog.
+ *
+ * Contrairement au blog, elles sont TRADUITES : une politique de
+ * confidentialite qui n'existe qu'en francais laisse l'anglophone sans reponse
+ * sur le traitement de ses propres donnees. Le suffixe `.en.mdx` suffit, comme
+ * pour la documentation.
+ *
+ * `dateMaj` est obligatoire, et c'est le seul champ ajoute au contrat commun.
+ * Une politique de confidentialite sans date de derniere mise a jour ne vaut
+ * rien : le lecteur ne peut pas savoir si ce qu'il lit decrit encore le
+ * traitement en cours, et l'autorite de controle non plus.
+ */
+export const institutionnel = defineDocs({
+  dir: "content/institutionnel",
+  docs: {
+    schema: frontmatterSchema.extend({
+      /** Date de derniere mise a jour, affichee en tete de page. */
+      dateMaj: dateIso,
+      /** Le chapeau affiche sous le titre. */
+      resume: z.string().optional(),
+    }),
+  },
+});
+
 export default defineConfig({
   mdxOptions: {
     // Order matters: remarkHeading runs first to assign data.hProperties.id

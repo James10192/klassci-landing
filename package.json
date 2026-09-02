@@ -8,7 +8,12 @@
     "start": "next start",
     "lint": "next lint",
     "tsc": "tsc --noEmit",
-    "verifier:amortisseur": "node --experimental-strip-types --conditions=react-server scripts/verifier-amortisseur.mjs"
+    "verifier:amortisseur": "node --experimental-strip-types --conditions=react-server scripts/verifier-amortisseur.mjs",
+    "verifier:seo": "node scripts/verifier-seo.mjs",
+    "verifier:seo:prod": "node scripts/verifier-seo.mjs --url https://www.klassci.com",
+    "verifier:schema": "node scripts/verifier-donnees-structurees.mjs",
+    "verifier:budget": "node scripts/verifier-budget.mjs",
+    "verifier": "pnpm tsc && pnpm verifier:seo && pnpm build && pnpm verifier:schema && pnpm verifier:budget"
   },
   "dependencies": {
     "@types/mdx": "^2.0.13",

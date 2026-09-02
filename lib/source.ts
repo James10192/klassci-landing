@@ -1,5 +1,5 @@
 import { loader } from "fumadocs-core/source";
-import { blog, docs } from "@/.source";
+import { blog, docs, institutionnel } from "@/.source";
 import { i18n } from "@/lib/i18n";
 
 // Fumadocs source loader — exposes getPage / getPages / pageTree.
@@ -24,6 +24,21 @@ export const source = loader({
 export const sourceBlog = loader({
   baseUrl: "/blog",
   source: blog.toFumadocsSource(),
+});
+
+// Les pages institutionnelles : a propos, securite, mentions legales,
+// confidentialite. Traduites, donc chargees avec la meme configuration i18n que
+// la documentation — un fichier `<nom>.en.mdx` sert la version anglaise, et le
+// fichier francais fait office de repli tant qu'elle n'existe pas.
+//
+// `baseUrl` vaut la racine : ces pages vivent a `/a-propos`, pas sous un
+// prefixe de rubrique. Les ranger sous `/legal` ou `/entreprise` aurait ajoute
+// un segment que personne ne tape et qui n'apporte rien — une politique de
+// confidentialite se cherche par son nom.
+export const sourceInstitutionnel = loader({
+  baseUrl: "/",
+  source: institutionnel.toFumadocsSource(),
+  i18n,
 });
 
 /** La langue dans laquelle le blog est publie. */
