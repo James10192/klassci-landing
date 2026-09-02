@@ -24,12 +24,19 @@ export function Logo({
       className={`inline-flex items-center gap-2 ${className}`}
       aria-label="KLASSCI"
     >
+      {/* `priority` posait un `link rel=preload fetchpriority=high` sur toutes
+          les pages, en concurrence directe avec la vraie image LCP. Le logo
+          reste charge sans attendre le defilement — `loading="eager"` — mais
+          il ne prend plus la bande passante du premier rendu. `sizes` evite
+          par ailleurs de telecharger une image de 469 pixels pour l'afficher
+          sur 73. */}
       <Image
         src="/img/logo-klassci-full.png"
         alt="KLASSCI"
         width={469}
         height={179}
-        priority
+        sizes="80px"
+        loading="eager"
         className={`h-7 w-auto ${filterClass}`}
       />
     </Link>

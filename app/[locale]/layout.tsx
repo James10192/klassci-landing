@@ -53,8 +53,13 @@ const FUMADOCS_LOCALES = [
   { name: "English", locale: "en" },
 ];
 
+// `latin-ext` couvre le polonais, le tcheque, le turc. Le site est en
+// francais et en anglais : le sous-ensemble `latin` (u+00??) porte deja tous
+// les accents dont ces deux langues ont besoin, oe/OE compris. Les charger
+// tous les deux ajoutait quatre fichiers et 57 ko au chemin critique, sur des
+// connexions ou chaque kilo-octet se paie.
 const plexSerif = IBM_Plex_Serif({
-  subsets: ["latin", "latin-ext"],
+  subsets: ["latin"],
   weight: ["300", "400", "500"],
   display: "swap",
   variable: "--font-plex-serif",
@@ -62,7 +67,7 @@ const plexSerif = IBM_Plex_Serif({
 });
 
 const plexSans = IBM_Plex_Sans({
-  subsets: ["latin", "latin-ext"],
+  subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   display: "swap",
   variable: "--font-plex-sans",

@@ -1,17 +1,16 @@
 /**
  * La serialisation du graphe, et le nettoyage qui la precede.
  *
- * Le contenu d'un `<script type="application/ld+json">` est du texte brut :
- * le navigateur n'y decode aucune entite HTML, mais il ferme le script au
- * premier `</script>` rencontre. Une chaine traduite qui contiendrait cette
- * suite — dans une reponse de FAQ, dans une description d'article — sortirait
- * donc du script et deviendrait du HTML executable.
+ * Le contenu d'un `<script type="application/ld+json">` est du texte brut : le
+ * navigateur n'y decode aucune entite HTML, mais il ferme le script au premier
+ * `</script>` rencontre. Une chaine traduite qui contiendrait cette suite —
+ * dans une reponse de FAQ, dans la description d'un article — sortirait donc du
+ * script et deviendrait du HTML executable.
  *
- * On echappe `<`, `>` et `&` en sequences JSON `\uXXXX`. Elles sont invisibles
- * pour un analyseur JSON, qui les redecode en caracteres, et inoffensives pour
- * l'analyseur HTML, qui n'y voit plus de balise. U+2028 et U+2029 sont
- * echappes en prime : ils sont valides en JSON mais rompent un litteral
- * JavaScript, ce qui casse tout outil tiers qui relirait la balise par `eval`.
+ * On echappe `<`, `>` et `&` en sequences JSON `\uXXXX` : invisibles pour un
+ * analyseur JSON, qui les redecode en caracteres, inoffensives pour l'analyseur
+ * HTML, qui n'y voit plus de balise. U+2028 et U+2029 le sont en prime : ils
+ * sont valides en JSON mais rompent un litteral JavaScript.
  */
 
 import type { JsonLdGraphe, JsonLdNoeud, JsonLdValeur } from "./types";
@@ -25,14 +24,17 @@ const ECHAPPEMENTS: Record<string, string> = {
 };
 
 /**
- * Retire recursivement `undefined`, les chaines vides et les tableaux vides.
+ * Retire recursivement les valeurs absentes, les chaines vides et les tableaux
+ * vides.
  *
  * Une propriete absente est neutre. Une propriete presente et vide est une
  * affirmation fausse : elle dit « cette organisation a une adresse, et cette
  * adresse est la chaine vide ». Les validateurs la signalent, et les systemes
- * qui lisent le graphe la recopient.
+ * qui relisent le graphe la recopient.
  */
-export function nettoyer(valeur: JsonLdValeur | undefined): JsonLdValeur | undefined {
+export function nettoyer(
+  valeur: JsonLdValeur | undefined,
+): JsonLdValeur | undefined {
   if (valeur === undefined || valeur === null) return undefined;
 
   if (typeof valeur === "string") {
@@ -72,7 +74,10 @@ export function graphe(
   const retenus = noeuds
     .filter((noeud): noeud is JsonLdNoeud => Boolean(noeud))
     .map((noeud) => nettoyer(noeud))
-    .filter((noeud): noeud is JsonLdNoeud => noeud !== undefined && typeof noeud === "object" && !Array.isArray(noeud));
+    .filter(
+      (noeud): noeud is JsonLdNoeud =>
+        noeud !== undefined && typeof noeud === "object" && !Array.isArray(noeud),
+    );
 
   return { "@context": "https://schema.org", "@graph": retenus };
 }

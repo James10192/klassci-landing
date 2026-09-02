@@ -1,6 +1,7 @@
 "use client";
 
 import { m } from "framer-motion";
+import Image from "next/image";
 
 interface SdgItem {
   number: string;
@@ -88,12 +89,16 @@ function HeroImpactCard({ item, variant }: { item: SdgItem; variant: SdgVariant 
       className="group relative min-h-[28rem] overflow-hidden rounded-lg border border-border bg-bg-card shadow-[0_24px_70px_rgba(4,83,203,0.14)] [transform-style:preserve-3d]"
     >
       <div className={`absolute inset-x-0 top-0 h-[58%] bg-gradient-to-br ${getTone(item.number, variant)}`} />
-      <img
-        src={SDG_IMAGES[item.number] ?? "/img/impact/odd-04.jpg"}
-        alt=""
-        className="absolute inset-x-0 top-0 h-[58%] w-full object-cover opacity-95 transition duration-700 group-hover:scale-[1.045]"
-        loading="lazy"
-      />
+      <div className="absolute inset-x-0 top-0 h-[58%] overflow-hidden">
+        <Image
+          src={SDG_IMAGES[item.number] ?? "/img/impact/odd-04.jpg"}
+          alt=""
+          fill
+          sizes="(max-width: 768px) 100vw, 33vw"
+          quality={70}
+          className="object-cover opacity-95 transition duration-700 group-hover:scale-[1.045]"
+        />
+      </div>
       <div className="absolute inset-x-0 top-0 h-[58%] bg-[radial-gradient(circle_at_18%_18%,rgba(255,255,255,0.42),transparent_32%),linear-gradient(180deg,transparent,rgba(0,0,0,0.18))]" />
 
       <div className="absolute left-5 top-5 flex items-center gap-2 text-white">
@@ -129,11 +134,13 @@ function SpotlightImpactCard({ item, variant }: { item: SdgItem; variant: SdgVar
     >
       <div className="relative h-36 overflow-hidden">
         <div className={`absolute inset-0 bg-gradient-to-br ${getTone(item.number, variant)} opacity-90`} />
-        <img
+        <Image
           src={SDG_IMAGES[item.number] ?? "/img/impact/odd-04.jpg"}
           alt=""
-          className="absolute inset-0 h-full w-full object-cover opacity-90 transition duration-700 group-hover:scale-[1.06]"
-          loading="lazy"
+          fill
+          sizes="(max-width: 768px) 50vw, 25vw"
+          quality={70}
+          className="object-cover opacity-90 transition duration-700 group-hover:scale-[1.06]"
         />
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.02),rgba(0,0,0,0.24))]" />
         <span className="absolute left-4 top-4 rounded border border-white/35 bg-black/20 px-2.5 py-1.5 font-mono text-[0.72rem] font-semibold text-white backdrop-blur-md">
@@ -162,11 +169,15 @@ function CompactImpactCard({ item, variant }: { item: SdgItem; variant: SdgVaria
       <div className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${getTone(item.number, variant)}`} />
       <div className="flex items-start gap-3">
         <div className="relative h-14 w-14 flex-shrink-0 overflow-hidden rounded border border-border bg-bg-alt">
-          <img
+          {/* Vignette de 56 pixels : elle telechargeait jusqu'ici un JPEG de
+              164 ko pour l'afficher dans un carre de la taille d'un ongle. */}
+          <Image
             src={SDG_IMAGES[item.number] ?? "/img/impact/odd-04.jpg"}
             alt=""
+            width={56}
+            height={56}
+            quality={70}
             className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
-            loading="lazy"
           />
         </div>
         <div className="min-w-0">

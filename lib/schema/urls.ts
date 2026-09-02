@@ -2,22 +2,23 @@
  * Les adresses du graphe, construites une seule fois et de la meme maniere.
  *
  * Le prefixe de langue est systematique sur ce site (`localePrefix: "always"`),
- * donc toute URL de page en porte un. Les `@id` d'entites, eux, n'en portent
- * jamais : l'organisation KLASSCI ne change pas selon la langue de la page qui
- * la decrit.
+ * donc toute adresse de page en porte un. Les `@id` d'entites, eux, n'en
+ * portent jamais : l'organisation KLASSCI ne change pas selon la langue de la
+ * page qui la decrit.
  */
 
 import type { Locale } from "@/i18n/routing";
 
 import { LANGUE_BCP47, SITE_URL } from "./constantes";
 
-/** L'URL absolue d'une page, prefixe de langue compris. `/universite` -> `.../fr/universite`. */
+/** L'adresse absolue d'une page, prefixe de langue compris. */
 export function urlPage(locale: Locale, chemin: string): string {
-  const normalise = chemin === "/" ? "" : chemin.startsWith("/") ? chemin : `/${chemin}`;
+  const normalise =
+    chemin === "/" ? "" : chemin.startsWith("/") ? chemin : `/${chemin}`;
   return `${SITE_URL}/${locale}${normalise}`;
 }
 
-/** L'URL absolue d'une ressource statique (image, video). Sans prefixe de langue. */
+/** L'adresse absolue d'une ressource statique. Sans prefixe de langue. */
 export function urlActif(chemin: string): string {
   return `${SITE_URL}${chemin.startsWith("/") ? chemin : `/${chemin}`}`;
 }
@@ -42,7 +43,7 @@ export function idFaq(locale: Locale, chemin: string): string {
   return `${urlPage(locale, chemin)}#faq`;
 }
 
-/** Le `@id` de l'article d'une page de documentation. */
+/** Le `@id` de l'article d'une page de documentation ou de blog. */
 export function idArticle(locale: Locale, chemin: string): string {
   return `${urlPage(locale, chemin)}#article`;
 }

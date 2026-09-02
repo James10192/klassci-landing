@@ -19,6 +19,7 @@ import { Footer } from "@/components/sections/footer";
 import { SdgImpactGrid } from "@/components/universe/sdg-impact-grid";
 import { Link } from "@/i18n/navigation";
 import type { CollegePlanKey } from "@/lib/college-pricing";
+import Image from "next/image";
 
 interface RoleItem {
   title: string;
@@ -65,11 +66,12 @@ function CollegeLogo({
 }) {
   return (
     <span className={`inline-flex w-fit flex-col items-center ${className}`}>
-      <img
+      <Image
         src="/img/college/logo-klassci-college.png"
         alt="KLASSCI"
         width={imageWidth}
         height={imageHeight}
+        sizes={`${imageWidth}px`}
         className="block object-contain"
         style={{ width: imageWidth, height: imageHeight }}
       />
@@ -200,7 +202,15 @@ export function CollegeLanding() {
                   className="w-[42rem] max-w-[82vw] flex-shrink-0 overflow-hidden rounded-lg border border-border bg-bg-card shadow-[0_10px_30px_rgba(4,83,203,0.10)]"
                 >
                   <div className="aspect-[16/9] bg-white p-2">
-                    <img src={item.src} alt="" className="h-full w-full object-contain" />
+                    <Image
+                      src={item.src}
+                      alt=""
+                      width={1440}
+                      height={1000}
+                      sizes="(max-width: 768px) 82vw, 42rem"
+                      quality={70}
+                      className="h-full w-full object-contain"
+                    />
                   </div>
                   <figcaption className="border-t border-border px-4 py-2 text-[0.78rem] font-mono uppercase tracking-[0.06em] text-text-muted">
                     {t(`heroStrip.items.${item.key}`)}
@@ -264,7 +274,15 @@ export function CollegeLanding() {
                         : "min-w-0 overflow-hidden rounded-lg border border-border bg-bg-alt"
                     }
                   >
-                    <img src={shot.image} alt={shot.alt} className="h-full w-full object-contain" />
+                    <Image
+                      src={shot.image}
+                      alt={shot.alt}
+                      width={shot.format === "mobile" ? 390 : 1440}
+                      height={shot.format === "mobile" ? 844 : 1000}
+                      sizes={shot.format === "mobile" ? "(max-width: 768px) 60vw, 18rem" : "(max-width: 1024px) 100vw, 50vw"}
+                      quality={70}
+                      className="h-full w-full object-contain"
+                    />
                   </div>
                   <figcaption className="p-2">
                   <h3 className="font-serif text-2xl font-light text-text">{shot.title}</h3>

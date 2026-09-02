@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { LmsPage } from "@/components/lms/lms-page";
-import { StructuredData } from "@/components/seo/structured-data";
+import { JsonLd } from "@/components/seo/json-ld";
 import { routing, type Locale } from "@/i18n/routing";
 import { buildUniverseMetadata } from "@/lib/seo";
+import { buildEditionGraph } from "@/lib/schema/pages";
 
 export async function generateMetadata({
   params,
@@ -31,11 +32,16 @@ export default async function LearningPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = await getTranslations({ locale, namespace: "lms.meta" });
+
+  const safeLocale = routing.locales.includes(locale as Locale)
+    ? (locale as Locale)
+    : routing.defaultLocale;
+  // Aucune FAQ n'est passee ici : cette page n'en affiche pas.
+  const graphe = await buildEditionGraph("lms", safeLocale);
 
   return (
     <>
-      <StructuredData description={t("description")} />
+      <JsonLd graph={graphe} />
       <LmsPage />
     </>
   );

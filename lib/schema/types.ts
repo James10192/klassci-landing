@@ -3,9 +3,9 @@
  *
  * On ne modelise pas schema.org au type pres : le vocabulaire compte des
  * milliers de proprietes, il bouge, et un type exhaustif se perimerait plus
- * vite qu'il ne rendrait service. Ce qu'on veut garantir ici est plus etroit
- * et plus utile : qu'un noeud soit serialisable, qu'il porte un `@type`, et
- * qu'un `@id` reference soit ecrit de la seule maniere admise.
+ * vite qu'il ne rendrait service. Ce qu'on garantit ici est plus etroit et
+ * plus utile : qu'un noeud soit serialisable, qu'il porte un `@type`, et
+ * qu'une reference `@id` s'ecrive de la seule maniere admise.
  */
 
 export type JsonLdValeur =

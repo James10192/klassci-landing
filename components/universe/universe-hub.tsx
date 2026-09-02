@@ -208,14 +208,19 @@ export function UniverseHub({ bandeauEtablissements }: { bandeauEtablissements?:
                 transition={{ type: "spring", stiffness: 170, damping: 26 }}
                 className="group relative min-h-[28rem] overflow-hidden rounded-lg border border-border bg-[#08152d] shadow-[0_24px_75px_rgba(4,83,203,0.14)] outline-none [transform-style:preserve-3d] md:min-h-0"
               >
-                <img
+                {/* Le parent porte deja `relative overflow-hidden` : `fill`
+                    fonctionne sans changer le balisage, et l'image passe enfin
+                    par l'optimiseur — 726 ko de PNG deviennent 8 ko d'AVIF. */}
+                <Image
                   src={image}
                   alt=""
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  quality={70}
                   className={[
-                    "absolute inset-0 h-full w-full object-cover object-top transition duration-700",
+                    "object-cover object-top transition duration-700",
                     isMuted ? "scale-[1.01] opacity-45 grayscale" : "scale-100 opacity-75 group-hover:scale-[1.055] group-hover:opacity-95",
                   ].join(" ")}
-                  loading="lazy"
                 />
                 <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(8,21,45,0.04),rgba(8,21,45,0.86))]" />
                 <div className={`absolute inset-0 bg-gradient-to-br ${tone} transition-opacity duration-500 ${isActive ? "opacity-20" : "opacity-50"}`} />

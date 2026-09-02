@@ -5,6 +5,7 @@ import { useCallback, useState } from "react";
 
 import { track } from "@/lib/analytics/track";
 import { FeatureModal, type FeatureKey } from "./feature-modal";
+import Image from "next/image";
 
 interface BigFeature {
   key: FeatureKey;
@@ -73,11 +74,17 @@ export function FeaturesBig() {
                   imageRight ? "lg:order-2" : "lg:order-1"
                 }`}
               >
-                <img
+                {/* Sans width/height, la hauteur reste inconnue jusqu'au
+                    decodage : la section se decale sous les yeux du lecteur.
+                    Les captures source font toutes 1874x925. */}
+                <Image
                   src={feature.image}
                   alt={feature.alt}
+                  width={1874}
+                  height={925}
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  quality={72}
                   className="h-auto w-full"
-                  loading="lazy"
                 />
               </div>
 

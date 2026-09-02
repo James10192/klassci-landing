@@ -25,13 +25,26 @@ export default function robots(): MetadataRoute.Robots {
         // buildUniverseMetadata couvre ce qui est malgre tout recupere — un
         // lien partage, un robot qui ignore ce fichier — pas ce qui est
         // liste ici.
+        //
+        // Les motifs sont ancres par `$` ou suivis d'une barre oblique. Sans
+        // cet ancrage, `/*/inscription` est un prefixe au sens de la
+        // specification : il interdisait aussi
+        // /fr/docs/secretaire/inscriptions et sa version anglaise — le guide
+        // le plus dense du site, quatre mille mots sur la facon d'inscrire un
+        // etudiant, et precisement la page qui repond a la question que les
+        // secretariats tapent dans un moteur. Elle etait fermee au crawl par
+        // effet de bord.
         disallow: [
           "/api/",
           "/login",
-          "/inscription",
-          "/*/inscription",
-          "/reinscription",
-          "/*/reinscription",
+          "/inscription$",
+          "/inscription/",
+          "/*/inscription$",
+          "/*/inscription/",
+          "/reinscription$",
+          "/reinscription/",
+          "/*/reinscription$",
+          "/*/reinscription/",
         ],
       },
     ],

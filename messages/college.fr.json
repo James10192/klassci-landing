@@ -1,7 +1,7 @@
 {
   "college": {
     "meta": {
-      "title": "KLASSCI College, gestion complète des collèges et lycées",
+      "title": "Logiciel de gestion pour collèges et lycées",
       "description": "KLASSCI College centralise inscriptions, frais, notes, bulletins, présences, emploi du temps et espaces parents pour les collèges et lycées."
     },
     "nav": {
@@ -149,15 +149,51 @@
       "title": "Un collège plus vert, plus connecté et plus responsable au quotidien.",
       "intro": "KLASSCI College aide les établissements à réduire le papier, fluidifier la relation école-famille et renforcer la traçabilité des décisions. Cette transformation contribue à 9 Objectifs de Développement Durable des Nations Unies.",
       "items": [
-        { "number": "04", "name": "Éducation de qualité", "text": "Suivi plus régulier des notes, présences, bulletins et informations utiles aux familles." },
-        { "number": "05", "name": "Égalité entre les sexes", "text": "Même accès numérique aux informations scolaires pour les élèves, parents et personnels habilités." },
-        { "number": "08", "name": "Travail décent", "text": "Moins de ressaisie pour les équipes administratives et plus de temps pour accompagner les familles." },
-        { "number": "09", "name": "Innovation", "text": "Digitalisation progressive des processus scolaires sans multiplier les outils." },
-        { "number": "10", "name": "Inégalités réduites", "text": "Information mieux partagée entre établissement et familles, avec des comptes adaptés à chaque acteur." },
-        { "number": "12", "name": "Consommation responsable", "text": "Réduction concrète du papier grâce aux reçus, bulletins, attestations et exports numériques." },
-        { "number": "13", "name": "Action climat", "text": "Moins d'impressions répétées, moins de pertes de documents et des démarches plus sobres." },
-        { "number": "16", "name": "Institutions efficaces", "text": "Meilleure traçabilité des paiements, présences, notes et décisions administratives." },
-        { "number": "17", "name": "Partenariats", "text": "Collaboration plus fluide entre école, parents, enseignants, élèves et partenaires." }
+        {
+          "number": "04",
+          "name": "Éducation de qualité",
+          "text": "Suivi plus régulier des notes, présences, bulletins et informations utiles aux familles."
+        },
+        {
+          "number": "05",
+          "name": "Égalité entre les sexes",
+          "text": "Même accès numérique aux informations scolaires pour les élèves, parents et personnels habilités."
+        },
+        {
+          "number": "08",
+          "name": "Travail décent",
+          "text": "Moins de ressaisie pour les équipes administratives et plus de temps pour accompagner les familles."
+        },
+        {
+          "number": "09",
+          "name": "Innovation",
+          "text": "Digitalisation progressive des processus scolaires sans multiplier les outils."
+        },
+        {
+          "number": "10",
+          "name": "Inégalités réduites",
+          "text": "Information mieux partagée entre établissement et familles, avec des comptes adaptés à chaque acteur."
+        },
+        {
+          "number": "12",
+          "name": "Consommation responsable",
+          "text": "Réduction concrète du papier grâce aux reçus, bulletins, attestations et exports numériques."
+        },
+        {
+          "number": "13",
+          "name": "Action climat",
+          "text": "Moins d'impressions répétées, moins de pertes de documents et des démarches plus sobres."
+        },
+        {
+          "number": "16",
+          "name": "Institutions efficaces",
+          "text": "Meilleure traçabilité des paiements, présences, notes et décisions administratives."
+        },
+        {
+          "number": "17",
+          "name": "Partenariats",
+          "text": "Collaboration plus fluide entre école, parents, enseignants, élèves et partenaires."
+        }
       ]
     },
     "sales": {
@@ -244,14 +280,55 @@
             "elite": "Élite"
           },
           "rows": [
-            { "key": "capacity", "label": "Effectif conseillé", "essentielle": "", "pro": "", "elite": "" },
-            { "label": "Élèves, inscriptions, notes et bulletins", "essentielle": "Inclus", "pro": "Inclus", "elite": "Inclus" },
-            { "label": "Paiements et comptabilité", "essentielle": "Simplifiée", "pro": "Complète", "elite": "Complète" },
-            { "label": "Emplois du temps et présences", "essentielle": "Essentiel", "pro": "Inclus", "elite": "Inclus" },
-            { "label": "Application parents", "essentielle": "Standard", "pro": "Incluse", "elite": "Incluse" },
-            { "label": "Tableaux de bord et statistiques", "essentielle": "Standard", "pro": "Avancés", "elite": "Sur mesure" },
-            { "label": "Gestion RH, API et archivage avancé", "essentielle": "Non inclus", "pro": "Non inclus", "elite": "Inclus" },
-            { "label": "Assistance", "essentielle": "6j/7", "pro": "6j/7", "elite": "6j/7 prioritaire" }
+            {
+              "key": "capacity",
+              "label": "Effectif conseillé",
+              "essentielle": "",
+              "pro": "",
+              "elite": ""
+            },
+            {
+              "label": "Élèves, inscriptions, notes et bulletins",
+              "essentielle": "Inclus",
+              "pro": "Inclus",
+              "elite": "Inclus"
+            },
+            {
+              "label": "Paiements et comptabilité",
+              "essentielle": "Simplifiée",
+              "pro": "Complète",
+              "elite": "Complète"
+            },
+            {
+              "label": "Emplois du temps et présences",
+              "essentielle": "Essentiel",
+              "pro": "Inclus",
+              "elite": "Inclus"
+            },
+            {
+              "label": "Application parents",
+              "essentielle": "Standard",
+              "pro": "Incluse",
+              "elite": "Incluse"
+            },
+            {
+              "label": "Tableaux de bord et statistiques",
+              "essentielle": "Standard",
+              "pro": "Avancés",
+              "elite": "Sur mesure"
+            },
+            {
+              "label": "Gestion RH, API et archivage avancé",
+              "essentielle": "Non inclus",
+              "pro": "Non inclus",
+              "elite": "Inclus"
+            },
+            {
+              "label": "Assistance",
+              "essentielle": "6j/7",
+              "pro": "6j/7",
+              "elite": "6j/7 prioritaire"
+            }
           ]
         },
         "perStudent": {
@@ -273,9 +350,18 @@
         "intro": "L'effort est réparti dans le temps, pendant que notre équipe prépare votre établissement et accompagne vos équipes.",
         "paymentTitle": "Paiement échelonné",
         "paymentSteps": [
-          { "value": "40 %", "label": "À la signature" },
-          { "value": "30 %", "label": "Au déploiement" },
-          { "value": "30 %", "label": "Trente jours après" }
+          {
+            "value": "40 %",
+            "label": "À la signature"
+          },
+          {
+            "value": "30 %",
+            "label": "Au déploiement"
+          },
+          {
+            "value": "30 %",
+            "label": "Trente jours après"
+          }
         ],
         "items": {
           "configuration": "Configuration",
@@ -305,9 +391,18 @@
         "type": "Type d'établissement",
         "typePlaceholder": "Sélectionner",
         "types": [
-          { "value": "college", "label": "Collège" },
-          { "value": "lycee", "label": "Lycée" },
-          { "value": "groupe_scolaire", "label": "Groupe scolaire" }
+          {
+            "value": "college",
+            "label": "Collège"
+          },
+          {
+            "value": "lycee",
+            "label": "Lycée"
+          },
+          {
+            "value": "groupe_scolaire",
+            "label": "Groupe scolaire"
+          }
         ],
         "students": "Nombre d'élèves",
         "plan": "Formule envisagée",

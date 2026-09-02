@@ -18,11 +18,12 @@ import { Security } from "@/components/sections/security";
 import { Support } from "@/components/sections/support";
 import { Testimonials } from "@/components/sections/testimonials";
 import { VideoTestimonial } from "@/components/sections/video-testimonial";
-import { StructuredData } from "@/components/seo/structured-data";
+import { JsonLd } from "@/components/seo/json-ld";
 import { UniversityImpact } from "@/components/universe/university-impact";
 import { LogosEtablissements } from "@/components/vitrine/logos-etablissements";
 import { routing, type Locale } from "@/i18n/routing";
 import { buildUniverseMetadata } from "@/lib/seo";
+import { buildEditionGraph } from "@/lib/schema/pages";
 import { etablissementsVitrine } from "@/lib/vitrine/etablissements";
 
 export async function generateMetadata({
@@ -32,7 +33,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const safeLocale = routing.locales.includes(locale) ? locale : routing.defaultLocale;
-  const t = await getTranslations({ locale: safeLocale, namespace: "metadata" });
+  // Cette page lisait le namespace `metadata`, c'est-a-dire les chaines par
+  // defaut du site. Son titre etait donc « KLASSCI, gestion scolaire
+  // repensee. » : la page produit destinee aux universites et aux grandes
+  // ecoles ne contenait ni « universite », ni « grande ecole », ni « LMD »
+  // dans le seul texte que lit un moteur avant tout le reste.
+  const t = await getTranslations({ locale: safeLocale, namespace: "universite.meta" });
 
   return buildUniverseMetadata({
     locale: safeLocale,
@@ -52,12 +58,26 @@ export default async function UniversitePage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const t = await getTranslations({ locale, namespace: "metadata" });
+  const safeLocale = routing.locales.includes(locale as Locale)
+    ? (locale as Locale)
+    : routing.defaultLocale;
   const etablissements = await etablissementsVitrine();
+
+  // La FAQ n'est declaree QUE sur cette page : c'est la seule qui la rende.
+  // La poser ailleurs serait du balisage sans contenu visible.
+  const faq = await getTranslations({ locale: safeLocale, namespace: "faq" });
+  const graphe = await buildEditionGraph("universite", safeLocale, {
+    faq: faq.raw("items") as Array<{ q: string; a: string }>,
+    etablissements: etablissements.map((e) => ({
+      nom: e.nom,
+      ville: e.ville,
+      logo: e.logo,
+    })),
+  });
 
   return (
     <>
-      <StructuredData description={t("description")} />
+      <JsonLd graph={graphe} />
       <Nav />
       <main>
         <Hero />

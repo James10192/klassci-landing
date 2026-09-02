@@ -3,14 +3,13 @@
  *
  * Ce noeud n'apparait qu'une fois par page, avec le meme `@id` partout, et
  * c'est tout son interet : c'est ce qui permet a un moteur de rassembler la
- * page d'accueil, les trois pages produit et les vingt-quatre pages de
- * documentation sous une seule et meme organisation.
+ * page d'accueil, les trois pages produit, la documentation et le blog sous une
+ * seule et meme organisation.
  *
  * Il ne produit pas de resultat enrichi au sens strict — Google le dit
  * explicitement — mais il alimente le panneau de connaissance, la
- * desambiguisation de la marque, et l'extraction par les moteurs generatifs.
- * C'est le noeud le plus rentable du graphe, et celui qu'il faut remplir en
- * premier.
+ * desambiguisation de la marque et l'extraction par les moteurs de reponse.
+ * C'est le noeud le plus rentable du graphe, et celui a remplir en premier.
  */
 
 import type { Locale } from "@/i18n/routing";
@@ -31,19 +30,18 @@ import { urlActif } from "./urls";
 
 export interface EntreeOrganisation {
   locale: Locale;
-  /** La description marketing, dans la langue de la page. */
+  /** La description, dans la langue de la page. */
   description: string;
-  /** La accroche courte affichee en haut de la page produit. */
+  /** L'accroche courte affichee en haut de la page produit. */
   slogan?: string;
-  /** Les domaines de competence, dans la langue de la page. */
   competences?: string[];
 }
 
 /**
  * Les sujets que KLASSCI maitrise. `knowsAbout` est l'une des rares proprietes
- * qu'un moteur generatif lit litteralement pour decider si une entite fait
- * autorite sur une question. Les valeurs doivent decrire ce que le produit
- * fait reellement, pas une liste de mots-cles.
+ * qu'un moteur de reponse lit litteralement pour decider si une entite fait
+ * autorite sur une question. Les valeurs decrivent ce que le produit fait
+ * reellement, pas une liste de mots-cles.
  */
 const COMPETENCES: Record<Locale, string[]> = {
   fr: [
@@ -69,15 +67,11 @@ const COMPETENCES: Record<Locale, string[]> = {
 };
 
 /**
- * L'editeur, tel que le pied de page et les metadonnees du layout le nomment
- * (`creator: "African Digital Consulting"`).
+ * L'editeur, tel que le pied de page et les metadonnees du layout le nomment.
  *
  * A CONFIRMER : si KLASSCI n'est pas une personne morale distincte mais un
  * produit d'African Digital Consulting, il faut inverser la hierarchie —
- * `Organization` = ADC, et KLASSCI devient une `Brand` referencee par
- * `ADC.brand`. Le graphe ci-dessous suppose deux entites reelles, ce que
- * suggerent les deux presences sociales distinctes (LinkedIn /company/klassci
- * et Facebook African Digit Consulting).
+ * `Organization` devient ADC, et KLASSCI une `Brand` qu'elle reference.
  */
 export function buildPublisher(): JsonLdNoeud {
   return {
@@ -86,7 +80,6 @@ export function buildPublisher(): JsonLdNoeud {
     name: "African Digital Consulting",
     alternateName: "ADC",
     url: SITE_URL,
-    sameAs: ["https://web.facebook.com/p/African-Digit-Consulting-100092649035928/"],
     subOrganization: ref(ORGANISATION_ID),
   };
 }
@@ -113,8 +106,8 @@ export function buildOrganization({
         addressCountry: "CI",
       },
     },
-    // Une adresse partielle est acceptee et reste vraie. Une rue inventee ne
-    // le serait pas : `streetAddress` et `postalCode` restent absents tant que
+    // Une adresse partielle est acceptee et reste vraie. Une rue inventee ne le
+    // serait pas : `streetAddress` et `postalCode` restent absents tant que
     // personne n'a fourni l'adresse reelle du siege.
     address: {
       "@type": "PostalAddress",
@@ -133,8 +126,7 @@ export function buildOrganization({
     image: ref(`${SITE_URL}/#logo`),
     email: COURRIEL_CONTACT,
     // `telephone` reste absent : le seul numero present dans le depot est le
-    // remplissage du formulaire de contact (`+225 07 00 00 00 00`), qui n'est
-    // pas un numero joignable.
+    // remplissage du formulaire de contact, qui n'est pas un numero joignable.
     sameAs: PROFILS_OFFICIELS,
     knowsAbout: competences ?? COMPETENCES[locale],
     areaServed: PAYS_DESSERVIS.map((code) => ({
@@ -146,13 +138,6 @@ export function buildOrganization({
       {
         "@type": "ContactPoint",
         contactType: locale === "fr" ? "service client" : "customer support",
-        email: COURRIEL_CONTACT,
-        availableLanguage: ["fr", "en"],
-        areaServed: PAYS_DESSERVIS,
-      },
-      {
-        "@type": "ContactPoint",
-        contactType: locale === "fr" ? "commercial" : "sales",
         email: COURRIEL_CONTACT,
         availableLanguage: ["fr", "en"],
         areaServed: PAYS_DESSERVIS,

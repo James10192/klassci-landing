@@ -855,5 +855,11 @@
         "texte": "Pick the edition that fits your institution."
       }
     }
+  },
+  "universite": {
+    "meta": {
+      "title": "University management software, LMD and BTS",
+      "description": "Enrolment, grades, report cards, attendance, timetables and tuition fees: KLASSCI runs universities and higher-education schools across West Africa, in BTS and UEMOA LMD."
+    }
   }
 }

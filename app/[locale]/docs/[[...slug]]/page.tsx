@@ -5,6 +5,9 @@ import { setRequestLocale } from "next-intl/server";
 
 import { source } from "@/lib/source";
 import { SITE_URL } from "@/lib/site-url";
+import { JsonLd } from "@/components/seo/json-ld";
+import { buildDocGraph } from "@/lib/schema/pages";
+import { routing, type Locale } from "@/i18n/routing";
 import { getMDXComponents } from "@/mdx-components";
 
 interface PageParams {
@@ -101,8 +104,38 @@ export default async function DocPage({ params }: PageParams) {
   const data = page.data as unknown as MDXPageData;
   const MDX = data.body;
 
+  const safeLocale = routing.locales.includes(locale as Locale)
+    ? (locale as Locale)
+    : routing.defaultLocale;
+  const segments = slug ?? [];
+  const cheminDoc = `/docs${segments.length ? `/${segments.join("/")}` : ""}`;
+
+  // Le fil d'Ariane reprend ce que Fumadocs affiche deja dans la barre
+  // laterale : la documentation, la rubrique, puis la page. C'est le seul
+  // resultat enrichi encore facilement atteignable, et vingt-quatre pages
+  // s'en passaient.
+  const filAriane = [
+    { nom: "Documentation", chemin: "/docs" },
+    ...(segments.length > 1
+      ? [{ nom: segments[0], chemin: `/docs/${segments[0]}` }]
+      : []),
+    { nom: data.title },
+  ];
+
+  const graphe = await buildDocGraph(
+    safeLocale,
+    {
+      chemin: cheminDoc,
+      titre: data.title,
+      description: data.description,
+      rubrique: segments.length > 1 ? segments[0] : undefined,
+    },
+    filAriane,
+  );
+
   return (
     <DocsPage toc={data.toc} full={data.full}>
+      <JsonLd graph={graphe} />
       <DocsTitle>{data.title}</DocsTitle>
       {data.description ? (
         <DocsDescription>{data.description}</DocsDescription>
