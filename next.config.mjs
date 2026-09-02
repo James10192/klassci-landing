@@ -19,6 +19,13 @@ const nextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "klassci.com" },
       { protocol: "https", hostname: "www.klassci.com" },
+      // Les logos des etablissements sont servis par leur propre instance
+      // (`esbtp-yakro.klassci.com/api/public/etablissement/logo`). Les faire
+      // passer par l'optimiseur d'images plutot que de pointer le navigateur
+      // du visiteur directement dessus : l'ecole n'est appelee qu'une fois par
+      // revalidation au lieu d'une fois par visiteur, et l'adresse des
+      // familles ne touche jamais l'instance de l'ecole.
+      { protocol: "https", hostname: "*.klassci.com" },
     ],
   },
 

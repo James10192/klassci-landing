@@ -228,10 +228,11 @@
     }
   },
   "socialProof": {
+    "eyebrow": "01 · Confiance",
     "title": "Adopté par des établissements qui forment des milliers d'étudiants",
     "clients": [
-      { "name": "ESBTP Abidjan", "detail": "2 600+ étudiants · Plan Élite", "logo": "/img/clients/esbtp.png" },
-      { "name": "ESBTP Yamoussoukro", "detail": "2 000+ étudiants · Plan Élite", "logo": "/img/clients/esbtp.png" },
+      { "name": "ESBTP Abidjan", "code": "esbtp-abidjan", "detail": "2 600+ étudiants · Plan Élite", "logo": "/img/clients/esbtp.png" },
+      { "name": "ESBTP Yamoussoukro", "code": "esbtp-yakro", "detail": "2 000+ étudiants · Plan Élite", "logo": "/img/clients/esbtp.png" },
       { "name": "Institut Pascal", "detail": "1 000+ étudiants · Plan Élite", "logo": "/img/clients/institut-pascal.jpg" },
       { "name": "San Andrea School", "detail": "1 200+ étudiants · Plan Élite", "logo": "/img/clients/san-andrea.jpg" },
       { "name": "ITS", "detail": "800+ étudiants · Plan Pro", "logo": "/img/clients/its.jpg" }
@@ -534,7 +535,8 @@
         "title": "Produit",
         "links": [
           { "label": "Fonctionnalités", "href": "#fonctionnalites" },
-          { "label": "Tarifs", "href": "#tarifs" }
+          { "label": "Tarifs", "href": "#tarifs" },
+          { "label": "S'inscrire en ligne", "href": "/inscription" }
         ]
       },
       "resources": {

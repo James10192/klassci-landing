@@ -8,32 +8,50 @@ import PlayCircle from "lucide-react/dist/esm/icons/play-circle";
 import { useLocale, useTranslations } from "next-intl";
 
 import { Footer } from "@/components/sections/footer";
-import { Link } from "@/i18n/navigation";
+import { SiteNav } from "@/components/sections/site-nav";
+import { Logo } from "@/components/ui/logo";
 
 const ICONS = [PlayCircle, Layers, Clock];
 
 export function LmsPage() {
   const t = useTranslations("lms");
+  const nav = useTranslations("nav");
+  const accueil = useTranslations("welcome");
   const locale = useLocale() as "fr" | "en";
-  const docsHref = locale === "fr" ? "/docs/lms" : "/en/docs/lms";
+  const docsHref = `/${locale}/docs/lms`;
   const items = t.raw("items") as Array<{ title: string; description: string }>;
 
   return (
     <>
-      <main className="min-h-screen bg-bg text-text">
-        <nav className="border-b border-border bg-[var(--nav-bg)] backdrop-blur-md">
-          <div className="container flex h-16 items-center justify-between gap-4">
-            <Link href="/" className="font-serif text-xl font-light text-accent">
-              KLASSCI
-            </Link>
-            <a href={docsHref} className="inline-flex min-h-11 items-center gap-2 rounded border border-border px-3 text-sm text-text-secondary hover:text-text">
-              <BookOpen className="h-4 w-4" aria-hidden />
-              {t("docs")}
-            </a>
-          </div>
-        </nav>
+      {/* Cette page n'avait qu'un logo et un lien vers la documentation : pas de
+          retour vers les autres univers, pas de reglage de langue, pas de menu
+          sur telephone. On y arrivait, on n'en repartait plus. */}
+      <SiteNav
+        logo={<Logo />}
+        libelles={{ ouvrirMenu: nav("menuOpen"), fermerMenu: nav("menuClose") }}
+        liens={[
+          { cle: "accueil", libelle: nav("home"), href: `/${locale}` },
+          { cle: "universite", libelle: accueil("doors.universite.name"), href: "/universite", interne: true },
+          { cle: "college", libelle: accueil("doors.college.name"), href: "/college", interne: true },
+          { cle: "docs", libelle: nav("docs"), href: docsHref, icone: BookOpen, iconeDansLaBarre: true },
+        ]}
+        action={({ fermerMenu, contexte }) => (
+          <a
+            href="mailto:contact@klassci.com?subject=KLASSCI%20LMS"
+            onClick={fermerMenu}
+            className={
+              contexte === "barre"
+                ? "hidden min-h-11 items-center rounded border border-accent bg-accent px-3.5 text-[0.875rem] font-medium text-white transition-colors hover:bg-accent-hover sm:inline-flex"
+                : "min-h-11 font-serif text-[1.75rem] font-light text-accent"
+            }
+          >
+            {t("cta")}
+          </a>
+        )}
+      />
 
-        <section className="container grid min-h-[calc(100vh-4rem)] gap-10 py-20 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
+      <main className="min-h-screen bg-bg pt-[57px] text-text">
+        <section className="container grid min-h-[calc(100vh-57px)] gap-10 py-20 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
           <div>
             <p className="mb-5 inline-flex rounded border border-border bg-bg-card px-3 py-1 text-sm text-text-secondary">
               {t("badge")}

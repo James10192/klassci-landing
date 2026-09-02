@@ -5,6 +5,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ReinscriptionPage } from "@/components/portail/reinscription-page";
 import { routing, type Locale } from "@/i18n/routing";
 import { etablissementsOuverts } from "@/lib/portail/tenants";
+import { identitesParCode } from "@/lib/vitrine/etablissements";
 import { buildUniverseMetadata } from "@/lib/seo";
 
 // La liste des etablissements servis vient des variables d'environnement :
@@ -47,5 +48,12 @@ export default async function PortailUniversite({
     redirect(`/${locale}/inscription/universite/${etablissements[0].code}`);
   }
 
-  return <ReinscriptionPage locale={locale} etablissements={etablissements} />;
+  // Les logos viennent des ecoles elles-memes. Une instance injoignable laisse
+  // simplement sa ligne sans logo : le choix reste possible, ce qui est la
+  // seule chose qui compte ici.
+  const identites = await identitesParCode(etablissements.map((ecole) => ecole.code));
+
+  return (
+    <ReinscriptionPage locale={locale} etablissements={etablissements} identites={identites} />
+  );
 }

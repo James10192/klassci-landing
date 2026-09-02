@@ -6,17 +6,15 @@ import BookOpen from "lucide-react/dist/esm/icons/book-open";
 import ChevronDown from "lucide-react/dist/esm/icons/chevron-down";
 import GraduationCap from "lucide-react/dist/esm/icons/graduation-cap";
 import Laptop from "lucide-react/dist/esm/icons/laptop";
-import Menu from "lucide-react/dist/esm/icons/menu";
 import School from "lucide-react/dist/esm/icons/school";
-import X from "lucide-react/dist/esm/icons/x";
 import { m } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState, type ReactNode } from "react";
 
 import { Logo } from "@/components/ui/logo";
-import { LanguageSwitcher } from "@/components/ui/language-switcher";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { SiteNav } from "@/components/sections/site-nav";
 import { UniverseContactDialog } from "@/components/universe/universe-contact-dialog";
+import { SceneProduit } from "@/components/vitrine/scene-produit";
 import { Link } from "@/i18n/navigation";
 import { track } from "@/lib/analytics/track";
 
@@ -57,122 +55,67 @@ const DOORS: Array<{
   },
 ];
 
-export function UniverseHub() {
+/**
+ * Le bandeau des etablissements arrive en PROP et non par un import : il est
+ * rendu sur le serveur, ou vivent les adresses des instances, et traverse cette
+ * frontiere deja construit.
+ */
+export function UniverseHub({ bandeauEtablissements }: { bandeauEtablissements?: ReactNode }) {
   const t = useTranslations("welcome");
   const nav = useTranslations("nav");
   const locale = useLocale() as "fr" | "en";
-  const [mobileOpen, setMobileOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
   const [activeDoor, setActiveDoor] = useState<DoorKey | null>(null);
   const docsHref = `/${locale}/docs`;
   const homeHref = `/${locale}`;
-  const closeMobile = useCallback(() => setMobileOpen(false), []);
   const mainDoors = DOORS.filter((door) => door.key !== "lms");
   const virtualDoor = DOORS.find((door) => door.key === "lms");
-  const openContact = useCallback(() => {
-    setMobileOpen(false);
+  const ouvrirContact = useCallback(() => {
     setContactOpen(true);
     track("cta_click", { location: "hub_nav_contact", locale });
   }, [locale]);
 
-  useEffect(() => {
-    document.body.style.overflow = mobileOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [mobileOpen]);
-
   return (
     <main className="min-h-screen overflow-hidden scroll-smooth bg-bg text-text">
-      <nav className="fixed left-0 right-0 top-0 z-40 border-b border-border bg-[var(--nav-bg)] backdrop-blur-md">
-        <div className="container flex h-16 items-center justify-between gap-4">
-          <Logo className="[&_img]:h-9" />
-          <div className="hidden items-center gap-1 text-sm md:flex">
-            <a href={homeHref} className="px-3 py-2 font-medium text-text-secondary transition-colors hover:text-text">
-              {nav("home")}
-            </a>
-            <Link href="/universite" className="px-3 py-2 font-medium text-text-secondary transition-colors hover:text-text">
-              {t("doors.universite.name")}
-            </Link>
-            <Link href="/college" className="px-3 py-2 font-medium text-text-secondary transition-colors hover:text-text">
-              {t("doors.college.name")}
-            </Link>
-            <Link href="/lms" className="px-3 py-2 font-medium text-text-secondary transition-colors hover:text-text">
-              {t("doors.lms.name")}
-            </Link>
-            <a href={docsHref} className="inline-flex items-center gap-1.5 px-3 py-2 font-medium text-text-secondary transition-colors hover:text-text">
-              <BookOpen className="h-4 w-4" aria-hidden />
-              {nav("docs")}
-            </a>
-          </div>
-          <div className="flex items-center gap-2 text-sm">
-            <LanguageSwitcher className="hidden sm:inline-flex" />
-            <ThemeToggle className="hidden sm:inline-flex" />
-            <button
-              type="button"
-              onClick={openContact}
-              className="hidden min-h-11 items-center rounded border border-accent bg-accent px-3.5 text-sm font-medium text-white transition-all hover:bg-accent-hover sm:inline-flex"
-            >
-              {nav("contact")}
-            </button>
-            <button
-              type="button"
-              onClick={() => setMobileOpen((value) => !value)}
-              className="inline-flex h-11 w-11 items-center justify-center rounded border border-border text-text md:hidden"
-              aria-label={mobileOpen ? nav("menuClose") : nav("menuOpen")}
-              aria-expanded={mobileOpen}
-            >
-              {mobileOpen ? <X className="h-5 w-5" aria-hidden /> : <Menu className="h-5 w-5" aria-hidden />}
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      {mobileOpen && (
-        <div
-          className="fixed inset-0 z-30 flex flex-col items-center justify-center gap-7 bg-bg px-6 pt-20 md:hidden"
-          role="dialog"
-          aria-modal="true"
-        >
-          <a
-            href={homeHref}
-            onClick={closeMobile}
-            className="font-serif text-[1.75rem] font-light text-text transition-colors hover:text-accent"
-          >
-            {nav("home")}
-          </a>
-          {DOORS.map(({ key, href, Icon }) => (
-            <Link
-              key={key}
-              href={href}
-              onClick={closeMobile}
-              className="inline-flex items-center gap-3 font-serif text-[1.75rem] font-light text-text transition-colors hover:text-accent"
-            >
-              <Icon className="h-6 w-6" aria-hidden />
-              {t(`doors.${key}.name`)}
-            </Link>
-          ))}
+      <SiteNav
+        logo={<Logo className="[&_img]:h-9" />}
+        libelles={{ ouvrirMenu: nav("menuOpen"), fermerMenu: nav("menuClose") }}
+        seuilLiens="xl"
+        liens={[
+          { cle: "accueil", libelle: nav("home"), href: homeHref },
+          ...DOORS.map(({ key, href, Icon }) => ({
+            cle: key,
+            libelle: t(`doors.${key}.name`),
+            href,
+            interne: true,
+            icone: Icon,
+          })),
+          { cle: "docs", libelle: nav("docs"), href: docsHref, icone: BookOpen, iconeDansLaBarre: true },
+          {
+            cle: "inscription",
+            libelle: nav("inscription"),
+            href: `/${locale}/inscription`,
+            enAvant: true,
+            onClick: () => track("cta_click", { location: "hub_inscription", locale }),
+          },
+        ]}
+        action={({ fermerMenu, contexte }) => (
           <button
             type="button"
-            onClick={openContact}
-            className="font-serif text-[1.75rem] font-light text-accent transition-colors hover:text-accent-hover"
+            onClick={() => {
+              fermerMenu();
+              ouvrirContact();
+            }}
+            className={
+              contexte === "barre"
+                ? "hidden min-h-11 items-center rounded border border-accent bg-accent px-3.5 text-sm font-medium text-white transition-all hover:bg-accent-hover sm:inline-flex"
+                : "min-h-11 font-serif text-[1.75rem] font-light text-accent"
+            }
           >
-            {nav("contactCta")}
+            {contexte === "barre" ? nav("contact") : nav("contactCta")}
           </button>
-          <a
-            href={docsHref}
-            onClick={closeMobile}
-            className="inline-flex items-center gap-3 font-serif text-[1.75rem] font-light text-text transition-colors hover:text-accent"
-          >
-            <BookOpen className="h-6 w-6" aria-hidden />
-            {nav("docs")}
-          </a>
-          <div className="mt-4 flex items-center gap-4">
-            <LanguageSwitcher />
-            <ThemeToggle />
-          </div>
-        </div>
-      )}
+        )}
+      />
 
       <UniverseContactDialog open={contactOpen} onClose={() => setContactOpen(false)} />
 
@@ -227,34 +170,17 @@ export function UniverseHub() {
             </div>
           </div>
 
-          <div className="relative min-h-[34rem] [perspective:1200px]">
-            <div className="hub-orbit absolute inset-0">
-              <Image
-                src="/img/dashboard/01-dashboard.png"
-                alt=""
-                width={1200}
-                height={760}
-                priority
-                className="absolute left-10 top-4 w-[80%] rounded-lg border border-border bg-bg-card shadow-[0_30px_80px_rgba(4,83,203,0.18)]"
-              />
-              <Image
-                src="/img/college/current-dashboard.png"
-                alt=""
-                width={1200}
-                height={760}
-                className="absolute bottom-8 right-0 w-[74%] rounded-lg border border-border bg-bg-card shadow-[0_24px_70px_rgba(26,26,26,0.16)]"
-              />
-              <div className="absolute bottom-1 left-3 h-64 w-32 rounded-[1.5rem] border-[8px] border-[#111827] bg-white shadow-[0_24px_60px_rgba(0,0,0,0.18)]">
-                <img
-                  src="/img/college/current-mobile-dashboard.png"
-                  alt=""
-                  className="h-full w-full rounded-[1rem] object-cover object-top"
-                />
-              </div>
-            </div>
-          </div>
+          <SceneProduit
+            etiquettes={{
+              pilotage: t("demo.pilotage"),
+              caisse: t("demo.caisse"),
+              mobile: t("demo.mobile"),
+            }}
+          />
         </div>
       </section>
+
+      {bandeauEtablissements}
 
       <section id="univers" className="relative z-10 scroll-mt-20 px-4 pb-20 md:px-6">
         <div className="container mb-7 flex items-end justify-between gap-6">
@@ -373,26 +299,6 @@ export function UniverseHub() {
           clip-path: polygon(8% 10%, 92% 0, 100% 72%, 18% 100%);
         }
 
-        .hub-orbit {
-          transform-style: preserve-3d;
-          transform: rotateX(9deg) rotateY(-10deg);
-          animation: hubOrbit 12s ease-in-out infinite;
-        }
-
-        @keyframes hubOrbit {
-          0%, 100% {
-            transform: rotateX(9deg) rotateY(-10deg);
-          }
-          50% {
-            transform: rotateX(11deg) rotateY(4deg);
-          }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-          .hub-orbit {
-            animation: none;
-          }
-        }
       `}</style>
     </main>
   );

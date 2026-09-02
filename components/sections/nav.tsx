@@ -1,194 +1,78 @@
 "use client";
 
-import { BookOpen, Menu, X } from "lucide-react";
+import BookOpen from "lucide-react/dist/esm/icons/book-open";
 import { useLocale, useTranslations } from "next-intl";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 
+import { SiteNav, type LienNav } from "@/components/sections/site-nav";
 import { Logo } from "@/components/ui/logo";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { LanguageSwitcher } from "@/components/ui/language-switcher";
+import type { CtaLocation } from "@/lib/analytics/events";
 import { track } from "@/lib/analytics/track";
 
-const ANCHOR_LINKS = [
-  { key: "features", href: "#fonctionnalites" },
-  { key: "pricing", href: "#tarifs" },
-  { key: "faq", href: "#faq" },
-  { key: "contact", href: "#contact" },
-] as const;
-
+/**
+ * La barre de l'édition Université.
+ *
+ * Elle ne décrit plus que ses liens : la coquille — hauteur, fond, réglages,
+ * menu mobile — est celle de tout le site (`SiteNav`).
+ *
+ * Les ancres restent ici et n'ont pas été remplacées par les liens vers les
+ * autres univers : cette page compte dix-sept sections, et « Tarifs » ou
+ * « FAQ » y sont la seule façon d'atteindre le bas sans faire défiler une
+ * minute. Le passage d'un univers à l'autre se fait par « Accueil », qui est
+ * précisément la page faite pour ça.
+ */
 export function Nav() {
   const t = useTranslations("nav");
   const locale = useLocale() as "fr" | "en";
-  const [mobileOpen, setMobileOpen] = useState(false);
 
-  const homeHref = `/${locale}`;
-  const docsHref = `/${locale}/docs`;
-  const inscriptionHref = `/${locale}/inscription`;
+  const suivre = useCallback(
+    (endroit: CtaLocation) => () => track("cta_click", { location: endroit, locale }),
+    [locale],
+  );
 
-  useEffect(() => {
-    document.body.style.overflow = mobileOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [mobileOpen]);
-
-  const closeMobile = useCallback(() => setMobileOpen(false), []);
-
-  const handleContactClick = useCallback(() => {
-    track("cta_click", { location: "nav", locale });
-  }, [locale]);
-
-  const handleInscriptionClick = useCallback(() => {
-    track("cta_click", { location: "nav_inscription", locale });
-  }, [locale]);
-
-  const handleDocsClick = useCallback(() => {
-    track("cta_click", { location: "nav_docs", locale });
-  }, [locale]);
+  const liens: LienNav[] = [
+    { cle: "home", libelle: t("home"), href: `/${locale}` },
+    { cle: "features", libelle: t("features"), href: "#fonctionnalites" },
+    { cle: "pricing", libelle: t("pricing"), href: "#tarifs" },
+    { cle: "faq", libelle: t("faq"), href: "#faq" },
+    {
+      cle: "docs",
+      libelle: t("docs"),
+      href: `/${locale}/docs`,
+      icone: BookOpen,
+      iconeDansLaBarre: true,
+      onClick: suivre("nav_docs"),
+    },
+    {
+      cle: "inscription",
+      libelle: t("inscription"),
+      href: `/${locale}/inscription`,
+      enAvant: true,
+      onClick: suivre("nav_inscription"),
+    },
+  ];
 
   return (
-    <>
-      <nav
-        className="fixed top-0 left-0 right-0 z-[100] h-[57px] flex items-center bg-[var(--nav-bg)] border-b border-border backdrop-blur-md backdrop-saturate-150 transition-colors"
-        aria-label="Primary"
-      >
-        <div className="container flex items-center justify-between gap-6">
-          <Logo />
-
-          {/* Desktop links */}
-          <div className="hidden md:flex items-center gap-1">
-            <a
-              href={homeHref}
-              className="px-3 py-2 text-[0.875rem] font-medium text-text-secondary hover:text-text transition-colors"
-            >
-              {t("home")}
-            </a>
-            {ANCHOR_LINKS.map((link) => (
-              <a
-                key={link.key}
-                href={link.href}
-                className="px-3 py-2 text-[0.875rem] font-medium text-text-secondary hover:text-text transition-colors"
-              >
-                {t(link.key)}
-              </a>
-            ))}
-            <a
-              href={docsHref}
-              onClick={handleDocsClick}
-              aria-label={t("docsAria")}
-              className="inline-flex items-center gap-1.5 px-3 py-2 text-[0.875rem] font-medium text-text-secondary hover:text-text transition-colors"
-            >
-              <BookOpen className="h-4 w-4" aria-hidden />
-              {t("docs")}
-            </a>
-            {/* L'inscription en ligne se rejoint par la navigation, pas
-                seulement par un lien qu'on nous a transmis : une famille qui
-                arrive sur klassci.com doit pouvoir la trouver seule. */}
-            <a
-              href={inscriptionHref}
-              onClick={handleInscriptionClick}
-              aria-label={t("inscriptionAria")}
-              className="px-3 py-2 text-[0.875rem] font-medium text-accent hover:text-accent-hover transition-colors"
-            >
-              {t("inscription")}
-            </a>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <LanguageSwitcher className="hidden sm:inline-flex" />
-            <ThemeToggle className="hidden sm:inline-flex" />
-            <a
-              href="#contact"
-              onClick={handleContactClick}
-              className="hidden sm:inline-flex items-center gap-2 px-3.5 py-1.5 text-[0.875rem] font-medium border border-accent bg-accent text-white rounded hover:bg-accent-hover transition-all"
-            >
-              {t("contact")}
-            </a>
-
-            {/* Mobile hamburger — h-10 w-10 = 40px, closer to the 44px iOS guideline */}
-            <button
-              type="button"
-              onClick={() => setMobileOpen((v) => !v)}
-              className="md:hidden inline-flex items-center justify-center h-10 w-10 rounded border border-border text-text"
-              aria-label={mobileOpen ? t("menuClose") : t("menuOpen")}
-              aria-expanded={mobileOpen}
-            >
-              {mobileOpen ? (
-                <X className="h-5 w-5" aria-hidden />
-              ) : (
-                <Menu className="h-5 w-5" aria-hidden />
-              )}
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      {/* Mobile fullscreen menu */}
-      {mobileOpen && (
-        <div
-          className="md:hidden fixed inset-0 z-[99] bg-bg flex flex-col items-center justify-center gap-7 pt-16"
-          role="dialog"
-          aria-modal="true"
+    <SiteNav
+      logo={<Logo />}
+      liens={liens}
+      libelles={{ ouvrirMenu: t("menuOpen"), fermerMenu: t("menuClose") }}
+      action={({ fermerMenu, contexte }) => (
+        <a
+          href="#contact"
+          onClick={() => {
+            fermerMenu();
+            track("cta_click", { location: "nav", locale });
+          }}
+          className={
+            contexte === "barre"
+              ? "hidden min-h-11 items-center gap-2 rounded border border-accent bg-accent px-3.5 text-[0.875rem] font-medium text-white transition-all hover:bg-accent-hover sm:inline-flex"
+              : "min-h-11 font-serif text-[1.75rem] font-light text-accent"
+          }
         >
-          <a
-            href={homeHref}
-            onClick={closeMobile}
-            className="font-serif font-light text-[1.75rem] text-text hover:text-accent transition-colors"
-          >
-            {t("home")}
-          </a>
-          {/* La même mesure que sur le bureau : sans elle, `nav_inscription`
-              ne compterait presque rien sur un marché où le trafic est très
-              majoritairement mobile, et se lirait comme « personne ne clique
-              sur cette entrée » — une donnée fausse sur laquelle on pourrait
-              décider de la retirer. */}
-          <a
-            href={inscriptionHref}
-            onClick={() => {
-              handleInscriptionClick();
-              closeMobile();
-            }}
-            className="font-serif font-light text-[1.75rem] text-text hover:text-accent transition-colors"
-          >
-            {t("inscription")}
-          </a>
-          {ANCHOR_LINKS.map((link) => (
-            <a
-              key={link.key}
-              href={link.href}
-              onClick={closeMobile}
-              className="font-serif font-light text-[1.75rem] text-text hover:text-accent transition-colors"
-            >
-              {t(link.key)}
-            </a>
-          ))}
-          <a
-            href={docsHref}
-            onClick={() => {
-              handleDocsClick();
-              closeMobile();
-            }}
-            className="inline-flex items-center gap-3 font-serif font-light text-[1.75rem] text-text hover:text-accent transition-colors"
-          >
-            <BookOpen className="h-6 w-6" aria-hidden />
-            {t("docs")}
-          </a>
-          <a
-            href="#contact"
-            onClick={() => {
-              handleContactClick();
-              closeMobile();
-            }}
-            className="font-serif font-light text-[1.75rem] text-accent"
-          >
-            {t("contactCta")}
-          </a>
-          <div className="flex items-center gap-4 mt-4">
-            <LanguageSwitcher />
-            <ThemeToggle />
-          </div>
-        </div>
+          {t("contact")}
+        </a>
       )}
-    </>
+    />
   );
 }
