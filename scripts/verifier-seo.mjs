@@ -218,11 +218,35 @@ async function controlerEnLigne(base) {
       echec("en-ligne", "robots.txt ne declare aucun sitemap");
     } else {
       const adresse = ligne.split(/:\s*/).slice(1).join(":").trim();
+      let valide = false;
       try {
         new URL(adresse);
-        ok("robots.txt declare un sitemap valide");
+        valide = true;
       } catch {
-        echec("en-ligne", `l'adresse du sitemap dans robots.txt est invalide : ${JSON.stringify(adresse)}`);
+        echec(
+          "en-ligne",
+          `l'adresse du sitemap dans robots.txt est invalide : ${JSON.stringify(adresse)}`,
+        );
+      }
+
+      // Une adresse syntaxiquement valide ne suffit pas. En production, la
+      // directive valait `Sitemap: https://klassci.com` suivie, a la ligne, de
+      // `/sitemap.xml` : la premiere partie passait le controle, et Google
+      // recuperait la page d'accueil au lieu du plan du site. On va donc
+      // chercher l'adresse declaree et on regarde ce qu'elle renvoie.
+      if (valide) {
+        const cible = await recuperer(adresse);
+        const type = cible.entetes.get("content-type") ?? "";
+        if (cible.statut !== 200) {
+          echec("en-ligne", `le sitemap declare dans robots.txt repond ${cible.statut} : ${adresse}`);
+        } else if (!/xml/i.test(type) && !cible.corps.trimStart().startsWith("<?xml")) {
+          echec(
+            "en-ligne",
+            `l'adresse declaree comme sitemap ne renvoie pas du XML (${type || "type inconnu"}) : ${adresse}`,
+          );
+        } else {
+          ok("robots.txt declare un sitemap qui repond bien un plan de site");
+        }
       }
     }
   }
