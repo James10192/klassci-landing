@@ -39,6 +39,8 @@ export async function generateMetadata({
     title: "Ressources et guides pour les établissements",
     description: DESCRIPTION,
     path: "/blog",
+    flux: `/${LANGUE_BLOG}/blog/rss.xml`,
+    image: "/img/og/blog.png",
   });
 }
 

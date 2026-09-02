@@ -35,6 +35,13 @@ interface SeoInput {
    * dont un maillon ne repond pas est ecartee en entier.
    */
   languesDisponibles?: readonly Locale[];
+  /**
+   * Un flux a annoncer dans l'en-tete, en chemin relatif.
+   *
+   * C'est par cette balise qu'un navigateur, un agregateur ou un robot
+   * decouvrent le flux du blog sans avoir a en deviner l'adresse.
+   */
+  flux?: string;
 }
 
 export function buildUniverseMetadata({
@@ -46,6 +53,7 @@ export function buildUniverseMetadata({
   image = key ? UNIVERSE_IMAGES[key] : "/img/og/default.png",
   noindex = false,
   languesDisponibles = routing.locales,
+  flux,
 }: SeoInput): Metadata {
   const normalizedPath = path === "/" ? "" : path;
   const localizedPath = `/${locale}${normalizedPath}`;
@@ -66,6 +74,7 @@ export function buildUniverseMetadata({
     alternates: {
       canonical: localizedPath,
       languages: langues,
+      ...(flux ? { types: { "application/rss+xml": flux } } : {}),
     },
     openGraph: {
       type: "website",
