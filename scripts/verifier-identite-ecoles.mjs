@@ -131,7 +131,14 @@ function identite(surcharges = {}) {
  */
 function registre(codes, reponses, exclus = "") {
   process.env.REINSCRIPTION_TENANTS = codes.join(",");
-  process.env.VITRINE_EXCLUS = exclus;
+
+  // `null` : la variable n'est pas posée du tout, ce qui n'est pas la même
+  // chose que posée vide — c'est le cas qui a publié « AZERTY ».
+  if (exclus === null) {
+    delete process.env.VITRINE_EXCLUS;
+  } else {
+    process.env.VITRINE_EXCLUS = exclus;
+  }
 
   for (const code of codes) {
     const suffixe = code.replace(/-/g, "_").toUpperCase();
@@ -210,6 +217,39 @@ verifier("l'instance de démonstration est écartée du mur de logos", async () 
     servies.map((e) => e.code),
     ["esbtp-yakro"],
   );
+});
+
+verifier("l'instance de démonstration reste écartée même sans réglage", async () => {
+  // Elle s'est affichée sous le nom « AZERTY » entre deux écoles réelles, sur
+  // la page d'accueil, parce que l'exclusion attendait une variable que
+  // personne n'avait posée. Un réglage dont l'oubli publie quelque chose de
+  // faux est un réglage mal choisi.
+  registre(
+    ["presentation", "esbtp-yakro"],
+    { presentation: identite({ nom: "AZERTY" }), "esbtp-yakro": identite() },
+    null,
+  );
+
+  const servies = await etablissementsVitrine();
+
+  assert.deepEqual(
+    servies.map((e) => e.code),
+    ["esbtp-yakro"],
+  );
+});
+
+verifier("… et une exclusion posée vide n'écarte plus personne", async () => {
+  // C'est ainsi qu'on inclurait délibérément la démonstration : la variable
+  // reste le mécanisme, le défaut n'est qu'un défaut.
+  registre(
+    ["presentation", "esbtp-yakro"],
+    { presentation: identite({ nom: "Démo" }), "esbtp-yakro": identite() },
+    "",
+  );
+
+  const servies = await etablissementsVitrine();
+
+  assert.equal(servies.length, 2);
 });
 
 verifier("… mais garde son identité sur sa propre page d'inscription", async () => {
