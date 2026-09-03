@@ -7,7 +7,7 @@ import { articles } from "@/lib/blog";
 import {
   cheminInstitutionnel,
   pageInstitutionnelle,
-  PAGES_INSTITUTIONNELLES,
+  pagesPubliables,
 } from "@/lib/institutionnel";
 import { LANGUE_BLOG, source } from "@/lib/source";
 import { routing } from "@/i18n/routing";
@@ -124,15 +124,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
   ];
 
-  // Les quatre pages institutionnelles, traduites toutes les deux — elles ont
-  // donc leurs alternates, contrairement au blog. Leur `lastModified` vient de
-  // la date de mise a jour ecrite dans le frontmatter, pas de l'horodatage du
-  // fichier : c'est cette date-la qui est affichee au lecteur, et une
-  // correction de typographie n'a pas a annoncer que les mentions legales ont
-  // change.
+  // Les pages institutionnelles COMPLETES, traduites dans les deux langues —
+  // elles ont donc leurs alternates, contrairement au blog. Celles qui portent
+  // encore un encadre « a completer » restent accessibles mais hors du plan :
+  // on ne declare pas comme identite officielle de l'editeur une page qui dit
+  // elle-meme qu'il lui manque des informations.
+  //
+  // Leur `lastModified` vient de la date de mise a jour ecrite dans le
+  // frontmatter, pas de l'horodatage du fichier : c'est cette date-la qui est
+  // affichee au lecteur, et une correction de typographie n'a pas a annoncer
+  // que les mentions legales ont change.
   const institutionnelles: MetadataRoute.Sitemap = routing.locales.flatMap(
     (locale) =>
-      PAGES_INSTITUTIONNELLES.flatMap((slug) => {
+      pagesPubliables(locale).flatMap((slug) => {
         const page = pageInstitutionnelle(slug, locale);
         if (!page) return [];
 

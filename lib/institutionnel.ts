@@ -1,3 +1,6 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+
 import type { Metadata } from "next";
 
 import { routing, type Locale } from "@/i18n/routing";
@@ -56,6 +59,49 @@ function normaliserDate(valeur: unknown): string {
 /** Le chemin de la page, sans préfixe de langue. */
 export function cheminInstitutionnel(slug: SlugInstitutionnel): string {
   return `/${slug}`;
+}
+
+/**
+ * La page est-elle encore un brouillon ?
+ *
+ * Ces quatre pages exigent des informations que ce dépôt ne contient pas :
+ * forme juridique, RCCM, adresse postale, directeur de la publication,
+ * hébergeur des instances. Elles sont écrites, et les trous sont marqués à
+ * l'écran par un encadré `<ACompleter>` plutôt qu'inventés — une mention
+ * légale fausse est plus grave qu'une mention légale absente, parce qu'elle
+ * est opposable.
+ *
+ * Mais un encadré « à compléter avant mise en ligne » servi sur
+ * klassci.com/fr/mentions-legales dit exactement le contraire de ce que ces
+ * pages sont censées établir. Tant qu'il en reste un, la page reste
+ * accessible — le pied de page y mène, et quelqu'un qui la cherche doit la
+ * trouver — mais elle n'est pas offerte aux moteurs comme l'identité
+ * officielle de l'éditeur, ni déclarée dans le plan du site.
+ *
+ * Le contrôle porte sur le fichier source, pas sur un drapeau à tenir à jour :
+ * le jour où la dernière information est renseignée et le dernier encadré
+ * retiré, la page devient indexable d'elle-même. Rien à penser, rien à
+ * oublier.
+ */
+export function estBrouillon(slug: SlugInstitutionnel, locale: Locale): boolean {
+  const suffixe = locale === routing.defaultLocale ? "" : `.${locale}`;
+  const chemin = join(
+    process.cwd(),
+    "content/institutionnel",
+    `${slug}${suffixe}.mdx`,
+  );
+
+  try {
+    return readFileSync(chemin, "utf8").includes("<ACompleter");
+  } catch {
+    // Fichier illisible : on ne publie pas ce qu'on ne peut pas relire.
+    return true;
+  }
+}
+
+/** Les pages complètes, dans une langue donnée. */
+export function pagesPubliables(locale: Locale): SlugInstitutionnel[] {
+  return PAGES_INSTITUTIONNELLES.filter((slug) => !estBrouillon(slug, locale));
 }
 
 /**
@@ -129,5 +175,8 @@ export function metadonneesInstitutionnelles(
     title: page.title,
     description: page.description ?? page.resume ?? "",
     path: cheminInstitutionnel(slug),
+    // Une page qui porte encore un encadré « à compléter » ne doit pas être
+    // proposée comme la référence légale de l'éditeur.
+    noindex: estBrouillon(slug, locale),
   });
 }
