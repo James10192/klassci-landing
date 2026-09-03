@@ -133,6 +133,43 @@ function texte(valeur: unknown, repli = ""): string {
 }
 
 /**
+ * Le nom que l'école s'est donné, ou celui du registre si elle n'en a pas.
+ *
+ * KLASSCI pose « KLASSCI » comme valeur initiale de `school_name` — un choix
+ * délibéré côté produit, pour qu'une instance clonée n'hérite pas du nom de
+ * l'école dont elle a été copiée. Le revers est qu'une école qui n'a jamais
+ * ouvert ses réglages se présente publiquement sous le nom de l'éditeur.
+ *
+ * C'est ce qui s'est produit : la liste des établissements affichait
+ * « KLASSCI · Yamoussoukro » entre deux écoles réelles, et personne ne
+ * reconnaissait cette ligne — c'était Ephrata. Un futur bachelier, lui, ne
+ * peut pas le deviner du tout.
+ *
+ * On retombe donc sur le libellé du registre, celui que l'exploitant a posé
+ * dans `REINSCRIPTION_LABEL_<CODE>`. Ce n'est pas une correction du fond : le
+ * remède reste que l'école renseigne son nom dans ses réglages, et il vaut
+ * aussi pour ses bulletins. Mais la vitrine n'a aucune raison de présenter le
+ * nom de l'éditeur comme celui d'un client.
+ */
+function nomEcole(brut: unknown, libelleRegistre: string): string {
+  const propose = texte(brut);
+
+  if (propose === "" || comparableNom(propose) === "klassci") {
+    return libelleRegistre;
+  }
+
+  return propose;
+}
+
+function comparableNom(valeur: string): string {
+  return valeur
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "")
+    .toLowerCase()
+    .trim();
+}
+
+/**
  * Une couleur hexadécimale, ou la teinte KLASSCI.
  *
  * KLASSCI assainit déjà ces valeurs. On les revalide quand même : elles vont
@@ -191,8 +228,9 @@ async function interroger(
     return {
       code: ecole.code,
       // Le nom réglé par l'école prime sur le libellé du registre : c'est elle
-      // qui sait comment elle s'appelle, et elle le corrige sans nous.
-      nom: texte(brut.nom, ecole.libelle),
+      // qui sait comment elle s'appelle, et elle le corrige sans nous. Sauf
+      // quand ce nom est celui de l'éditeur, faute d'avoir jamais été réglé.
+      nom: nomEcole(brut.nom, ecole.libelle),
       sigle: texte(brut.sigle),
       ville: texte(brut.ville),
       logo: (brut.logo?.present ?? false) === true ? urlLogo(brut.logo?.url, ecole.base) : null,
