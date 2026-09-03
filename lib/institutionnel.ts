@@ -61,24 +61,20 @@ function normaliserDate(valeur: unknown): string {
 /**
  * La page est-elle encore un brouillon ?
  *
- * Ces quatre pages exigent des informations que ce dépôt ne contient pas :
- * forme juridique, RCCM, adresse postale, directeur de la publication,
- * hébergeur des instances. Elles sont écrites, et les trous sont marqués à
- * l'écran par un encadré `<ACompleter>` plutôt qu'inventés — une mention
- * légale fausse est plus grave qu'une mention légale absente, parce qu'elle
- * est opposable.
+ * Ces quatre pages ont été servies en ligne pendant plusieurs jours avec, à
+ * l'écran, un encadré adressé à la direction : « les éléments suivants doivent
+ * être fournis avant la mise en ligne ». Le mécanisme de cette fonction avait
+ * bien fait son travail — la page était `noindex` et hors du plan du site,
+ * donc invisible des moteurs — mais elle restait lisible par n'importe quel
+ * visiteur, et un visiteur est précisément qui lit une page de mentions
+ * légales. Protéger le référencement d'un brouillon ne le rend pas moins
+ * publié.
  *
- * Mais un encadré « à compléter avant mise en ligne » servi sur
- * klassci.com/fr/mentions-legales dit exactement le contraire de ce que ces
- * pages sont censées établir. Tant qu'il en reste un, la page reste
- * accessible — le pied de page y mène, et quelqu'un qui la cherche doit la
- * trouver — mais elle n'est pas offerte aux moteurs comme l'identité
- * officielle de l'éditeur, ni déclarée dans le plan du site.
- *
- * Le contrôle porte sur le fichier source, pas sur un drapeau à tenir à jour :
- * le jour où la dernière information est renseignée et le dernier encadré
- * retiré, la page devient indexable d'elle-même. Rien à penser, rien à
- * oublier.
+ * Le marqueur est donc devenu explicite : `brouillon: true` en tête du
+ * fichier. On ne décrète plus le brouillon en lisant la présence d'un encadré
+ * publiable, parce qu'un brouillon publiable finit publié. Ce qui manque à une
+ * page se dit hors du site, et `scripts/verifier-notes-internes.mjs` refuse la
+ * construction si une note interne réapparaît dans un fichier servi.
  */
 export function estBrouillon(slug: SlugInstitutionnel, locale: Locale): boolean {
   const suffixe = locale === routing.defaultLocale ? "" : `.${locale}`;
@@ -89,7 +85,10 @@ export function estBrouillon(slug: SlugInstitutionnel, locale: Locale): boolean 
   );
 
   try {
-    return readFileSync(chemin, "utf8").includes("<ACompleter");
+    const source = readFileSync(chemin, "utf8");
+    const entete = source.split(/^---$/m)[1] ?? "";
+
+    return /^\s*brouillon\s*:\s*true\s*$/m.test(entete);
   } catch {
     // Fichier illisible : on ne publie pas ce qu'on ne peut pas relire.
     return true;

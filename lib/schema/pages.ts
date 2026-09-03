@@ -21,7 +21,7 @@ import { buildBreadcrumb, type Segment } from "./breadcrumb";
 import { buildClientList, type EtablissementClient } from "./clients";
 import { APPLICATION_ID, CHEMIN_EDITION, type Edition } from "./constantes";
 import { buildFaqPage, type QuestionFaq } from "./faq";
-import { buildOrganization, buildPublisher } from "./organization";
+import { buildMarque, buildOrganization } from "./organization";
 import { graphe } from "./serialiser";
 import { buildSoftwareApplication, type Formule } from "./software-application";
 import { buildTechArticle, type EntreeArticle } from "./tech-article";
@@ -43,12 +43,8 @@ async function socle(locale: Locale) {
   const hero = await getTranslations({ locale, namespace: "hero" });
 
   return [
-    buildOrganization({
-      locale,
-      description: t("description"),
-      slogan: hero("title"),
-    }),
-    buildPublisher(),
+    buildOrganization({ locale }),
+    buildMarque({ description: t("description"), slogan: hero("title") }),
     buildWebSite(locale),
   ];
 }

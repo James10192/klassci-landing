@@ -258,34 +258,20 @@
   },
   "socialProof": {
     "eyebrow": "01 · Confiance",
-    "title": "Adopté par des établissements qui forment des milliers d'étudiants",
+    "title": "Les établissements dont l'inscription en ligne est ouverte ici",
+    "note": "Cette bande montre les écoles dont le portail d'inscription est ouvert sur klassci.com, avec le logo et le nom qu'elles ont elles-mêmes réglés. Ce n'est pas la liste de nos clients : un établissement qui n'ouvre pas ses inscriptions en ligne n'y figure pas.",
     "clients": [
       {
         "name": "ESBTP Abidjan",
         "code": "esbtp-abidjan",
-        "detail": "2 600+ étudiants · Plan Élite",
+        "detail": "Abidjan",
         "logo": "/img/clients/esbtp.png"
       },
       {
         "name": "ESBTP Yamoussoukro",
         "code": "esbtp-yakro",
-        "detail": "2 000+ étudiants · Plan Élite",
+        "detail": "Yamoussoukro",
         "logo": "/img/clients/esbtp.png"
-      },
-      {
-        "name": "Institut Pascal",
-        "detail": "1 000+ étudiants · Plan Élite",
-        "logo": "/img/clients/institut-pascal.jpg"
-      },
-      {
-        "name": "San Andrea School",
-        "detail": "1 200+ étudiants · Plan Élite",
-        "logo": "/img/clients/san-andrea.jpg"
-      },
-      {
-        "name": "ITS",
-        "detail": "800+ étudiants · Plan Pro",
-        "logo": "/img/clients/its.jpg"
       }
     ],
     "testimonials": [
@@ -858,7 +844,7 @@
         ]
       }
     },
-    "copyright": "© {year} KLASSCI · African Digital Consulting",
+    "copyright": "© {year} KLASSCI · African Digit Consulting",
     "social": {
       "facebook": "Facebook",
       "linkedin": "LinkedIn"

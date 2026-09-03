@@ -18,11 +18,24 @@ import { SITE_URL } from "@/lib/site-url";
 
 export { SITE_URL };
 
-/** L'organisation KLASSCI. Un seul noeud pour tout le site, toutes langues. */
+/**
+ * L'organisation. Un seul noeud pour tout le site, toutes langues — et c'est
+ * **African Digit Consulting**, pas KLASSCI.
+ *
+ * Le graphe declarait auparavant une organisation nommee KLASSCI, avec sa date
+ * de creation, son adresse et son courriel, et rattachait ADC au-dessus comme
+ * maison mere. C'etait faux : il n'existe pas de personne morale KLASSCI. La
+ * societe qui edite le logiciel, contracte avec les etablissements et repond de
+ * ce site est ADC ; KLASSCI est le nom du produit.
+ *
+ * Un moteur qui lit deux organisations la ou il n'y en a qu'une n'attribue ni
+ * l'anteriorite ni la reputation au bon nom, et une entreprise declaree plus
+ * grande qu'elle ne l'est se voit un jour demander des comptes la-dessus.
+ */
 export const ORGANISATION_ID = `${SITE_URL}/#organization`;
 
-/** African Digital Consulting, l'editeur. Voir le pied de page du site. */
-export const EDITEUR_ID = `${SITE_URL}/#publisher`;
+/** La marque KLASSCI, portee par l'organisation ci-dessus. */
+export const MARQUE_ID = `${SITE_URL}/#marque`;
 
 /** Le site lui-meme, dans ses deux versions linguistiques. */
 export const SITE_ID = `${SITE_URL}/#website`;
@@ -52,20 +65,36 @@ export const CHEMIN_EDITION: Record<Edition, string> = {
 export const LANGUE_BCP47 = { fr: "fr-FR", en: "en-US" } as const;
 
 /**
- * Annee de creation. Le site ecrit « les etablissements que nous accompagnons
- * depuis 2023 » (`features.intro`) ; l'ancien balisage annoncait 2024. On
- * retient l'annee que le site montre a ses visiteurs — c'est la seule des deux
- * qu'un moteur peut recouper, et une contradiction entre le balisage et le
- * texte visible est exactement ce que les consignes sanctionnent.
+ * Depuis quand des etablissements sont accompagnes. Le site l'ecrit :
+ * « les etablissements que nous accompagnons depuis 2023 » (`features.intro`).
  *
- * A CONFIRMER par le fondateur.
+ * Ce n'est PAS la date de creation d'African Digit Consulting, qui n'est pas
+ * connue de ce depot. Elle n'est donc plus posee en `foundingDate` : dater la
+ * naissance d'une societe d'apres l'anciennete d'un de ses produits est une
+ * affirmation qu'on ne saurait pas defendre.
  */
-export const ANNEE_CREATION = "2023";
+export const ANNEE_PREMIERS_ETABLISSEMENTS = "2023";
 
-/** Comptes officiels, tels que le pied de page les publie. */
+/**
+ * Comptes officiels, tels que le pied de page les publie. Les deux appartiennent
+ * a African Digit Consulting : la page LinkedIn a ete renommee au profit du
+ * produit, la page Facebook porte encore le nom de la societe.
+ */
 export const PROFILS_OFFICIELS = [
   "https://www.linkedin.com/company/klassci/",
+  "https://web.facebook.com/p/African-Digit-Consulting-100092649035928/",
 ];
+
+/**
+ * Ce que fait la societe, en une phrase. Elle decrit ADC — pas le produit :
+ * la description commerciale de KLASSCI vit sur le noeud `Brand`, ou elle est
+ * a sa place. Confondre les deux ferait dire au graphe que la societe EST le
+ * logiciel.
+ */
+export const DESCRIPTION_EDITEUR: Record<"fr" | "en", string> = {
+  fr: "African Digit Consulting edite KLASSCI, un logiciel de gestion scolaire, depuis Abidjan.",
+  en: "African Digit Consulting publishes KLASSCI, a school management platform, from Abidjan.",
+};
 
 /** L'adresse de contact, telle que la section Contact et le pied de page l'affichent. */
 export const COURRIEL_CONTACT = "contact@klassci.com";

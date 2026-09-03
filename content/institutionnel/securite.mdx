@@ -116,20 +116,12 @@ Cette répartition est développée, canal par canal, dans la [politique de conf
 
 ## Ce que nous ne promettons pas
 
-Trois limites, dites ici plutôt que découvertes plus tard.
+Quatre limites, dites ici plutôt que découvertes plus tard.
+
+**Les bases en exploitation ne sont pas chiffrées au niveau du support.** Ce sont les sauvegardes qui le sont. Un chiffrement au repos protège contre le vol d'un disque ou la récupération d'un support mis au rebut ; il ne protège pas contre un accès obtenu au serveur en marche, qui est le scénario le plus courant. Nous préférons dire lequel des deux nous couvrons.
 
 **La limitation de débit du relais n'est pas une garantie, c'est un amortisseur.** Ses compteurs vivent dans la mémoire du processus qui sert la requête ; sur une plateforme sans serveur, chaque instance a les siens et une instance neuve démarre à zéro. Elle divise l'amplification d'une rafale, elle ne la supprime pas. Une borne réellement étanche demande un magasin partagé, et sera posée le jour où un établissement sera visé pour de bon.
 
 **Nous ne revendiquons aucune certification.** Aucun audit externe, aucune homologation, aucun label n'a été obtenu à ce jour. Le dire vaut mieux que laisser un logo suggérer le contraire.
 
 **Le RGPD n'est pas le texte qui nous est applicable.** Le cadre de référence est la loi ivoirienne n° 2013-450 ; les pratiques décrites ici en reprennent les principes, et rencontrent souvent ceux du règlement européen, mais un établissement ivoirien qui exige une conformité RGPD contractuelle doit poser la question explicitement plutôt que la déduire d'une page de site.
-
-<ACompleter>
-
-Trois points relèvent d'une décision de l'éditeur ou d'une formalité administrative, et doivent être arrêtés avant la mise en ligne de cette page :
-
-- **Chiffrement de la base elle-même.** Les sauvegardes sont chiffrées ; les bases en cours d'exploitation ne le sont pas au niveau du support. Indiquer si le chiffrement au repos est activé chez l'hébergeur, ou assumer qu'il ne l'est pas — la seconde réponse est acceptable et vérifiable, la formule vague ne l'est pas.
-- **Incidents** : délai d'information de l'établissement en cas de violation de données, et procédure de notification à l'Autorité de protection. C'est un engagement contractuel, pas une caractéristique technique.
-- **Formalités ARTCI** : état de la déclaration ou de l'autorisation pour les traitements opérés par l'éditeur, et désignation éventuelle d'un correspondant à la protection des données.
-
-</ACompleter>

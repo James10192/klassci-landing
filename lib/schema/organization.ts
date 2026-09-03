@@ -1,5 +1,5 @@
 /**
- * L'entite KLASSCI, et son editeur.
+ * L'editeur, African Digit Consulting, et la marque KLASSCI qu'il porte.
  *
  * Ce noeud n'apparait qu'une fois par page, avec le meme `@id` partout, et
  * c'est tout son interet : c'est ce qui permet a un moteur de rassembler la
@@ -15,10 +15,10 @@
 import type { Locale } from "@/i18n/routing";
 
 import {
-  ANNEE_CREATION,
   COURRIEL_CONTACT,
-  EDITEUR_ID,
+  DESCRIPTION_EDITEUR,
   LOGO,
+  MARQUE_ID,
   ORGANISATION_ID,
   PAYS_DESSERVIS,
   PROFILS_OFFICIELS,
@@ -30,10 +30,6 @@ import { urlActif } from "./urls";
 
 export interface EntreeOrganisation {
   locale: Locale;
-  /** La description, dans la langue de la page. */
-  description: string;
-  /** L'accroche courte affichee en haut de la page produit. */
-  slogan?: string;
   competences?: string[];
 }
 
@@ -67,45 +63,42 @@ const COMPETENCES: Record<Locale, string[]> = {
 };
 
 /**
- * L'editeur, tel que le pied de page et les metadonnees du layout le nomment.
+ * La marque du produit.
  *
- * A CONFIRMER : si KLASSCI n'est pas une personne morale distincte mais un
- * produit d'African Digital Consulting, il faut inverser la hierarchie —
- * `Organization` devient ADC, et KLASSCI une `Brand` qu'elle reference.
+ * `Brand` est le type exact pour un nom de produit qui n'est pas une personne
+ * morale : il porte le logo et l'accroche sans rien affirmer d'une societe.
+ * C'est ce noeud, et non l'organisation, qui s'appelle KLASSCI.
  */
-export function buildPublisher(): JsonLdNoeud {
+export function buildMarque({ description, slogan }: {
+  description: string;
+  slogan?: string;
+}): JsonLdNoeud {
   return {
-    "@type": "Organization",
-    "@id": EDITEUR_ID,
-    name: "African Digital Consulting",
-    alternateName: "ADC",
+    "@type": "Brand",
+    "@id": MARQUE_ID,
+    name: "KLASSCI",
+    description,
+    slogan,
+    logo: ref(`${SITE_URL}/#logo`),
     url: SITE_URL,
-    subOrganization: ref(ORGANISATION_ID),
   };
 }
 
 export function buildOrganization({
   locale,
-  description,
-  slogan,
   competences,
 }: EntreeOrganisation): JsonLdNoeud {
   return {
     "@type": "Organization",
     "@id": ORGANISATION_ID,
-    name: "KLASSCI",
+    name: "African Digit Consulting",
+    alternateName: "ADC",
     url: SITE_URL,
-    description,
-    slogan,
-    foundingDate: ANNEE_CREATION,
-    foundingLocation: {
-      "@type": "Place",
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: "Abidjan",
-        addressCountry: "CI",
-      },
-    },
+    description: DESCRIPTION_EDITEUR[locale],
+    // `foundingDate` est absent a dessein : ce depot connait l'annee des
+    // premiers etablissements accompagnes, pas celle de la creation de la
+    // societe. Les deux ne se confondent pas.
+    //
     // Une adresse partielle est acceptee et reste vraie. Une rue inventee ne le
     // serait pas : `streetAddress` et `postalCode` restent absents tant que
     // personne n'a fourni l'adresse reelle du siege.
@@ -123,6 +116,9 @@ export function buildOrganization({
       height: LOGO.hauteur,
       caption: "KLASSCI",
     },
+    // Le logo servi est celui du produit : c'est la marque que ce site affiche,
+    // et Google demande le logo tel qu'il apparait sur le site.
+    brand: ref(MARQUE_ID),
     image: ref(`${SITE_URL}/#logo`),
     email: COURRIEL_CONTACT,
     // `telephone` reste absent : le seul numero present dans le depot est le
@@ -133,7 +129,6 @@ export function buildOrganization({
       "@type": "Country",
       identifier: code,
     })),
-    parentOrganization: ref(EDITEUR_ID),
     contactPoint: [
       {
         "@type": "ContactPoint",
