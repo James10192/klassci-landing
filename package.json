@@ -13,11 +13,12 @@
     "verifier:identite-ecoles": "node --experimental-strip-types --conditions=react-server scripts/verifier-identite-ecoles.mjs",
     "verifier:recherche": "node --experimental-strip-types scripts/verifier-recherche.mjs",
     "verifier:seo": "node scripts/verifier-seo.mjs",
-    "verifier:seo:prod": "node scripts/verifier-seo.mjs --url https://www.klassci.com",
     "verifier:schema": "node scripts/verifier-donnees-structurees.mjs",
     "verifier:budget": "node scripts/verifier-budget.mjs",
-    "verifier:citations": "node scripts/verifier-citations.mjs",
-    "verifier": "pnpm tsc && pnpm verifier:amortisseur && pnpm verifier:identite-ecoles && pnpm verifier:recherche && pnpm verifier:seo && pnpm build && pnpm verifier:schema && pnpm verifier:budget"
+    "verifier": "pnpm tsc && pnpm verifier:amortisseur && pnpm verifier:identite-ecoles && pnpm verifier:recherche && pnpm verifier:seo && pnpm build && pnpm verifier:schema && pnpm verifier:budget",
+    "verifier:seo:prod": "node scripts/verifier-seo.mjs --url https://www.klassci.com",
+    "verifier:couleurs:prod": "node --experimental-strip-types scripts/verifier-couleurs-prod.mjs",
+    "verifier:citations": "node scripts/verifier-citations.mjs"
   },
   "dependencies": {
     "@types/mdx": "^2.0.13",
