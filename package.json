@@ -8,7 +8,13 @@
     "start": "next start",
     "lint": "next lint",
     "tsc": "tsc --noEmit",
-    "verifier:amortisseur": "node --experimental-strip-types --conditions=react-server scripts/verifier-amortisseur.mjs"
+    "verifier:amortisseur": "node --experimental-strip-types --conditions=react-server scripts/verifier-amortisseur.mjs",
+    "verifier:seo": "node scripts/verifier-seo.mjs",
+    "verifier:seo:prod": "node scripts/verifier-seo.mjs --url https://www.klassci.com",
+    "verifier:schema": "node scripts/verifier-donnees-structurees.mjs",
+    "verifier:budget": "node scripts/verifier-budget.mjs",
+    "verifier:citations": "node scripts/verifier-citations.mjs",
+    "verifier": "pnpm tsc && pnpm verifier:seo && pnpm build && pnpm verifier:schema && pnpm verifier:budget"
   },
   "dependencies": {
     "@types/mdx": "^2.0.13",
@@ -36,7 +42,8 @@
     "eslint-config-next": "14.2.16",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "zod": "^4.3.6"
   },
   "browserslist": {
     "production": [

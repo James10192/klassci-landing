@@ -1,0 +1,200 @@
+---
+title: "Recouvrer les frais de scolarité"
+description: "Échéancier, encaissement, relance, pilotage : la méthode de recouvrement des frais de scolarité pour une école privée d'Afrique de l'Ouest, sources à l'appui."
+date: 2026-09-02
+auteur: "Équipe KLASSCI"
+theme: "finance"
+motCle: "recouvrement frais de scolarité"
+resume: "Le taux de recouvrement d'un établissement privé se joue moins dans la fermeté des relances que dans le calendrier : celui des familles, celui de l'État pour les élèves qu'il affecte, celui de vos propres charges. Cet article reconstitue la méthode échéance par échéance, chiffre un exemple complet sur une école de 700 élèves, et signale explicitement les points — notamment juridiques — qu'aucune source accessible ne permet de trancher."
+sources:
+  - "Loi n° 95-696 du 7 septembre 1995 relative à l'Enseignement (art. 5 : concession du service public à des établissements privés) — https://uvci.online/fr/__pdf/textes/LOI-95-696%20DU%207%20SEPT%201995%20RELATIVE%20A%20L%27ENSEIGNEMENT.pdf"
+  - "Loi n° 2015-635 du 17 septembre 2015 modifiant la loi n° 95-696, scolarisation obligatoire de 6 à 16 ans — NATLEX/OIT — https://www.ilo.org/dyn/natlex/natlex4.detail?p_lang=fr&p_isn=104175"
+  - "L'impact de la privatisation et de la marchandisation de l'éducation sur le droit à l'éducation en Côte d'Ivoire — Rapport de recherche GI-ESCR / MIDH (arrêté n° 0059/MEN/CAB/SAPEP du 29/04/2008, arrêté n° 111/MENET/CAB du 24 décembre 2014, données d'enquête sur les exclusions pour impayé) — https://static1.squarespace.com/static/5a6e0958f6576ebde0e78c18/t/62cc37fb4d975773e522a3a2/1657550864697/Rapport+de+Recherche_Education_Final_Revise.pdf"
+  - "Écoles privées : les fondateurs exigent le paiement de 118 milliards FCFA d'arriérés (12 février 2025) — KOACI — https://www.koaci.com/article/2025/02/12/cote-divoire/societe/cote-divoire-ecoles-privees-les-fondateurs-exigent-le-paiement-de-118-milliards-fcfa-darrieres-de-frais-de-scolarite-des-eleves-affectes-par-letat_184469.html"
+  - "Polémique autour des 105 milliards dus aux écoles privées : la réponse du Trésor public, mécanisme « n+1 » (25 avril 2026) — KOACI — https://www.koaci.com/article/2026/04/25/cote-divoire/societe/cote-divoire-polemique-autour-des-105-milliards-dus-aux-ecoles-privees-la-reponse-du-tresor-public_196159.html"
+  - "Les écoles privées réclament une revalorisation des frais de scolarité des élèves affectés par l'État (convention de 1992) — Abidjan.net — https://news.abidjan.net/articles/597389/cote-divoire-les-ecoles-privees-reclament-une-revalorisation-des-frais-de-scolarite-des-eleves-affectes-par-l8217etat"
+  - "Procédure de transfert d'élève et pièces du dossier (bulletin du 3e trimestre, fiche de changement d'établissement signée par l'établissement d'origine) — MENA / DESPS — https://mena-desps.org/static/docs/fne/transferts/24_25/procedure_transfert.pdf"
+  - "Inscription en ligne 2026-2027 : frais fixés à 6 000 FCFA (public) et 3 000 FCFA (privé) — KOACI — https://www.koaci.com/article/2026/08/04/cote-divoire/societe/cote-divoire-rentree-scolaire-2026-2027-inscriptions-en-ligne-au-secondaire-frais-fixes-a-6000-fcfa-public-et-3000-fcfa-prive_199210.html"
+  - "Plan comptable SYSCOHADA révisé — comptes 41 (clients), 49 (dépréciations), 65 (autres charges), 477 (produits constatés d'avance) — https://plan-comptable-ohada.com/nouvelle-norme-2016/plan-comptable-syscohada.html"
+  - "OHADA — Plan des comptes du SYSCOHADA révisé (texte intégral) — droit-afrique.com — https://www.droit-afrique.com/uploads/OHADA-Plan-comptable-2017.pdf"
+  - "Paiement marchand Orange Money Côte d'Ivoire — solutions d'encaissement — https://www.orange.ci/fr/orange-money/solution-d-encaissement/paiement-petits-commerces.html"
+  - "MoMo Pay — MTN Côte d'Ivoire — https://www.mtn.ci/momo/momo-pay/"
+  - "Intégrer Wave en Côte d'Ivoire : commissions marchand et comparaison des canaux (2026) — Kolonell — https://kolonell.com/fr/blog/wave-cote-ivoire-integration-marchand-abidjan-2026"
+  - "MTN MoMo API : intégration et commissions marchand en Côte d'Ivoire (2026) — Kolonell — https://kolonell.com/fr/blog/mtn-momo-api-integration-site-web-cote-ivoire-2026"
+  - "Campagnes et récoltes café-cacao — Conseil du Café-Cacao — http://www.conseilcafecacao.ci/index.php?option=com_content&view=article&id=105&Itemid=183"
+  - "Loi n° 2013-450 du 19 juin 2013 relative à la protection des données à caractère personnel, Journal officiel — Autorité de protection — https://www.autoritedeprotection.ci/docs/loi_2013_450_journal.pdf"
+  - "Tarification de la plateforme WhatsApp Business (messages utilitaires, évolution au 1er octobre 2026) — Meta for Developers — https://developers.facebook.com/documentation/business-messaging/whatsapp/pricing"
+---
+Un fondateur qui annonce un taux de recouvrement de 80 % pense généralement avoir un problème de fermeté. Il a presque toujours un problème de calendrier. Les 20 % manquants ne sont pas répartis uniformément sur l'année : ils se concentrent sur deux ou trois moments précis, prévisibles longtemps à l'avance. C'est ce qui rend le recouvrement pilotable — et c'est pourquoi durcir le ton ne déplace presque rien.
+
+Passer d'un taux subi à un taux piloté tient à quatre décisions, dans cet ordre : la forme de l'échéancier, la structure des créances, le canal d'encaissement, la mécanique de relance. Le reste sert à vérifier que ces quatre-là tiennent.
+
+## Pourquoi une école privée recouvre-t-elle mal, alors que ses familles paient ?
+
+Parce que l'échéancier est calé sur les besoins de l'école, et que les familles paient au rythme de leurs propres rentrées. L'écart entre les deux calendriers produit un impayé qui n'est, le plus souvent, qu'un retard annoncé.
+
+L'instinct du gestionnaire est d'appeler l'argent tôt : une grosse première tranche à l'inscription, parce que les salaires de septembre tombent en septembre. Or septembre est le mois le plus coûteux de l'année pour une famille — fournitures, uniformes, transport, inscription en ligne au Fichier national des élèves ([6 000 FCFA au public, 3 000 FCFA au privé pour 2026-2027](https://www.koaci.com/article/2026/08/04/cote-divoire/societe/cote-divoire-rentree-scolaire-2026-2027-inscriptions-en-ligne-au-secondaire-frais-fixes-a-6000-fcfa-public-et-3000-fcfa-prive_199210.html)), souvent pour plusieurs enfants. Y demander 40 % de la scolarité, c'est entrer en concurrence avec toutes les autres dépenses de rentrée.
+
+La suite est mécanique : une partie des familles paie partiellement, l'école enregistre un impayé, ouvre un dossier, mobilise du temps de comptable — pour une créance qui se serait dénouée seule six semaines plus tard. L'établissement fabrique son propre stock d'impayés, puis dépense pour le résorber.
+
+La réglementation, elle, anticipe l'étalement. L'article 6 de l'[arrêté n° 0059/MEN/CAB/SAPEP du 29 avril 2008](https://static1.squarespace.com/static/5a6e0958f6576ebde0e78c18/t/62cc37fb4d975773e522a3a2/1657550864697/Rapport+de+Recherche_Education_Final_Revise.pdf) prévoit l'échelonnement des frais annexes. L'enquête de terrain menée par GI-ESCR et le MIDH montre qu'il n'est pas systématiquement appliqué : 44,9 % des répondants au primaire et 28 % au secondaire déclarent ne pas en avoir bénéficié. Une part substantielle des impayés naît donc d'un refus d'étalement que le texte autorisait.
+
+## Comment caler l'échéancier sur la trésorerie des familles plutôt que sur celle de l'école ?
+
+En partant du calendrier de revenus de vos familles, pas de celui de vos charges. Ce sont deux courbes distinctes, et c'est votre trésorerie — pas votre échéancier — qui doit absorber l'écart.
+
+Ce calendrier n'est pas le même partout. Une école de Cocody dont les parents sont salariés encaisse sur un rythme mensuel régulier ; un établissement de Daloa ou de Soubré vit au rythme de la commercialisation agricole, et le Conseil du Café-Cacao publie le calendrier des campagnes ainsi que le prix bord champ à l'ouverture de chacune : l'information vous dit quand l'argent entre dans les ménages de votre bassin de recrutement. Trois règles en découlent.
+
+**Une première tranche plus petite que l'instinct ne le suggère.** Elle doit être payable en septembre par une famille qui équipe deux enfants. Ce que vous perdez en encaissement immédiat, vous le regagnez en dossiers de relance non ouverts.
+
+**Des échéances datées, pas relatives.** « 30 jours après l'inscription » produit autant de dates d'échéance que d'élèves et interdit toute relance collective. Une date fixe — le 15 janvier, le 15 avril — se rappelle, s'affiche, se relance en une seule opération. Dans KLASSCI, le délai de paiement se paramètre par catégorie de frais, avec une surcharge par classe : calez-le pour retomber sur vos dates, et inscrivez-les au règlement financier remis aux familles.
+
+**Un échéancier négociable à la marge, et écrit.** Une famille qui demande un décalage de trois semaines et l'obtient par écrit paie. La même famille à qui l'on oppose un refus disparaît du radar et devient un dossier à 90 jours.
+
+Un échéancier que personne ne respecte n'est pas un échéancier : c'est une fiction qui produit des impayés comptables sans produire d'encaissements.
+
+## Un élève affecté par l'État, combien de créances cela fait-il ?
+
+Deux. Une créance sur l'État, une créance sur la famille. Elles n'ont ni le même débiteur, ni le même calendrier, ni le même risque — et les confondre dans une seule ligne « scolarité due » est la première cause d'erreur de pilotage dans les établissements conventionnés.
+
+Pour un élève affecté ou orienté, l'établissement perçoit une allocation de l'État au titre de la convention. L'article 4 de l'arrêté n° 0059 institue en outre des « frais complémentaires », définis comme « le reliquat de la scolarité due aux établissements scolaires privés pour tout élève affecté ou orienté » et exigibles « lorsque des établissements scolaires privés pratiquent des montants supérieurs à ceux que l'État alloue ». Le même arrêté encadre les frais annexes, « fixés de 0 à 37 000 F CFA par élève, par année scolaire ».
+
+Ce montage est contesté : le rapport GI-ESCR / MIDH soutient que l'arrêté de 2008 contredit des textes supérieurs dans la hiérarchie des normes, selon lesquels les élèves affectés dans le privé sont à la charge de l'État, et en recommande l'abrogation. **Traitez donc la répartition entre part État et part famille comme un paramètre de votre convention, à vérifier auprès de votre direction régionale — pas comme une règle stable.**
+
+Le comportement de la créance sur l'État, lui, est établi. La convention prévoit des versements aux **30 mars, 30 juin et 30 septembre**, calendrier rappelé par les fondateurs le 12 février 2025, quand ils réclamaient [118 milliards de FCFA d'arriérés au titre de 2023-2024](https://www.koaci.com/article/2025/02/12/cote-divoire/societe/cote-divoire-ecoles-privees-les-fondateurs-exigent-le-paiement-de-118-milliards-fcfa-darrieres-de-frais-de-scolarite-des-eleves-affectes-par-letat_184469.html), auxquels s'ajoutaient plus de 26 milliards accumulés depuis 2000. En avril 2026, la Coordination du secteur éducation évoquait 105 milliards restant dus sur une enveloppe de 120 milliards pour 2024-2025.
+
+La [réponse du Trésor public](https://www.koaci.com/article/2026/04/25/cote-divoire/societe/cote-divoire-polemique-autour-des-105-milliards-dus-aux-ecoles-privees-la-reponse-du-tresor-public_196159.html) est, pour un gestionnaire, l'information la plus utile du dossier : le Trésor indique n'enregistrer aucun arriéré dans ses services et rappelle que le paiement suppose un engagement préalable des ministères techniques, selon un mécanisme dit « n+1 » — les règlements de l'année écoulée sont engagés sur l'exercice budgétaire suivant.
+
+Conséquence directe : **la part État n'est pas une créance à recouvrer, c'est une créance à financer.** Aucune relance n'accélère un engagement budgétaire. Ce qui se pilote, c'est le décalage : le connaître, le provisionner, et ne jamais bâtir un plan de paie sur une subvention non engagée.
+
+## Quel canal d'encaissement coûte le moins cher, une fois le rapprochement compté ?
+
+Rarement celui qui affiche 0 %. Le coût réel d'un canal, ce sont ses frais **plus** le temps de rapprochement qu'il impose et le risque de non-enregistrement qu'il porte. Les commissions ci-dessous sont des ordres de grandeur : les opérateurs ne publient pas de grille marchand et négocient au dossier. Demandez la vôtre par écrit avant d'arbitrer.
+
+| Canal | Coût pour l'établissement | Preuve d'encaissement | Difficulté de rapprochement |
+|---|---|---|---|
+| Espèces | 0 % affiché, coût réel élevé | Le reçu numéroté, et rien d'autre | Élevée : aucune trace externe |
+| Virement bancaire | Frais de réception faibles ou nuls | Relevé bancaire | Faible si la référence élève est imposée |
+| Wave | Environ 1 % côté marchand | Relevé et identifiant de transaction | Moyenne : un relevé de plus |
+| Orange Money marchand | Environ 1 %, à négocier | Relevé et identifiant | Moyenne |
+| MTN MoMo marchand | 1,5 % à 2,5 % selon intégration directe ou via agrégateur | Relevé et identifiant | Moyenne |
+| Chèque | Frais bancaires, plus le risque de rejet | Bordereau de remise | Moyenne, plus le traitement des rejets |
+
+Les espèces sont le canal le plus cher, et de loin. Leur coût ne se lit pas sur une facture d'opérateur : il se lit dans les écarts de caisse, dans les encaissements enregistrés deux jours trop tard, dans les paiements dont la famille produit un reçu que la comptabilité n'a jamais vu passer. Un canal électronique à 1 % qui produit un identifiant opposable coûte moins cher qu'un canal à 0 % adossé à un carnet à souches.
+
+Le vrai sujet n'est donc pas le taux, c'est le rapprochement. Avec quatre opérateurs mobiles, une banque et une caisse, une seule ligne de recette peut avoir six origines et six relevés. Une seule chose les relie : **la référence de transaction saisie à l'enregistrement.** Dans KLASSCI, le champ « Référence du paiement » — numéro de chèque, identifiant Wave, OM ou MoMo, référence de virement — est techniquement facultatif ; rendez-le obligatoire par procédure interne. Un paiement électronique sans référence est un paiement que vous ne pourrez pas rapprocher, donc que vous risquez de réclamer deux fois.
+
+La règle de caisse tient en une phrase : aucun encaissement sans référence externe, sauf les espèces, qui exigent un reçu numéroté émis immédiatement.
+
+{/* DONNEE-TERRAIN: part des encaissements par canal (espèces / mobile money / virement) observée sur les établissements équipés, avant et après ouverture d'un compte marchand — à compléter par l'équipe */}
+
+## Quand, par quel canal et sur quel ton relancer une famille ?
+
+Tôt, individuellement, et sans jamais confondre un rappel avec une sanction. La relance la plus rentable part **avant** l'échéance : elle ne coûte presque rien, ne heurte personne, et supprime les retards purement organisationnels.
+
+| Moment | Canal | Émetteur | Objet |
+|---|---|---|---|
+| J−7 avant l'échéance | SMS ou WhatsApp, message court | Comptabilité | Rappel de la date, du montant, des moyens de paiement |
+| J+3 | WhatsApp individuel, relevé en pièce jointe | Comptabilité | Constat neutre, solde exact, invitation à se manifester |
+| J+15 | Appel téléphonique | Le comptable, nommément | Écouter, comprendre, proposer un étalement écrit |
+| J+30 | Courrier remis contre décharge | Direction | Rappel formel du règlement financier |
+| J+60 | Convocation à un entretien | Direction | Protocole d'accord écrit et daté |
+| J+90 | Décision écrite et motivée | Direction | Conforme au règlement intérieur, tracée au dossier |
+
+WhatsApp fonctionne pour trois raisons opérationnelles : le canal est déjà installé chez le destinataire, il est asynchrone — une mère qui travaille lit à 21 h — et il transporte une pièce jointe, donc le relevé de situation financière en PDF. Un parent qui reçoit le détail de ce qu'il doit conteste bien moins qu'un parent qui reçoit un montant sec.
+
+Si vous industrialisez l'envoi via la plateforme WhatsApp Business, deux points : les messages sortants relèvent de gabarits soumis à approbation, et Meta a annoncé qu'au 1er octobre 2026 les messages utilitaires envoyés dans la fenêtre de service cesseraient d'être gratuits. Le canal reste peu coûteux ; il n'est plus gratuit.
+
+**Le groupe WhatsApp de la classe n'est pas un canal de recouvrement.** Trois raisons, dont deux tiennent au droit. La première est probatoire : nul ne peut prouver qu'un message publié dans un groupe a été reçu par un destinataire précis. La deuxième relève de la [loi n° 2013-450 du 19 juin 2013 sur la protection des données à caractère personnel](https://www.autoritedeprotection.ci/docs/loi_2013_450_journal.pdf) : la situation financière d'une famille est une donnée personnelle, la diffuser à trente tiers n'a aucune base légale. La troisième est disciplinaire : l'arrêté n° 111/MENET/CAB du 24 décembre 2014 portant code de conduite des personnels des structures publiques et privées relevant du ministère interdit et rend passible de sanctions « toute forme de propos à caractère insultant, humiliant, discriminatoire ou raciste à l'endroit de l'élève ». Nommer publiquement l'enfant d'une famille en retard s'en approche dangereusement.
+
+Le groupe de classe est un canal pédagogique : le mélanger au recouvrement détruit son usage. Les relances sont individuelles, toujours.
+
+{/* DONNEE-TERRAIN: effet mesuré du rappel J−7 sur le taux de paiement à échéance, avant / après activation des relances automatiques — à compléter par l'équipe */}
+
+## Que peut faire un établissement, et que ne peut-il pas faire, en cas d'impayé ?
+
+C'est le point sur lequel la documentation accessible est la plus faible, et il faut le dire nettement : **au moment de la rédaction, en septembre 2026, nous n'avons trouvé aucun texte ivoirien régissant expressément les droits de l'élève dont les frais sont impayés.** Ce n'est pas une lacune de recherche, c'est un constat partagé : l'analyse de conformité du rapport GI-ESCR / MIDH classe explicitement en « non couvert » par les textes nationaux le point « la protection des droits des apprenant(e)s en situation de manquement ou de retard dans le paiement des frais ».
+
+Quatre éléments encadrent néanmoins la pratique et suffisent à tracer une ligne prudente.
+
+**Le règlement intérieur est le document pivot.** L'arrêté n° 111/MENET/CAB du 24 décembre 2014 interdit et rend passible de sanctions disciplinaires « l'exclusion d'un élève des cours non conforme aux dispositions prévues dans le règlement intérieur de l'école, l'établissement ». La rédaction est instructive : ce n'est pas l'exclusion en soi qui est visée, mais celle qui ne suit pas le règlement intérieur. Un établissement dont le règlement financier est écrit, remis, signé à l'inscription et fidèlement appliqué se trouve dans une tout autre position que celui qui improvise à la porte de la classe.
+
+**La pratique documentée est massive, et le rapport la décrit comme une stratégie de recouvrement.** Parmi les parents interrogés ayant connu au moins un retard, 68,2 % au primaire et 71,4 % au secondaire déclarent que leur enfant a été expulsé des cours. Le rapport cite un directeur des études : au-delà du 10 du mois, « les éducateurs commencent à mettre dehors les élèves non à jour de leur scolarité », puis, en fin d'année, une liste est laissée dans les classes pour que les enseignants les fassent sortir. Qu'une pratique soit répandue ne la rend pas défendable — c'est le type de fait qu'un rapport documente pour en demander la fin.
+
+**La scolarité est obligatoire de 6 à 16 ans** depuis la [loi n° 2015-635 du 17 septembre 2015](https://www.ilo.org/dyn/natlex/natlex4.detail?p_lang=fr&p_isn=104175) modifiant la loi n° 95-696. Un élève de cette tranche privé de cours pour motif financier pose une question qui dépasse la relation contractuelle entre l'école et la famille. Ajoutons que l'article 5 de la loi de 1995 qualifie l'enseignement privé de **concession du service public** : un établissement agréé n'est pas un commerçant ordinaire vis-à-vis de son usager.
+
+**Sur la rétention de documents, nous n'avons rien trouvé.** Aucun texte accessible n'autorise ni n'interdit expressément de retenir un bulletin, un certificat de scolarité ou une signature tant qu'un solde est dû. Nous ne tranchons donc pas. Deux faits opérationnels méritent d'être connus : le dossier de transfert exige, selon la procédure publiée par le ministère, « le bulletin de notes du troisième trimestre de l'année en cours » et une « fiche de changement d'établissement » signée par l'établissement d'origine — retenir l'un ou l'autre bloque effectivement le départ de l'élève ; et l'inscription en ligne conditionne l'existence de l'élève dans le Fichier national, donc la remontée de ses notes et sa présentation aux examens.
+
+Un établissement qui fait de ce blocage un levier doit mesurer ce qu'il met dans la balance : il ne gêne pas un débiteur, il suspend la scolarité d'un enfant, pour une créance qu'il pourrait souvent recouvrer autrement. Sur ce point, faites valider votre règlement intérieur par un conseil et par votre direction régionale.
+
+## Quels indicateurs suffisent à piloter le recouvrement ?
+
+Trois. Un de performance, un de risque, un de survie. Au-delà, on produit des tableaux que personne ne lit.
+
+**Le taux de recouvrement à échéance**, et non le taux annuel : encaissé cumulé divisé par attendu cumulé **à la date de chaque échéance**. Le taux annuel, mesuré en juin, ne dit rien — il est toujours bon, puisque presque tout finit par rentrer. C'est le taux au 30 septembre, puis au 15 janvier, qui prédit votre trésorerie de novembre et de mars.
+
+**L'antériorité de la créance.** Un impayé de dix jours et un impayé de cent jours n'appellent ni le même traitement ni la même probabilité de recouvrement. Le découpage utile est celui du tableau de bord comptable de KLASSCI : moins de 30 jours, 30 à 60, 60 à 90, au-delà de 90 (critique). Ce qui compte n'est pas le montant total impayé, mais sa migration vers les tranches hautes d'un mois sur l'autre.
+
+**La couverture de trésorerie, en mois de charges** : trésorerie disponible divisée par charges mensuelles moyennes. Seul indicateur qui réponde à la question qui compte — combien de mois de salaires puis-je payer si plus rien ne rentre demain ? Un établissement à 92 % de recouvrement mais 0,3 mois de couverture est en danger ; un établissement à 80 % avec 2 mois ne l'est pas.
+
+## Un exemple complet : 700 élèves, trois tranches, deux débiteurs
+
+Prenons un établissement secondaire de 700 élèves. Les hypothèses ci-dessous rendent la mécanique lisible — remplacez-les par vos chiffres, notamment la part allouée par l'État, qui dépend de votre convention.
+
+- 440 élèves non affectés, scolarité annuelle 180 000 FCFA
+- 260 élèves affectés ou orientés, part État supposée de 100 000 FCFA, donc un frais complémentaire famille de 80 000 FCFA
+- Frais annexes de 30 000 FCFA pour les 700 élèves, dans la fourchette de 0 à 37 000 FCFA fixée par l'arrêté de 2008
+- Charges de fonctionnement, salaires compris : 11 000 000 FCFA par mois, sur dix mois
+
+Produit attendu des familles : 440 × 180 000 = 79 200 000, plus 260 × 80 000 = 20 800 000, plus 700 × 30 000 = 21 000 000, soit **121 000 000 FCFA**. Produit attendu de l'État : 260 × 100 000 = **26 000 000 FCFA**. Total **147 000 000 FCFA**, pour 110 000 000 FCFA de charges. Échéancier familles en trois tranches datées : 40 % au 30 septembre (48 400 000), 35 % au 15 janvier (42 350 000), 25 % au 15 avril (30 250 000).
+
+Supposons un recouvrement de 85 % à la première échéance, puis 82 % et 80 % en cumulé, l'État versant sa première tranche après le 30 mars prévu par la convention.
+
+| Date | Attendu familles (cumul) | Encaissé familles (cumul) | Taux | Subvention reçue | Charges (cumul) | Trésorerie |
+|---|---|---|---|---|---|---|
+| 30 septembre | 48 400 000 | 41 140 000 | 85,0 % | 0 | 11 000 000 | +30 140 000 |
+| 31 décembre | 48 400 000 | 45 140 000 | 93,3 % | 0 | 44 000 000 | **+1 140 000** |
+| 31 janvier | 90 750 000 | 74 415 000 | 82,0 % | 0 | 55 000 000 | +19 415 000 |
+| 31 mars | 90 750 000 | 80 000 000 | 88,2 % | 0 | 77 000 000 | **+3 000 000** |
+| 30 avril | 121 000 000 | 96 800 000 | 80,0 % | 8 666 667 | 88 000 000 | +17 466 667 |
+
+Lisez la colonne de droite. Au 31 décembre, cet établissement dispose de 1 140 000 FCFA pour une charge mensuelle de 11 000 000 : **un dixième de mois de couverture**. Au 31 mars, un quart de mois. Entre les deux, son taux de recouvrement n'est jamais descendu sous 82 %.
+
+Le problème n'est donc pas le taux, c'est la forme de la courbe : deux creux, en décembre et en mars, chacun juste avant une échéance et juste avant un versement de subvention. Ils sont visibles dès le mois d'août, sur un tableur, avant que le premier élève n'entre en classe.
+
+Reste à recouvrer au 30 avril : 24 200 000 FCFA côté familles, soit 2,2 mois de charges, et 17 333 333 FCFA côté État, soit 1,6 mois. Près de quatre mois de fonctionnement — dont la moitié ne dépend d'aucune relance.
+
+## Comment traiter comptablement des frais encaissés d'avance ?
+
+L'année scolaire court de septembre à juin, l'exercice comptable se clôt le 31 décembre. Une partie de ce que vous avez facturé au 31 décembre rémunère un service que vous rendrez l'année suivante : ce n'est pas encore un produit de l'exercice. Le SYSCOHADA révisé traite cette situation par les comptes de régularisation. Les comptes utiles, pour tenir la conversation avec votre expert-comptable :
+
+| Compte | Libellé | Usage dans un établissement |
+|---|---|---|
+| 4111 | Clients | La créance sur la famille |
+| 4495 | État, subventions d'exploitation à recevoir | La créance sur l'État, en contrepartie du compte 71 |
+| 4191 | Clients, avances et acomptes reçus | Encaissement reçu avant exigibilité |
+| 477 | Produits constatés d'avance | La part de scolarité qui rémunère l'exercice suivant |
+| 4162 | Créances douteuses | Reclassement quand le recouvrement devient incertain |
+| 4912 | Dépréciations des comptes clients, créances douteuses | La dépréciation, en contrepartie du compte 659 |
+| 6511 | Pertes sur créances clients | La perte définitive, une fois la créance irrécouvrable |
+
+Reprenons l'exemple. Sur 121 000 000 FCFA facturés pour dix mois de service, quatre sont rendus au 31 décembre : le produit acquis à l'exercice est de 121 000 000 × 4/10 = 48 400 000 FCFA, et les 72 600 000 FCFA restants sont différés au compte 477.
+
+Ce 48 400 000 est exactement le montant de la première tranche. **C'est une coïncidence arithmétique, et elle est instructive :** les deux grandeurs n'ont aucun rapport. L'une mesure un encaissement contractuel, l'autre un service rendu. L'établissement qui les confond lit son résultat dans son relevé bancaire — l'erreur la plus coûteuse du secteur, parce qu'elle fait passer pour un bénéfice de décembre l'argent des cours de mars.
+
+Deux points à trancher avec votre expert-comptable : le rythme de la dépréciation — au bout de combien de jours une créance famille bascule en 4162, et à quel taux — et le traitement de la créance sur l'État. Compte tenu du mécanisme « n+1 », un retard de subvention n'a pas la même signification qu'un retard de famille et ne devrait pas se déprécier selon la même règle. Deux questions qui relèvent d'une politique comptable écrite, appliquée d'un exercice à l'autre.
+
+## Par où commencer
+
+Si vous ne deviez faire qu'une chose cette semaine : ouvrez un tableur, posez vos douze mois en colonnes, vos charges mensuelles sur une ligne, vos échéances attendues sur une autre, et regardez où la différence cumulée passe sous un mois de charges. En une heure, vous tenez la carte de vos deux ou trois moments de tension — donc la liste des échéances à déplacer.
+
+Le reste suit : un règlement financier écrit et signé à l'inscription, une référence de transaction obligatoire sur chaque encaissement électronique, un rappel systématique à J−7, trois indicateurs suivis chaque mois. Aucune de ces mesures ne demande de durcir le ton avec une seule famille.
+
+## Pour aller plus loin
+
+- [Comptable — opérations quotidiennes](/fr/docs/comptable/operations) : enregistrer et valider un paiement, éditer un reçu numéroté, suivre les tranches de retard et les inscriptions en attente de règlement.
+- [Module Frais et Comptabilité](/fr/docs/modules/frais-comptabilite) : paramétrer les catégories de frais, les délais de paiement et les montants par classe, y compris la distinction affectés / réaffectés / non affectés.
+- [Ouvrir une école privée en Côte d'Ivoire](/fr/blog/ouvrir-ecole-privee-cote-divoire) : agrément, carte scolaire et régime des élèves affectés, en amont de toute question de recouvrement.
+- [KLASSCI pour les universités et grandes écoles](/fr/universite) et [pour les collèges et lycées](/fr/college).
+
+{/* DONNEE-TERRAIN: taux de recouvrement à échéance médian observé sur les établissements équipés, par type d'échéance (rentrée / mi-année / fin d'année) — à compléter par l'équipe */}

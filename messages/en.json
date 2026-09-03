@@ -24,22 +24,49 @@
     "inscriptionAria": "Apply to one of our schools"
   },
   "hero": {
-    "title": "School management, reimagined.",
+    "title": "University management, reimagined.",
     "subtitle": "KLASSCI replaces your spreadsheets, grade books, and bulletin boards. One place to run everything.",
     "primaryCta": "Try it free",
     "primaryCtaSub": "— it's free",
     "secondaryCta": "See how it works",
     "note": "Browser-based. No installation required.",
     "screenshots": [
-      { "label": "Dashboard", "alt": "KLASSCI dashboard" },
-      { "label": "Student management", "alt": "KLASSCI student management page" },
-      { "label": "New enrolment", "alt": "KLASSCI new enrolment form" },
-      { "label": "Results & report cards", "alt": "KLASSCI results and report cards" },
-      { "label": "Master timetable", "alt": "KLASSCI master timetable" },
-      { "label": "Attendance", "alt": "KLASSCI attendance management" },
-      { "label": "LMD pathway", "alt": "KLASSCI LMD pathway" },
-      { "label": "Staff management", "alt": "KLASSCI staff management" },
-      { "label": "Sign-in code", "alt": "KLASSCI attendance sign-in code" }
+      {
+        "label": "Dashboard",
+        "alt": "KLASSCI dashboard"
+      },
+      {
+        "label": "Student management",
+        "alt": "KLASSCI student management page"
+      },
+      {
+        "label": "New enrolment",
+        "alt": "KLASSCI new enrolment form"
+      },
+      {
+        "label": "Results & report cards",
+        "alt": "KLASSCI results and report cards"
+      },
+      {
+        "label": "Master timetable",
+        "alt": "KLASSCI master timetable"
+      },
+      {
+        "label": "Attendance",
+        "alt": "KLASSCI attendance management"
+      },
+      {
+        "label": "LMD pathway",
+        "alt": "KLASSCI LMD pathway"
+      },
+      {
+        "label": "Staff management",
+        "alt": "KLASSCI staff management"
+      },
+      {
+        "label": "Sign-in code",
+        "alt": "KLASSCI attendance sign-in code"
+      }
     ]
   },
   "pillars": {
@@ -231,11 +258,33 @@
     "eyebrow": "01 · Trusted by",
     "title": "Trusted by schools educating thousands of students",
     "clients": [
-      { "name": "ESBTP Abidjan", "code": "esbtp-abidjan", "detail": "2,600+ students · Élite plan", "logo": "/img/clients/esbtp.png" },
-      { "name": "ESBTP Yamoussoukro", "code": "esbtp-yakro", "detail": "2,000+ students · Élite plan", "logo": "/img/clients/esbtp.png" },
-      { "name": "Institut Pascal", "detail": "1,000+ students · Élite plan", "logo": "/img/clients/institut-pascal.jpg" },
-      { "name": "San Andrea School", "detail": "1,200+ students · Élite plan", "logo": "/img/clients/san-andrea.jpg" },
-      { "name": "ITS", "detail": "800+ students · Pro plan", "logo": "/img/clients/its.jpg" }
+      {
+        "name": "ESBTP Abidjan",
+        "code": "esbtp-abidjan",
+        "detail": "2,600+ students · Élite plan",
+        "logo": "/img/clients/esbtp.png"
+      },
+      {
+        "name": "ESBTP Yamoussoukro",
+        "code": "esbtp-yakro",
+        "detail": "2,000+ students · Élite plan",
+        "logo": "/img/clients/esbtp.png"
+      },
+      {
+        "name": "Institut Pascal",
+        "detail": "1,000+ students · Élite plan",
+        "logo": "/img/clients/institut-pascal.jpg"
+      },
+      {
+        "name": "San Andrea School",
+        "detail": "1,200+ students · Élite plan",
+        "logo": "/img/clients/san-andrea.jpg"
+      },
+      {
+        "name": "ITS",
+        "detail": "800+ students · Pro plan",
+        "logo": "/img/clients/its.jpg"
+      }
     ],
     "testimonials": [
       {
@@ -294,15 +343,36 @@
     "title": "Guided deployment from start to finish",
     "intro": "Our team prepares your environment, secures the migration of your data and supports every role through go-live.",
     "steps": {
-      "scoping": { "title": "Scoping", "text": "We define scope, priorities and schedule with your project team." },
-      "migration": { "title": "Migration", "text": "Your structured data is imported, checked and prepared for your environment." },
-      "training": { "title": "Training", "text": "Leadership, administration, finance and teaching teams are trained for their roles." },
-      "launch": { "title": "Go-live", "text": "We validate critical journeys and stay alongside your teams during adoption." }
+      "scoping": {
+        "title": "Scoping",
+        "text": "We define scope, priorities and schedule with your project team."
+      },
+      "migration": {
+        "title": "Migration",
+        "text": "Your structured data is imported, checked and prepared for your environment."
+      },
+      "training": {
+        "title": "Training",
+        "text": "Leadership, administration, finance and teaching teams are trained for their roles."
+      },
+      "launch": {
+        "title": "Go-live",
+        "text": "We validate critical journeys and stay alongside your teams during adoption."
+      }
     },
     "assurances": {
-      "backups": { "title": "Daily backups", "text": "Your data is backed up automatically every day." },
-      "support": { "title": "Support for your plan", "text": "The level of assistance matches the service you choose." },
-      "adoption": { "title": "Adoption follow-up", "text": "We track usage and help your teams get the most from KLASSCI." }
+      "backups": {
+        "title": "Daily backups",
+        "text": "Your data is backed up automatically every day."
+      },
+      "support": {
+        "title": "Support for your plan",
+        "text": "The level of assistance matches the service you choose."
+      },
+      "adoption": {
+        "title": "Adoption follow-up",
+        "text": "We track usage and help your teams get the most from KLASSCI."
+      }
     }
   },
   "imageBanner": {
@@ -380,39 +450,123 @@
         {
           "label": "Product",
           "rows": [
-            { "label": "Online learning platform (LMS)", "essentiel": "—", "pro": "✓", "elite": "✓" },
-            { "label": "Public API", "essentiel": "—", "pro": "✓", "elite": "✓ + early access" },
-            { "label": "Parent WhatsApp", "essentiel": "—", "pro": "Standard (1,000 msg/month)", "elite": "Full (5,000 msg/month)" }
+            {
+              "label": "Online learning platform (LMS)",
+              "essentiel": "—",
+              "pro": "✓",
+              "elite": "✓"
+            },
+            {
+              "label": "Public API",
+              "essentiel": "—",
+              "pro": "✓",
+              "elite": "✓ + early access"
+            },
+            {
+              "label": "Parent WhatsApp",
+              "essentiel": "—",
+              "pro": "Standard (1,000 msg/month)",
+              "elite": "Full (5,000 msg/month)"
+            }
           ]
         },
         {
           "label": "Capacities",
           "rows": [
-            { "label": "Admin seats (Founder, Director, Studies, Bursar, Cashier)", "essentiel": "5", "pro": "5", "elite": "Unlimited" },
-            { "label": "Teacher seats", "essentiel": "10", "pro": "25", "elite": "Unlimited" },
-            { "label": "Max students", "essentiel": "500", "pro": "1,500", "elite": "Unlimited" },
-            { "label": "Max teachers", "essentiel": "30", "pro": "60", "elite": "Unlimited" }
+            {
+              "label": "Admin seats (Founder, Director, Studies, Bursar, Cashier)",
+              "essentiel": "5",
+              "pro": "5",
+              "elite": "Unlimited"
+            },
+            {
+              "label": "Teacher seats",
+              "essentiel": "10",
+              "pro": "25",
+              "elite": "Unlimited"
+            },
+            {
+              "label": "Max students",
+              "essentiel": "500",
+              "pro": "1,500",
+              "elite": "Unlimited"
+            },
+            {
+              "label": "Max teachers",
+              "essentiel": "30",
+              "pro": "60",
+              "elite": "Unlimited"
+            }
           ]
         },
         {
           "label": "Technical service ★",
           "rows": [
-            { "label": "Support", "essentiel": "Mon-Thu (4d/7)", "pro": "Mon-Fri (5d/7)", "elite": "Mon-Sat (6d/7)" },
-            { "label": "Launch customisation", "essentiel": "Logo + colours", "pro": "+ Report card / receipt templates", "elite": "Tailored setup" },
-            { "label": "Continuous customisation", "essentiel": "—", "pro": "2 engineering days / year", "elite": "1 engineering day / month (12 days/year)" },
-            { "label": "Roadmap influence", "essentiel": "—", "pro": "Vote", "elite": "Priority" },
-            { "label": "Dedicated account manager", "essentiel": "—", "pro": "—", "elite": "✓" },
-            { "label": "Annual usage audit", "essentiel": "—", "pro": "—", "elite": "✓" }
+            {
+              "label": "Support",
+              "essentiel": "Mon-Thu (4d/7)",
+              "pro": "Mon-Fri (5d/7)",
+              "elite": "Mon-Sat (6d/7)"
+            },
+            {
+              "label": "Launch customisation",
+              "essentiel": "Logo + colours",
+              "pro": "+ Report card / receipt templates",
+              "elite": "Tailored setup"
+            },
+            {
+              "label": "Continuous customisation",
+              "essentiel": "—",
+              "pro": "2 engineering days / year",
+              "elite": "1 engineering day / month (12 days/year)"
+            },
+            {
+              "label": "Roadmap influence",
+              "essentiel": "—",
+              "pro": "Vote",
+              "elite": "Priority"
+            },
+            {
+              "label": "Dedicated account manager",
+              "essentiel": "—",
+              "pro": "—",
+              "elite": "✓"
+            },
+            {
+              "label": "Annual usage audit",
+              "essentiel": "—",
+              "pro": "—",
+              "elite": "✓"
+            }
           ]
         }
       ],
       "pricing": {
         "label": "Pricing",
-        "annual": { "label": "Annual (from year two)", "essentiel": "700k FCFA", "pro": "1.15M FCFA", "elite": "4.8M FCFA" },
-        "firstYear": { "label": "First year", "essentiel": "988k FCFA", "pro": "1.3M FCFA", "elite": "6M FCFA" },
-        "monthly": { "label": "Monthly billing", "essentiel": "67k FCFA", "pro": "110k FCFA", "elite": "460k FCFA" }
+        "annual": {
+          "label": "Annual (from year two)",
+          "essentiel": "700k FCFA",
+          "pro": "1.15M FCFA",
+          "elite": "4.8M FCFA"
+        },
+        "firstYear": {
+          "label": "First year",
+          "essentiel": "988k FCFA",
+          "pro": "1.3M FCFA",
+          "elite": "6M FCFA"
+        },
+        "monthly": {
+          "label": "Monthly billing",
+          "essentiel": "67k FCFA",
+          "pro": "110k FCFA",
+          "elite": "460k FCFA"
+        }
       },
-      "ctas": { "essentiel": "Choose Essentiel", "pro": "Choose Pro", "elite": "Choose Élite" }
+      "ctas": {
+        "essentiel": "Choose Essentiel",
+        "pro": "Choose Pro",
+        "elite": "Choose Élite"
+      }
     },
     "footer": "Every tier includes hosting, backups and MESRS compliance · Migration of your existing data included at activation"
   },
@@ -455,23 +609,57 @@
       "locationLabel": "Location"
     },
     "form": {
-      "name": { "label": "Full name", "placeholder": "Your name" },
-      "email": { "label": "Email", "placeholder": "you@example.com" },
-      "school": { "label": "School", "placeholder": "Your school name" },
-      "phone": { "label": "Phone", "placeholder": "+225 07 00 00 00 00" },
+      "name": {
+        "label": "Full name",
+        "placeholder": "Your name"
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "you@example.com"
+      },
+      "school": {
+        "label": "School",
+        "placeholder": "Your school name"
+      },
+      "phone": {
+        "label": "Phone",
+        "placeholder": "+225 07 00 00 00 00"
+      },
       "type": {
         "label": "School type",
         "placeholder": "Select",
         "options": [
-          { "value": "ecole_superieure", "label": "Higher education school" },
-          { "value": "universite", "label": "University" },
-          { "value": "lycee", "label": "High school" },
-          { "value": "college", "label": "Middle school" },
-          { "value": "centre_formation", "label": "Training centre" },
-          { "value": "autre", "label": "Other" }
+          {
+            "value": "ecole_superieure",
+            "label": "Higher education school"
+          },
+          {
+            "value": "universite",
+            "label": "University"
+          },
+          {
+            "value": "lycee",
+            "label": "High school"
+          },
+          {
+            "value": "college",
+            "label": "Middle school"
+          },
+          {
+            "value": "centre_formation",
+            "label": "Training centre"
+          },
+          {
+            "value": "autre",
+            "label": "Other"
+          }
         ]
       },
-      "message": { "label": "Message", "labelOptional": "Message (optional)", "placeholder": "Tell us how KLASSCI can help you..." },
+      "message": {
+        "label": "Message",
+        "labelOptional": "Message (optional)",
+        "placeholder": "Tell us how KLASSCI can help you..."
+      },
       "submit": "Send request",
       "submitArrow": "→",
       "submitting": "Sending...",
@@ -499,16 +687,40 @@
       "intro": "KLASSCI helps higher-education institutions track students with disabilities, learning accommodations, extra time, required assistants and official recognition, with confidentiality controlled by permissions.",
       "imageAlt": "Student accessibility tracking page in KLASSCI",
       "stats": [
-        { "value": "10", "label": "students tracked" },
-        { "value": "10", "label": "extra-time profiles" },
-        { "value": "2", "label": "assistants required" },
-        { "value": "8", "label": "official recognitions" }
+        {
+          "value": "10",
+          "label": "students tracked"
+        },
+        {
+          "value": "10",
+          "label": "extra-time profiles"
+        },
+        {
+          "value": "2",
+          "label": "assistants required"
+        },
+        {
+          "value": "8",
+          "label": "official recognitions"
+        }
       ],
       "cards": [
-        { "title": "Student profile", "text": "Categories, teacher summary, validity period and official recognition." },
-        { "title": "Concrete accommodations", "text": "Extra time, enlarged material, authorized computer, assistant and implementation notes." },
-        { "title": "Confidentiality", "text": "Useful summaries circulate while sensitive details stay limited to authorized roles." },
-        { "title": "Exports and audit", "text": "PDF/Excel reports and change history secure administrative follow-up." }
+        {
+          "title": "Student profile",
+          "text": "Categories, teacher summary, validity period and official recognition."
+        },
+        {
+          "title": "Concrete accommodations",
+          "text": "Extra time, enlarged material, authorized computer, assistant and implementation notes."
+        },
+        {
+          "title": "Confidentiality",
+          "text": "Useful summaries circulate while sensitive details stay limited to authorized roles."
+        },
+        {
+          "title": "Exports and audit",
+          "text": "PDF/Excel reports and change history secure administrative follow-up."
+        }
       ]
     },
     "sdg": {
@@ -516,15 +728,51 @@
       "title": "Less paper, stronger inclusion and more responsible university governance.",
       "intro": "KLASSCI connects university management to a greener, more traceable operating model. By reducing print-heavy workflows, strengthening accessibility and structuring governance, the platform contributes to 9 United Nations Sustainable Development Goals.",
       "items": [
-        { "number": "04", "name": "Quality education", "text": "More reliable academic organization, accessible data and stronger learning follow-up." },
-        { "number": "05", "name": "Gender equality", "text": "Digital services shared by learners, staff and authorized leaders." },
-        { "number": "08", "name": "Decent work", "text": "Administrative teams spend less time on repetitive work and re-entry." },
-        { "number": "09", "name": "Innovation", "text": "Structured digital transformation for African higher education." },
-        { "number": "10", "name": "Reduced inequalities", "text": "Better tracking of specific needs and learning accommodations." },
-        { "number": "12", "name": "Responsible consumption", "text": "Concrete paper reduction through digital report cards, receipts, exports and documents." },
-        { "number": "13", "name": "Climate action", "text": "Fewer printouts, fewer unnecessary administrative trips and leaner workflows." },
-        { "number": "16", "name": "Effective institutions", "text": "Traceability, permissions, audit and clearer governance for authorized teams." },
-        { "number": "17", "name": "Partnerships", "text": "Better coordination between institutions, families, public bodies and partners." }
+        {
+          "number": "04",
+          "name": "Quality education",
+          "text": "More reliable academic organization, accessible data and stronger learning follow-up."
+        },
+        {
+          "number": "05",
+          "name": "Gender equality",
+          "text": "Digital services shared by learners, staff and authorized leaders."
+        },
+        {
+          "number": "08",
+          "name": "Decent work",
+          "text": "Administrative teams spend less time on repetitive work and re-entry."
+        },
+        {
+          "number": "09",
+          "name": "Innovation",
+          "text": "Structured digital transformation for African higher education."
+        },
+        {
+          "number": "10",
+          "name": "Reduced inequalities",
+          "text": "Better tracking of specific needs and learning accommodations."
+        },
+        {
+          "number": "12",
+          "name": "Responsible consumption",
+          "text": "Concrete paper reduction through digital report cards, receipts, exports and documents."
+        },
+        {
+          "number": "13",
+          "name": "Climate action",
+          "text": "Fewer printouts, fewer unnecessary administrative trips and leaner workflows."
+        },
+        {
+          "number": "16",
+          "name": "Effective institutions",
+          "text": "Traceability, permissions, audit and clearer governance for authorized teams."
+        },
+        {
+          "number": "17",
+          "name": "Partnerships",
+          "text": "Better coordination between institutions, families, public bodies and partners."
+        }
       ]
     }
   },
@@ -534,24 +782,68 @@
       "product": {
         "title": "Product",
         "links": [
-          { "label": "Features", "href": "#fonctionnalites" },
-          { "label": "Pricing", "href": "#tarifs" },
-          { "label": "Apply online", "href": "/inscription" }
+          {
+            "label": "University and higher education",
+            "href": "/universite"
+          },
+          {
+            "label": "Middle and high school",
+            "href": "/college"
+          },
+          {
+            "label": "Online learning",
+            "href": "/lms"
+          },
+          {
+            "label": "Enrol online",
+            "href": "/inscription"
+          }
         ]
       },
       "resources": {
         "title": "Resources",
         "links": [
-          { "label": "Documentation", "href": "/docs" },
-          { "label": "API reference", "href": "/docs/api-reference" },
-          { "label": "Changelog", "href": "/docs/changelog" }
+          {
+            "label": "Documentation",
+            "href": "/docs"
+          },
+          {
+            "label": "API reference",
+            "href": "/docs/api-reference"
+          },
+          {
+            "label": "Changelog",
+            "href": "/docs/changelog"
+          },
+          {
+            "label": "About",
+            "href": "/a-propos"
+          },
+          {
+            "label": "Data security",
+            "href": "/securite"
+          }
         ]
       },
       "contact": {
         "title": "Contact",
         "links": [
-          { "label": "contact@klassci.com", "href": "mailto:contact@klassci.com" },
-          { "label": "Abidjan, Côte d'Ivoire", "href": "#contact" }
+          {
+            "label": "contact@klassci.com",
+            "href": "mailto:contact@klassci.com"
+          },
+          {
+            "label": "Abidjan, Côte d'Ivoire",
+            "href": "#contact"
+          },
+          {
+            "label": "Legal notice",
+            "href": "/mentions-legales"
+          },
+          {
+            "label": "Privacy",
+            "href": "/confidentialite"
+          }
         ]
       }
     },
@@ -559,6 +851,35 @@
     "social": {
       "facebook": "Facebook",
       "linkedin": "LinkedIn"
+    }
+  },
+  "notFound": {
+    "titre": "This page does not exist",
+    "texte": "The address you asked for is gone, or never existed. Here is where to pick up.",
+    "aria": "Where to go next",
+    "liens": {
+      "universite": {
+        "titre": "KLASSCI University",
+        "texte": "Universities and higher-education schools, BTS and LMD."
+      },
+      "college": {
+        "titre": "KLASSCI College",
+        "texte": "Middle and high schools, from enrolment to report card."
+      },
+      "docs": {
+        "titre": "Documentation",
+        "texte": "Getting started, roles, modules, API."
+      },
+      "accueil": {
+        "titre": "Home",
+        "texte": "Pick the edition that fits your institution."
+      }
+    }
+  },
+  "universite": {
+    "meta": {
+      "title": "University management software, LMD and BTS",
+      "description": "Enrolment, grades, report cards, attendance, timetables and tuition fees: KLASSCI runs universities and higher-education schools across West Africa, in BTS and UEMOA LMD."
     }
   }
 }

@@ -1,5 +1,5 @@
 import { loader } from "fumadocs-core/source";
-import { docs } from "@/.source";
+import { blog, docs, institutionnel } from "@/.source";
 import { i18n } from "@/lib/i18n";
 
 // Fumadocs source loader — exposes getPage / getPages / pageTree.
@@ -14,3 +14,32 @@ export const source = loader({
   source: docs.toFumadocsSource(),
   i18n,
 });
+
+// Le blog. Volontairement sans i18n : le corpus est francais, et il le reste
+// tant qu'il n'est pas traduit par quelqu'un qui connait le sujet. Brancher
+// l'i18n ici ferait servir les memes articles sous `/en/blog/...` par repli —
+// c'est-a-dire du contenu duplique entre deux langues, exactement ce que les
+// balises hreflang sont censees empecher. Un article reglementaire ivoirien
+// mal traduit dessert l'autorite qu'il est cense construire.
+export const sourceBlog = loader({
+  baseUrl: "/blog",
+  source: blog.toFumadocsSource(),
+});
+
+// Les pages institutionnelles : a propos, securite, mentions legales,
+// confidentialite. Traduites, donc chargees avec la meme configuration i18n que
+// la documentation — un fichier `<nom>.en.mdx` sert la version anglaise, et le
+// fichier francais fait office de repli tant qu'elle n'existe pas.
+//
+// `baseUrl` vaut la racine : ces pages vivent a `/a-propos`, pas sous un
+// prefixe de rubrique. Les ranger sous `/legal` ou `/entreprise` aurait ajoute
+// un segment que personne ne tape et qui n'apporte rien — une politique de
+// confidentialite se cherche par son nom.
+export const sourceInstitutionnel = loader({
+  baseUrl: "/",
+  source: institutionnel.toFumadocsSource(),
+  i18n,
+});
+
+/** La langue dans laquelle le blog est publie. */
+export const LANGUE_BLOG = "fr" as const;

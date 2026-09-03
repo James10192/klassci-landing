@@ -99,11 +99,16 @@ export function SceneProduit({ etiquettes }: { etiquettes: EtiquettesScene }) {
             : { rotateX, rotateY }
         }
       >
+        {/* Sans `sizes`, Next produit un jeu de sources en densite : un
+            telephone Android en DPR 2 choisit la variante 2048 pixels, soit
+            30 ko et quatre fois le cout de decodage, pour une image affichee
+            sur 288 pixels. C'est l'image LCP de la page d'accueil. */}
         <Image
           src="/img/dashboard/01-dashboard.png"
           alt=""
           width={1200}
           height={760}
+          sizes="(max-width: 768px) 80vw, 640px"
           priority
           className="absolute left-10 top-4 w-[80%] rounded-lg border border-border bg-bg-card shadow-[0_30px_80px_rgba(4,83,203,0.18)]"
         />
@@ -114,6 +119,7 @@ export function SceneProduit({ etiquettes }: { etiquettes: EtiquettesScene }) {
           alt=""
           width={1200}
           height={760}
+          sizes="(max-width: 768px) 74vw, 590px"
           className="absolute bottom-8 right-0 w-[74%] rounded-lg border border-border bg-bg-card shadow-[0_24px_70px_rgba(26,26,26,0.16)]"
         />
         <Etiquette className="bottom-2 right-2">{etiquettes.caisse}</Etiquette>
@@ -124,6 +130,7 @@ export function SceneProduit({ etiquettes }: { etiquettes: EtiquettesScene }) {
             alt=""
             width={390}
             height={844}
+            sizes="128px"
             className="h-full w-full rounded-[1rem] object-cover object-top"
           />
         </div>

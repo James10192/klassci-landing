@@ -4,7 +4,9 @@ import ArrowRight from "lucide-react/dist/esm/icons/arrow-right";
 import Clock3 from "lucide-react/dist/esm/icons/clock-3";
 import FileText from "lucide-react/dist/esm/icons/file-text";
 import School from "lucide-react/dist/esm/icons/school";
-import { motion, useReducedMotion } from "framer-motion";
+// `m` et non `motion` : sous <LazyMotion strict>, `motion` leve une
+// invariant en developpement et annule l'elagage du paquet.
+import { m, useReducedMotion } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 
@@ -103,7 +105,7 @@ export function CollegeRoiCalculator({
             </div>
           </div>
 
-          <motion.div
+          <m.div
             key={recommendedPlan}
             initial={reduceMotion ? false : { opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -147,7 +149,7 @@ export function CollegeRoiCalculator({
               {t("cta")}
               <ArrowRight className="h-4 w-4" aria-hidden />
             </button>
-          </motion.div>
+          </m.div>
         </div>
       </div>
     </section>

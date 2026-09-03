@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { ReactNode } from "react";
 
 export function CollegeMockupStage() {
@@ -6,9 +7,13 @@ export function CollegeMockupStage() {
       <div className="college-orbit absolute inset-0 [transform-style:preserve-3d]">
         <div className="absolute left-0 top-8 w-[88%] [transform:translateZ(70px)_rotateY(-7deg)]">
           <LaptopFrame>
-            <img
+            <Image
               src="/img/college/current-dashboard.png"
               alt=""
+              width={1440}
+              height={1000}
+              sizes="(max-width: 768px) 88vw, 60vw"
+              quality={70}
               className="h-full w-full object-contain"
             />
           </LaptopFrame>
@@ -16,9 +21,13 @@ export function CollegeMockupStage() {
 
         <div className="absolute bottom-4 right-3 w-[28%] min-w-[9.5rem] [transform:translateZ(190px)_rotateY(11deg)]">
           <PhoneFrame>
-            <img
+            <Image
               src="/img/college/current-mobile-dashboard.png"
               alt=""
+              width={390}
+              height={844}
+              sizes="(max-width: 768px) 28vw, 200px"
+              quality={70}
               className="h-full w-full object-contain"
             />
           </PhoneFrame>

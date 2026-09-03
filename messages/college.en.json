@@ -1,7 +1,7 @@
 {
   "college": {
     "meta": {
-      "title": "KLASSCI College, complete school management for middle and high schools",
+      "title": "Management software for middle and high schools",
       "description": "KLASSCI College brings enrollment, fees, grades, report cards, attendance, timetables and parent spaces into one platform."
     },
     "nav": {
@@ -37,12 +37,30 @@
       "title": "Each account sees exactly what it must handle",
       "intro": "KLASSCI College separates responsibilities without fragmenting information. Roles collaborate in the same system with proper permissions.",
       "items": [
-        { "title": "Leadership", "description": "Global view of enrollment, finances, attendance, results and official documents." },
-        { "title": "Secretariat", "description": "Enrollments, student files, classes, administrative documents and daily requests." },
-        { "title": "Accounting", "description": "Collections, receipts, balances, reminders and financial statements by student or class." },
-        { "title": "Teachers", "description": "Grades, attendance, timetable and class tracking from mobile or desktop." },
-        { "title": "Parents", "description": "Fees, report cards, timetables, documents and useful updates for each child." },
-        { "title": "Students", "description": "Simple access to grades, report cards, attendance, payments, timetable and published documents." }
+        {
+          "title": "Leadership",
+          "description": "Global view of enrollment, finances, attendance, results and official documents."
+        },
+        {
+          "title": "Secretariat",
+          "description": "Enrollments, student files, classes, administrative documents and daily requests."
+        },
+        {
+          "title": "Accounting",
+          "description": "Collections, receipts, balances, reminders and financial statements by student or class."
+        },
+        {
+          "title": "Teachers",
+          "description": "Grades, attendance, timetable and class tracking from mobile or desktop."
+        },
+        {
+          "title": "Parents",
+          "description": "Fees, report cards, timetables, documents and useful updates for each child."
+        },
+        {
+          "title": "Students",
+          "description": "Simple access to grades, report cards, attendance, payments, timetable and published documents."
+        }
       ]
     },
     "modules": {
@@ -50,14 +68,38 @@
       "title": "Every school workflow, without parallel tools",
       "intro": "The product covers the flows that cost teams time, from intake to report cards.",
       "items": [
-        { "title": "Enrollments", "description": "Student file, class, status, subscribed fees, documents and validation." },
-        { "title": "Fees and cashier", "description": "Enrollment-based payments, receipts, remaining balances, history and reminders." },
-        { "title": "Grades and reports", "description": "Teacher entry, averages, ranks, report cards and PDF documents." },
-        { "title": "Attendance", "description": "Digital roll call, absences, lateness, justifications and class statistics." },
-        { "title": "Timetable", "description": "Classroom equals class, teachers move, each actor reads a clear schedule." },
-        { "title": "Parents", "description": "Family portal with children, fees, documents, grades and reports." },
-        { "title": "Documents", "description": "Certificates, attestations, financial statements and clean exports." },
-        { "title": "Leadership", "description": "Dashboards that surface priorities before they become emergencies." }
+        {
+          "title": "Enrollments",
+          "description": "Student file, class, status, subscribed fees, documents and validation."
+        },
+        {
+          "title": "Fees and cashier",
+          "description": "Enrollment-based payments, receipts, remaining balances, history and reminders."
+        },
+        {
+          "title": "Grades and reports",
+          "description": "Teacher entry, averages, ranks, report cards and PDF documents."
+        },
+        {
+          "title": "Attendance",
+          "description": "Digital roll call, absences, lateness, justifications and class statistics."
+        },
+        {
+          "title": "Timetable",
+          "description": "Classroom equals class, teachers move, each actor reads a clear schedule."
+        },
+        {
+          "title": "Parents",
+          "description": "Family portal with children, fees, documents, grades and reports."
+        },
+        {
+          "title": "Documents",
+          "description": "Certificates, attestations, financial statements and clean exports."
+        },
+        {
+          "title": "Leadership",
+          "description": "Dashboards that surface priorities before they become emergencies."
+        }
       ]
     },
     "showcase": {
@@ -65,11 +107,41 @@
       "title": "Recent, readable screens shown in real devices",
       "intro": "Recent screenshots show the real school-management screens without added frames, keeping every interface fully readable.",
       "items": [
-        { "title": "Live dashboard", "caption": "Current dashboard with blue and orange header, indicators and quick actions.", "image": "/img/college/current-dashboard.png", "alt": "Current KLASSCI College dashboard", "format": "desktop" },
-        { "title": "Mobile dashboard", "caption": "Indicators and actions stay accessible on phone with the same brand identity.", "image": "/img/college/current-mobile-dashboard.png", "alt": "Current KLASSCI College mobile dashboard", "format": "mobile" },
-        { "title": "Assessments and entry", "caption": "Grade supervision with filters by class, subject and term.", "image": "/img/college/current-grades.png", "alt": "KLASSCI College grades", "format": "desktop" },
-        { "title": "Parents and accounts", "caption": "Track guardians, login accounts and useful contacts for each family.", "image": "/img/college/current-parents.png", "alt": "KLASSCI College parents", "format": "desktop" },
-        { "title": "Timetable", "caption": "Generation, preview and PDF export grouped in one clear interface.", "image": "/img/college/current-timetable.png", "alt": "KLASSCI College timetable", "format": "desktop" }
+        {
+          "title": "Live dashboard",
+          "caption": "Current dashboard with blue and orange header, indicators and quick actions.",
+          "image": "/img/college/current-dashboard.png",
+          "alt": "Current KLASSCI College dashboard",
+          "format": "desktop"
+        },
+        {
+          "title": "Mobile dashboard",
+          "caption": "Indicators and actions stay accessible on phone with the same brand identity.",
+          "image": "/img/college/current-mobile-dashboard.png",
+          "alt": "Current KLASSCI College mobile dashboard",
+          "format": "mobile"
+        },
+        {
+          "title": "Assessments and entry",
+          "caption": "Grade supervision with filters by class, subject and term.",
+          "image": "/img/college/current-grades.png",
+          "alt": "KLASSCI College grades",
+          "format": "desktop"
+        },
+        {
+          "title": "Parents and accounts",
+          "caption": "Track guardians, login accounts and useful contacts for each family.",
+          "image": "/img/college/current-parents.png",
+          "alt": "KLASSCI College parents",
+          "format": "desktop"
+        },
+        {
+          "title": "Timetable",
+          "caption": "Generation, preview and PDF export grouped in one clear interface.",
+          "image": "/img/college/current-timetable.png",
+          "alt": "KLASSCI College timetable",
+          "format": "desktop"
+        }
       ]
     },
     "impact": {
@@ -77,15 +149,51 @@
       "title": "A greener, better connected and more responsible school.",
       "intro": "KLASSCI College helps schools reduce paper, improve school-family coordination and strengthen decision traceability. This transformation contributes to 9 United Nations Sustainable Development Goals.",
       "items": [
-        { "number": "04", "name": "Quality education", "text": "More regular tracking of grades, attendance, report cards and family information." },
-        { "number": "05", "name": "Gender equality", "text": "Equal digital access to school information for authorized students, parents and staff." },
-        { "number": "08", "name": "Decent work", "text": "Less re-entry for administrative teams and more time to support families." },
-        { "number": "09", "name": "Innovation", "text": "Progressive digitization of school workflows without multiplying tools." },
-        { "number": "10", "name": "Reduced inequalities", "text": "Information is shared more reliably between school and families through actor-specific accounts." },
-        { "number": "12", "name": "Responsible consumption", "text": "Concrete paper reduction through digital receipts, report cards, certificates and exports." },
-        { "number": "13", "name": "Climate action", "text": "Fewer repeated printouts, fewer lost documents and leaner administrative workflows." },
-        { "number": "16", "name": "Effective institutions", "text": "Better traceability for payments, attendance, grades and administrative decisions." },
-        { "number": "17", "name": "Partnerships", "text": "Smoother collaboration between school, parents, teachers, students and partners." }
+        {
+          "number": "04",
+          "name": "Quality education",
+          "text": "More regular tracking of grades, attendance, report cards and family information."
+        },
+        {
+          "number": "05",
+          "name": "Gender equality",
+          "text": "Equal digital access to school information for authorized students, parents and staff."
+        },
+        {
+          "number": "08",
+          "name": "Decent work",
+          "text": "Less re-entry for administrative teams and more time to support families."
+        },
+        {
+          "number": "09",
+          "name": "Innovation",
+          "text": "Progressive digitization of school workflows without multiplying tools."
+        },
+        {
+          "number": "10",
+          "name": "Reduced inequalities",
+          "text": "Information is shared more reliably between school and families through actor-specific accounts."
+        },
+        {
+          "number": "12",
+          "name": "Responsible consumption",
+          "text": "Concrete paper reduction through digital receipts, report cards, certificates and exports."
+        },
+        {
+          "number": "13",
+          "name": "Climate action",
+          "text": "Fewer repeated printouts, fewer lost documents and leaner administrative workflows."
+        },
+        {
+          "number": "16",
+          "name": "Effective institutions",
+          "text": "Better traceability for payments, attendance, grades and administrative decisions."
+        },
+        {
+          "number": "17",
+          "name": "Partnerships",
+          "text": "Smoother collaboration between school, parents, teachers, students and partners."
+        }
       ]
     },
     "sales": {
@@ -172,14 +280,55 @@
             "elite": "Elite"
           },
           "rows": [
-            { "key": "capacity", "label": "Recommended enrolment", "essentielle": "", "pro": "", "elite": "" },
-            { "label": "Students, enrolment, grades and reports", "essentielle": "Included", "pro": "Included", "elite": "Included" },
-            { "label": "Payments and accounting", "essentielle": "Simplified", "pro": "Complete", "elite": "Complete" },
-            { "label": "Timetables and attendance", "essentielle": "Essential", "pro": "Included", "elite": "Included" },
-            { "label": "Parent application", "essentielle": "Standard", "pro": "Included", "elite": "Included" },
-            { "label": "Dashboards and statistics", "essentielle": "Standard", "pro": "Advanced", "elite": "Tailored" },
-            { "label": "HR, API and advanced archiving", "essentielle": "Not included", "pro": "Not included", "elite": "Included" },
-            { "label": "Support", "essentielle": "6 days/week", "pro": "6 days/week", "elite": "Priority 6 days/week" }
+            {
+              "key": "capacity",
+              "label": "Recommended enrolment",
+              "essentielle": "",
+              "pro": "",
+              "elite": ""
+            },
+            {
+              "label": "Students, enrolment, grades and reports",
+              "essentielle": "Included",
+              "pro": "Included",
+              "elite": "Included"
+            },
+            {
+              "label": "Payments and accounting",
+              "essentielle": "Simplified",
+              "pro": "Complete",
+              "elite": "Complete"
+            },
+            {
+              "label": "Timetables and attendance",
+              "essentielle": "Essential",
+              "pro": "Included",
+              "elite": "Included"
+            },
+            {
+              "label": "Parent application",
+              "essentielle": "Standard",
+              "pro": "Included",
+              "elite": "Included"
+            },
+            {
+              "label": "Dashboards and statistics",
+              "essentielle": "Standard",
+              "pro": "Advanced",
+              "elite": "Tailored"
+            },
+            {
+              "label": "HR, API and advanced archiving",
+              "essentielle": "Not included",
+              "pro": "Not included",
+              "elite": "Included"
+            },
+            {
+              "label": "Support",
+              "essentielle": "6 days/week",
+              "pro": "6 days/week",
+              "elite": "Priority 6 days/week"
+            }
           ]
         },
         "perStudent": {
@@ -201,9 +350,18 @@
         "intro": "The effort is spread over time while our team configures your institution and supports your teams.",
         "paymentTitle": "Staged payment",
         "paymentSteps": [
-          { "value": "40%", "label": "On signature" },
-          { "value": "30%", "label": "On deployment" },
-          { "value": "30%", "label": "Thirty days later" }
+          {
+            "value": "40%",
+            "label": "On signature"
+          },
+          {
+            "value": "30%",
+            "label": "On deployment"
+          },
+          {
+            "value": "30%",
+            "label": "Thirty days later"
+          }
         ],
         "items": {
           "configuration": "Configuration",
@@ -233,9 +391,18 @@
         "type": "Institution type",
         "typePlaceholder": "Select",
         "types": [
-          { "value": "college", "label": "Middle school" },
-          { "value": "lycee", "label": "High school" },
-          { "value": "groupe_scolaire", "label": "School group" }
+          {
+            "value": "college",
+            "label": "Middle school"
+          },
+          {
+            "value": "lycee",
+            "label": "High school"
+          },
+          {
+            "value": "groupe_scolaire",
+            "label": "School group"
+          }
         ],
         "students": "Number of students",
         "plan": "Plan considered",

@@ -48,6 +48,14 @@ const nextConfig = {
         ],
       },
       {
+        // Les reponses d'API n'ont rien a faire dans un index. Le `Disallow`
+        // du robots.txt empeche de les explorer ; cet en-tete couvre ce qui
+        // serait malgre tout recupere — un lien partage, un robot qui ignore
+        // le fichier.
+        source: "/api/:path*",
+        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+      },
+      {
         source: "/(.*)",
         headers: [
           { key: "X-Content-Type-Options", value: "nosniff" },
@@ -61,11 +69,22 @@ const nextConfig = {
 
 
   async redirects() {
-    // Old top-level URLs redirect to the new MDX-based locations under /docs.
-    // Preserves SEO + backlinks from the legacy klassci.com Laravel pages.
+    // Les anciennes adresses de la version Laravel du site, conservees pour
+    // les liens entrants.
+    //
+    // Elles visaient `/docs/...`, sans prefixe de langue — ce qui enchainait
+    // deux sauts : un 308 vers `/docs/api-reference`, puis un 307 du
+    // middleware vers `/fr/docs/api-reference`. Une chaine de redirections
+    // dilue le signal du lien entrant et coute un aller-retour au visiteur.
+    // Ces adresses heritees etaient francaises : on vise donc directement la
+    // page francaise.
     return [
-      { source: "/api-reference", destination: "/docs/api-reference", permanent: true },
-      { source: "/changelog", destination: "/docs/changelog", permanent: true },
+      {
+        source: "/api-reference",
+        destination: "/fr/docs/api-reference",
+        permanent: true,
+      },
+      { source: "/changelog", destination: "/fr/docs/changelog", permanent: true },
     ];
   },
 };

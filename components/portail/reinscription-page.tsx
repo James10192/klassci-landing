@@ -67,6 +67,21 @@ function initiales(nom: string): string {
  * Le logo est posé sur une tuile blanche, y compris dans le bandeau coloré :
  * les logos d'école sont presque toujours dessinés pour du papier blanc, et
  * beaucoup deviennent illisibles posés à même une couleur soutenue.
+ *
+ * **La tuile est rectangulaire, et c'est le point.** Elle était carrée, de
+ * quarante pixels moins six de marge intérieure : vingt-huit pixels de côté.
+ * Or un logo d'établissement n'est presque jamais un carré — ceux que servent
+ * les instances font 185 × 141, 412 × 142, 600 × 360. `object-contain` dans un
+ * carré de vingt-huit pixels réduisait le logo de l'USAT à une bande de vingt-
+ * huit sur dix : présente dans le HTML, chargée, visible au sens du navigateur,
+ * et illisible pour un être humain. La donnée était juste de bout en bout ;
+ * c'est l'affichage qui la perdait.
+ *
+ * Le rapport 4:3 retenu laisse respirer un mot-symbole sans déformer un
+ * écusson, qui reste centré. Et le liseré n'est pas décoratif : le logo de
+ * l'une des instances est blanc à 85 %, donc invisible sur une tuile blanche
+ * posée sur un fond clair. Le liseré dessine la tuile même quand son contenu
+ * ne se voit pas.
  */
 function Marque({
   logo,
@@ -77,14 +92,19 @@ function Marque({
   nom: string;
   taille: "liste" | "bandeau";
 }) {
-  const boite = taille === "bandeau" ? "h-14 w-14" : "h-10 w-10";
+  const boite = taille === "bandeau" ? "h-16 w-[5.5rem]" : "h-12 w-16";
   const texte = taille === "bandeau" ? "text-base" : "text-xs";
+  const marge = taille === "bandeau" ? "p-2" : "p-1.5";
+
+  const tuile =
+    `inline-flex ${boite} shrink-0 items-center justify-center rounded-xl bg-white` +
+    " ring-1 ring-black/[0.06] shadow-[0_1px_3px_rgba(16,24,40,0.12)]";
 
   if (logo === null) {
     return (
       <span
         aria-hidden
-        className={`inline-flex ${boite} shrink-0 items-center justify-center rounded-xl bg-white font-mono ${texte} font-semibold text-text-secondary shadow-[0_1px_3px_rgba(16,24,40,0.12)]`}
+        className={`${tuile} font-mono ${texte} font-semibold text-text-secondary`}
       >
         {initiales(nom)}
       </span>
@@ -92,15 +112,16 @@ function Marque({
   }
 
   return (
-    <span
-      className={`inline-flex ${boite} shrink-0 items-center justify-center rounded-xl bg-white p-1.5 shadow-[0_1px_3px_rgba(16,24,40,0.12)]`}
-    >
+    <span className={`${tuile} ${marge}`}>
       <Image
         src={logo}
-        alt=""
-        width={112}
-        height={112}
-        sizes="112px"
+        // Le nom de l'école, pas une chaîne vide : c'est une image porteuse de
+        // sens, la seule marque visuelle qui distingue une ligne de la
+        // suivante. Un lecteur d'écran doit l'annoncer.
+        alt={nom}
+        width={176}
+        height={128}
+        sizes="176px"
         className="h-full w-full object-contain"
       />
     </span>
@@ -276,9 +297,7 @@ async function ChoixEtablissement({
                 href={`/${locale}/inscription/universite/${etablissement.code}`}
                 className="flex min-h-[56px] items-center gap-3.5 rounded-xl border border-border px-4 py-3 transition-[border-color,background-color,scale] duration-200 hover:border-accent hover:bg-accent-light active:scale-[0.96]"
               >
-                <span className="rounded-xl bg-bg-alt">
-                  <Marque logo={identite?.logo ?? null} nom={nom} taille="liste" />
-                </span>
+                <Marque logo={identite?.logo ?? null} nom={nom} taille="liste" />
                 <span className="min-w-0 flex-1">
                   <span className="block truncate font-medium">{nom}</span>
                   {identite?.ville ? (

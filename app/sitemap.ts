@@ -1,39 +1,163 @@
+import { statSync } from "node:fs";
+import { join } from "node:path";
+
 import type { MetadataRoute } from "next";
 
-import { source } from "@/lib/source";
+import { articles } from "@/lib/blog";
+import {
+  cheminInstitutionnel,
+  pageInstitutionnelle,
+  pagesPubliables,
+} from "@/lib/institutionnel";
+import { LANGUE_BLOG, source } from "@/lib/source";
 import { routing } from "@/i18n/routing";
+import { SITE_URL } from "@/lib/site-url";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://klassci.com";
+/**
+ * Le plan du site.
+ *
+ * Deux defauts corriges ici, tous deux invisibles depuis le code et visibles
+ * seulement dans la sortie reelle :
+ *
+ * 1. L'adresse de base etait lue directement dans l'environnement. La variable
+ *    Vercel se terminait par un saut de ligne, donc chaque `<loc>` valait
+ *    `https://klassci.com\n/fr` — les 32 adresses etaient invalides.
+ *
+ * 2. `page.url` de fumadocs porte deja le prefixe de langue (`/fr/docs/...`).
+ *    Le prefixer une seconde fois produisait `/fr/fr/docs/...` et
+ *    `/en/fr/docs/...` : les 24 adresses de documentation menaient a des 404,
+ *    et les pages anglaises n'etaient jamais declarees.
+ *
+ * On ajoute aussi les alternates de langue : declarer les correspondances
+ * fr/en dans le sitemap dispense d'avoir a recuperer chaque page pour lire ses
+ * balises `link rel=alternate`, et c'est la methode que Google recommande
+ * quand le nombre de pages augmente.
+ */
+
+const RACINE_CONTENU = join(process.cwd(), "content/docs");
+
+/**
+ * Date de derniere modification reelle du fichier source.
+ *
+ * `new Date()` a chaque construction annonce que tout le site a change a
+ * chaque deploiement : le signal devient du bruit et un robot finit par
+ * l'ignorer. On lit donc la date du fichier, avec repli sur la date de
+ * construction si le chemin ne se resout pas.
+ */
+function derniereModification(candidats: string[]): Date {
+  for (const candidat of candidats) {
+    try {
+      return statSync(join(RACINE_CONTENU, candidat)).mtime;
+    } catch {
+      // Le fichier n'existe pas sous ce nom : on essaie le suivant.
+    }
+  }
+  return new Date();
+}
+
+/** Correspondances fr/en d'un meme chemin, x-default compris. */
+function alternates(chemin: string) {
+  const languages: Record<string, string> = {};
+  for (const langue of routing.locales) {
+    languages[langue] = `${SITE_URL}/${langue}${chemin}`;
+  }
+  languages["x-default"] = `${SITE_URL}/${routing.defaultLocale}${chemin}`;
+  return { languages };
+}
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const now = new Date();
+  const maintenant = new Date();
+  const liste = articles();
 
-  const localePath = (locale: string) => `/${locale}`;
+  const pagesVitrine = ["", "/universite", "/college", "/lms"];
 
-  const homepages: MetadataRoute.Sitemap = routing.locales.map((locale) => ({
-    url: `${SITE_URL}${localePath(locale)}`,
-    lastModified: now,
-    changeFrequency: "weekly",
-    priority: 1.0,
-  }));
-
-  const universePages: MetadataRoute.Sitemap = routing.locales.flatMap((locale) =>
-    ["/universite", "/college", "/lms"].map((path) => ({
-      url: `${SITE_URL}${localePath(locale)}${path}`,
-      lastModified: now,
+  const vitrine: MetadataRoute.Sitemap = routing.locales.flatMap((locale) =>
+    pagesVitrine.map((chemin) => ({
+      url: `${SITE_URL}/${locale}${chemin}`,
+      lastModified: maintenant,
       changeFrequency: "weekly" as const,
-      priority: path === "/lms" ? 0.7 : 0.9,
+      priority: chemin === "" ? 1 : chemin === "/lms" ? 0.7 : 0.9,
+      alternates: alternates(chemin),
     })),
   );
 
-  const docs: MetadataRoute.Sitemap = source.getPages().flatMap((page) =>
-    routing.locales.map((locale) => ({
-      url: `${SITE_URL}${localePath(locale)}${page.url}`,
-      lastModified: now,
+  // `getPages(locale)` renvoie l'arbre de la langue demandee et `page.url`
+  // contient deja `/fr` ou `/en`. On ne prefixe donc rien.
+  const documentation: MetadataRoute.Sitemap = routing.locales.flatMap((locale) =>
+    source.getPages(locale).map((page) => {
+      const nom = page.file.flattenedPath || page.file.path;
+      const cheminSansLangue = page.url.replace(new RegExp(`^/${locale}`), "");
+
+      return {
+        url: `${SITE_URL}${page.url}`,
+        lastModified: derniereModification([
+          `${nom}.${locale}.mdx`,
+          `${nom}.mdx`,
+          page.file.path,
+        ]),
+        changeFrequency: "monthly" as const,
+        priority: 0.7,
+        alternates: alternates(cheminSansLangue),
+      };
+    }),
+  );
+
+  // Le blog n'est publie qu'en francais : il n'a donc pas d'alternates. En
+  // declarer un vers une page anglaise inexistante ferait echouer la
+  // verification de reciprocite, et la grappe entiere serait ecartee.
+  const blog: MetadataRoute.Sitemap = [
+    {
+      url: `${SITE_URL}/${LANGUE_BLOG}/blog`,
+      lastModified: liste[0]
+        ? new Date(`${liste[0].donnees.date}T00:00:00Z`)
+        : maintenant,
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
+    },
+    ...liste.map((item) => ({
+      url: `${SITE_URL}/${LANGUE_BLOG}${item.chemin}`,
+      lastModified: new Date(
+        `${item.donnees.dateRevision ?? item.donnees.date}T00:00:00Z`,
+      ),
       changeFrequency: "monthly" as const,
-      priority: 0.7,
+      priority: 0.75,
     })),
+  ];
+
+  // Les pages institutionnelles COMPLETES, traduites dans les deux langues —
+  // elles ont donc leurs alternates, contrairement au blog. Celles qui portent
+  // encore un encadre « a completer » restent accessibles mais hors du plan :
+  // on ne declare pas comme identite officielle de l'editeur une page qui dit
+  // elle-meme qu'il lui manque des informations.
+  //
+  // Leur `lastModified` vient de la date de mise a jour ecrite dans le
+  // frontmatter, pas de l'horodatage du fichier : c'est cette date-la qui est
+  // affichee au lecteur, et une correction de typographie n'a pas a annoncer
+  // que les mentions legales ont change.
+  const institutionnelles: MetadataRoute.Sitemap = routing.locales.flatMap(
+    (locale) =>
+      pagesPubliables(locale).flatMap((slug) => {
+        const page = pageInstitutionnelle(slug, locale);
+        if (!page) return [];
+
+        const chemin = cheminInstitutionnel(slug);
+        const date = new Date(`${page.dateMaj}T00:00:00Z`);
+
+        return [
+          {
+            url: `${SITE_URL}/${locale}${chemin}`,
+            lastModified: Number.isNaN(date.getTime()) ? maintenant : date,
+            changeFrequency: "yearly" as const,
+            // Basse, mais pas nulle : ces pages ne se positionnent pas sur des
+            // requetes, elles servent a etablir que l'editeur existe. Les
+            // omettre du plan les rendrait invisibles a l'evaluation de
+            // fiabilite qui, elle, les cherche.
+            priority: 0.4,
+            alternates: alternates(chemin),
+          },
+        ];
+      }),
   );
 
-  return [...homepages, ...universePages, ...docs];
+  return [...vitrine, ...documentation, ...institutionnelles, ...blog];
 }

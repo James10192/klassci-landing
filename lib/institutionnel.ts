@@ -1,0 +1,182 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+
+import type { Metadata } from "next";
+
+import { routing, type Locale } from "@/i18n/routing";
+import { buildUniverseMetadata } from "@/lib/seo";
+import { sourceInstitutionnel } from "@/lib/source";
+
+/**
+ * Les pages institutionnelles, vues depuis les routes.
+ *
+ * Fumadocs sait charger et compiler les fichiers ; ce module ajoute les deux
+ * choses qui manquent : une liste FERMÉE des pages qui existent, et une date de
+ * mise à jour ramenée à une forme sûre.
+ *
+ * La liste est fermée à dessein. Ces quatre pages ne se multiplient pas au fil
+ * des semaines comme des articles : chacune a sa route déclarée dans `app/`, et
+ * un fichier MDX ajouté dans `content/institutionnel` sans route
+ * correspondante ne serait servi nulle part. Mieux vaut que ce soit une
+ * constante qu'on lit que du contenu qu'on croit publié.
+ */
+
+export const PAGES_INSTITUTIONNELLES = [
+  "a-propos",
+  "securite",
+  "mentions-legales",
+  "confidentialite",
+] as const;
+
+export type SlugInstitutionnel = (typeof PAGES_INSTITUTIONNELLES)[number];
+
+export interface DonneesPageInstitutionnelle {
+  title: string;
+  description?: string;
+  /** Date de dernière mise à jour, au format `AAAA-MM-JJ`. */
+  dateMaj: string;
+  /** Le chapeau affiché sous le titre. */
+  resume?: string;
+  toc?: import("fumadocs-core/server").TableOfContents;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  body: React.ComponentType<{ components?: any }>;
+}
+
+/**
+ * Ramène une date de frontmatter à `AAAA-MM-JJ`.
+ *
+ * YAML transforme `2026-09-02` sans guillemets en objet `Date`, et la
+ * transformation déclarée dans le schéma n'atteint pas toujours la valeur que
+ * lit le rendu — le blog rencontre exactement le même écueil et le corrige au
+ * même endroit, à la lecture.
+ */
+function normaliserDate(valeur: unknown): string {
+  if (valeur instanceof Date) return valeur.toISOString().slice(0, 10);
+  if (typeof valeur === "string") return valeur.slice(0, 10);
+  return "";
+}
+
+/** Le chemin de la page, sans préfixe de langue. */
+export function cheminInstitutionnel(slug: SlugInstitutionnel): string {
+  return `/${slug}`;
+}
+
+/**
+ * La page est-elle encore un brouillon ?
+ *
+ * Ces quatre pages exigent des informations que ce dépôt ne contient pas :
+ * forme juridique, RCCM, adresse postale, directeur de la publication,
+ * hébergeur des instances. Elles sont écrites, et les trous sont marqués à
+ * l'écran par un encadré `<ACompleter>` plutôt qu'inventés — une mention
+ * légale fausse est plus grave qu'une mention légale absente, parce qu'elle
+ * est opposable.
+ *
+ * Mais un encadré « à compléter avant mise en ligne » servi sur
+ * klassci.com/fr/mentions-legales dit exactement le contraire de ce que ces
+ * pages sont censées établir. Tant qu'il en reste un, la page reste
+ * accessible — le pied de page y mène, et quelqu'un qui la cherche doit la
+ * trouver — mais elle n'est pas offerte aux moteurs comme l'identité
+ * officielle de l'éditeur, ni déclarée dans le plan du site.
+ *
+ * Le contrôle porte sur le fichier source, pas sur un drapeau à tenir à jour :
+ * le jour où la dernière information est renseignée et le dernier encadré
+ * retiré, la page devient indexable d'elle-même. Rien à penser, rien à
+ * oublier.
+ */
+export function estBrouillon(slug: SlugInstitutionnel, locale: Locale): boolean {
+  const suffixe = locale === routing.defaultLocale ? "" : `.${locale}`;
+  const chemin = join(
+    process.cwd(),
+    "content/institutionnel",
+    `${slug}${suffixe}.mdx`,
+  );
+
+  try {
+    return readFileSync(chemin, "utf8").includes("<ACompleter");
+  } catch {
+    // Fichier illisible : on ne publie pas ce qu'on ne peut pas relire.
+    return true;
+  }
+}
+
+/** Les pages complètes, dans une langue donnée. */
+export function pagesPubliables(locale: Locale): SlugInstitutionnel[] {
+  return PAGES_INSTITUTIONNELLES.filter((slug) => !estBrouillon(slug, locale));
+}
+
+/**
+ * Le contenu d'une page, dans la langue demandée.
+ *
+ * Rend `undefined` si le fichier n'existe pas, pour que l'appelant décide —
+ * une page absente est un 404, pas une page vide.
+ */
+export function pageInstitutionnelle(
+  slug: SlugInstitutionnel,
+  locale: Locale,
+): DonneesPageInstitutionnelle | undefined {
+  const page = sourceInstitutionnel.getPage([slug], locale);
+  if (!page) return undefined;
+
+  const donnees = page.data as unknown as DonneesPageInstitutionnelle;
+
+  return { ...donnees, dateMaj: normaliserDate(donnees.dateMaj) };
+}
+
+/**
+ * La date, écrite en toutes lettres dans la langue de la page.
+ *
+ * `timeZone: "UTC"` n'est pas un détail : sans lui, une date écrite
+ * `2026-09-02` est interprétée à minuit UTC puis affichée dans le fuseau du
+ * serveur, et recule d'un jour dès que celui-ci est à l'ouest de Greenwich.
+ * Une politique de confidentialité datée de la veille sur la moitié des
+ * déploiements est le genre d'incohérence que personne ne remarque et que tout
+ * le monde constate.
+ */
+export function dateLisible(iso: string, locale: Locale): string {
+  const date = new Date(`${iso}T00:00:00Z`);
+  if (Number.isNaN(date.getTime())) return iso;
+
+  return new Intl.DateTimeFormat(locale === "en" ? "en-GB" : "fr-FR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(date);
+}
+
+/** La langue demandée si le site la sert, la langue par défaut sinon. */
+export function langueSure(brute: string): Locale {
+  return routing.locales.includes(brute as Locale)
+    ? (brute as Locale)
+    : routing.defaultLocale;
+}
+
+/**
+ * Les métadonnées d'une page institutionnelle.
+ *
+ * Titre et description viennent du frontmatter, donc du fichier traduit : la
+ * version anglaise porte son propre titre, sans qu'aucune table de
+ * correspondance n'ait à être tenue à jour en parallèle du contenu.
+ *
+ * On passe par `buildUniverseMetadata` plutôt que d'écrire l'objet à la main —
+ * c'est lui qui pose l'adresse canonique, les balises hreflang réciproques et
+ * l'image de partage. Une page légale qui se déclare canonique de la page
+ * d'accueil est exactement la faute que la documentation a déjà payée une fois.
+ */
+export function metadonneesInstitutionnelles(
+  slug: SlugInstitutionnel,
+  locale: Locale,
+): Metadata {
+  const page = pageInstitutionnelle(slug, locale);
+  if (!page) return {};
+
+  return buildUniverseMetadata({
+    locale,
+    title: page.title,
+    description: page.description ?? page.resume ?? "",
+    path: cheminInstitutionnel(slug),
+    // Une page qui porte encore un encadré « à compléter » ne doit pas être
+    // proposée comme la référence légale de l'éditeur.
+    noindex: estBrouillon(slug, locale),
+  });
+}

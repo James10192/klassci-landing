@@ -15,6 +15,7 @@ import { I18nProvider } from "fumadocs-ui/i18n";
 import { PostHogProvider } from "@/components/analytics/posthog-provider";
 import { MotionConfigProvider } from "@/components/motion-config-provider";
 import { routing } from "@/i18n/routing";
+import { SITE_URL } from "@/lib/site-url";
 
 // UI strings shown by Fumadocs (search dialog, TOC label, theme toggle, etc.)
 // per locale. English values are the library defaults but we set them
@@ -52,8 +53,13 @@ const FUMADOCS_LOCALES = [
   { name: "English", locale: "en" },
 ];
 
+// `latin-ext` couvre le polonais, le tcheque, le turc. Le site est en
+// francais et en anglais : le sous-ensemble `latin` (u+00??) porte deja tous
+// les accents dont ces deux langues ont besoin, oe/OE compris. Les charger
+// tous les deux ajoutait quatre fichiers et 57 ko au chemin critique, sur des
+// connexions ou chaque kilo-octet se paie.
 const plexSerif = IBM_Plex_Serif({
-  subsets: ["latin", "latin-ext"],
+  subsets: ["latin"],
   weight: ["300", "400", "500"],
   display: "swap",
   variable: "--font-plex-serif",
@@ -61,7 +67,7 @@ const plexSerif = IBM_Plex_Serif({
 });
 
 const plexSans = IBM_Plex_Sans({
-  subsets: ["latin", "latin-ext"],
+  subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   display: "swap",
   variable: "--font-plex-sans",
@@ -76,8 +82,6 @@ const plexMono = IBM_Plex_Mono({
   fallback: ["ui-monospace", "monospace"],
 });
 
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://klassci.com";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -109,6 +113,10 @@ export async function generateMetadata({
       languages: {
         fr: "/fr",
         en: "/en",
+        // Sans x-default, un moteur qui ne reconnait ni le francais ni
+        // l'anglais du visiteur choisit seul une version. On lui dit que le
+        // francais est le repli : c'est la langue du marche principal.
+        "x-default": "/fr",
       },
     },
     openGraph: {
@@ -144,8 +152,15 @@ export async function generateMetadata({
       },
     },
     icons: {
-      icon: "/img/logo-klassci.png",
-      apple: "/img/logo-klassci.png",
+      // Le logo de marque fait 1080x1080 et pese 126 ko : le servir comme
+      // favicon fait telecharger un fichier de cette taille pour l'afficher
+      // en 16 pixels. On sert des declinaisons dimensionnees.
+      icon: [
+        { url: "/favicon.ico", sizes: "any" },
+        { url: "/icone-192.png", type: "image/png", sizes: "192x192" },
+        { url: "/icone-512.png", type: "image/png", sizes: "512x512" },
+      ],
+      apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
     },
   };
 }

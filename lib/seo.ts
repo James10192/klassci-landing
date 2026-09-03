@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 
 import { routing, type Locale } from "@/i18n/routing";
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://klassci.com";
+import { SITE_URL } from "@/lib/site-url";
 
 type UniverseKey = "home" | "universite" | "college" | "lms";
 
@@ -27,6 +26,22 @@ interface SeoInput {
   image?: string;
   /** Retire la page des moteurs. Voir l'usage sur le portail de reinscription. */
   noindex?: boolean;
+  /**
+   * Les langues dans lesquelles cette page existe reellement.
+   *
+   * Par defaut, les deux : la vitrine et la documentation sont traduites. Le
+   * blog, lui, est publie en francais seulement. Declarer une version anglaise
+   * qui n'existe pas romprait la reciprocite qu'exige hreflang — et une grappe
+   * dont un maillon ne repond pas est ecartee en entier.
+   */
+  languesDisponibles?: readonly Locale[];
+  /**
+   * Un flux a annoncer dans l'en-tete, en chemin relatif.
+   *
+   * C'est par cette balise qu'un navigateur, un agregateur ou un robot
+   * decouvrent le flux du blog sans avoir a en deviner l'adresse.
+   */
+  flux?: string;
 }
 
 export function buildUniverseMetadata({
@@ -37,25 +52,34 @@ export function buildUniverseMetadata({
   path,
   image = key ? UNIVERSE_IMAGES[key] : "/img/og/default.png",
   noindex = false,
+  languesDisponibles = routing.locales,
+  flux,
 }: SeoInput): Metadata {
   const normalizedPath = path === "/" ? "" : path;
   const localizedPath = `/${locale}${normalizedPath}`;
   const url = new URL(localizedPath, SITE_URL).toString();
   const imageUrl = new URL(image, SITE_URL).toString();
-  const frenchPath = `/fr${normalizedPath}`;
-  const englishPath = `/en${normalizedPath}`;
+  const langues: Record<string, string> = {};
+  for (const langue of languesDisponibles) {
+    langues[langue] = `/${langue}${normalizedPath}`;
+  }
+  // x-default vise le francais : c'est la langue du marche principal, et
+  // c'est la seule version disponible quand une page n'est pas traduite.
+  langues["x-default"] = langues.fr ?? `/${languesDisponibles[0]}${normalizedPath}`;
 
   return {
     metadataBase: new URL(SITE_URL),
-    title,
+    // Le gabarit du layout ajoute « · KLASSCI ». Une page qui porte deja la
+    // marque dans son titre produirait « À propos de KLASSCI · KLASSCI » : dix
+    // caracteres perdus sur les soixante que Google affiche, au profit d'une
+    // repetition. On coupe alors le gabarit — `absolute` est la forme prevue
+    // par Next pour cela.
+    title: /\bKLASSCI\b/i.test(title) ? { absolute: title } : title,
     description,
     alternates: {
       canonical: localizedPath,
-      languages: {
-        fr: frenchPath,
-        en: englishPath,
-        "x-default": frenchPath,
-      },
+      languages: langues,
+      ...(flux ? { types: { "application/rss+xml": flux } } : {}),
     },
     openGraph: {
       type: "website",

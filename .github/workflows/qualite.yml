@@ -1,0 +1,73 @@
+name: Qualité
+
+# Les garde-fous SEO tournent ici parce qu'ils ne servent à rien s'ils ne
+# tournent que quand on y pense. Quatre pannes ont coexisté en production sans
+# qu'aucune ne déclenche d'erreur : un sitemap dont les trente-deux adresses
+# étaient invalides, un robots.txt dont la directive Sitemap était coupée en
+# deux, vingt-quatre pages de documentation qui se déclaraient doublons de
+# l'accueil, et un motif Disallow qui fermait au crawl la meilleure page du
+# site. Aucune n'aurait été rattrapée par un test unitaire.
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  schedule:
+    # Lundi 6 h UTC : le contrôle des sources citées, qui n'a de sens que
+    # répété — un lien meurt sans prévenir, et l'article ne change pas.
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+jobs:
+  verifier:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Typage
+        run: pnpm tsc
+
+      - name: Contrôles SEO sur le dépôt
+        run: node scripts/verifier-seo.mjs
+
+      - name: Construction
+        run: pnpm build
+        env:
+          # L'adresse sert au sitemap, aux canoniques et au graphe. On la pose
+          # ici pour que la vérification porte sur les mêmes adresses qu'en
+          # production — et `lib/site-url.ts` la nettoie de toute façon.
+          NEXT_PUBLIC_SITE_URL: https://www.klassci.com
+
+      - name: Données structurées des pages construites
+        run: node scripts/verifier-donnees-structurees.mjs
+
+      - name: Budget de performance
+        run: node scripts/verifier-budget.mjs
+
+  # Séparé du portail : ce contrôle dépend du réseau et de sites tiers. Une
+  # panne chez le CAMES ou un pare-feu qui refuse un centre de données ne doit
+  # pas empêcher un déploiement. Il tourne donc seul, chaque lundi, et son
+  # échec se lit dans l'onglet Actions sans rien bloquer.
+  citations:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Les sources citées répondent-elles encore ?
+        run: node scripts/verifier-citations.mjs

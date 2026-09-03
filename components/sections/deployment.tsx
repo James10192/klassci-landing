@@ -7,7 +7,9 @@ import LineChart from "lucide-react/dist/esm/icons/chart-no-axes-combined";
 import Rocket from "lucide-react/dist/esm/icons/rocket";
 import ShieldCheck from "lucide-react/dist/esm/icons/shield-check";
 import SlidersHorizontal from "lucide-react/dist/esm/icons/sliders-horizontal";
-import { motion, useReducedMotion } from "framer-motion";
+// `m` et non `motion` : sous <LazyMotion strict>, `motion` leve une
+// invariant en developpement et annule l'elagage du paquet.
+import { m, useReducedMotion } from "framer-motion";
 import { useTranslations } from "next-intl";
 
 interface DeploymentItem {
@@ -42,7 +44,7 @@ export function Deployment() {
           <p className="mx-auto mt-4 max-w-2xl leading-relaxed text-text-secondary">{t("intro")}</p>
         </header>
 
-        <motion.ol
+        <m.ol
           initial={reduceMotion ? false : "hidden"}
           whileInView="visible"
           viewport={{ once: true, amount: 0.25 }}
@@ -55,7 +57,7 @@ export function Deployment() {
           {DEPLOYMENT_STEPS.map(({ key, icon: Icon }, index) => {
             const step = t.raw(`steps.${key}`) as DeploymentItem;
             return (
-              <motion.li
+              <m.li
                 key={key}
                 variants={{
                   hidden: { opacity: 0, y: 12 },
@@ -73,10 +75,10 @@ export function Deployment() {
                   <h3 className="mt-1 font-sans text-base font-semibold text-text">{step.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-text-secondary">{step.text}</p>
                 </div>
-              </motion.li>
+              </m.li>
             );
           })}
-        </motion.ol>
+        </m.ol>
 
         <div className="mt-12 grid overflow-hidden rounded-lg border border-border bg-border md:grid-cols-3">
           {DEPLOYMENT_ASSURANCES.map(({ key, icon: Icon }) => {
