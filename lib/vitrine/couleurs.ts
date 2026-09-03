@@ -173,3 +173,47 @@ export function variablesEtablissement(couleurPrincipale: string): Record<string
     "--accent-light": translucide(accent),
   };
 }
+
+/**
+ * Les couleurs du bandeau d'identité : son fond, et l'encre qui va dessus.
+ *
+ * Cette décision vivait dans le composant du bandeau, où aucun script ne
+ * pouvait l'atteindre. Elle s'est trompée en production sans que rien ne le
+ * signale, et je ne l'ai vue qu'en regardant les six écoles une à une — ce
+ * qu'on ne refera pas à chaque livraison. Elle est ici parce qu'elle décide
+ * quelque chose, et que ce qui décide doit pouvoir être mis à l'épreuve.
+ *
+ * Deux règles, chacune née d'un défaut constaté :
+ *
+ * 1. **Un bandeau qu'on ne voit pas ne vaut rien.** Trois écoles sur six ont
+ *    laissé `bandeau_fond` en blanc — la valeur par défaut des PDF, juste sur
+ *    du papier, où la feuille a un bord. À l'écran, ce blanc posé sur un fond
+ *    presque blanc ne montre rien : l'étudiant voyait une carte vide là où on
+ *    voulait lui dire « vous êtes chez votre école ».
+ *
+ * 2. **Une page porte une couleur d'identité, pas deux.** Le repli prend
+ *    `accentUtilisable`, non la couleur brute de l'école. La nuance se voit :
+ *    l'orange de l'ESBTP Yakro est écarté des commandes, parce que du texte
+ *    blanc dessus est illisible. Posé brut sur le bandeau, il donnait une page
+ *    à bandeau orange, boutons bleus et pied bleu — la couleur de l'école
+ *    apparaissant une seule fois, contredite partout ailleurs.
+ *
+ * L'encre n'est recalculée que lorsqu'on a changé le fond : sinon on garde
+ * celle que KLASSCI a calculée pour le PDF, faute de quoi le document imprimé
+ * et la page web divergeraient.
+ */
+export function couleursBandeau(identite: {
+  bandeauFond: string;
+  bandeauTexte: string;
+  couleurPrincipale: string;
+}): { fond: string; encre: string } {
+  const substitue = tropClairePourUnFond(identite.bandeauFond);
+
+  if (!substitue) {
+    return { fond: identite.bandeauFond, encre: identite.bandeauTexte };
+  }
+
+  const fond = accentUtilisable(identite.couleurPrincipale);
+
+  return { fond, encre: texteLisibleSur(fond) };
+}
