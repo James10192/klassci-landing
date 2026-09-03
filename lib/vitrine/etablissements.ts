@@ -1,5 +1,7 @@
 import "server-only";
 
+import { codesDemonstration } from "../instances-demonstration.ts";
+
 /**
  * Les établissements que klassci.com montre, avec leur identité.
  *
@@ -79,38 +81,6 @@ type ReponseIdentite = {
 const CODE_VALIDE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const COULEUR_VALIDE = /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i;
 
-/**
- * L'instance de démonstration, écartée du mur de logos par défaut.
- *
- * Elle n'est pas un client : c'est le bac à sable du produit, et son nom est
- * celui que la dernière démonstration y a laissé. Elle s'est affichée sous le
- * nom « AZERTY » entre deux écoles réelles, sur la page d'accueil, parce que
- * l'exclusion attendait une variable d'environnement que personne n'avait
- * encore posée.
- *
- * Un réglage dont l'oubli publie quelque chose de faux est un réglage mal
- * choisi. Le défaut protège donc, et la variable reste le mécanisme : la poser
- * remplace cette liste, et la poser VIDE n'écarte plus personne — c'est ainsi
- * qu'on inclurait délibérément la démonstration.
- *
- * `presentation` n'est pas un nom deviné : c'est celui que tout le produit
- * donne à cette instance — sa branche Git, son sous-domaine, sa configuration
- * de déploiement.
- */
-const EXCLUS_PAR_DEFAUT = ["presentation"];
-
-function codesExclus(): string[] {
-  const declare = process.env.VITRINE_EXCLUS;
-
-  if (declare === undefined) {
-    return EXCLUS_PAR_DEFAUT;
-  }
-
-  return declare
-    .split(",")
-    .map((code) => code.trim().toLowerCase())
-    .filter((code) => code !== "");
-}
 
 function suffixeEnv(code: string): string {
   return code.replace(/-/g, "_").toUpperCase();
@@ -132,7 +102,7 @@ function libelleParDefaut(code: string): string {
  * reste cliente de KLASSCI même hors saison d'inscription.
  */
 function codesAInterroger(appliquerExclusions = true): Array<{ code: string; base: string; libelle: string }> {
-  const exclus = new Set(appliquerExclusions ? codesExclus() : []);
+  const exclus = new Set(appliquerExclusions ? codesDemonstration() : []);
 
   return (process.env.REINSCRIPTION_TENANTS ?? "")
     .split(",")
@@ -280,13 +250,48 @@ async function interroger(
  * Les appels partent en parallèle : six écoles interrogées l'une après l'autre
  * additionneraient leurs latences, et une seule instance lente retarderait la
  * page entière.
+ *
+ * **La liste vient du registre, pas du réseau.** Une école dont l'inscription
+ * en ligne est ouverte l'est, que son instance réponde ou non à cet instant —
+ * c'est un fait de configuration, pas un fait de réseau. L'appel ne fait
+ * qu'enrichir : logo, nom réel, ville, couleurs.
+ *
+ * La version précédente écartait toute école injoignable. Cela paraissait
+ * prudent et ne l'était pas : ces instances démarrent à froid, et une réponse
+ * qui dépasse cinq secondes retirait l'école du mur pour une heure entière,
+ * jusqu'à la revalidation suivante. USAT et ISLG ont disparu ainsi, au hasard
+ * du moment de la construction. Une école absente sans raison lisible est pire
+ * qu'une école affichée avec son monogramme : la tuile sait déjà se passer de
+ * logo, elle sait donc se passer de réponse.
  */
 export async function etablissementsVitrine(): Promise<EtablissementVitrine[]> {
-  const resultats = await Promise.all(codesAInterroger().map(interroger));
+  const inscrites = codesAInterroger();
+  const resultats = await Promise.all(inscrites.map(interroger));
 
-  return resultats
-    .filter((etablissement): etablissement is EtablissementVitrine => etablissement !== null)
+  return inscrites
+    .map((ecole, rang) => resultats[rang] ?? replis(ecole))
     .sort((a, b) => a.nom.localeCompare(b.nom, "fr"));
+}
+
+/**
+ * Ce qu'on sait d'une école quand son instance n'a pas répondu : son libellé
+ * de registre, et rien d'autre. Pas de logo — la tuile affiche alors ses
+ * initiales — pas de ville, et les couleurs de KLASSCI.
+ */
+function replis(ecole: { code: string; libelle: string }): EtablissementVitrine {
+  return {
+    code: ecole.code,
+    nom: ecole.libelle,
+    sigle: "",
+    ville: "",
+    logo: null,
+    identite: {
+      couleurPrincipale: COULEUR_REPLI,
+      bandeauFond: COULEUR_REPLI,
+      bandeauTexte: "#ffffff",
+      entete: "",
+    },
+  };
 }
 
 /**

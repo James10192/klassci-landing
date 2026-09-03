@@ -1,5 +1,7 @@
 import "server-only";
 
+import { estDemonstration } from "../instances-demonstration.ts";
+
 /**
  * Les établissements joignables depuis klassci.com.
  *
@@ -137,6 +139,12 @@ function tous(): EtablissementInterne[] {
  */
 export function etablissementsOuverts(): EtablissementVisible[] {
   return tous()
+    // L'instance de démonstration reste servie — son URL directe fonctionne,
+    // une démonstration du parcours doit rester possible — mais elle n'est
+    // plus PROPOSÉE. Elle s'affichait ici entre des écoles réelles, sous le nom
+    // laissé par la dernière démonstration, et une famille pouvait y déposer un
+    // dossier.
+    .filter(({ code }) => !estDemonstration(code))
     .map(({ code, libelle }) => ({ code, libelle }))
     .sort((a, b) => a.libelle.localeCompare(b.libelle, "fr"));
 }
