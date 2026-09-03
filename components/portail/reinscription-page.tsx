@@ -4,11 +4,7 @@ import Link from "next/link";
 import { Footer } from "@/components/sections/footer";
 import type { EtablissementVisible } from "@/lib/portail/tenants";
 import type { EtablissementVitrine } from "@/lib/vitrine/etablissements";
-import {
-  texteLisibleSur,
-  tropClairePourUnFond,
-  variablesEtablissement,
-} from "@/lib/vitrine/couleurs";
+import { couleursBandeau, variablesEtablissement } from "@/lib/vitrine/couleurs";
 
 import { ListeEtablissements } from "./liste-etablissements";
 import { Marque } from "./marque-etablissement";
@@ -80,21 +76,11 @@ function BandeauIdentite({
     );
   }
 
-  // Le fond réglé par l'école, sauf s'il est trop clair pour se distinguer du
-  // fond de page. Trois écoles sur six ont laissé `bandeau_fond` en blanc —
-  // c'est la valeur par défaut des PDF, et sur du papier elle est juste : la
-  // feuille a un bord, le bandeau se lit. À l'écran, ce même blanc posé sur un
-  // fond presque blanc ne montre rien du tout : l'étudiant voyait une carte
-  // vide là où on voulait lui dire « vous êtes chez votre école ».
-  //
-  // Dans ce cas seulement, on prend la couleur principale de l'établissement —
-  // celle-là même qui teinte déjà les boutons de la page — et on recalcule le
-  // texte, la valeur reçue ayant été calculée contre un fond blanc qui n'est
-  // plus celui-ci.
-  const fondRegle = identite.identite.bandeauFond;
-  const substitue = tropClairePourUnFond(fondRegle);
-  const fond = substitue ? identite.identite.couleurPrincipale : fondRegle;
-  const encre = substitue ? texteLisibleSur(fond) : identite.identite.bandeauTexte;
+  // Le fond que l'école a réglé, sauf s'il est trop clair pour se distinguer
+  // du fond de page — auquel cas on se replie sur la couleur d'identité de la
+  // page. La règle et ses raisons sont dans `couleursBandeau`, avec les deux
+  // défauts qui l'ont dictée ; elle y est vérifiée à chaque construction.
+  const { fond, encre } = couleursBandeau(identite.identite);
 
   return (
     <div

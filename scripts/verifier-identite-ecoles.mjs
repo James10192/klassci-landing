@@ -27,8 +27,14 @@
 
 import assert from "node:assert/strict";
 
-const { rapportContraste, accentUtilisable, assombrir, translucide, variablesEtablissement } =
-  await import("../lib/vitrine/couleurs.ts");
+const {
+  rapportContraste,
+  accentUtilisable,
+  assombrir,
+  translucide,
+  variablesEtablissement,
+  couleursBandeau,
+} = await import("../lib/vitrine/couleurs.ts");
 
 const { etablissementsVitrine, identitesParCode } = await import(
   "../lib/vitrine/etablissements.ts"
@@ -97,6 +103,96 @@ verifier("les variables de thème sont cohérentes entre elles", () => {
   assert.equal(repli["--accent"], BLEU_KLASSCI);
   assert.equal(repli["--accent-hover"], assombrir(BLEU_KLASSCI));
   assert.match(repli["--accent-light"], /^rgba\(4, 83, 203, /);
+});
+
+/* ────────────────────────── Bandeau d'identité ────────────────────────── */
+
+verifier("un bandeau lisible est servi tel que l'école l'a réglé", () => {
+  // Le vert de l'ESBTP Abidjan : franc, il se distingue du fond de page, et
+  // l'encre calculée pour le PDF vaut aussi à l'écran.
+  const bandeau = couleursBandeau({
+    bandeauFond: "#0d6818",
+    bandeauTexte: "#ffffff",
+    couleurPrincipale: "#0d6818",
+  });
+
+  assert.deepEqual(bandeau, { fond: "#0d6818", encre: "#ffffff" });
+});
+
+verifier("un bandeau blanc, invisible sur la page, est remplacé", () => {
+  // Le blanc est la valeur par défaut des PDF. Sur papier il se lit, la
+  // feuille ayant un bord ; à l'écran il ne montre rien.
+  assert.ok(rapportContraste("#ffffff", "#f7f6f3") < 1.35);
+
+  const bandeau = couleursBandeau({
+    bandeauFond: "#ffffff",
+    bandeauTexte: "#000000",
+    couleurPrincipale: "#242259",
+  });
+
+  assert.equal(bandeau.fond, "#242259");
+  // L'encre reçue valait pour un fond blanc ; sur ce bleu nuit elle serait
+  // illisible, donc elle est recalculée.
+  assert.equal(bandeau.encre, "#ffffff");
+  assert.ok(rapportContraste(bandeau.fond, bandeau.encre) >= 4.5);
+});
+
+verifier("le bandeau porte la couleur que la page porte, jamais une autre", () => {
+  // Le défaut : l'ESBTP Yamoussoukro a réglé un bandeau blanc et un orange
+  // comme couleur principale. L'orange est écarté des commandes — du blanc
+  // dessus est illisible — donc la page est bleue. En posant l'orange brut
+  // sur le bandeau, on obtenait un bandeau orange, des boutons bleus et un
+  // pied bleu : la couleur de l'école apparaissait une seule fois, contredite
+  // partout ailleurs. Une page porte une couleur d'identité, pas deux.
+  const ecole = {
+    bandeauFond: "#ffffff",
+    bandeauTexte: "#000000",
+    couleurPrincipale: "#ea8c34",
+  };
+
+  assert.equal(couleursBandeau(ecole).fond, variablesEtablissement(ecole.couleurPrincipale)["--accent"]);
+});
+
+verifier("… et cela vaut pour toutes les écoles, quelle que soit leur couleur", () => {
+  // La règle générale, dont Yamoussoukro n'était qu'un cas : dès qu'on
+  // substitue, le fond du bandeau EST l'accent de la page. Sans cela, chaque
+  // nouvelle école dont la couleur est écartée rejouerait le même défaut.
+  for (const couleurPrincipale of [
+    "#ea8c34", // orange, écarté
+    "#f59e0b", // ambre, écarté
+    "#0d6818", // vert, retenu
+    "#242259", // bleu nuit, retenu
+    "#cc0a0a", // rouge, retenu
+    "pas une couleur", // refusée : repli sur le bleu KLASSCI
+  ]) {
+    const bandeau = couleursBandeau({
+      bandeauFond: "#ffffff",
+      bandeauTexte: "#000000",
+      couleurPrincipale,
+    });
+
+    assert.equal(
+      bandeau.fond,
+      variablesEtablissement(couleurPrincipale)["--accent"],
+      `couleur : ${couleurPrincipale}`,
+    );
+    assert.ok(
+      rapportContraste(bandeau.fond, bandeau.encre) >= 4.5,
+      `texte illisible sur ${bandeau.fond}`,
+    );
+  }
+});
+
+verifier("un fond que l'école a mal réglé n'est pas posé sur la page", () => {
+  // Même frontière que partout ailleurs : ce qui vient du réseau est revalidé.
+  const bandeau = couleursBandeau({
+    bandeauFond: "chartreuse; background-image: url(//pirate.example/x)",
+    bandeauTexte: "#ffffff",
+    couleurPrincipale: "#0d6818",
+  });
+
+  // Non reconnu comme couleur, donc jugé invisible, donc substitué.
+  assert.equal(bandeau.fond, "#0d6818");
 });
 
 /* ──────────────────────── Ce qu'on accepte du réseau ──────────────────────── */
