@@ -79,6 +79,39 @@ type ReponseIdentite = {
 const CODE_VALIDE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const COULEUR_VALIDE = /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i;
 
+/**
+ * L'instance de démonstration, écartée du mur de logos par défaut.
+ *
+ * Elle n'est pas un client : c'est le bac à sable du produit, et son nom est
+ * celui que la dernière démonstration y a laissé. Elle s'est affichée sous le
+ * nom « AZERTY » entre deux écoles réelles, sur la page d'accueil, parce que
+ * l'exclusion attendait une variable d'environnement que personne n'avait
+ * encore posée.
+ *
+ * Un réglage dont l'oubli publie quelque chose de faux est un réglage mal
+ * choisi. Le défaut protège donc, et la variable reste le mécanisme : la poser
+ * remplace cette liste, et la poser VIDE n'écarte plus personne — c'est ainsi
+ * qu'on inclurait délibérément la démonstration.
+ *
+ * `presentation` n'est pas un nom deviné : c'est celui que tout le produit
+ * donne à cette instance — sa branche Git, son sous-domaine, sa configuration
+ * de déploiement.
+ */
+const EXCLUS_PAR_DEFAUT = ["presentation"];
+
+function codesExclus(): string[] {
+  const declare = process.env.VITRINE_EXCLUS;
+
+  if (declare === undefined) {
+    return EXCLUS_PAR_DEFAUT;
+  }
+
+  return declare
+    .split(",")
+    .map((code) => code.trim().toLowerCase())
+    .filter((code) => code !== "");
+}
+
 function suffixeEnv(code: string): string {
   return code.replace(/-/g, "_").toUpperCase();
 }
@@ -99,14 +132,7 @@ function libelleParDefaut(code: string): string {
  * reste cliente de KLASSCI même hors saison d'inscription.
  */
 function codesAInterroger(appliquerExclusions = true): Array<{ code: string; base: string; libelle: string }> {
-  const exclus = new Set(
-    appliquerExclusions
-      ? (process.env.VITRINE_EXCLUS ?? "")
-          .split(",")
-          .map((code) => code.trim().toLowerCase())
-          .filter((code) => code !== "")
-      : [],
-  );
+  const exclus = new Set(appliquerExclusions ? codesExclus() : []);
 
   return (process.env.REINSCRIPTION_TENANTS ?? "")
     .split(",")
