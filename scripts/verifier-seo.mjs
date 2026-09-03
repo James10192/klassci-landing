@@ -60,6 +60,7 @@ const court = (chemin) => relative(RACINE, chemin);
 
 function controlerMetadonnees() {
   const pages = fichiers("app", /^page\.tsx$/).filter((p) => !p.includes("/api/"));
+  const constructeurs = constructeursDeMetadonnees();
 
   for (const page of pages) {
     const source = lire(page);
@@ -76,14 +77,56 @@ function controlerMetadonnees() {
       continue;
     }
 
-    // Le canonical peut venir de buildUniverseMetadata ; on accepte les deux.
+    // Le canonical peut etre ecrit sur place, ou delegue a un constructeur.
     const aCanonical =
-      /alternates\s*:/.test(source) || /buildUniverseMetadata|construireMetadonnees/.test(source);
+      /alternates\s*:/.test(source) ||
+      constructeurs.some((nomFonction) =>
+        new RegExp(`\\b${nomFonction}\\s*\\(`).test(source),
+      );
     if (!aCanonical) {
       echec("canonical", `${nom} ne pose pas de canonical ni d'alternates de langue`);
     }
   }
   if (pages.length) ok(`metadonnees verifiees sur ${pages.length} routes`);
+}
+
+/**
+ * Les fonctions de `lib/` qui posent une adresse canonique.
+ *
+ * Elles sont decouvertes plutot qu'enumerees. Une liste ecrite en dur ici
+ * aurait cette proprietee desagreable : ajouter un constructeur de
+ * metadonnees ferait echouer le controle, et la reaction naturelle serait
+ * d'ajouter son nom a la liste — c'est-a-dire de faire taire le controle sans
+ * avoir rien verifie. En lisant `lib/`, on accepte exactement les fonctions
+ * dont on a constate qu'elles appellent `buildUniverseMetadata`, qui est le
+ * seul endroit du depot ou le canonical est reellement pose.
+ */
+function constructeursDeMetadonnees() {
+  const racine = "buildUniverseMetadata";
+  const trouves = new Set([racine]);
+
+  // Deux passes suffisent : une fonction qui delegue a une fonction qui
+  // delegue au constructeur racine. Au-dela, la chaine serait elle-meme le
+  // probleme a signaler.
+  for (let passe = 0; passe < 2; passe += 1) {
+    for (const fichier of fichiers("lib", /\.ts$/)) {
+      const source = lire(fichier);
+      const connus = [...trouves];
+      if (!connus.some((nom) => new RegExp(`\\b${nom}\\s*\\(`).test(source))) continue;
+
+      for (const trouve of source.matchAll(
+        /export\s+(?:async\s+)?function\s+(\w+)/g,
+      )) {
+        // On ne retient que les fonctions qui rendent des metadonnees : le
+        // type de retour est la seule marque fiable, et il est present partout
+        // dans ce depot.
+        const declaration = source.slice(trouve.index, trouve.index + 400);
+        if (/:\s*Metadata\b/.test(declaration)) trouves.add(trouve[1]);
+      }
+    }
+  }
+
+  return [...trouves];
 }
 
 function controlerAdresseDuSite() {

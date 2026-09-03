@@ -69,7 +69,12 @@ export function buildUniverseMetadata({
 
   return {
     metadataBase: new URL(SITE_URL),
-    title,
+    // Le gabarit du layout ajoute « · KLASSCI ». Une page qui porte deja la
+    // marque dans son titre produirait « À propos de KLASSCI · KLASSCI » : dix
+    // caracteres perdus sur les soixante que Google affiche, au profit d'une
+    // repetition. On coupe alors le gabarit — `absolute` est la forme prevue
+    // par Next pour cela.
+    title: /\bKLASSCI\b/i.test(title) ? { absolute: title } : title,
     description,
     alternates: {
       canonical: localizedPath,

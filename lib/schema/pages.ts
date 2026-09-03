@@ -377,3 +377,65 @@ export async function buildArticleGraph(
     },
   );
 }
+
+/* -------------------------------------------------- pages institutionnelles */
+
+/**
+ * Les quatre pages qui engagent l'entreprise.
+ *
+ * Le type du noeud n'est pas decoratif : `AboutPage` et `ContactPage` sont les
+ * deux seuls sous-types de `WebPage` que schema.org definit pour ce role, et
+ * les emettre dit a un moteur ce que la page est sans qu'il ait a l'inferer du
+ * texte. Les mentions legales sont une `ContactPage` — c'est la page qui porte
+ * l'identite et les coordonnees de l'editeur, ce qui est exactement sa
+ * definition.
+ *
+ * La politique de confidentialite et la page securite restent des `WebPage` :
+ * schema.org n'a rien de plus precis, et inventer un type serait pire que ne
+ * rien dire.
+ *
+ * Aucune de ces pages n'emet de date de publication : elles portent une date de
+ * mise a jour, qui est la seule qui compte pour un texte juridique — celle qui
+ * dit a un lecteur si ce qu'il lit est encore la version qui l'engage.
+ */
+
+const TYPE_INSTITUTIONNEL: Record<
+  string,
+  "WebPage" | "AboutPage" | "ContactPage"
+> = {
+  "a-propos": "AboutPage",
+  "mentions-legales": "ContactPage",
+  securite: "WebPage",
+  confidentialite: "WebPage",
+};
+
+export async function buildInstitutionnelGraph(
+  locale: Locale,
+  page: {
+    slug: string;
+    chemin: string;
+    titre: string;
+    description: string;
+    dateMaj: string;
+  },
+): Promise<JsonLdGraphe> {
+  return graphe(
+    ...(await socle(locale)),
+    buildWebPage({
+      locale,
+      chemin: page.chemin,
+      nom: page.titre,
+      description: page.description,
+      image: IMAGES.default,
+      type: TYPE_INSTITUTIONNEL[page.slug] ?? "WebPage",
+      dateModification: page.dateMaj,
+      avecFilAriane: true,
+    }),
+    // Deux elements seulement : la racine, puis la page. « L'entreprise »
+    // n'est pas une page — l'inserer aurait produit un maillon sans adresse au
+    // milieu du fil, ce que Google rejette. Le fil affiche a l'ecran porte le
+    // meme dernier libelle, comme l'exige la regle de correspondance entre le
+    // balisage et ce que le visiteur lit.
+    buildBreadcrumb(locale, page.chemin, [{ nom: page.titre }]),
+  );
+}

@@ -814,6 +814,14 @@
           {
             "label": "Changelog",
             "href": "/docs/changelog"
+          },
+          {
+            "label": "About",
+            "href": "/a-propos"
+          },
+          {
+            "label": "Data security",
+            "href": "/securite"
           }
         ]
       },
@@ -827,6 +835,14 @@
           {
             "label": "Abidjan, Côte d'Ivoire",
             "href": "#contact"
+          },
+          {
+            "label": "Legal notice",
+            "href": "/mentions-legales"
+          },
+          {
+            "label": "Privacy",
+            "href": "/confidentialite"
           }
         ]
       }

@@ -4,6 +4,11 @@ import { join } from "node:path";
 import type { MetadataRoute } from "next";
 
 import { articles } from "@/lib/blog";
+import {
+  cheminInstitutionnel,
+  pageInstitutionnelle,
+  PAGES_INSTITUTIONNELLES,
+} from "@/lib/institutionnel";
 import { LANGUE_BLOG, source } from "@/lib/source";
 import { routing } from "@/i18n/routing";
 import { SITE_URL } from "@/lib/site-url";
@@ -119,5 +124,36 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
   ];
 
-  return [...vitrine, ...documentation, ...blog];
+  // Les quatre pages institutionnelles, traduites toutes les deux — elles ont
+  // donc leurs alternates, contrairement au blog. Leur `lastModified` vient de
+  // la date de mise a jour ecrite dans le frontmatter, pas de l'horodatage du
+  // fichier : c'est cette date-la qui est affichee au lecteur, et une
+  // correction de typographie n'a pas a annoncer que les mentions legales ont
+  // change.
+  const institutionnelles: MetadataRoute.Sitemap = routing.locales.flatMap(
+    (locale) =>
+      PAGES_INSTITUTIONNELLES.flatMap((slug) => {
+        const page = pageInstitutionnelle(slug, locale);
+        if (!page) return [];
+
+        const chemin = cheminInstitutionnel(slug);
+        const date = new Date(`${page.dateMaj}T00:00:00Z`);
+
+        return [
+          {
+            url: `${SITE_URL}/${locale}${chemin}`,
+            lastModified: Number.isNaN(date.getTime()) ? maintenant : date,
+            changeFrequency: "yearly" as const,
+            // Basse, mais pas nulle : ces pages ne se positionnent pas sur des
+            // requetes, elles servent a etablir que l'editeur existe. Les
+            // omettre du plan les rendrait invisibles a l'evaluation de
+            // fiabilite qui, elle, les cherche.
+            priority: 0.4,
+            alternates: alternates(chemin),
+          },
+        ];
+      }),
+  );
+
+  return [...vitrine, ...documentation, ...institutionnelles, ...blog];
 }
