@@ -32,6 +32,9 @@ import { readdir, readFile } from "node:fs/promises";
 import { join, relative, sep } from "node:path";
 
 const SORTIE = { graphes: 0, avertissements: 0, erreurs: 0 };
+
+/** La meme valeur de repli que `lib/site-url.ts`, pour les memes raisons. */
+const SITE_PAR_DEFAUT = "https://www.klassci.com";
 const RAPPORT = [];
 
 const LANGUES = { fr: ["fr-FR", "fr", "fr-CI"], en: ["en-US", "en", "en-GB"] };
@@ -61,16 +64,54 @@ function extraireJsonLd(html) {
   return blocs;
 }
 
-function* parcourir(valeur) {
+/**
+ * Les proprietes dont la valeur DOIT pouvoir designer un autre domaine.
+ *
+ * `citation` porte les sources d'un article : sur un texte reglementaire, ce
+ * sont les adresses du Journal officiel, du CAMES, d'un quotidien. Les
+ * signaler comme « hors domaine » revenait a reprocher a l'article d'etre
+ * source — 106 avertissements sur les seuls articles du blog, qui noyaient
+ * les vrais.
+ *
+ * `sameAs` designe les profils publics de l'organisation, `isBasedOn` et
+ * `subjectOf` d'autres travaux : meme raison.
+ */
+const PROPRIETES_EXTERNES = new Set([
+  "citation",
+  "sameAs",
+  "isBasedOn",
+  "subjectOf",
+  "significantLink",
+]);
+
+/**
+ * Parcourt le graphe en signalant les noeuds atteints par une propriete dont
+ * la valeur vise legitimement l'exterieur.
+ *
+ * @param externe Vrai des qu'on est passe par une de ces proprietes : un
+ *   sous-noeud de `citation` reste externe, quelle que soit sa profondeur.
+ */
+function* parcourir(valeur, externe = false) {
   if (Array.isArray(valeur)) {
-    for (const element of valeur) yield* parcourir(element);
+    for (const element of valeur) yield* parcourir(element, externe);
     return;
   }
   if (valeur && typeof valeur === "object") {
-    yield valeur;
-    for (const enfant of Object.values(valeur)) yield* parcourir(enfant);
+    yield externe ? Object.assign(Object.create(MARQUE_EXTERNE), valeur) : valeur;
+    for (const [cle, enfant] of Object.entries(valeur)) {
+      yield* parcourir(enfant, externe || PROPRIETES_EXTERNES.has(cle));
+    }
   }
 }
+
+/**
+ * Le marqueur « ce noeud vient de l'exterieur ».
+ *
+ * Pose sur le prototype plutot que dans l'objet : les autres controles
+ * enumerent les cles du noeud (`Object.keys(n).length > 1` pour distinguer une
+ * organisation d'une simple reference), et une cle de plus les aurait fausses.
+ */
+const MARQUE_EXTERNE = { __externe: true };
 
 function verifierGraphe(page, racine, langue, origine) {
   const noeuds = [...parcourir(racine)];
@@ -202,7 +243,12 @@ function verifierGraphe(page, racine, langue, origine) {
           page,
           `${cle} relatif : "${valeur}". Un graphe se lit hors contexte : toute adresse doit etre absolue.`,
         );
-      } else if (origine && !valeur.startsWith(origine) && !/\.klassci\.com/.test(valeur)) {
+      } else if (
+        origine &&
+        !noeud.__externe &&
+        !valeur.startsWith(origine) &&
+        !/\.klassci\.com/.test(valeur)
+      ) {
         signaler("AVERTIR", page, `${cle} hors domaine : ${valeur}`);
       }
     }
@@ -300,7 +346,18 @@ async function principal() {
   const racine = args.includes("--racine")
     ? args[args.indexOf("--racine") + 1]
     : ".next/server/app";
-  const origine = process.env.NEXT_PUBLIC_SITE_URL?.trim().replace(/\/+$/, "");
+  // Sans origine connue, les controles d'adresse ne s'executent pas. Le
+  // script annoncait alors « 0 avertissement », ce qui se lit « rien a
+  // signaler » alors que cela voulait dire « rien verifie » — le pire des
+  // deux mondes. On retombe donc sur la meme valeur sure que l'application,
+  // et on le dit.
+  const brut = process.env.NEXT_PUBLIC_SITE_URL?.trim().replace(/\/+$/, "");
+  const origine = brut || SITE_PAR_DEFAUT;
+  if (!brut) {
+    console.log(
+      `  NEXT_PUBLIC_SITE_URL absente : les adresses sont controlees contre ${SITE_PAR_DEFAUT}.`,
+    );
+  }
 
   if (urls.length > 0) {
     for (const url of urls) {
