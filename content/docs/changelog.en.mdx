@@ -27,6 +27,10 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 - **"Apply online" is in the footer** — the families' entry point lived only in the navigation bar, which is to say nowhere once you had read to the bottom of a page.
 
+### Security
+
+- **The platform's third-party components have been brought up to date, and the check meant to watch them can finally ring** — KLASSCI relies, like any modern platform, on software components written by others. Thirteen flaws rated high or critical were sitting in them. One allowed executable code to be slipped into a page through formatted text; another could bring the server down by handing it a document built to keep it busy indefinitely; a third could bypass the rules deciding which outside services the platform agrees to call. **They are closed.** The more troubling part, though, wasn't the flaws themselves but the fact that nobody could see them: the automated check meant to report them was written in a way that made failure impossible, so it announced "all clear" no matter what it found. It now genuinely decides, and it decides on what ships to production rather than on development tooling. It also stops on an alert the reference database hasn't rated yet — an unrated alert is not a harmless one, and that is precisely what had let through a validation flaw in the keys used to sign notifications. When a risk has to be accepted because no fix has been published, it stays visible with its stated reason rather than hidden: accepting a risk and concealing it are two different things. Finally, the test suite only ran during code review, never on a direct release: it now runs in both cases, on the development branch as well as on each school's own.
+
 ---
 
 ## August 2026
