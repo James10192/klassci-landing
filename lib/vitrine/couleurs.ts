@@ -126,6 +126,38 @@ export function translucide(couleur: string, alpha = 0.1): string {
 }
 
 /**
+ * Une couleur est-elle trop claire pour tenir lieu de fond sur cette page ?
+ *
+ * Le fond du site est presque blanc. Un bandeau blanc posé dessus n'est pas un
+ * bandeau discret : c'est un rectangle qu'on ne voit pas.
+ *
+ * Le seuil est un rapport de contraste avec le fond de page, pas une
+ * luminance : c'est la grandeur qui décrit ce que l'œil distingue réellement,
+ * et elle traite correctement un beige ou un gris très clair, qu'un seuil de
+ * luminance laisserait passer.
+ */
+export function tropClairePourUnFond(couleur: string, fondDePage = "#f7f6f3"): boolean {
+  const rapport = rapportContraste(couleur, fondDePage);
+
+  return rapport === null || rapport < 1.35;
+}
+
+/**
+ * Du texte lisible sur un fond donné : blanc, ou l'encre du site.
+ *
+ * KLASSCI calcule déjà cette couleur pour ses PDF et la sert dans
+ * `bandeau_texte`. On ne s'en sert ici que lorsqu'on a dû changer le fond —
+ * auquel cas la valeur reçue a été calculée contre un autre fond et ne veut
+ * plus rien dire.
+ */
+export function texteLisibleSur(fond: string): string {
+  const surBlanc = rapportContraste(fond, "#ffffff") ?? 0;
+  const surEncre = rapportContraste(fond, "#111827") ?? 0;
+
+  return surBlanc >= surEncre ? "#ffffff" : "#111827";
+}
+
+/**
  * Les variables de thème à poser autour du formulaire d'une école.
  *
  * Tout le portail est écrit avec les jetons `accent` — boutons, liens, bordures
