@@ -1,7 +1,7 @@
 ---
 title: "Security and data protection"
-description: "One database per institution, a signed public portal, security headers and daily backups: the actual architecture behind KLASSCI, limits included."
-dateMaj: "2026-09-02"
+description: "One database per school, backups encrypted and re-read weekly, two-factor authentication, a readable export: what KLASSCI does, and where it stops."
+dateMaj: "2026-09-03"
 resume: "This page describes what the software actually does, not what would be pleasant to promise. Every measure below can be checked in the product or in the code this site serves; what remains to be established is flagged at the end."
 ---
 
@@ -58,11 +58,51 @@ Every response also carries four security headers:
 
 Logos and colours shown on a school's enrolment page are accepted only if they come from that school's own instance, and colours are re-validated before they reach the page — a misconfigured instance must not be able to write styling into our pages.
 
-## Backups and logging
+## Where the data lives
 
-Institution data is **backed up automatically every day**.
+The institution instances are served from addresses registered to **LWS (Ligne Web Services), in France** — the `2a00:7ee0:9::/48` range, declared in the RIPE registry under reference `FR-LWS-20150429`. This marketing site is served by **Vercel**, from its `iad1` region (Washington, United States); it holds no student record, as the previous section details.
 
-The relay's technical logs record the institution code and the nature of the incident, **never the student number or the date of birth**: those are the two halves of one identifier, and a log is not the place to bring them together.
+The distinction matters: your students' data does not leave French hosting, even though the enrolment page that collects it is served from elsewhere.
+
+The RIPE registry gives the country where the range is registered, not the address of the data centre. A head of school who needs the exact physical location, for a contractual clause or a formality, should ask us in writing — we have it from the provider, and we are not going to infer it from a registry.
+
+## Backups
+
+Three different things, often confused under one word.
+
+**What is taken, and when.** A database backup every night at 2 a.m., and a full backup — database and uploaded documents — every Sunday at 3 a.m. Archives are kept for **thirty days**, then deleted automatically.
+
+**What protects them.** Archives are encrypted with **AES-256**, using PBKDF2 key derivation over one hundred thousand iterations. The key is kept somewhere other than the server being backed up: a key stored next to the safe locks nothing. A copy is placed off the server it protects — as long as a backup lives beside the database it backs up, it protects against a mistake, not against losing the server, and it disappears with it.
+
+**What proves they are worth anything.** Every Sunday at 5 a.m., each institution's latest backup is **actually restored** into a throwaway database, and we count what came back: the number of tables, and the number of rows in the tables that carry the business — students, enrolments, payments, marks. Counting tables would not be enough: an archive carrying only the structure would restore a hundred and eighty empty tables and pass for good.
+
+The verdict is dated and kept. That is what allows us to answer *"when did you last test your backups?"* with something other than an intention. A backup that has never been restored is not a backup: it is a file we hope contains something, and we only find out otherwise at the worst possible moment.
+
+## Who has access, and how
+
+**Passwords** are at least eight characters, and must mix letters and digits. They are stored as bcrypt hashes, never in clear — including in backups, which take the database as it stands.
+
+**Two-factor authentication** is available on every account. Each person turns it on from their own space, by scanning a code with Google Authenticator, Microsoft Authenticator or FreeOTP, and leaves with eight recovery codes to print for the day the phone is lost. Each recovery code works once.
+
+The institution chooses **which roles it requires it for** — protecting a head office and an accounts department without imposing a phone on two thousand students, many of whom sign in from a shared device. This setting locks nobody out: until someone has confirmed their second factor from their own phone, they sign in as before. That was the condition for a school to be able to switch it on mid-term.
+
+**Rights are granted by permission, not by fixed job title.** An institution composes its own profiles — a registrar who sees enrolments without touching accounts, an external auditor read-only and for a limited time — without us having to change the software. Removing access for someone who leaves means deactivating their account, which cuts access without erasing what they entered: the entries they made stay attributed to their name in the audit log, which is exactly what accounting requires.
+
+**Sensitive actions are logged**: who validated a payment, who changed a mark, who cancelled a receipt, with the before and after state. That log cannot be erased from within the application.
+
+## If you leave
+
+An institution that terminates leaves with its data, in a format it can read.
+
+The export produces **one spreadsheet file per table**, which opens directly in Excel and LibreOffice on the registrar's own computer, with nobody there to help. Alongside it come the documents uploaded to the platform — report cards, receipts, photographs, logo — and a file at the top stating what the folder contains, what it does not, and why.
+
+That format is not a detail. Handing a database dump to a school that is leaving gives it its data without giving it the means to read it: it owns the data, it can do nothing with it. Reversibility is measured by what you can open, not by what you can download.
+
+Password hashes and sign-in tokens are removed from the export. They are not the school's data: they are the secrets protecting its users' accounts, and an archive of this kind travels by email and USB stick. A successor has passwords reset; they never need the hashes, and having them would let them attack the hashes offline, at leisure.
+
+## Relay logging
+
+The relay's technical traces record the institution code and the nature of the incident, **never the student number nor the date of birth**: these are the two halves of an identifier, and a log is not the place to bring them together.
 
 ## Who is responsible for what
 
@@ -86,14 +126,10 @@ Three limits, stated here rather than discovered later.
 
 <ACompleter titre="To be completed before going live">
 
-The following are operational matters and must be settled by the publisher before publication:
+Three points are a matter of editorial decision or administrative formality, and must be settled before this page goes live:
 
-- **Encryption at rest**: are institution databases and backups encrypted on disk? By what mechanism?
-- **Hosting**: where are institution instances physically hosted, with which provider, in which country? A head of institution who asks is entitled to a written answer.
-- **Backups**: retention period, location of copies, and the date of the last restore actually tested. A backup never restored is not a backup.
-- **Access management**: password policy, two-factor authentication for administrative accounts, and the procedure for revoking access when a staff member leaves.
-- **Incidents**: how quickly the institution is informed of a data breach, and the procedure for notifying the protection authority.
-- **ARTCI formalities**: status of the declaration or authorisation for processing carried out by the publisher, and whether a data protection correspondent has been appointed.
-- **Reversibility**: format and lead time for a full export of an institution's data on termination, and the deletion deadline after handover.
+- **Encryption of the database itself.** Backups are encrypted; the live databases are not encrypted at the storage level. State whether encryption at rest is enabled at the host, or accept that it is not — the second answer is acceptable and verifiable, a vague phrase is not.
+- **Incidents**: how quickly the institution is informed of a data breach, and the procedure for notifying the Protection Authority. That is a contractual commitment, not a technical characteristic.
+- **ARTCI formalities**: the status of the declaration or authorisation for processing carried out by the publisher, and the appointment of a data protection officer where applicable.
 
 </ACompleter>

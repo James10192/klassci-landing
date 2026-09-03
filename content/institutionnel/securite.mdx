@@ -1,7 +1,7 @@
 ---
 title: "Sécurité et protection des données"
-description: "Base isolée par établissement, portail public signé, en-têtes de sécurité, sauvegardes quotidiennes : l'architecture réelle de KLASSCI, avec ses limites."
-dateMaj: "2026-09-02"
+description: "Base isolée par école, sauvegardes chiffrées et relues chaque semaine, double authentification, export relisible : ce que KLASSCI fait, et où cela s'arrête."
+dateMaj: "2026-09-03"
 resume: "Cette page décrit ce que le logiciel fait réellement, pas ce qu'il serait agréable de promettre. Chaque mesure décrite ci-dessous est vérifiable dans le produit ou dans le code servi par ce site ; ce qui reste à établir est signalé en fin de page."
 ---
 
@@ -58,9 +58,49 @@ Chaque réponse porte par ailleurs quatre en-têtes de sécurité :
 
 Les logos et couleurs affichés sur la page d'inscription d'une école ne sont acceptés que s'ils proviennent de l'instance de cette école, et les couleurs sont revalidées avant d'atterrir dans la page — une instance mal configurée ne doit pas pouvoir écrire du style dans nos pages.
 
-## Sauvegardes et journalisation
+## Où vivent les données
 
-Les données des établissements sont **sauvegardées automatiquement chaque jour**.
+Les instances des établissements sont servies depuis des adresses enregistrées au nom de **LWS (Ligne Web Services), en France** — la plage `2a00:7ee0:9::/48`, déclarée au registre RIPE sous la référence `FR-LWS-20150429`. Ce site vitrine, lui, est servi par **Vercel**, depuis sa région `iad1` (Washington, États-Unis) ; il ne détient aucun dossier d'élève, comme la section précédente le détaille.
+
+La distinction compte : les données de vos élèves ne quittent pas l'hébergement français, quand bien même la page d'inscription qui les collecte est servie d'ailleurs.
+
+Le registre RIPE donne le pays d'enregistrement de la plage, pas l'adresse du centre de données. Une direction qui a besoin de la localisation physique exacte, pour une clause contractuelle ou une formalité, doit nous la demander par écrit — nous la tenons du prestataire, et nous n'allons pas la déduire d'un registre.
+
+## Sauvegardes
+
+Trois choses différentes, souvent confondues sous un même mot.
+
+**Ce qui est pris, et quand.** Une sauvegarde de la base chaque nuit à 2 h, et une sauvegarde complète — base et documents déposés — chaque dimanche à 3 h. Les archives sont conservées **trente jours**, puis effacées automatiquement.
+
+**Ce qui les protège.** Les archives sont chiffrées en **AES-256**, avec une dérivation de clé PBKDF2 à cent mille itérations. La clé est conservée ailleurs que sur le serveur sauvegardé : une clé rangée à côté du coffre ne ferme rien. Une copie est déposée hors du serveur qu'elle protège — tant qu'une sauvegarde vit à côté de la base qu'elle sauvegarde, elle protège d'une fausse manipulation, pas d'une perte du serveur, et elle disparaît avec lui.
+
+**Ce qui prouve qu'elles valent quelque chose.** Chaque dimanche à 5 h, la dernière sauvegarde de chaque établissement est **réellement restaurée** dans une base jetable, et l'on compte ce qu'elle a rendu : le nombre de tables, et le nombre de lignes des tables qui portent le métier — élèves, inscriptions, paiements, notes. Compter les tables ne suffirait pas : une archive qui ne porterait que la structure restaurerait cent quatre-vingts tables vides et passerait pour bonne.
+
+Le verdict est daté et conservé. C'est ce qui permet de répondre à *« quand avez-vous testé vos sauvegardes pour la dernière fois ? »* par autre chose qu'une intention. Une sauvegarde jamais restaurée n'est pas une sauvegarde : c'est un fichier dont on espère qu'il contient quelque chose, et l'on ne découvre le contraire qu'au pire moment.
+
+## Qui accède, et comment
+
+**Les mots de passe** font au minimum huit caractères, et doivent mêler lettres et chiffres. Ils sont conservés sous forme d'empreinte bcrypt, jamais en clair — y compris dans les sauvegardes, qui reprennent la base telle quelle.
+
+**La double authentification** est disponible pour tous les comptes. Chacun l'active depuis son propre espace, en scannant un code avec Google Authenticator, Microsoft Authenticator ou FreeOTP, et repart avec huit codes de secours à imprimer pour le jour où le téléphone se perd. Chaque code de secours ne sert qu'une fois.
+
+L'établissement choisit **les fonctions pour lesquelles il l'exige** — protéger une direction et une comptabilité sans imposer un téléphone à deux mille étudiants, dont beaucoup se connectent depuis un appareil partagé. Ce réglage n'enferme personne dehors : tant qu'une personne n'a pas confirmé son second facteur depuis son propre téléphone, elle se connecte comme avant. C'était la condition pour qu'une école puisse l'activer en pleine rentrée.
+
+**Les droits sont attribués par permission, pas par fonction figée.** Un établissement compose ses propres profils — un « responsable de scolarité » qui voit les inscriptions sans toucher à la comptabilité, un auditeur externe en lecture seule et pour un temps — sans que nous ayons à modifier le logiciel. Retirer les accès de quelqu'un qui part revient à désactiver son compte, ce qui coupe l'accès sans effacer ce qu'il a saisi : les écritures qu'il a passées restent attribuées à son nom dans le journal d'audit, ce qui est exactement ce qu'on attend en comptabilité.
+
+**Les actions sensibles sont journalisées** : qui a validé un paiement, qui a modifié une note, qui a annulé un encaissement, avec l'état avant et après. Ce journal ne s'efface pas depuis l'application.
+
+## Si vous partez
+
+Un établissement qui résilie repart avec ses données, dans un format qu'il peut relire.
+
+L'export produit **un fichier par table, au format tableur**, qui s'ouvre directement dans Excel et LibreOffice sur le poste du secrétariat, sans personne pour aider. S'y ajoutent les documents déposés dans la plateforme — bulletins, reçus, photos, logo — et un fichier en tête qui énonce ce que le dossier contient, ce qu'il ne contient pas, et pourquoi.
+
+Ce format n'est pas un détail. Remettre un export de base de données à une école qui part, c'est lui donner ses données sans lui donner le moyen de les lire : elle les possède, elle n'en fait rien. La réversibilité se mesure à ce qu'on peut ouvrir, pas à ce qu'on peut télécharger.
+
+Les empreintes de mots de passe et les jetons de connexion sont retirés de l'export. Ce ne sont pas des données de l'école : ce sont les secrets qui protègent les comptes de ses utilisateurs, et une archive de ce genre circule par courriel et par clé USB. Un successeur fait réinitialiser les mots de passe ; il n'a jamais besoin des empreintes, et les avoir lui permettrait de les attaquer hors ligne, tranquillement.
+
+## Journalisation du relais
 
 Les traces techniques du relais consignent le code de l'établissement et la nature de l'incident, **jamais le matricule ni la date de naissance** : ce sont les deux moitiés d'un identifiant, et un journal n'est pas l'endroit où les réunir.
 
@@ -86,14 +126,10 @@ Trois limites, dites ici plutôt que découvertes plus tard.
 
 <ACompleter>
 
-Les points suivants relèvent de l'exploitation et doivent être arrêtés par l'éditeur avant la mise en ligne :
+Trois points relèvent d'une décision de l'éditeur ou d'une formalité administrative, et doivent être arrêtés avant la mise en ligne de cette page :
 
-- **Chiffrement au repos** : les bases des établissements et les sauvegardes sont-elles chiffrées sur le support ? Avec quel mécanisme ?
-- **Hébergement** : où sont physiquement hébergées les instances des établissements, chez quel prestataire, dans quel pays ? Une direction qui pose la question a droit à une réponse écrite.
-- **Sauvegardes** : durée de rétention, emplacement des copies, et date de la dernière restauration réellement testée. Une sauvegarde jamais restaurée n'est pas une sauvegarde.
-- **Gestion des accès** : politique de mot de passe, double authentification pour les comptes d'administration, procédure de retrait des accès d'un agent qui quitte l'établissement.
-- **Incidents** : délai d'information de l'établissement en cas de violation de données, et procédure de notification à l'Autorité de protection.
+- **Chiffrement de la base elle-même.** Les sauvegardes sont chiffrées ; les bases en cours d'exploitation ne le sont pas au niveau du support. Indiquer si le chiffrement au repos est activé chez l'hébergeur, ou assumer qu'il ne l'est pas — la seconde réponse est acceptable et vérifiable, la formule vague ne l'est pas.
+- **Incidents** : délai d'information de l'établissement en cas de violation de données, et procédure de notification à l'Autorité de protection. C'est un engagement contractuel, pas une caractéristique technique.
 - **Formalités ARTCI** : état de la déclaration ou de l'autorisation pour les traitements opérés par l'éditeur, et désignation éventuelle d'un correspondant à la protection des données.
-- **Réversibilité** : format et délai d'export complet des données d'un établissement qui résilie, et délai de suppression après restitution.
 
 </ACompleter>
