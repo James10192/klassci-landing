@@ -60,9 +60,9 @@ Deux interdits absolus, qui valent pour tout agent rédacteur :
 
 | État | Prio | Titre | Slug | Thème |
 |---|---|---|---|---|
-| ☐ | P1 | Délibération de jury LMD : procédure et PV | `deliberation-jury-lmd-proces-verbal` | lmd |
+| ✅ | P1 | Délibération de jury LMD : procédure et PV | `deliberation-jury-lmd-proces-verbal` | lmd |
 | ☐ | P1 | Compensation LMD : valider un semestre | `compensation-lmd-validation-semestre` | lmd |
-| ☐ | P1 | Élèves affectés : gérer subvention et solde | `eleves-affectes-subvention-etat` | finance |
+| ✅ | P1 | Élèves affectés : gérer subvention et solde | `eleves-affectes-subvention-etat` | finance |
 | ☐ | P1 | Modèle de bulletin trimestriel à télécharger | `modele-bulletin-trimestriel` | operations |
 | ☐ | P1 | Prix d'un logiciel scolaire en FCFA | `prix-logiciel-gestion-scolaire-fcfa` | achat |
 | ☐ | P1 | Agrément privé : dossier, délais, pièges | `agrement-etablissement-prive-cote-divoire` | reglementation |
@@ -122,6 +122,15 @@ Le corpus a besoin de surfaces d'atterrissage. Par ordre d'utilité :
 - `/{locale}/comparatif/{alternative-excel,tarification-par-eleve-ou-licence}`
 - `/{locale}/ressources` — les modèles téléchargeables
 - `/{locale}/glossaire` — UE, ECUE, crédit, DRENA, MESRS…
+
+Livrées depuis : `/{locale}/{a-propos,securite,mentions-legales,confidentialite}`.
+Elles ne se positionnent sur aucune requête et ce n'est pas leur rôle : elles
+établissent qu'un éditeur existe, nommément, sous un droit identifié. C'est ce
+qu'un directeur vérifie avant de confier les notes et les paiements de ses
+élèves à un tiers, et c'est aussi ce que cherche l'évaluation de fiabilité d'un
+moteur. Quatre encadrés « À compléter » y attendent des informations que seul
+un humain détient — forme juridique, RCCM, directeur de la publication,
+hébergeur des instances.
 
 ## Attention aux slugs
 
