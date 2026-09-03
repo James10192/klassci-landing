@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useMemo, useRef, useState } from "react";
 
+import { filtrer } from "@/lib/portail/recherche";
+
 import { Marque } from "./marque-etablissement";
 
 /**
@@ -17,10 +19,28 @@ import { Marque } from "./marque-etablissement";
  *
  * La recherche est **insensible aux accents**, ce qui n'est pas un détail sur
  * un site francophone : quelqu'un qui tape « ecole » sur un clavier de
- * téléphone doit trouver « ÉCOLE SPÉCIALE DU BÂTIMENT ». Elle porte aussi sur
- * la ville et sur le code — un étudiant de Yamoussoukro cherchera sa ville
- * avant le nom exact de son école, et quelqu'un qui a reçu un lien connaîtra
- * « yakro » sans connaître l'intitulé officiel.
+ * téléphone doit trouver « ÉCOLE SPÉCIALE DU BÂTIMENT ». Elle porte sur le nom
+ * et sur la ville — un étudiant de Yamoussoukro cherchera sa ville avant le nom
+ * exact de son école.
+ *
+ * **Elle ne porte QUE sur ce qui est affiché**, et c'est une règle, pas une
+ * limitation. Le code technique de l'établissement était indexé au départ, pour
+ * que « yakro » trouve `esbtp-yakro`. Mais ce code n'apparaît nulle part à
+ * l'écran : chercher « universite » ramenait une école nommée « AZERTY » —
+ * elle correspondait par son code, `universite-san-pedro`, que le visiteur ne
+ * voit pas. Un résultat qu'on ne peut pas expliquer en le regardant apprend à
+ * se méfier de tous les autres. Une recherche vaut par ce qu'elle écarte autant
+ * que par ce qu'elle trouve.
+ *
+ * Reste qu'un étudiant tape « esbtp », pas « Ecole Spéciale du Bâtiment et des
+ * Travaux Publics » — le nom que l'école a réglé. On indexe donc l'**acronyme
+ * calculé à partir du nom affiché** : les initiales de ses mots pleins. Il
+ * n'est pas lu dans un champ séparé, et c'est délibéré — le sigle servi par
+ * les instances vaut « ESBTP » sur quatre écoles dont deux ne sont pas
+ * l'ESBTP, reste d'un clonage. Dériver l'acronyme de ce qui est écrit à
+ * l'écran le rend à la fois juste et explicable : « ESBTP », ce sont les
+ * initiales du nom qu'on a sous les yeux, et « ISLG » celles d'Institut
+ * Supérieur Louis Le Grand.
  *
  * Tous les mots doivent correspondre, pas un seul : « esbtp abidjan » ne doit
  * pas ramener l'ESBTP de Yamoussoukro. Ils peuvent être dans n'importe quel
@@ -46,21 +66,6 @@ export type LibellesRecherche = {
 /** À partir de combien d'écoles le champ de recherche apparaît. */
 const SEUIL_RECHERCHE = 8;
 
-/**
- * Ramène un texte à sa forme comparable : sans accent, sans casse.
- *
- * `NFD` sépare la lettre de son accent, et la classe `\p{Diacritic}` retire
- * l'accent devenu autonome. C'est la seule méthode qui traite correctement
- * l'ensemble des langues, plutôt qu'une table de correspondance qui oublie
- * toujours un caractère.
- */
-function comparable(texte: string): string {
-  return texte
-    .normalize("NFD")
-    .replace(/\p{Diacritic}/gu, "")
-    .toLowerCase();
-}
-
 export function ListeEtablissements({
   locale,
   entrees,
@@ -75,25 +80,11 @@ export function ListeEtablissements({
 
   const cherchable = entrees.length >= SEUIL_RECHERCHE;
 
-  // L'index est calculé une fois : sans lui, chaque frappe re-normaliserait
-  // le nom, la ville et le code de chaque école.
-  const index = useMemo(
-    () =>
-      entrees.map((entree) => ({
-        entree,
-        recherche: comparable(`${entree.nom} ${entree.ville} ${entree.code}`),
-      })),
-    [entrees],
-  );
-
-  const visibles = useMemo(() => {
-    const mots = comparable(requete).split(/\s+/).filter(Boolean);
-    if (mots.length === 0) return entrees;
-
-    return index
-      .filter(({ recherche }) => mots.every((mot) => recherche.includes(mot)))
-      .map(({ entree }) => entree);
-  }, [entrees, index, requete]);
+  // La règle vit dans `lib/portail/recherche`, et `verifier-recherche.mjs`
+  // l'éprouve à chaque construction. Elle décide de ce que le visiteur voit :
+  // elle n'avait pas à rester enfermée dans un composant qu'on ne peut
+  // vérifier qu'en pilotant un navigateur.
+  const visibles = useMemo(() => filtrer(entrees, requete), [entrees, requete]);
 
   return (
     <>

@@ -315,6 +315,28 @@ a:hover {
   animation: gradientText 6s linear infinite;
 }
 
+/* --------------------------------------------------------------------------
+   Le pied de page aux couleurs de l'ecole choisie.
+
+   `--footer-bg: var(--accent)` est declare sur `:root`, et une reference de
+   variable se resout la ou elle est declaree : redefinir `--accent` plus bas
+   dans l'arbre — ce que fait le portail pour prendre les couleurs de
+   l'etablissement — ne l'atteignait pas. Une page entiere aux couleurs de
+   l'ESBTP se terminait donc par un aplat bleu KLASSCI, et la rupture se
+   voyait plus que l'habillage.
+
+   On redeclare donc la variable sur l'element qui porte le theme, ou elle se
+   resout contre le bon `--accent`. Le mode sombre garde son pied presque noir :
+   y peindre le vert d'une ecole jurerait avec tout le reste de la page.
+   -------------------------------------------------------------------------- */
+[data-theme-etablissement] {
+  --footer-bg: var(--accent);
+}
+
+html.dark [data-theme-etablissement] {
+  --footer-bg: #111318;
+}
+
 html.dark .gradient-text {
   background: linear-gradient(
     90deg,

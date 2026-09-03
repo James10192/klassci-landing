@@ -4,7 +4,11 @@ import Link from "next/link";
 import { Footer } from "@/components/sections/footer";
 import type { EtablissementVisible } from "@/lib/portail/tenants";
 import type { EtablissementVitrine } from "@/lib/vitrine/etablissements";
-import { variablesEtablissement } from "@/lib/vitrine/couleurs";
+import {
+  texteLisibleSur,
+  tropClairePourUnFond,
+  variablesEtablissement,
+} from "@/lib/vitrine/couleurs";
 
 import { ListeEtablissements } from "./liste-etablissements";
 import { Marque } from "./marque-etablissement";
@@ -76,10 +80,26 @@ function BandeauIdentite({
     );
   }
 
+  // Le fond réglé par l'école, sauf s'il est trop clair pour se distinguer du
+  // fond de page. Trois écoles sur six ont laissé `bandeau_fond` en blanc —
+  // c'est la valeur par défaut des PDF, et sur du papier elle est juste : la
+  // feuille a un bord, le bandeau se lit. À l'écran, ce même blanc posé sur un
+  // fond presque blanc ne montre rien du tout : l'étudiant voyait une carte
+  // vide là où on voulait lui dire « vous êtes chez votre école ».
+  //
+  // Dans ce cas seulement, on prend la couleur principale de l'établissement —
+  // celle-là même qui teinte déjà les boutons de la page — et on recalcule le
+  // texte, la valeur reçue ayant été calculée contre un fond blanc qui n'est
+  // plus celui-ci.
+  const fondRegle = identite.identite.bandeauFond;
+  const substitue = tropClairePourUnFond(fondRegle);
+  const fond = substitue ? identite.identite.couleurPrincipale : fondRegle;
+  const encre = substitue ? texteLisibleSur(fond) : identite.identite.bandeauTexte;
+
   return (
     <div
       className="mx-auto mt-7 flex max-w-xl items-center gap-4 rounded-[20px] px-5 py-4 text-left"
-      style={{ backgroundColor: identite.identite.bandeauFond, color: identite.identite.bandeauTexte }}
+      style={{ backgroundColor: fond, color: encre }}
     >
       <Marque logo={identite.logo} nom={nom} taille="bandeau" />
       <span className="min-w-0">
@@ -116,9 +136,19 @@ export async function ReinscriptionPage({
     <>
       <ReinscriptionChrome />
 
-      {/* pt-[57px] : la barre est fixe, le contenu commence dessous. */}
-      <main className="min-h-screen bg-bg pt-[57px] text-text">
-        <div className="container py-14 sm:py-20" style={theme}>
+      {/* pt-[57px] : la barre est fixe, le contenu commence dessous.
+          Le theme est pose sur `main`, et non sur le seul conteneur du
+          contenu : le pied de page tire son fond de `--footer-bg`, defini
+          comme `var(--accent)`. Hors du conteneur, il ne voyait pas la couleur
+          de l'ecole — une page entiere aux couleurs de l'ESBTP se terminait
+          par un aplat bleu KLASSCI, et la rupture se voyait plus que
+          l'habillage. */}
+      <main
+        className="min-h-screen bg-bg pt-[57px] text-text"
+        style={theme}
+        data-theme-etablissement={theme ? "" : undefined}
+      >
+        <div className="container py-14 sm:py-20">
           <div className="mx-auto max-w-xl">
             <header className="text-center">
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-accent">

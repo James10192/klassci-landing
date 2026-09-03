@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "postinstall": "fumadocs-mdx",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -10,12 +11,13 @@
     "tsc": "tsc --noEmit",
     "verifier:amortisseur": "node --experimental-strip-types --conditions=react-server scripts/verifier-amortisseur.mjs",
     "verifier:identite-ecoles": "node --experimental-strip-types --conditions=react-server scripts/verifier-identite-ecoles.mjs",
+    "verifier:recherche": "node --experimental-strip-types scripts/verifier-recherche.mjs",
     "verifier:seo": "node scripts/verifier-seo.mjs",
     "verifier:seo:prod": "node scripts/verifier-seo.mjs --url https://www.klassci.com",
     "verifier:schema": "node scripts/verifier-donnees-structurees.mjs",
     "verifier:budget": "node scripts/verifier-budget.mjs",
     "verifier:citations": "node scripts/verifier-citations.mjs",
-    "verifier": "pnpm tsc && pnpm verifier:amortisseur && pnpm verifier:identite-ecoles && pnpm verifier:seo && pnpm build && pnpm verifier:schema && pnpm verifier:budget"
+    "verifier": "pnpm tsc && pnpm verifier:amortisseur && pnpm verifier:identite-ecoles && pnpm verifier:recherche && pnpm verifier:seo && pnpm build && pnpm verifier:schema && pnpm verifier:budget"
   },
   "dependencies": {
     "@types/mdx": "^2.0.13",
@@ -60,6 +62,6 @@
     ]
   },
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=22.6.0"
   }
 }

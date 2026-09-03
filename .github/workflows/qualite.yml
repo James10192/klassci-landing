@@ -31,13 +31,26 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          # 22 et non 20 : `--experimental-strip-types` n'existe qu'a partir de
+          # Node 22.6, et trois verificateurs eprouvent des modules TypeScript
+          # sans passer par un lanceur de tests. Node 20 est de toute facon
+          # deprecie sur les runners GitHub.
+          node-version: 22
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile
 
       - name: Typage
         run: pnpm tsc
+
+      - name: Amortisseur du relais
+        run: node --experimental-strip-types --conditions=react-server scripts/verifier-amortisseur.mjs
+
+      - name: Identité des écoles servie par la vitrine
+        run: node --experimental-strip-types --conditions=react-server scripts/verifier-identite-ecoles.mjs
+
+      - name: Règle de recherche du sélecteur d'établissement
+        run: node --experimental-strip-types scripts/verifier-recherche.mjs
 
       - name: Contrôles SEO sur le dépôt
         run: node scripts/verifier-seo.mjs
@@ -68,6 +81,6 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
       - name: Les sources citées répondent-elles encore ?
         run: node scripts/verifier-citations.mjs
