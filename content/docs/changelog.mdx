@@ -29,6 +29,10 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 
 - **« S'inscrire en ligne » figure dans le pied de page** — l'entrée des familles n'était accessible que depuis la barre de navigation, c'est-à-dire nulle part une fois la page parcourue jusqu'en bas.
 
+### Sécurité
+
+- **Les composants externes de la plateforme ont été remis à jour, et le contrôle qui devait les surveiller peut enfin sonner** — KLASSCI s'appuie, comme toute plateforme moderne, sur des briques logicielles écrites par d'autres. Treize failles classées hautes ou critiques y dormaient. L'une permettait de glisser du code exécutable dans une page à travers un texte mis en forme ; une autre de faire tomber le serveur en lui soumettant un document conçu pour l'occuper indéfiniment ; une troisième d'échapper aux règles qui décident quels services extérieurs la plateforme accepte d'appeler. **Elles sont fermées.** Le point le plus gênant n'était pourtant pas les failles elles-mêmes, mais le fait que personne ne pouvait les voir : la vérification automatique chargée de les signaler était écrite de telle façon qu'elle ne pouvait jamais échouer, et annonçait donc « tout va bien » quoi qu'elle trouve. Elle décide désormais réellement, et sur ce qui part en production plutôt que sur les outils de développement. Elle s'arrête aussi sur une alerte que la base de référence n'a pas encore classée — une alerte non évaluée n'est pas une alerte bénigne, et c'est exactement ce qui avait laissé passer un défaut de vérification des clés utilisées pour signer les notifications. Quand un risque doit être assumé faute de correctif publié, il reste affiché comme tel avec son motif, plutôt que masqué : accepter un risque et le cacher sont deux choses différentes. Enfin, les tests ne s'exécutaient que lors d'une relecture de code, jamais sur une mise en ligne directe : ils s'exécutent maintenant dans les deux cas, sur la branche de développement comme sur celle de chaque établissement.
+
 ---
 
 ## Août 2026
