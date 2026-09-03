@@ -17,6 +17,7 @@ import { UniverseContactDialog } from "@/components/universe/universe-contact-di
 import { SceneProduit } from "@/components/vitrine/scene-produit";
 import { Link } from "@/i18n/navigation";
 import { track } from "@/lib/analytics/track";
+import { groupeEntreprise } from "@/lib/navigation";
 
 type DoorKey = "universite" | "college" | "lms";
 type DoorIcon = typeof GraduationCap;
@@ -98,6 +99,7 @@ export function UniverseHub({ bandeauEtablissements }: { bandeauEtablissements?:
             enAvant: true,
             onClick: () => track("cta_click", { location: "hub_inscription", locale }),
           },
+          groupeEntreprise(locale, nav("entreprise")),
         ]}
         action={({ fermerMenu, contexte }) => (
           <button

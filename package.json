@@ -18,7 +18,8 @@
     "verifier": "pnpm tsc && pnpm verifier:amortisseur && pnpm verifier:identite-ecoles && pnpm verifier:recherche && pnpm verifier:seo && pnpm build && pnpm verifier:schema && pnpm verifier:budget",
     "verifier:seo:prod": "node scripts/verifier-seo.mjs --url https://www.klassci.com",
     "verifier:couleurs:prod": "node --experimental-strip-types scripts/verifier-couleurs-prod.mjs",
-    "verifier:citations": "node scripts/verifier-citations.mjs"
+    "verifier:citations": "node scripts/verifier-citations.mjs",
+    "verifier:navigation": "node scripts/verifier-navigation.mjs"
   },
   "dependencies": {
     "@types/mdx": "^2.0.13",
@@ -44,6 +45,7 @@
     "autoprefixer": "^10.4.20",
     "eslint": "^9.18.0",
     "eslint-config-next": "14.2.16",
+    "playwright-core": "^1.62.1",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.7.3",

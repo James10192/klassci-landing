@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 
 import { SiteNav } from "@/components/sections/site-nav";
 import { Logo } from "@/components/ui/logo";
+import { groupeEntreprise } from "@/lib/navigation";
 
 /**
  * La barre de navigation des pages du blog.
@@ -47,6 +48,7 @@ export function ChromeBlog({ locale }: { locale: string }) {
           href: `/${locale}/docs`,
           icone: BookOpen,
         },
+        groupeEntreprise(locale, nav("entreprise")),
       ]}
       action={({ fermerMenu, contexte }) => (
         <a

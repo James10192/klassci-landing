@@ -39,9 +39,14 @@ export function Footer() {
   const locale = useLocale() as "fr" | "en";
   const year = new Date().getFullYear();
 
-  const product = t.raw("columns.product") as FooterColumn;
-  const resources = t.raw("columns.resources") as FooterColumn;
-  const contact = t.raw("columns.contact") as FooterColumn;
+  // On boucle sur ce que le catalogue déclare, au lieu de nommer chaque
+  // colonne. La version précédente en lisait trois : ajouter la quatrième —
+  // « L'entreprise », qui rassemble enfin les pages institutionnelles — l'aurait
+  // laissée invisible sans que rien ne le signale, parce qu'une clé de
+  // traduction que personne ne lit ne produit aucune erreur.
+  const columns = Object.values(
+    t.raw("columns") as Record<string, FooterColumn>,
+  );
   const social = t.raw("social") as Record<string, string>;
 
   const onLinkClick = useCallback(() => {
@@ -82,7 +87,7 @@ export function Footer() {
   return (
     <footer className="bg-footer-bg text-footer-text">
       <div className="container py-16 lg:py-20">
-        <div className="grid grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr] gap-12 lg:gap-12">
+        <div className="grid grid-cols-2 gap-12 lg:grid-cols-[1.6fr_1fr_1fr_1fr_1fr] lg:gap-10">
           {/* Brand column */}
           <div className="col-span-2 lg:col-span-1 max-w-sm">
             <Logo variant="footer" />
@@ -91,41 +96,18 @@ export function Footer() {
             </p>
           </div>
 
-          {/* Product */}
-          <div>
-            <h4 className="font-mono text-[0.72rem] uppercase tracking-[0.08em] text-footer-link mb-4">
-              {product.title}
-            </h4>
-            <ul className="space-y-2.5">
-              {product.links.map((link) => (
-                <li key={link.label}>{renderLink(link)}</li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Resources */}
-          <div>
-            <h4 className="font-mono text-[0.72rem] uppercase tracking-[0.08em] text-footer-link mb-4">
-              {resources.title}
-            </h4>
-            <ul className="space-y-2.5">
-              {resources.links.map((link) => (
-                <li key={link.label}>{renderLink(link)}</li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Contact */}
-          <div>
-            <h4 className="font-mono text-[0.72rem] uppercase tracking-[0.08em] text-footer-link mb-4">
-              {contact.title}
-            </h4>
-            <ul className="space-y-2.5">
-              {contact.links.map((link) => (
-                <li key={link.label}>{renderLink(link)}</li>
-              ))}
-            </ul>
-          </div>
+          {columns.map((column) => (
+            <div key={column.title}>
+              <h4 className="font-mono text-[0.72rem] uppercase tracking-[0.08em] text-footer-link mb-4">
+                {column.title}
+              </h4>
+              <ul className="space-y-2.5">
+                {column.links.map((link) => (
+                  <li key={link.label}>{renderLink(link)}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
 
         {/* Bottom row */}

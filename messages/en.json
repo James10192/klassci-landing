@@ -21,7 +21,9 @@
     "menuClose": "Close menu",
     "languageSwitcherAria": "Switch language",
     "inscription": "Apply",
-    "inscriptionAria": "Apply to one of our schools"
+    "inscriptionAria": "Apply to one of our schools",
+    "entreprise": "Company",
+    "entrepriseAria": "Company and data protection pages"
   },
   "hero": {
     "title": "University management, reimagined.",
@@ -804,6 +806,10 @@
         "title": "Resources",
         "links": [
           {
+            "label": "Guides and resources",
+            "href": "/blog"
+          },
+          {
             "label": "Documentation",
             "href": "/docs"
           },
@@ -814,7 +820,12 @@
           {
             "label": "Changelog",
             "href": "/docs/changelog"
-          },
+          }
+        ]
+      },
+      "company": {
+        "title": "Company",
+        "links": [
           {
             "label": "About",
             "href": "/a-propos"
@@ -822,6 +833,14 @@
           {
             "label": "Data security",
             "href": "/securite"
+          },
+          {
+            "label": "Privacy",
+            "href": "/confidentialite"
+          },
+          {
+            "label": "Legal notice",
+            "href": "/mentions-legales"
           }
         ]
       },
@@ -835,14 +854,6 @@
           {
             "label": "Abidjan, Côte d'Ivoire",
             "href": "#contact"
-          },
-          {
-            "label": "Legal notice",
-            "href": "/mentions-legales"
-          },
-          {
-            "label": "Privacy",
-            "href": "/confidentialite"
           }
         ]
       }
