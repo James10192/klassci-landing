@@ -322,7 +322,29 @@ async function recuperer(url) {
 
 function extraire(html, motif) {
   const trouve = html.match(motif);
-  return trouve ? trouve[1] : null;
+  return trouve ? decoder(trouve[1]) : null;
+}
+
+/**
+ * Rend a un attribut HTML le texte que verra un lecteur.
+ *
+ * Sans cela, on mesure le balisage et non la phrase : une apostrophe francaise
+ * sortie par React vaut `&#x27;`, soit six caracteres au lieu d'un. Une
+ * description de 163 caracteres en comptait 173, et le controle demandait de
+ * raccourcir un texte qui tenait deja. Sur un site francais, ou presque chaque
+ * phrase porte une apostrophe, l'avertissement serait vite devenu du bruit
+ * qu'on ignore.
+ */
+function decoder(texte) {
+  return texte
+    .replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCodePoint(parseInt(hex, 16)))
+    .replace(/&#(\d+);/g, (_, dec) => String.fromCodePoint(Number(dec)))
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    // En dernier : sinon `&amp;#x27;` serait decode deux fois.
+    .replace(/&amp;/g, "&");
 }
 
 async function controlerEnLigne(base) {
