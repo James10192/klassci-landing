@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useMemo, useRef, useState } from "react";
 
+import { filtrer } from "@/lib/portail/recherche";
+
 import { Marque } from "./marque-etablissement";
 
 /**
@@ -64,49 +66,6 @@ export type LibellesRecherche = {
 /** À partir de combien d'écoles le champ de recherche apparaît. */
 const SEUIL_RECHERCHE = 8;
 
-/**
- * Ramène un texte à sa forme comparable : sans accent, sans casse.
- *
- * `NFD` sépare la lettre de son accent, et la classe `\p{Diacritic}` retire
- * l'accent devenu autonome. C'est la seule méthode qui traite correctement
- * l'ensemble des langues, plutôt qu'une table de correspondance qui oublie
- * toujours un caractère.
- */
-function comparable(texte: string): string {
-  return texte
-    .normalize("NFD")
-    .replace(/\p{Diacritic}/gu, "")
-    .toLowerCase();
-}
-
-/**
- * Les mots qui ne portent pas d'initiale dans un acronyme français.
- *
- * Sans eux, « Ecole Spéciale du Bâtiment et des Travaux Publics » donnerait
- * « ESDBETP » plutôt que « ESBTP ».
- */
-const MOTS_VIDES = new Set([
-  "de", "du", "des", "d", "la", "le", "les", "l",
-  "et", "en", "a", "au", "aux", "pour", "sur", "the", "of", "and",
-]);
-
-/**
- * L'acronyme d'un nom : les initiales de ses mots pleins.
- *
- * Rend une chaîne vide en dessous de deux lettres : l'« acronyme » d'un nom
- * d'un seul mot n'est qu'une lettre, et n'apprend rien que le nom ne dise
- * déjà.
- */
-function acronyme(nom: string): string {
-  const initiales = comparable(nom)
-    .split(/[^a-z0-9]+/)
-    .filter((mot) => mot !== "" && !MOTS_VIDES.has(mot))
-    .map((mot) => mot[0])
-    .join("");
-
-  return initiales.length >= 2 ? initiales : "";
-}
-
 export function ListeEtablissements({
   locale,
   entrees,
@@ -121,26 +80,11 @@ export function ListeEtablissements({
 
   const cherchable = entrees.length >= SEUIL_RECHERCHE;
 
-  // L'index est calculé une fois : sans lui, chaque frappe re-normaliserait
-  // le nom et la ville de chaque école. Le code n'y figure pas — voir plus
-  // haut : on ne cherche que dans ce que le visiteur a sous les yeux.
-  const index = useMemo(
-    () =>
-      entrees.map((entree) => ({
-        entree,
-        recherche: `${comparable(`${entree.nom} ${entree.ville}`)} ${acronyme(entree.nom)}`,
-      })),
-    [entrees],
-  );
-
-  const visibles = useMemo(() => {
-    const mots = comparable(requete).split(/\s+/).filter(Boolean);
-    if (mots.length === 0) return entrees;
-
-    return index
-      .filter(({ recherche }) => mots.every((mot) => recherche.includes(mot)))
-      .map(({ entree }) => entree);
-  }, [entrees, index, requete]);
+  // La règle vit dans `lib/portail/recherche`, et `verifier-recherche.mjs`
+  // l'éprouve à chaque construction. Elle décide de ce que le visiteur voit :
+  // elle n'avait pas à rester enfermée dans un composant qu'on ne peut
+  // vérifier qu'en pilotant un navigateur.
+  const visibles = useMemo(() => filtrer(entrees, requete), [entrees, requete]);
 
   return (
     <>
