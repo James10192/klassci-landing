@@ -1,0 +1,99 @@
+---
+title: "Security and data protection"
+description: "One database per institution, a signed public portal, security headers and daily backups: the actual architecture behind KLASSCI, limits included."
+dateMaj: "2026-09-02"
+resume: "This page describes what the software actually does, not what would be pleasant to promise. Every measure below can be checked in the product or in the code this site serves; what remains to be established is flagged at the end."
+---
+
+A security page made only of adjectives — robust, secure, compliant — teaches its reader nothing. This one describes precise mechanisms, and says where they stop. That is the only form that lets a head of institution, or their IT provider, ask a follow-up question.
+
+## One database per institution
+
+Each institution has **its own database**, on its own instance. There is no shared table where pupils from several schools would sit side by side behind a customer identifier.
+
+That choice has a cost — as many instances to deploy and update as there are institutions — and two direct consequences:
+
+1. **A filtering mistake cannot expose another school's data.** In a shared database, the whole of the isolation rests on a condition present in every single query; it only has to be missing once. Here there is nothing to filter, because there is nothing else in the database.
+2. **An incident stays confined to one institution.** A restore, a migration or a maintenance window affects one school, without taking the others offline.
+
+This is a question to put to any vendor, ourselves included: *is my database isolated or shared?* Either answer can be defended, provided it is owned and explained.
+
+## What travels between this site and your institution
+
+The [enrolment](/en/inscription) and [re-enrolment](/en/reinscription) forms open to families are served by this site, but the records themselves live on the institution's instance. In between, klassci.com acts as a relay, under four rules.
+
+**The shared secret never reaches the browser.** The family talks to klassci.com; klassci.com signs the call and talks to the institution. Nobody else can call those endpoints.
+
+**Every call is signed.** The signature is an HMAC-SHA256 covering the timestamp, the method, the path and the exact body being sent. A signature issued for one endpoint is therefore not valid on another, it can be used only once, and it expires after five minutes.
+
+**Only expected fields cross.** The relayed body is rebuilt field by field from a closed list, never passed through as received. A field added by a caller therefore never enters the signed payload — otherwise it would be authenticated by our own secret.
+
+**The address counted is the one the platform observed**, never the one a header claims. That address is what caps the number of attempts; letting the caller choose it would remove the limit while leaving everyone believing it was in place.
+
+A response discipline completes this: when a record is not found, the answer is identical whatever the reason, so the form cannot be used to guess which student numbers exist. And when the institution is unreachable, the message says so — rather than sending a family off to check a student number that was correct all along.
+
+## What this site keeps, and what it does not
+
+The relay **stores no application or re-enrolment record**. It forwards, returns the institution's answer, and keeps nothing.
+
+Only two things are retained, in memory and briefly:
+
+- **An attempt counter per IP address**, over a one-minute sliding window, to absorb bursts before they reach the school.
+- **The catalogue of programmes and levels published by the institution**, for a few minutes, because it is identical for every visitor to a given school and changes twice a year. It contains no personal data.
+
+What is collected, by whom and for how long is set out on the [Privacy policy](/en/confidentialite) page.
+
+## What the browser receives
+
+Every page is served over **HTTPS**, and institution instances are only ever called over HTTPS — an instance address that does not begin with `https://` is rejected by the configuration, not merely discouraged.
+
+Every response also carries four security headers:
+
+| Header | Value | What it prevents |
+| --- | --- | --- |
+| `X-Content-Type-Options` | `nosniff` | A file being executed as a type it does not declare |
+| `X-Frame-Options` | `DENY` | The site being framed by a third party to hijack a click |
+| `Referrer-Policy` | `strict-origin-when-cross-origin` | The full page address leaking to a third-party site |
+| `Permissions-Policy` | `camera=(), microphone=(), geolocation=()` | The page requesting camera, microphone or location |
+
+Logos and colours shown on a school's enrolment page are accepted only if they come from that school's own instance, and colours are re-validated before they reach the page — a misconfigured instance must not be able to write styling into our pages.
+
+## Backups and logging
+
+Institution data is **backed up automatically every day**.
+
+The relay's technical logs record the institution code and the nature of the incident, **never the student number or the date of birth**: those are the two halves of one identifier, and a log is not the place to bring them together.
+
+## Who is responsible for what
+
+The distinction is drawn by [Ivorian law no. 2013-450 of 19 June 2013](https://www.autoritedeprotection.ci/docs/loi_2013_450_journal.pdf) on the protection of personal data, and it has practical consequences.
+
+**The institution is the data controller.** It decides to keep a pupil file, sets its purpose, completes the formalities with the [protection authority](https://www.autoritedeprotection.ci/) — ARTCI, designated by the law — and answers access or rectification requests from its students and their families.
+
+**KLASSCI acts as a processor** for that part: we process the data on the institution's behalf and on its instructions. The law requires the institution to choose a processor offering sufficient technical and organisational security guarantees; this page exists partly so that assessment can be made.
+
+That split is set out channel by channel in the [privacy policy](/en/confidentialite).
+
+## What we do not promise
+
+Three limits, stated here rather than discovered later.
+
+**The relay's rate limiting is not a guarantee, it is a shock absorber.** Its counters live in the memory of the process serving the request; on a serverless platform each instance has its own, and a fresh instance starts from zero. It divides the amplification of a burst, it does not remove it. A genuinely airtight limit requires shared storage, and will be built the day an institution is deliberately targeted.
+
+**We claim no certification.** No external audit, no accreditation, no label has been obtained to date. Saying so is better than letting a badge imply otherwise.
+
+**The GDPR is not the text that governs us.** The reference framework is Ivorian law no. 2013-450; the practices described here follow its principles, and often meet those of the European regulation, but an institution that requires contractual GDPR compliance should ask explicitly rather than infer it from a web page.
+
+<ACompleter titre="To be completed before going live">
+
+The following are operational matters and must be settled by the publisher before publication:
+
+- **Encryption at rest**: are institution databases and backups encrypted on disk? By what mechanism?
+- **Hosting**: where are institution instances physically hosted, with which provider, in which country? A head of institution who asks is entitled to a written answer.
+- **Backups**: retention period, location of copies, and the date of the last restore actually tested. A backup never restored is not a backup.
+- **Access management**: password policy, two-factor authentication for administrative accounts, and the procedure for revoking access when a staff member leaves.
+- **Incidents**: how quickly the institution is informed of a data breach, and the procedure for notifying the protection authority.
+- **ARTCI formalities**: status of the declaration or authorisation for processing carried out by the publisher, and whether a data protection correspondent has been appointed.
+- **Reversibility**: format and lead time for a full export of an institution's data on termination, and the deletion deadline after handover.
+
+</ACompleter>

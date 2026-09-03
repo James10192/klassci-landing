@@ -1,0 +1,99 @@
+---
+title: "Sécurité et protection des données"
+description: "Base isolée par établissement, portail public signé, en-têtes de sécurité, sauvegardes quotidiennes : l'architecture réelle de KLASSCI, avec ses limites."
+dateMaj: "2026-09-02"
+resume: "Cette page décrit ce que le logiciel fait réellement, pas ce qu'il serait agréable de promettre. Chaque mesure décrite ci-dessous est vérifiable dans le produit ou dans le code servi par ce site ; ce qui reste à établir est signalé en fin de page."
+---
+
+Une page de sécurité qui ne contient que des adjectifs — robuste, sécurisé, conforme — n'apprend rien à la personne qui la lit. Celle-ci décrit des mécanismes précis, et indique là où ils s'arrêtent. C'est la seule forme qui permette à une direction d'établissement, ou à son prestataire informatique, de poser une question de suivi.
+
+## Une base de données par établissement
+
+Chaque établissement dispose de **sa propre base de données**, sur sa propre instance. Il n'y a pas de table commune où les élèves de plusieurs écoles cohabiteraient derrière un identifiant de client.
+
+Ce choix a un coût — il faut déployer et mettre à jour autant d'instances que d'établissements — et deux conséquences directes :
+
+1. **Une erreur de filtrage ne peut pas exposer les données d'une autre école.** Dans une base partagée, la totalité de l'isolation repose sur une condition présente dans chaque requête ; il suffit qu'elle manque une fois. Ici, il n'y a rien à filtrer, parce qu'il n'y a rien d'autre dans la base.
+2. **Un incident reste borné à un établissement.** Une restauration, une migration ou une intervention se font sur une seule école, sans immobiliser les autres.
+
+C'est une question à poser à tout éditeur, y compris à nous : *ma base est-elle isolée ou partagée ?* Les deux réponses peuvent se défendre, à condition d'être assumées et expliquées.
+
+## Ce qui circule entre ce site et votre établissement
+
+Les formulaires d'[inscription](/fr/inscription) et de [réinscription](/fr/reinscription) ouverts aux familles sont servis par ce site, mais les dossiers, eux, vivent dans l'instance de l'établissement. Entre les deux, klassci.com se comporte en relais, sous quatre règles.
+
+**Le secret partagé n'atteint jamais le navigateur.** La famille parle à klassci.com ; klassci.com signe l'appel et parle à l'établissement. Personne d'autre ne peut appeler ces points d'entrée.
+
+**Chaque appel est signé.** La signature est un HMAC-SHA256 qui couvre l'horodatage, la méthode, le chemin et le corps exact envoyé. Une signature émise pour un point d'entrée n'est donc pas valable sur un autre, elle n'est utilisable qu'une fois, et elle expire au bout de cinq minutes.
+
+**Seuls les champs attendus traversent.** Le corps relayé est reconstruit champ par champ à partir d'une liste fermée, jamais repris tel quel. Un champ ajouté par un appelant n'entre donc jamais dans la charge signée — sans quoi il serait authentifié par notre propre secret.
+
+**L'adresse comptabilisée est celle que la plateforme a constatée**, jamais celle qu'un en-tête déclare. C'est cette adresse qui borne le nombre de tentatives ; la laisser au choix de l'appelant reviendrait à supprimer la limite tout en la croyant en place.
+
+S'y ajoute une discipline de réponse : quand un dossier n'est pas trouvé, la réponse est identique quelle que soit la raison, afin qu'on ne puisse pas se servir du formulaire pour deviner quels matricules existent. Et quand l'établissement est injoignable, le message le dit — plutôt que d'envoyer une famille vérifier un matricule qui était correct.
+
+## Ce que ce site conserve, et ce qu'il ne conserve pas
+
+Le relais **n'enregistre aucun dossier de candidature ni de réinscription**. Il transmet, rend la réponse de l'établissement, et n'en garde rien.
+
+Deux choses seulement sont retenues, en mémoire vive et brièvement :
+
+- **Un compteur de tentatives par adresse**, le temps d'une minute glissante, pour absorber les rafales avant qu'elles n'atteignent l'école.
+- **Le catalogue des filières et niveaux publié par l'établissement**, quelques minutes, parce qu'il est identique pour tous les visiteurs d'une même école et ne change que deux fois par an. Il ne contient aucune donnée personnelle.
+
+Le détail de ce qui est collecté, par qui et pour combien de temps, figure sur la page [Politique de confidentialité](/fr/confidentialite).
+
+## Ce que le navigateur reçoit
+
+Toutes les pages sont servies en **HTTPS**, et les instances des établissements ne sont appelées qu'en HTTPS — une adresse d'instance qui ne commence pas par `https://` est refusée par la configuration, pas simplement déconseillée.
+
+Chaque réponse porte par ailleurs quatre en-têtes de sécurité :
+
+| En-tête | Valeur | Ce qu'il empêche |
+| --- | --- | --- |
+| `X-Content-Type-Options` | `nosniff` | Qu'un fichier soit exécuté comme un type qu'il n'annonce pas |
+| `X-Frame-Options` | `DENY` | Que le site soit encadré par un tiers pour piéger un clic |
+| `Referrer-Policy` | `strict-origin-when-cross-origin` | Que l'adresse complète consultée fuite vers un site tiers |
+| `Permissions-Policy` | `camera=(), microphone=(), geolocation=()` | Que la page demande la caméra, le micro ou la position |
+
+Les logos et couleurs affichés sur la page d'inscription d'une école ne sont acceptés que s'ils proviennent de l'instance de cette école, et les couleurs sont revalidées avant d'atterrir dans la page — une instance mal configurée ne doit pas pouvoir écrire du style dans nos pages.
+
+## Sauvegardes et journalisation
+
+Les données des établissements sont **sauvegardées automatiquement chaque jour**.
+
+Les traces techniques du relais consignent le code de l'établissement et la nature de l'incident, **jamais le matricule ni la date de naissance** : ce sont les deux moitiés d'un identifiant, et un journal n'est pas l'endroit où les réunir.
+
+## Qui est responsable de quoi
+
+La distinction est faite par la [loi ivoirienne n° 2013-450 du 19 juin 2013](https://www.autoritedeprotection.ci/docs/loi_2013_450_journal.pdf) relative à la protection des données à caractère personnel, et elle a des conséquences pratiques.
+
+**L'établissement est le responsable du traitement.** C'est lui qui décide de tenir un fichier d'élèves, qui en fixe la finalité, qui accomplit les formalités auprès de l'[Autorité de protection](https://www.autoritedeprotection.ci/) — l'ARTCI, désignée par la loi — et qui répond aux demandes d'accès ou de rectification de ses élèves et de leurs familles.
+
+**KLASSCI intervient comme sous-traitant** pour cette partie : nous traitons les données pour le compte de l'établissement et sur ses instructions. La loi impose à l'établissement de choisir un sous-traitant qui présente des garanties suffisantes de sécurité technique et d'organisation ; cette page existe aussi pour que cet examen soit possible.
+
+Cette répartition est développée, canal par canal, dans la [politique de confidentialité](/fr/confidentialite).
+
+## Ce que nous ne promettons pas
+
+Trois limites, dites ici plutôt que découvertes plus tard.
+
+**La limitation de débit du relais n'est pas une garantie, c'est un amortisseur.** Ses compteurs vivent dans la mémoire du processus qui sert la requête ; sur une plateforme sans serveur, chaque instance a les siens et une instance neuve démarre à zéro. Elle divise l'amplification d'une rafale, elle ne la supprime pas. Une borne réellement étanche demande un magasin partagé, et sera posée le jour où un établissement sera visé pour de bon.
+
+**Nous ne revendiquons aucune certification.** Aucun audit externe, aucune homologation, aucun label n'a été obtenu à ce jour. Le dire vaut mieux que laisser un logo suggérer le contraire.
+
+**Le RGPD n'est pas le texte qui nous est applicable.** Le cadre de référence est la loi ivoirienne n° 2013-450 ; les pratiques décrites ici en reprennent les principes, et rencontrent souvent ceux du règlement européen, mais un établissement ivoirien qui exige une conformité RGPD contractuelle doit poser la question explicitement plutôt que la déduire d'une page de site.
+
+<ACompleter>
+
+Les points suivants relèvent de l'exploitation et doivent être arrêtés par l'éditeur avant la mise en ligne :
+
+- **Chiffrement au repos** : les bases des établissements et les sauvegardes sont-elles chiffrées sur le support ? Avec quel mécanisme ?
+- **Hébergement** : où sont physiquement hébergées les instances des établissements, chez quel prestataire, dans quel pays ? Une direction qui pose la question a droit à une réponse écrite.
+- **Sauvegardes** : durée de rétention, emplacement des copies, et date de la dernière restauration réellement testée. Une sauvegarde jamais restaurée n'est pas une sauvegarde.
+- **Gestion des accès** : politique de mot de passe, double authentification pour les comptes d'administration, procédure de retrait des accès d'un agent qui quitte l'établissement.
+- **Incidents** : délai d'information de l'établissement en cas de violation de données, et procédure de notification à l'Autorité de protection.
+- **Formalités ARTCI** : état de la déclaration ou de l'autorisation pour les traitements opérés par l'éditeur, et désignation éventuelle d'un correspondant à la protection des données.
+- **Réversibilité** : format et délai d'export complet des données d'un établissement qui résilie, et délai de suppression après restitution.
+
+</ACompleter>

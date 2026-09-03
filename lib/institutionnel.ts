@@ -1,4 +1,7 @@
-import type { Locale } from "@/i18n/routing";
+import type { Metadata } from "next";
+
+import { routing, type Locale } from "@/i18n/routing";
+import { buildUniverseMetadata } from "@/lib/seo";
 import { sourceInstitutionnel } from "@/lib/source";
 
 /**
@@ -93,4 +96,38 @@ export function dateLisible(iso: string, locale: Locale): string {
     year: "numeric",
     timeZone: "UTC",
   }).format(date);
+}
+
+/** La langue demandée si le site la sert, la langue par défaut sinon. */
+export function langueSure(brute: string): Locale {
+  return routing.locales.includes(brute as Locale)
+    ? (brute as Locale)
+    : routing.defaultLocale;
+}
+
+/**
+ * Les métadonnées d'une page institutionnelle.
+ *
+ * Titre et description viennent du frontmatter, donc du fichier traduit : la
+ * version anglaise porte son propre titre, sans qu'aucune table de
+ * correspondance n'ait à être tenue à jour en parallèle du contenu.
+ *
+ * On passe par `buildUniverseMetadata` plutôt que d'écrire l'objet à la main —
+ * c'est lui qui pose l'adresse canonique, les balises hreflang réciproques et
+ * l'image de partage. Une page légale qui se déclare canonique de la page
+ * d'accueil est exactement la faute que la documentation a déjà payée une fois.
+ */
+export function metadonneesInstitutionnelles(
+  slug: SlugInstitutionnel,
+  locale: Locale,
+): Metadata {
+  const page = pageInstitutionnelle(slug, locale);
+  if (!page) return {};
+
+  return buildUniverseMetadata({
+    locale,
+    title: page.title,
+    description: page.description ?? page.resume ?? "",
+    path: cheminInstitutionnel(slug),
+  });
 }
