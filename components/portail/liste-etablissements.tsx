@@ -17,10 +17,28 @@ import { Marque } from "./marque-etablissement";
  *
  * La recherche est **insensible aux accents**, ce qui n'est pas un détail sur
  * un site francophone : quelqu'un qui tape « ecole » sur un clavier de
- * téléphone doit trouver « ÉCOLE SPÉCIALE DU BÂTIMENT ». Elle porte aussi sur
- * la ville et sur le code — un étudiant de Yamoussoukro cherchera sa ville
- * avant le nom exact de son école, et quelqu'un qui a reçu un lien connaîtra
- * « yakro » sans connaître l'intitulé officiel.
+ * téléphone doit trouver « ÉCOLE SPÉCIALE DU BÂTIMENT ». Elle porte sur le nom
+ * et sur la ville — un étudiant de Yamoussoukro cherchera sa ville avant le nom
+ * exact de son école.
+ *
+ * **Elle ne porte QUE sur ce qui est affiché**, et c'est une règle, pas une
+ * limitation. Le code technique de l'établissement était indexé au départ, pour
+ * que « yakro » trouve `esbtp-yakro`. Mais ce code n'apparaît nulle part à
+ * l'écran : chercher « universite » ramenait une école nommée « AZERTY » —
+ * elle correspondait par son code, `universite-san-pedro`, que le visiteur ne
+ * voit pas. Un résultat qu'on ne peut pas expliquer en le regardant apprend à
+ * se méfier de tous les autres. Une recherche vaut par ce qu'elle écarte autant
+ * que par ce qu'elle trouve.
+ *
+ * Reste qu'un étudiant tape « esbtp », pas « Ecole Spéciale du Bâtiment et des
+ * Travaux Publics » — le nom que l'école a réglé. On indexe donc l'**acronyme
+ * calculé à partir du nom affiché** : les initiales de ses mots pleins. Il
+ * n'est pas lu dans un champ séparé, et c'est délibéré — le sigle servi par
+ * les instances vaut « ESBTP » sur quatre écoles dont deux ne sont pas
+ * l'ESBTP, reste d'un clonage. Dériver l'acronyme de ce qui est écrit à
+ * l'écran le rend à la fois juste et explicable : « ESBTP », ce sont les
+ * initiales du nom qu'on a sous les yeux, et « ISLG » celles d'Institut
+ * Supérieur Louis Le Grand.
  *
  * Tous les mots doivent correspondre, pas un seul : « esbtp abidjan » ne doit
  * pas ramener l'ESBTP de Yamoussoukro. Ils peuvent être dans n'importe quel
@@ -61,6 +79,34 @@ function comparable(texte: string): string {
     .toLowerCase();
 }
 
+/**
+ * Les mots qui ne portent pas d'initiale dans un acronyme français.
+ *
+ * Sans eux, « Ecole Spéciale du Bâtiment et des Travaux Publics » donnerait
+ * « ESDBETP » plutôt que « ESBTP ».
+ */
+const MOTS_VIDES = new Set([
+  "de", "du", "des", "d", "la", "le", "les", "l",
+  "et", "en", "a", "au", "aux", "pour", "sur", "the", "of", "and",
+]);
+
+/**
+ * L'acronyme d'un nom : les initiales de ses mots pleins.
+ *
+ * Rend une chaîne vide en dessous de deux lettres : l'« acronyme » d'un nom
+ * d'un seul mot n'est qu'une lettre, et n'apprend rien que le nom ne dise
+ * déjà.
+ */
+function acronyme(nom: string): string {
+  const initiales = comparable(nom)
+    .split(/[^a-z0-9]+/)
+    .filter((mot) => mot !== "" && !MOTS_VIDES.has(mot))
+    .map((mot) => mot[0])
+    .join("");
+
+  return initiales.length >= 2 ? initiales : "";
+}
+
 export function ListeEtablissements({
   locale,
   entrees,
@@ -76,12 +122,13 @@ export function ListeEtablissements({
   const cherchable = entrees.length >= SEUIL_RECHERCHE;
 
   // L'index est calculé une fois : sans lui, chaque frappe re-normaliserait
-  // le nom, la ville et le code de chaque école.
+  // le nom et la ville de chaque école. Le code n'y figure pas — voir plus
+  // haut : on ne cherche que dans ce que le visiteur a sous les yeux.
   const index = useMemo(
     () =>
       entrees.map((entree) => ({
         entree,
-        recherche: comparable(`${entree.nom} ${entree.ville} ${entree.code}`),
+        recherche: `${comparable(`${entree.nom} ${entree.ville}`)} ${acronyme(entree.nom)}`,
       })),
     [entrees],
   );
