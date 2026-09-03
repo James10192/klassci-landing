@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { composantsInstitutionnels } from "@/components/institutionnel/mdx";
+import { NavInstitutionnelle } from "@/components/institutionnel/nav-institutionnelle";
 import { Footer } from "@/components/sections/footer";
 import { JsonLd } from "@/components/seo/json-ld";
 import type { Locale } from "@/i18n/routing";
@@ -90,75 +91,83 @@ export async function PageInstitutionnelle({
   return (
     <>
       <JsonLd graph={graphe} />
-      <main className="container py-section">
-        <nav
-          aria-label={locale === "en" ? "Breadcrumb" : "Fil d'Ariane"}
-          className="font-mono text-[0.72rem] uppercase tracking-[0.06em] text-text-muted"
-        >
-          <Link href={`/${locale}`} className="hover:text-accent">
-            {mots.accueil}
-          </Link>
-          <span aria-hidden className="px-2">
-            /
-          </span>
-          <span className="text-text-muted">{mots.rubrique}</span>
-          <span aria-hidden className="px-2">
-            /
-          </span>
-          <span className="text-text-secondary">{mots.titres[slug]}</span>
-        </nav>
-
-        <article className="mx-auto mt-8 max-w-[46rem]">
-          <header>
-            <h1 className="font-serif text-[2.4rem] font-light leading-[1.15] text-accent sm:text-[2.9rem]">
-              {donnees.title}
-            </h1>
-
-            {donnees.resume && (
-              <p className="mt-6 border-l-2 border-accent pl-5 text-[1.05rem] leading-relaxed text-text-secondary">
-                {donnees.resume}
-              </p>
-            )}
-
-            <div className="mt-7 border-y border-border py-3 font-mono text-[0.72rem] uppercase tracking-[0.06em] text-text-muted">
-              <span>{mots.misAJour} </span>
-              <time dateTime={donnees.dateMaj}>
-                {dateLisible(donnees.dateMaj, locale)}
-              </time>
-            </div>
-          </header>
-
-          <div className="mt-2">
-            <MDX components={composantsInstitutionnels} />
-          </div>
-        </article>
-
-        <aside
-          className="mx-auto mt-16 max-w-[46rem]"
-          aria-labelledby="pages-liees"
-        >
-          <h2
-            id="pages-liees"
-            className="font-mono text-[0.75rem] uppercase tracking-[0.08em] text-text-muted"
+      <NavInstitutionnelle locale={locale} />
+      {/* La barre est en `fixed` : elle ne pousse rien, et sans dégagement le
+          fil d'Ariane se retrouve collé dessous. L'enveloppe porte le décalage
+          plutôt que le `<main>` — `pt-[57px]` et `py-section` posent tous deux
+          un `padding-top`, et c'est l'ordre des règles CSS qui tranche, pas
+          celui des classes. Une ambiguïté qu'on ne voit qu'à l'écran. */}
+      <div className="pt-[57px]">
+        <main className="container py-section">
+          <nav
+            aria-label={locale === "en" ? "Breadcrumb" : "Fil d'Ariane"}
+            className="font-mono text-[0.72rem] uppercase tracking-[0.06em] text-text-muted"
           >
-            {mots.aussi}
-          </h2>
-          <ul className="mt-4 grid gap-4 sm:grid-cols-3">
-            {autres.map((autre) => (
-              <li key={autre}>
-                <Link
-                  href={`/${locale}${cheminInstitutionnel(autre)}`}
-                  className="block h-full rounded-lg border border-border bg-bg-card p-5 transition-colors duration-200 hover:border-accent"
-                >
-                  <span className="block font-serif text-[1.05rem] font-light leading-snug text-text">
-                    {mots.titres[autre]}
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </aside>
-      </main>
+            <Link href={`/${locale}`} className="hover:text-accent">
+              {mots.accueil}
+            </Link>
+            <span aria-hidden className="px-2">
+              /
+            </span>
+            <span className="text-text-muted">{mots.rubrique}</span>
+            <span aria-hidden className="px-2">
+              /
+            </span>
+            <span className="text-text-secondary">{mots.titres[slug]}</span>
+          </nav>
+
+          <article className="mx-auto mt-8 max-w-[46rem]">
+            <header>
+              <h1 className="font-serif text-[2.4rem] font-light leading-[1.15] text-accent sm:text-[2.9rem]">
+                {donnees.title}
+              </h1>
+
+              {donnees.resume && (
+                <p className="mt-6 border-l-2 border-accent pl-5 text-[1.05rem] leading-relaxed text-text-secondary">
+                  {donnees.resume}
+                </p>
+              )}
+
+              <div className="mt-7 border-y border-border py-3 font-mono text-[0.72rem] uppercase tracking-[0.06em] text-text-muted">
+                <span>{mots.misAJour} </span>
+                <time dateTime={donnees.dateMaj}>
+                  {dateLisible(donnees.dateMaj, locale)}
+                </time>
+              </div>
+            </header>
+
+            <div className="mt-2">
+              <MDX components={composantsInstitutionnels} />
+            </div>
+          </article>
+
+          <aside
+            className="mx-auto mt-16 max-w-[46rem]"
+            aria-labelledby="pages-liees"
+          >
+            <h2
+              id="pages-liees"
+              className="font-mono text-[0.75rem] uppercase tracking-[0.08em] text-text-muted"
+            >
+              {mots.aussi}
+            </h2>
+            <ul className="mt-4 grid gap-4 sm:grid-cols-3">
+              {autres.map((autre) => (
+                <li key={autre}>
+                  <Link
+                    href={`/${locale}${cheminInstitutionnel(autre)}`}
+                    className="block h-full rounded-lg border border-border bg-bg-card p-5 transition-colors duration-200 hover:border-accent"
+                  >
+                    <span className="block font-serif text-[1.05rem] font-light leading-snug text-text">
+                      {mots.titres[autre]}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </aside>
+        </main>
+      </div>
       <Footer />
     </>
   );

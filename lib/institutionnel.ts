@@ -5,6 +5,11 @@ import type { Metadata } from "next";
 
 import { routing, type Locale } from "@/i18n/routing";
 import { buildUniverseMetadata } from "@/lib/seo";
+import {
+  cheminInstitutionnel,
+  PAGES_INSTITUTIONNELLES,
+  type SlugInstitutionnel,
+} from "@/lib/institutionnel-pages";
 import { sourceInstitutionnel } from "@/lib/source";
 
 /**
@@ -21,14 +26,11 @@ import { sourceInstitutionnel } from "@/lib/source";
  * constante qu'on lit que du contenu qu'on croit publié.
  */
 
-export const PAGES_INSTITUTIONNELLES = [
-  "a-propos",
-  "securite",
-  "mentions-legales",
-  "confidentialite",
-] as const;
-
-export type SlugInstitutionnel = (typeof PAGES_INSTITUTIONNELLES)[number];
+// Réexportés depuis le module pur, pour que les appelants n'aient pas à savoir
+// lequel des deux modules les porte — et que ceux qui n'ont besoin que de la
+// liste puissent l'importer sans embarquer la lecture de fichiers.
+export { PAGES_INSTITUTIONNELLES, cheminInstitutionnel };
+export type { SlugInstitutionnel };
 
 export interface DonneesPageInstitutionnelle {
   title: string;
@@ -54,11 +56,6 @@ function normaliserDate(valeur: unknown): string {
   if (valeur instanceof Date) return valeur.toISOString().slice(0, 10);
   if (typeof valeur === "string") return valeur.slice(0, 10);
   return "";
-}
-
-/** Le chemin de la page, sans préfixe de langue. */
-export function cheminInstitutionnel(slug: SlugInstitutionnel): string {
-  return `/${slug}`;
 }
 
 /**

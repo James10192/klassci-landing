@@ -21,7 +21,9 @@
     "menuClose": "Fermer le menu",
     "languageSwitcherAria": "Changer de langue",
     "inscription": "S'inscrire",
-    "inscriptionAria": "S'inscrire dans un de nos établissements"
+    "inscriptionAria": "S'inscrire dans un de nos établissements",
+    "entreprise": "L'entreprise",
+    "entrepriseAria": "Pages sur l'entreprise et la protection des donnees"
   },
   "hero": {
     "title": "La gestion universitaire, repensée.",
@@ -818,7 +820,12 @@
           {
             "label": "Journal des versions",
             "href": "/docs/changelog"
-          },
+          }
+        ]
+      },
+      "company": {
+        "title": "L'entreprise",
+        "links": [
           {
             "label": "À propos",
             "href": "/a-propos"
@@ -826,6 +833,14 @@
           {
             "label": "Sécurité des données",
             "href": "/securite"
+          },
+          {
+            "label": "Confidentialité",
+            "href": "/confidentialite"
+          },
+          {
+            "label": "Mentions légales",
+            "href": "/mentions-legales"
           }
         ]
       },
@@ -839,14 +854,6 @@
           {
             "label": "Abidjan, Côte d'Ivoire",
             "href": "#contact"
-          },
-          {
-            "label": "Mentions légales",
-            "href": "/mentions-legales"
-          },
-          {
-            "label": "Confidentialité",
-            "href": "/confidentialite"
           }
         ]
       }

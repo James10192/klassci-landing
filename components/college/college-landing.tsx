@@ -20,6 +20,7 @@ import { SdgImpactGrid } from "@/components/universe/sdg-impact-grid";
 import { Link } from "@/i18n/navigation";
 import type { CollegePlanKey } from "@/lib/college-pricing";
 import Image from "next/image";
+import { groupeEntreprise } from "@/lib/navigation";
 
 interface RoleItem {
   title: string;
@@ -84,6 +85,7 @@ function CollegeLogo({
 
 export function CollegeLanding() {
   const t = useTranslations("college");
+  const nav = useTranslations("nav");
   const locale = useLocale() as "fr" | "en";
   const [quoteOpen, setQuoteOpen] = useState(false);
   const [quotePlan, setQuotePlan] = useState<CollegePlanKey | null>(null);
@@ -116,6 +118,7 @@ export function CollegeLanding() {
             { cle: "interfaces", libelle: t("nav.interfaces"), href: "#interfaces" },
             { cle: "quote", libelle: t("nav.quote"), href: "#tarifs" },
             { cle: "docs", libelle: t("nav.docs"), href: docsHref, icone: BookOpen, iconeDansLaBarre: true },
+            groupeEntreprise(locale, nav("entreprise")),
           ]}
           action={({ fermerMenu, contexte }) => (
             <button

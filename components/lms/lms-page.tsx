@@ -10,6 +10,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { Footer } from "@/components/sections/footer";
 import { SiteNav } from "@/components/sections/site-nav";
 import { Logo } from "@/components/ui/logo";
+import { groupeEntreprise } from "@/lib/navigation";
 
 const ICONS = [PlayCircle, Layers, Clock];
 
@@ -34,6 +35,7 @@ export function LmsPage() {
           { cle: "universite", libelle: accueil("doors.universite.name"), href: "/universite", interne: true },
           { cle: "college", libelle: accueil("doors.college.name"), href: "/college", interne: true },
           { cle: "docs", libelle: nav("docs"), href: docsHref, icone: BookOpen, iconeDansLaBarre: true },
+          groupeEntreprise(locale, nav("entreprise")),
         ]}
         action={({ fermerMenu, contexte }) => (
           <a
