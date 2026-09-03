@@ -1,53 +1,131 @@
 ---
 title: "Sécurité et protection des données"
-description: "Base isolée par école, sauvegardes chiffrées et relues chaque semaine, double authentification, export relisible : ce que KLASSCI fait, et où cela s'arrête."
+description: "Où sont hébergées les données de votre établissement, comment elles sont sauvegardées et vérifiées, qui y accède, et ce que vous récupérez si vous partez."
 dateMaj: "2026-09-03"
-resume: "Cette page décrit ce que le logiciel fait réellement, pas ce qu'il serait agréable de promettre. Chaque mesure décrite ci-dessous est vérifiable dans le produit ou dans le code servi par ce site ; ce qui reste à établir est signalé en fin de page."
+resume: "Cette page s'adresse aux directions d'établissement et à leurs prestataires informatiques. Elle décrit l'hébergement, l'isolation des données, les sauvegardes et leur vérification, la gestion des accès et les conditions de réversibilité. Une annexe technique en fin de page reprend les éléments destinés à un examen technique."
 ---
 
-Une page de sécurité qui ne contient que des adjectifs — robuste, sécurisé, conforme — n'apprend rien à la personne qui la lit. Celle-ci décrit des mécanismes précis, et indique là où ils s'arrêtent. C'est la seule forme qui permette à une direction d'établissement, ou à son prestataire informatique, de poser une question de suivi.
+Confier à un logiciel les dossiers de ses élèves, les notes qui décident d'un passage en année supérieure et les paiements des familles suppose de savoir où ces données vivent, qui peut les lire et ce qu'il advient d'elles si la relation s'arrête.
+
+Cette page répond à ces questions. Elle est écrite pour être lue par une direction, puis vérifiée par un prestataire informatique : les éléments qui relèvent d'un examen technique sont rassemblés en annexe.
+
+## En bref
+
+| Votre question | La réponse |
+| --- | --- |
+| Où sont hébergées les données de mon établissement ? | En France, chez LWS (Ligne Web Services) |
+| Ma base est-elle partagée avec d'autres écoles ? | Non. Une base de données par établissement, sur sa propre instance |
+| À quelle fréquence sauvegardez-vous ? | La base chaque nuit, l'ensemble chaque dimanche, conservation trente jours |
+| Ces sauvegardes sont-elles vérifiées ? | Oui, restaurées et recomptées chaque dimanche, avec un verdict daté |
+| Qui est responsable des données ? | Votre établissement. KLASSCI intervient comme sous-traitant |
+| Puis-je repartir avec mes données ? | Oui, au format tableur, documents déposés compris |
+| Avez-vous une certification ? | Non. Aucun audit externe à ce jour |
 
 ## Une base de données par établissement
 
-Chaque établissement dispose de **sa propre base de données**, sur sa propre instance. Il n'y a pas de table commune où les élèves de plusieurs écoles cohabiteraient derrière un identifiant de client.
+Chaque établissement dispose de **sa propre base de données**, sur sa propre instance. Il n'existe aucune table commune où les élèves de plusieurs écoles cohabiteraient derrière un identifiant de client.
 
-Ce choix a un coût — il faut déployer et mettre à jour autant d'instances que d'établissements — et deux conséquences directes :
+Deux conséquences pratiques :
 
-1. **Une erreur de filtrage ne peut pas exposer les données d'une autre école.** Dans une base partagée, la totalité de l'isolation repose sur une condition présente dans chaque requête ; il suffit qu'elle manque une fois. Ici, il n'y a rien à filtrer, parce qu'il n'y a rien d'autre dans la base.
+1. **Une erreur de filtrage ne peut pas exposer les données d'une autre école.** Dans une base partagée, l'isolation repose sur une condition présente dans chaque requête, et une seule omission suffit à faire tomber la cloison. Ici, la cloison est l'infrastructure elle-même.
 2. **Un incident reste borné à un établissement.** Une restauration, une migration ou une intervention se font sur une seule école, sans immobiliser les autres.
 
-C'est une question à poser à tout éditeur, y compris à nous : *ma base est-elle isolée ou partagée ?* Les deux réponses peuvent se défendre, à condition d'être assumées et expliquées.
+Le coût de ce choix est pour nous : il faut déployer et mettre à jour autant d'instances que d'établissements.
 
-## Ce qui circule entre ce site et votre établissement
+## Où vos données sont hébergées
 
-Les formulaires d'[inscription](/fr/inscription) et de [réinscription](/fr/reinscription) ouverts aux familles sont servis par ce site, mais les dossiers, eux, vivent dans l'instance de l'établissement. Entre les deux, klassci.com se comporte en relais, sous quatre règles.
+Les instances des établissements sont servies depuis des adresses enregistrées au nom de **LWS (Ligne Web Services), en France**. Ce site vitrine, lui, est servi par **Vercel**, depuis sa région `iad1` (Washington, États-Unis) ; il ne détient aucun dossier d'élève.
 
-**Le secret partagé n'atteint jamais le navigateur.** La famille parle à klassci.com ; klassci.com signe l'appel et parle à l'établissement. Personne d'autre ne peut appeler ces points d'entrée.
+La distinction compte : les données de vos élèves ne quittent pas l'hébergement français, même lorsque la page d'inscription qui les collecte est servie d'ailleurs.
 
-**Chaque appel est signé.** La signature est un HMAC-SHA256 qui couvre l'horodatage, la méthode, le chemin et le corps exact envoyé. Une signature émise pour un point d'entrée n'est donc pas valable sur un autre, elle n'est utilisable qu'une fois, et elle expire au bout de cinq minutes.
+Le registre RIPE donne le pays d'enregistrement de la plage d'adresses, non l'adresse du centre de données. Si vous avez besoin de la localisation physique exacte, pour une clause contractuelle ou une formalité, demandez-la par écrit : nous la tenons du prestataire.
 
-**Seuls les champs attendus traversent.** Le corps relayé est reconstruit champ par champ à partir d'une liste fermée, jamais repris tel quel. Un champ ajouté par un appelant n'entre donc jamais dans la charge signée — sans quoi il serait authentifié par notre propre secret.
+## Sauvegardes, et la preuve qu'elles fonctionnent
 
-**L'adresse comptabilisée est celle que la plateforme a constatée**, jamais celle qu'un en-tête déclare. C'est cette adresse qui borne le nombre de tentatives ; la laisser au choix de l'appelant reviendrait à supprimer la limite tout en la croyant en place.
+| | |
+| --- | --- |
+| **Base de données** | Chaque nuit à 2 h |
+| **Base et documents déposés** | Chaque dimanche à 3 h |
+| **Conservation** | Trente jours, puis effacement automatique |
+| **Chiffrement** | AES-256, clé conservée hors du serveur sauvegardé |
+| **Copie hors site** | Oui, sur un support distinct du serveur protégé |
+| **Vérification** | Chaque dimanche à 5 h, par restauration réelle |
 
-S'y ajoute une discipline de réponse : quand un dossier n'est pas trouvé, la réponse est identique quelle que soit la raison, afin qu'on ne puisse pas se servir du formulaire pour deviner quels matricules existent. Et quand l'établissement est injoignable, le message le dit — plutôt que d'envoyer une famille vérifier un matricule qui était correct.
+Deux points méritent d'être développés, parce qu'ils distinguent une sauvegarde d'un fichier qu'on espère utile.
 
-## Ce que ce site conserve, et ce qu'il ne conserve pas
+**La clé n'est pas rangée à côté du coffre.** Elle est conservée ailleurs que sur le serveur sauvegardé, et une copie de l'archive est déposée hors de ce serveur. Une sauvegarde qui vit à côté de la base qu'elle protège couvre la fausse manipulation, pas la perte du serveur : elle disparaît avec lui.
 
-Le relais **n'enregistre aucun dossier de candidature ni de réinscription**. Il transmet, rend la réponse de l'établissement, et n'en garde rien.
+**Les sauvegardes sont réellement restaurées, pas seulement produites.** Chaque dimanche, la dernière archive de chaque établissement est restaurée dans une base jetable, puis recomptée : nombre de tables, et nombre de lignes des tables qui portent le métier — élèves, inscriptions, paiements, notes. Compter les tables ne suffirait pas, une archive vide de contenu en restituerait le compte exact. Le verdict est daté et conservé, ce qui permet de répondre à la question « quand vos sauvegardes ont-elles été testées pour la dernière fois ? » par une date.
 
-Deux choses seulement sont retenues, en mémoire vive et brièvement :
+## Qui accède à quoi
 
-- **Un compteur de tentatives par adresse**, le temps d'une minute glissante, pour absorber les rafales avant qu'elles n'atteignent l'école.
-- **Le catalogue des filières et niveaux publié par l'établissement**, quelques minutes, parce qu'il est identique pour tous les visiteurs d'une même école et ne change que deux fois par an. Il ne contient aucune donnée personnelle.
+**Les mots de passe** font au minimum huit caractères et mêlent lettres et chiffres. Ils sont conservés sous forme d'empreinte bcrypt, jamais en clair — y compris dans les sauvegardes.
 
-Le détail de ce qui est collecté, par qui et pour combien de temps, figure sur la page [Politique de confidentialité](/fr/confidentialite).
+**La double authentification** est disponible pour tous les comptes. Chacun l'active depuis son espace, en scannant un code avec Google Authenticator, Microsoft Authenticator ou FreeOTP, et repart avec huit codes de secours à usage unique, à imprimer pour le jour où le téléphone se perd.
 
-## Ce que le navigateur reçoit
+Votre établissement choisit **les fonctions pour lesquelles il l'exige** : protéger une direction et une comptabilité sans imposer un téléphone à deux mille étudiants, dont beaucoup se connectent depuis un appareil partagé. Le réglage n'enferme personne dehors — tant qu'une personne n'a pas confirmé son second facteur, elle se connecte comme avant. Une école peut donc l'activer en pleine rentrée.
 
-Toutes les pages sont servies en **HTTPS**, et les instances des établissements ne sont appelées qu'en HTTPS — une adresse d'instance qui ne commence pas par `https://` est refusée par la configuration, pas simplement déconseillée.
+**Les droits sont attribués par permission, non par fonction figée.** Vous composez vos propres profils : un responsable de scolarité qui voit les inscriptions sans toucher à la comptabilité, un auditeur externe en lecture seule et pour une durée limitée. Aucune modification du logiciel n'est nécessaire.
 
-Chaque réponse porte par ailleurs quatre en-têtes de sécurité :
+Retirer les accès de quelqu'un qui part revient à désactiver son compte : l'accès est coupé, les écritures qu'il a passées restent attribuées à son nom dans le journal d'audit — ce qu'exige la tenue d'une comptabilité.
+
+**Les actions sensibles sont journalisées** : qui a validé un paiement, modifié une note, annulé un encaissement, avec l'état avant et après. Ce journal ne peut pas être effacé depuis l'application.
+
+## Si vous nous quittez
+
+Un établissement qui résilie repart avec ses données, dans un format qu'il peut relire.
+
+L'export produit **un fichier par table, au format tableur**, qui s'ouvre directement dans Excel et LibreOffice sur le poste du secrétariat. S'y ajoutent les documents déposés dans la plateforme — bulletins, reçus, photos, logo — et un fichier d'en-tête qui énonce ce que le dossier contient et ce qu'il ne contient pas.
+
+Le format n'est pas un détail : remettre un export de base de données brut à une école qui part revient à lui donner ses données sans le moyen de les lire.
+
+Les empreintes de mots de passe et les jetons de connexion sont retirés de l'export. Ce ne sont pas des données de l'école mais les secrets qui protègent les comptes de ses utilisateurs, et une archive de ce genre circule par courriel et par clé USB. Un successeur fait réinitialiser les mots de passe ; il n'a jamais besoin des empreintes.
+
+## Qui est responsable de quoi
+
+La répartition est fixée par la [loi ivoirienne n° 2013-450 du 19 juin 2013](https://www.autoritedeprotection.ci/docs/loi_2013_450_journal.pdf) relative à la protection des données à caractère personnel.
+
+**Votre établissement est le responsable du traitement.** C'est lui qui décide de tenir un fichier d'élèves, qui en fixe la finalité, qui accomplit les formalités auprès de l'[Autorité de protection](https://www.autoritedeprotection.ci/) et qui répond aux demandes d'accès ou de rectification de ses élèves et de leurs familles.
+
+**KLASSCI intervient comme sous-traitant** : nous traitons ces données pour le compte de l'établissement et sur ses instructions. La loi impose au responsable de traitement de choisir un sous-traitant présentant des garanties suffisantes de sécurité technique et d'organisation.
+
+La répartition est développée, canal par canal, dans la [politique de confidentialité](/fr/confidentialite).
+
+## Portée et limites
+
+Quatre points, énoncés ici plutôt que découverts plus tard.
+
+**Les bases en exploitation ne sont pas chiffrées au niveau du support.** Les sauvegardes le sont. Le chiffrement au repos protège contre le vol d'un disque ou la lecture d'un support mis au rebut, non contre un accès obtenu à un serveur en fonctionnement.
+
+**La limitation de débit du relais est un amortisseur, non une garantie.** Elle divise l'effet d'une rafale de requêtes, elle ne le supprime pas. Une borne étanche suppose un magasin partagé entre les instances ; elle sera posée si un établissement est visé.
+
+**Aucune certification n'est revendiquée.** Aucun audit externe, aucune homologation, aucun label n'a été obtenu à ce jour.
+
+**Le texte applicable est la loi ivoirienne n° 2013-450**, non le RGPD. Les pratiques décrites ici en reprennent les principes et rencontrent souvent ceux du règlement européen, mais un établissement qui exige une conformité RGPD contractuelle doit poser la question explicitement.
+
+## Annexe technique
+
+Cette section s'adresse à votre prestataire informatique.
+
+### Trajet des formulaires d'inscription
+
+Les formulaires d'[inscription](/fr/inscription) et de [réinscription](/fr/reinscription) sont servis par klassci.com ; les dossiers vivent dans l'instance de l'établissement. Entre les deux, un relais :
+
+- **Le secret partagé n'atteint jamais le navigateur.** La famille s'adresse à klassci.com, qui signe l'appel et s'adresse à l'établissement.
+- **Chaque appel est signé** par un HMAC-SHA256 couvrant l'horodatage, la méthode, le chemin et le corps exact. Une signature émise pour un point d'entrée n'est pas valable pour un autre.
+- **Seuls les champs attendus traversent.** Le corps relayé est reconstruit champ par champ à partir d'une liste fermée, jamais repris tel quel.
+- **La limitation de débit s'appuie sur l'adresse constatée par la plateforme**, jamais sur celle qu'un en-tête déclare.
+- **Les réponses « dossier introuvable » sont identiques** quelle que soit la raison, afin que le formulaire ne puisse pas servir à deviner quels matricules existent.
+
+### Ce que le site conserve
+
+Le relais **n'enregistre aucun dossier**. Il transmet, rend la réponse de l'établissement et n'en garde rien. Deux éléments seulement sont retenus, en mémoire vive et brièvement : un compteur de tentatives par adresse sur une minute glissante, et le catalogue des filières et niveaux publié par l'établissement, qui ne contient aucune donnée personnelle.
+
+Les traces techniques consignent le code de l'établissement et la nature de l'incident, **jamais le matricule ni la date de naissance** : ce sont les deux moitiés d'un identifiant.
+
+### Transport et en-têtes
+
+Toutes les pages sont servies en HTTPS, et une adresse d'instance qui ne commence pas par `https://` est refusée par la configuration.
 
 | En-tête | Valeur | Ce qu'il empêche |
 | --- | --- | --- |
@@ -56,72 +134,16 @@ Chaque réponse porte par ailleurs quatre en-têtes de sécurité :
 | `Referrer-Policy` | `strict-origin-when-cross-origin` | Que l'adresse complète consultée fuite vers un site tiers |
 | `Permissions-Policy` | `camera=(), microphone=(), geolocation=()` | Que la page demande la caméra, le micro ou la position |
 
-Les logos et couleurs affichés sur la page d'inscription d'une école ne sont acceptés que s'ils proviennent de l'instance de cette école, et les couleurs sont revalidées avant d'atterrir dans la page — une instance mal configurée ne doit pas pouvoir écrire du style dans nos pages.
+Les logos et couleurs affichés sur la page d'inscription d'une école ne sont acceptés que s'ils proviennent de l'instance de cette école, et les couleurs sont revalidées avant d'être écrites dans la page.
 
-## Où vivent les données
+### Références d'hébergement
 
-Les instances des établissements sont servies depuis des adresses enregistrées au nom de **LWS (Ligne Web Services), en France** — la plage `2a00:7ee0:9::/48`, déclarée au registre RIPE sous la référence `FR-LWS-20150429`. Ce site vitrine, lui, est servi par **Vercel**, depuis sa région `iad1` (Washington, États-Unis) ; il ne détient aucun dossier d'élève, comme la section précédente le détaille.
+Instances des établissements : plage `2a00:7ee0:9::/48`, déclarée au registre RIPE sous la référence `FR-LWS-20150429`. Site vitrine : Vercel, région `iad1`.
 
-La distinction compte : les données de vos élèves ne quittent pas l'hébergement français, quand bien même la page d'inscription qui les collecte est servie d'ailleurs.
+### Chiffrement des archives
 
-Le registre RIPE donne le pays d'enregistrement de la plage, pas l'adresse du centre de données. Une direction qui a besoin de la localisation physique exacte, pour une clause contractuelle ou une formalité, doit nous la demander par écrit — nous la tenons du prestataire, et nous n'allons pas la déduire d'un registre.
+AES-256 en mode CBC, dérivation de clé PBKDF2 à cent mille itérations, sel aléatoire par archive.
 
-## Sauvegardes
+## Une question ?
 
-Trois choses différentes, souvent confondues sous un même mot.
-
-**Ce qui est pris, et quand.** Une sauvegarde de la base chaque nuit à 2 h, et une sauvegarde complète — base et documents déposés — chaque dimanche à 3 h. Les archives sont conservées **trente jours**, puis effacées automatiquement.
-
-**Ce qui les protège.** Les archives sont chiffrées en **AES-256**, avec une dérivation de clé PBKDF2 à cent mille itérations. La clé est conservée ailleurs que sur le serveur sauvegardé : une clé rangée à côté du coffre ne ferme rien. Une copie est déposée hors du serveur qu'elle protège — tant qu'une sauvegarde vit à côté de la base qu'elle sauvegarde, elle protège d'une fausse manipulation, pas d'une perte du serveur, et elle disparaît avec lui.
-
-**Ce qui prouve qu'elles valent quelque chose.** Chaque dimanche à 5 h, la dernière sauvegarde de chaque établissement est **réellement restaurée** dans une base jetable, et l'on compte ce qu'elle a rendu : le nombre de tables, et le nombre de lignes des tables qui portent le métier — élèves, inscriptions, paiements, notes. Compter les tables ne suffirait pas : une archive qui ne porterait que la structure restaurerait cent quatre-vingts tables vides et passerait pour bonne.
-
-Le verdict est daté et conservé. C'est ce qui permet de répondre à *« quand avez-vous testé vos sauvegardes pour la dernière fois ? »* par autre chose qu'une intention. Une sauvegarde jamais restaurée n'est pas une sauvegarde : c'est un fichier dont on espère qu'il contient quelque chose, et l'on ne découvre le contraire qu'au pire moment.
-
-## Qui accède, et comment
-
-**Les mots de passe** font au minimum huit caractères, et doivent mêler lettres et chiffres. Ils sont conservés sous forme d'empreinte bcrypt, jamais en clair — y compris dans les sauvegardes, qui reprennent la base telle quelle.
-
-**La double authentification** est disponible pour tous les comptes. Chacun l'active depuis son propre espace, en scannant un code avec Google Authenticator, Microsoft Authenticator ou FreeOTP, et repart avec huit codes de secours à imprimer pour le jour où le téléphone se perd. Chaque code de secours ne sert qu'une fois.
-
-L'établissement choisit **les fonctions pour lesquelles il l'exige** — protéger une direction et une comptabilité sans imposer un téléphone à deux mille étudiants, dont beaucoup se connectent depuis un appareil partagé. Ce réglage n'enferme personne dehors : tant qu'une personne n'a pas confirmé son second facteur depuis son propre téléphone, elle se connecte comme avant. C'était la condition pour qu'une école puisse l'activer en pleine rentrée.
-
-**Les droits sont attribués par permission, pas par fonction figée.** Un établissement compose ses propres profils — un « responsable de scolarité » qui voit les inscriptions sans toucher à la comptabilité, un auditeur externe en lecture seule et pour un temps — sans que nous ayons à modifier le logiciel. Retirer les accès de quelqu'un qui part revient à désactiver son compte, ce qui coupe l'accès sans effacer ce qu'il a saisi : les écritures qu'il a passées restent attribuées à son nom dans le journal d'audit, ce qui est exactement ce qu'on attend en comptabilité.
-
-**Les actions sensibles sont journalisées** : qui a validé un paiement, qui a modifié une note, qui a annulé un encaissement, avec l'état avant et après. Ce journal ne s'efface pas depuis l'application.
-
-## Si vous partez
-
-Un établissement qui résilie repart avec ses données, dans un format qu'il peut relire.
-
-L'export produit **un fichier par table, au format tableur**, qui s'ouvre directement dans Excel et LibreOffice sur le poste du secrétariat, sans personne pour aider. S'y ajoutent les documents déposés dans la plateforme — bulletins, reçus, photos, logo — et un fichier en tête qui énonce ce que le dossier contient, ce qu'il ne contient pas, et pourquoi.
-
-Ce format n'est pas un détail. Remettre un export de base de données à une école qui part, c'est lui donner ses données sans lui donner le moyen de les lire : elle les possède, elle n'en fait rien. La réversibilité se mesure à ce qu'on peut ouvrir, pas à ce qu'on peut télécharger.
-
-Les empreintes de mots de passe et les jetons de connexion sont retirés de l'export. Ce ne sont pas des données de l'école : ce sont les secrets qui protègent les comptes de ses utilisateurs, et une archive de ce genre circule par courriel et par clé USB. Un successeur fait réinitialiser les mots de passe ; il n'a jamais besoin des empreintes, et les avoir lui permettrait de les attaquer hors ligne, tranquillement.
-
-## Journalisation du relais
-
-Les traces techniques du relais consignent le code de l'établissement et la nature de l'incident, **jamais le matricule ni la date de naissance** : ce sont les deux moitiés d'un identifiant, et un journal n'est pas l'endroit où les réunir.
-
-## Qui est responsable de quoi
-
-La distinction est faite par la [loi ivoirienne n° 2013-450 du 19 juin 2013](https://www.autoritedeprotection.ci/docs/loi_2013_450_journal.pdf) relative à la protection des données à caractère personnel, et elle a des conséquences pratiques.
-
-**L'établissement est le responsable du traitement.** C'est lui qui décide de tenir un fichier d'élèves, qui en fixe la finalité, qui accomplit les formalités auprès de l'[Autorité de protection](https://www.autoritedeprotection.ci/) — l'ARTCI, désignée par la loi — et qui répond aux demandes d'accès ou de rectification de ses élèves et de leurs familles.
-
-**KLASSCI intervient comme sous-traitant** pour cette partie : nous traitons les données pour le compte de l'établissement et sur ses instructions. La loi impose à l'établissement de choisir un sous-traitant qui présente des garanties suffisantes de sécurité technique et d'organisation ; cette page existe aussi pour que cet examen soit possible.
-
-Cette répartition est développée, canal par canal, dans la [politique de confidentialité](/fr/confidentialite).
-
-## Ce que nous ne promettons pas
-
-Quatre limites, dites ici plutôt que découvertes plus tard.
-
-**Les bases en exploitation ne sont pas chiffrées au niveau du support.** Ce sont les sauvegardes qui le sont. Un chiffrement au repos protège contre le vol d'un disque ou la récupération d'un support mis au rebut ; il ne protège pas contre un accès obtenu au serveur en marche, qui est le scénario le plus courant. Nous préférons dire lequel des deux nous couvrons.
-
-**La limitation de débit du relais n'est pas une garantie, c'est un amortisseur.** Ses compteurs vivent dans la mémoire du processus qui sert la requête ; sur une plateforme sans serveur, chaque instance a les siens et une instance neuve démarre à zéro. Elle divise l'amplification d'une rafale, elle ne la supprime pas. Une borne réellement étanche demande un magasin partagé, et sera posée le jour où un établissement sera visé pour de bon.
-
-**Nous ne revendiquons aucune certification.** Aucun audit externe, aucune homologation, aucun label n'a été obtenu à ce jour. Le dire vaut mieux que laisser un logo suggérer le contraire.
-
-**Le RGPD n'est pas le texte qui nous est applicable.** Le cadre de référence est la loi ivoirienne n° 2013-450 ; les pratiques décrites ici en reprennent les principes, et rencontrent souvent ceux du règlement européen, mais un établissement ivoirien qui exige une conformité RGPD contractuelle doit poser la question explicitement plutôt que la déduire d'une page de site.
+Écrivez à **contact@klassci.com**. Les demandes d'un prestataire informatique mandaté par un établissement client — localisation physique des serveurs, détail d'une mesure, engagement contractuel — reçoivent une réponse écrite.

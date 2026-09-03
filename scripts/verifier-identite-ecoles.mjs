@@ -40,6 +40,17 @@ const { etablissementsVitrine, identitesParCode } = await import(
   "../lib/vitrine/etablissements.ts"
 );
 
+const { etablissementsOuverts, etablissementAvecSecret } = await import(
+  "../lib/portail/tenants.ts"
+);
+
+/**
+ * Le portail d'inscription et le mur d'accueil décidaient séparément de la même
+ * chose : le mur écartait l'instance de démonstration, le portail non. Elle
+ * s'offrait donc aux familles, sous le nom laissé par la dernière
+ * démonstration, entre des écoles réelles.
+ */
+
 const verifs = [];
 const verifier = (nom, corps) => verifs.push([nom, corps]);
 
@@ -240,6 +251,9 @@ function registre(codes, reponses, exclus = "") {
     const suffixe = code.replace(/-/g, "_").toUpperCase();
     process.env[`REINSCRIPTION_BASE_${suffixe}`] = `https://${code}.klassci.com`;
     process.env[`REINSCRIPTION_LABEL_${suffixe}`] = `Libellé ${code}`;
+    // Le registre du portail refuse une école sans secret utilisable — à
+    // raison : listée sans secret, elle rendrait une erreur au premier envoi.
+    process.env[`REINSCRIPTION_SECRET_${suffixe}`] = "x".repeat(64);
   }
 
   const appels = [];
@@ -276,18 +290,29 @@ verifier("une école qui répond est servie avec son identité", async () => {
   assert.equal(ecole.identite.entete, "Ministère de l'Enseignement Supérieur");
 });
 
-verifier("une école injoignable disparaît sans emporter les autres", async () => {
+verifier("une école injoignable reste listée, sous son libellé de registre", async () => {
+  // Elle disparaissait, autrefois. Cela paraissait prudent et ne l'était pas :
+  // ces instances démarrent à froid, et une réponse au-delà du délai retirait
+  // l'école du mur pour une heure entière. USAT et ISLG ont disparu ainsi, au
+  // hasard du moment de la construction. Or l'inscription en ligne d'une école
+  // est ouverte ou non : c'est un fait de configuration, pas de réseau.
   registre(["ephrata", "esbtp-yakro"], { "esbtp-yakro": identite() });
 
   const servies = await etablissementsVitrine();
 
   assert.deepEqual(
-    servies.map((e) => e.code),
-    ["esbtp-yakro"],
+    servies.map((e) => e.code).sort(),
+    ["ephrata", "esbtp-yakro"],
   );
+
+  const injoignable = servies.find((e) => e.code === "ephrata");
+
+  assert.equal(injoignable.nom, "Libellé ephrata", "le libellé du registre prend le relais");
+  assert.equal(injoignable.logo, null, "sans réponse, pas de logo : la tuile affiche ses initiales");
+  assert.equal(injoignable.ville, "");
 });
 
-verifier("une instance qui n'a pas encore reçu le déploiement est absente", async () => {
+verifier("une instance qui n'a pas encore reçu le déploiement reste listée, sans identité", async () => {
   // 404 : la route publique n'existe pas encore sur ce serveur. C'est l'état
   // NORMAL entre la fusion et le `klassci pull`, et il ne doit rien casser.
   registre(["ephrata", "esbtp-yakro"], { ephrata: 404, "esbtp-yakro": identite() });
@@ -295,9 +320,11 @@ verifier("une instance qui n'a pas encore reçu le déploiement est absente", as
   const servies = await etablissementsVitrine();
 
   assert.deepEqual(
-    servies.map((e) => e.code),
-    ["esbtp-yakro"],
+    servies.map((e) => e.code).sort(),
+    ["ephrata", "esbtp-yakro"],
+    "elle reste listée : son inscription est ouverte, c'est son identité qui manque",
   );
+  assert.equal(servies.find((e) => e.code === "ephrata").logo, null);
 });
 
 verifier("l'instance de démonstration est écartée du mur de logos", async () => {
@@ -457,6 +484,32 @@ verifier("… mais une école dont le nom contient KLASSCI garde le sien", async
 
 const fetchOrigine = globalThis.fetch;
 let echecs = 0;
+
+verifier("l'instance de démonstration n'est pas proposée à l'inscription", async () => {
+  registre(["presentation", "esbtp-yakro"], {}, null);
+
+  const ouverts = etablissementsOuverts().map((e) => e.code);
+
+  assert.deepEqual(ouverts, ["esbtp-yakro"]);
+});
+
+verifier("… mais elle reste joignable par son adresse directe", async () => {
+  registre(["presentation", "esbtp-yakro"], {}, null);
+
+  // Une démonstration du parcours d'inscription doit rester possible. Ce qui
+  // est retiré, c'est la PROPOSITION à quelqu'un qui n'est pas venu la
+  // chercher, pas l'accès de qui a le lien.
+  assert.notEqual(etablissementAvecSecret("presentation"), null);
+});
+
+verifier("poser la liste vide inclut délibérément la démonstration", async () => {
+  registre(["presentation", "esbtp-yakro"], {}, "");
+
+  assert.deepEqual(
+    etablissementsOuverts().map((e) => e.code).sort(),
+    ["esbtp-yakro", "presentation"],
+  );
+});
 
 for (const [nom, corps] of verifs) {
   try {
