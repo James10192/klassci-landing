@@ -243,6 +243,16 @@
       "aucun": {
         "titre": "Aucun établissement disponible",
         "texte": "Aucun établissement n'a encore ouvert ses inscriptions en ligne. Rapprochez-vous directement du vôtre."
+      },
+      "recherche": {
+        "placeholder": "Rechercher un établissement…",
+        "etiquette": "Rechercher un établissement",
+        "effacer": "Effacer la recherche",
+        "resultats": "{n} établissement(s) trouvé(s)",
+        "vide": {
+          "titre": "Aucun établissement ne correspond",
+          "texte": "Vérifiez l'orthographe, ou cherchez la ville plutôt que le nom."
+        }
       }
     },
     "confiance": {

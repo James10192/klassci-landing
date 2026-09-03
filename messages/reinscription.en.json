@@ -243,6 +243,16 @@
       "aucun": {
         "titre": "No school available",
         "texte": "No school has opened online enrolment yet. Contact yours directly."
+      },
+      "recherche": {
+        "placeholder": "Search for a school…",
+        "etiquette": "Search for a school",
+        "effacer": "Clear search",
+        "resultats": "{n} school(s) found",
+        "vide": {
+          "titre": "No school matches",
+          "texte": "Check the spelling, or search by city rather than name."
+        }
       }
     },
     "confiance": {
