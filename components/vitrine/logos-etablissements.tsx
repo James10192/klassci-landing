@@ -48,35 +48,56 @@ function initiales(nom: string): string {
 }
 
 /**
- * Un logo, ou les initiales de l'école.
+ * Un logo, ou les initiales de l'école, sur une tuile blanche.
  *
  * Le monogramme n'est pas un pis-aller honteux : une école qui n'a pas encore
  * déposé son logo est quand même une école cliente, et sa case doit avoir la
  * même tenue que les autres. C'est infiniment préférable à un logo KLASSCI
  * répété, qui donnerait à lire « nous nous équipons nous-mêmes ».
+ *
+ * **La tuile est blanche dans les deux thèmes, et c'est le point.** Les logos
+ * étaient posés à même la carte, dont la couleur suit le thème : en sombre, la
+ * ligne de sous-titre de l'ESBTP — de l'encre foncée sur un fond transparent —
+ * devenait illisible, et un logo livré sur fond blanc opaque s'affichait en
+ * pavé. Un logo d'établissement est dessiné pour du papier ; on lui rend du
+ * papier, quel que soit le thème du visiteur.
+ *
+ * Le liseré n'est pas décoratif : sur une carte claire, il dessine la tuile que
+ * son fond blanc ne distingue plus — et c'est aussi lui qui la montre quand le
+ * logo lui-même est presque blanc.
+ *
+ * La tuile est RECTANGULAIRE, comme au portail et pour la même raison : un logo
+ * d'école n'est presque jamais carré (les instances en servent en 185 × 141,
+ * 412 × 142, 600 × 360), et `object-contain` dans un carré les réduit à une
+ * bande. Le rapport 4:3 laisse respirer un mot-symbole sans déformer un écusson.
  */
+const TUILE =
+  "inline-flex h-20 w-[6.5rem] shrink-0 items-center justify-center rounded-xl bg-white" +
+  " ring-1 ring-black/[0.06] shadow-[0_1px_3px_rgba(16,24,40,0.10)]";
+
 function Marque({ vignette }: { vignette: Vignette }) {
   if (vignette.logo === null) {
     return (
-      <span
-        aria-hidden
-        className="inline-flex h-14 w-14 items-center justify-center rounded-lg bg-accent-light font-mono text-[1.05rem] font-semibold text-accent"
-      >
+      <span aria-hidden className={`${TUILE} font-mono text-[1.05rem] font-semibold text-text-secondary`}>
         {initiales(vignette.nom)}
       </span>
     );
   }
 
   return (
-    <Image
-      src={vignette.logo}
-      alt=""
-      width={160}
-      height={56}
-      sizes="160px"
-      loading="lazy"
-      className="h-14 w-auto max-w-[150px] object-contain"
-    />
+    <span className={`${TUILE} p-2.5`}>
+      <Image
+        src={vignette.logo}
+        // Vide, à dessein : le nom de l'école est écrit juste en dessous, dans
+        // la même carte. L'annoncer deux fois n'aide personne.
+        alt=""
+        width={208}
+        height={160}
+        sizes="208px"
+        loading="lazy"
+        className="h-full w-full object-contain"
+      />
+    </span>
   );
 }
 
@@ -143,9 +164,7 @@ export async function LogosEtablissements({
               aria-hidden={rang >= vignettes.length}
               className="flex min-w-[220px] flex-shrink-0 flex-col items-center gap-3 rounded-lg border border-border bg-bg-card px-9 py-7 transition-all duration-200 ease-klassci hover:-translate-y-0.5 hover:border-accent hover:shadow-[0_4px_16px_rgba(4,83,203,0.08)]"
             >
-              <span className="flex h-14 items-center justify-center">
-                <Marque vignette={vignette} />
-              </span>
+              <Marque vignette={vignette} />
               <span className="text-center font-sans text-[0.9rem] font-semibold text-text">
                 {vignette.nom}
               </span>
