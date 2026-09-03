@@ -79,7 +79,11 @@ prix, ni un chiffre.
 
 ## Quand tu as fini
 
-Réponds avec : le nombre de mots, les sources retenues avec leurs URL, et
-surtout **la liste de ce que tu n'as pas pu vérifier**. C'est le point le plus
+Lance `pnpm verifier:citations` : il interroge toutes les adresses externes du
+contenu et refuse celles qui ont disparu.
+
+Réponds avec : le nombre de mots, les sources retenues avec leurs URL et le
+code de réponse que tu as constaté pour chacune, et surtout **la liste de ce
+que tu n'as pas pu vérifier**. C'est le point le plus
 important de ton compte rendu : il dit à l'humain ce qu'il doit contrôler
 avant publication.

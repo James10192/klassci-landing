@@ -35,6 +35,17 @@ galerie des résultats enrichis. Un type de balisage a-t-il été déprécié, o
 restauré ? `docs/seo/regles.md` contient un tableau de statuts daté de
 septembre 2026 : dis s'il est encore juste.
 
+**4. Les sources citees.** Lance `pnpm verifier:citations`. Il interroge toutes
+les adresses externes du contenu et distingue « disparu » de « refus d'acces ».
+Un lien mort dans un article de reglementation est la premiere chose qu'un
+lecteur mefiant verifie — et quatre des cinq articles fondateurs en portaient
+un le jour de leur publication, l'ARTCI ayant refondu son site.
+
+Pour chaque source disparue : retrouve-la a sa nouvelle adresse, ou trouve une
+source equivalente qui repond. Un quotidien d'Etat reproduisant integralement
+un discours ministeriel vaut le communique disparu du portail. Ne remplace
+jamais une source primaire par un resume de moteur de recherche.
+
 ## Ton rapport
 
 - **Ce qui a bougé** depuis la dernière veille, et ce que ça implique.
@@ -43,6 +54,8 @@ septembre 2026 : dis s'il est encore juste.
   surclasserait.
 - **Les menaces** : un concurrent qui se met à publier, une règle qui change.
 - **Ta recommandation de prochain sujet**, à confronter au plan éditorial.
+- **Les sources mortes** et, pour chacune, l'adresse de remplacement que tu as
+  ouverte et verifiee.
 - Les corrections à apporter à `docs/seo/regles.md`, s'il y en a.
 
 Distingue toujours ce que tu as vérifié en ouvrant une page de ce que tu

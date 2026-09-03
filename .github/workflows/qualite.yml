@@ -12,6 +12,11 @@ on:
   push:
     branches: [master]
   pull_request:
+  schedule:
+    # Lundi 6 h UTC : le contrôle des sources citées, qui n'a de sens que
+    # répété — un lien meurt sans prévenir, et l'article ne change pas.
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
 
 jobs:
   verifier:
@@ -50,3 +55,19 @@ jobs:
 
       - name: Budget de performance
         run: node scripts/verifier-budget.mjs
+
+  # Séparé du portail : ce contrôle dépend du réseau et de sites tiers. Une
+  # panne chez le CAMES ou un pare-feu qui refuse un centre de données ne doit
+  # pas empêcher un déploiement. Il tourne donc seul, chaque lundi, et son
+  # échec se lit dans l'onglet Actions sans rien bloquer.
+  citations:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Les sources citées répondent-elles encore ?
+        run: node scripts/verifier-citations.mjs
