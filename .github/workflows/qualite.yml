@@ -55,6 +55,12 @@ jobs:
       - name: Contrôles SEO sur le dépôt
         run: node scripts/verifier-seo.mjs
 
+      # Quatre pages institutionnelles ont été servies en ligne avec, à l'écran,
+      # un encadré adressé à la direction : « les éléments suivants doivent être
+      # fournis avant la mise en ligne ». Rien ne regardait le texte servi.
+      - name: Aucune note interne servie au public
+        run: node scripts/verifier-notes-internes.mjs
+
       - name: Construction
         run: pnpm build
         env:

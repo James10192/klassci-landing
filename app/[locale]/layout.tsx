@@ -105,8 +105,8 @@ export async function generateMetadata({
     },
     description: t("description"),
     keywords: t("keywords"),
-    authors: [{ name: "African Digital Consulting" }],
-    creator: "African Digital Consulting",
+    authors: [{ name: "African Digit Consulting" }],
+    creator: "African Digit Consulting",
     publisher: "KLASSCI",
     alternates: {
       canonical: `/${locale}`,

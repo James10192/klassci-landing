@@ -116,20 +116,12 @@ That split is set out channel by channel in the [privacy policy](/en/confidentia
 
 ## What we do not promise
 
-Three limits, stated here rather than discovered later.
+Four limits, stated here rather than discovered later.
+
+**Live databases are not encrypted at the storage level.** The backups are. Encryption at rest protects against a stolen disk or a discarded drive being read; it does not protect against access obtained to a running server, which is the more common scenario. We would rather say which of the two we cover.
 
 **The relay's rate limiting is not a guarantee, it is a shock absorber.** Its counters live in the memory of the process serving the request; on a serverless platform each instance has its own, and a fresh instance starts from zero. It divides the amplification of a burst, it does not remove it. A genuinely airtight limit requires shared storage, and will be built the day an institution is deliberately targeted.
 
 **We claim no certification.** No external audit, no accreditation, no label has been obtained to date. Saying so is better than letting a badge imply otherwise.
 
 **The GDPR is not the text that governs us.** The reference framework is Ivorian law no. 2013-450; the practices described here follow its principles, and often meet those of the European regulation, but an institution that requires contractual GDPR compliance should ask explicitly rather than infer it from a web page.
-
-<ACompleter titre="To be completed before going live">
-
-Three points are a matter of editorial decision or administrative formality, and must be settled before this page goes live:
-
-- **Encryption of the database itself.** Backups are encrypted; the live databases are not encrypted at the storage level. State whether encryption at rest is enabled at the host, or accept that it is not — the second answer is acceptable and verifiable, a vague phrase is not.
-- **Incidents**: how quickly the institution is informed of a data breach, and the procedure for notifying the Protection Authority. That is a contractual commitment, not a technical characteristic.
-- **ARTCI formalities**: the status of the declaration or authorisation for processing carried out by the publisher, and the appointment of a data protection officer where applicable.
-
-</ACompleter>

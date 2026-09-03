@@ -258,34 +258,20 @@
   },
   "socialProof": {
     "eyebrow": "01 · Trusted by",
-    "title": "Trusted by schools educating thousands of students",
+    "title": "The institutions whose online enrolment is open here",
+    "note": "This band shows the schools whose enrolment portal is open on klassci.com, with the logo and name they set themselves. It is not our client list: an institution that does not open online enrolment does not appear here.",
     "clients": [
       {
         "name": "ESBTP Abidjan",
         "code": "esbtp-abidjan",
-        "detail": "2,600+ students · Élite plan",
+        "detail": "Abidjan",
         "logo": "/img/clients/esbtp.png"
       },
       {
         "name": "ESBTP Yamoussoukro",
         "code": "esbtp-yakro",
-        "detail": "2,000+ students · Élite plan",
+        "detail": "Yamoussoukro",
         "logo": "/img/clients/esbtp.png"
-      },
-      {
-        "name": "Institut Pascal",
-        "detail": "1,000+ students · Élite plan",
-        "logo": "/img/clients/institut-pascal.jpg"
-      },
-      {
-        "name": "San Andrea School",
-        "detail": "1,200+ students · Élite plan",
-        "logo": "/img/clients/san-andrea.jpg"
-      },
-      {
-        "name": "ITS",
-        "detail": "800+ students · Pro plan",
-        "logo": "/img/clients/its.jpg"
       }
     ],
     "testimonials": [
@@ -858,7 +844,7 @@
         ]
       }
     },
-    "copyright": "© {year} KLASSCI — African Digital Consulting",
+    "copyright": "© {year} KLASSCI — African Digit Consulting",
     "social": {
       "facebook": "Facebook",
       "linkedin": "LinkedIn"

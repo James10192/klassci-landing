@@ -11,12 +11,18 @@ import type { EtablissementVitrine } from "@/lib/vitrine/etablissements";
  * personne ne l'ajoute à la main. C'est la différence entre une page de
  * références qui vieillit et une qui reste vraie.
  *
- * Deux sources se rejoignent. Les établissements SERVIS, interrogés en direct,
- * et une liste de références tenue dans les traductions — des écoles clientes
- * qui ne sont pas des instances de l'édition Université, et qu'aucun appel ne
- * peut donc découvrir. Une référence qui porte un `code` d'établissement
- * s'efface quand ce même établissement répond en direct : la version vivante
- * gagne toujours, avec son vrai logo et son vrai nom.
+ * **Ce bandeau ne montre que les établissements joignables** — ceux dont le
+ * portail d'inscription est ouvert sur klassci.com, interrogés en direct. Il ne
+ * montre plus une liste d'écoles tenue à la main dans les traductions : celle-ci
+ * portait des effectifs et des formules d'abonnement que rien ne vérifiait, et
+ * elle donnait à lire « voici nos clients » là où il fallait lire « voici les
+ * écoles dont on peut vérifier soi-même l'inscription en ligne ». Une école
+ * absente de ce mur n'est pas une école absente de notre clientèle, et le
+ * sous-titre le dit au visiteur.
+ *
+ * Les entrées des traductions qui restent portent un `code` : elles servent de
+ * repli quand une instance ne répond pas, et s'effacent dès qu'elle répond. La
+ * version vivante gagne toujours, avec son vrai logo et son vrai nom.
  */
 
 type Reference = {
@@ -134,13 +140,26 @@ export async function LogosEtablissements({
     return null;
   }
 
+  /**
+   * En dessous de cinq établissements, le défilement dessert ce qu'il montre :
+   * la boucle a besoin d'une copie de la liste pour se refermer sans couture,
+   * et avec deux écoles le visiteur lit « ESBTP Abidjan, ESBTP Yamoussoukro,
+   * ESBTP Abidjan, ESBTP Yamoussoukro ». Une file courte se pose donc,
+   * centrée, sans copie ni animation. C'est aussi plus honnête : quatre écoles
+   * qui ne bougent pas se comptent, là où un ruban qui tourne suggère une file
+   * dont on ne voit pas le bout.
+   */
+  const enRuban = vignettes.length >= 5;
+
   // Doublée pour que la boucle se referme sans couture. Les copies portent une
   // clé distincte mais restent invisibles aux lecteurs d'écran : la liste est
   // déjà annoncée une fois.
-  const defile = [
-    ...vignettes.map((vignette) => ({ ...vignette, cle: `a-${vignette.cle}` })),
-    ...vignettes.map((vignette) => ({ ...vignette, cle: `b-${vignette.cle}` })),
-  ];
+  const defile = enRuban
+    ? [
+        ...vignettes.map((vignette) => ({ ...vignette, cle: `a-${vignette.cle}` })),
+        ...vignettes.map((vignette) => ({ ...vignette, cle: `b-${vignette.cle}` })),
+      ]
+    : vignettes.map((vignette) => ({ ...vignette, cle: `a-${vignette.cle}` }));
 
   return (
     <section className="overflow-hidden py-14" aria-labelledby="etablissements-titre">
@@ -154,10 +173,25 @@ export async function LogosEtablissements({
         >
           {t("title")}
         </h2>
+        <p className="mx-auto mt-4 max-w-[62ch] font-sans text-[0.9rem] leading-relaxed text-text-muted">
+          {t("note")}
+        </p>
       </div>
 
-      <div className="marquee-fade relative -mx-[calc(50vw-50%)] mt-10 w-screen overflow-hidden py-3">
-        <ul className="flex w-fit animate-marquee-40 gap-6 hover:[animation-play-state:paused]">
+      <div
+        className={
+          enRuban
+            ? "marquee-fade relative -mx-[calc(50vw-50%)] mt-10 w-screen overflow-hidden py-3"
+            : "container mt-10 py-3"
+        }
+      >
+        <ul
+          className={
+            enRuban
+              ? "flex w-fit animate-marquee-40 gap-6 hover:[animation-play-state:paused]"
+              : "flex flex-wrap justify-center gap-6"
+          }
+        >
           {defile.map((vignette, rang) => (
             <li
               key={vignette.cle}
