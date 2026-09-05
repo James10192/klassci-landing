@@ -15,6 +15,11 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ### Added
 
+- **The enrolment sheet now carries the whole file** — full civil status, contact details, programme down to the domain, parents and guardians with their relationship and occupation, and the list of documents with what is still missing. One full page per copy, and a signature line for the parent or guardian. Deliberately absent: account credentials, internal reasons for rejecting a document, and cashier comments — those are staff notes, not information for the family carrying the paper home.
+
+- **A blank form to fill in the waiting room** — staff print it, the student completes it by hand, brings it back, and the office types it in. The field order matches the data-entry screen so nothing is skipped, the lines are tall enough to write on, and sex and State-assignment status are ticked rather than written. It asks for no class, level or programme: the school assigns those afterwards. Available from the enrolments list.
+
+
 - **KLASSCI installs on a phone, and actually works there** — the app sits on a phone or tablet home screen, opens without an address bar, and behaves like a phone app rather than a shrunken website. Bottom tab bar with a pill that glides between tabs, sheets that rise from the bottom and follow your finger, pull-to-refresh, and a banner when the network drops. Each profile gets its own tabs: a student sees Home, Grades, Timetable, Absences; a teacher, roll call and grades; the cashier, payment collection.
 
   The first screens have shipped: the student home, grades grouped by teaching unit with credits under LMD, absences with a justification that goes out from a single sheet (reason, attachment, no page reload), the cashier's four-step full-screen collection flow, the receipt with its actions, and the teacher's full-width roll call. Every action still obeys its permission: what an account may not do is not shown.
@@ -56,6 +61,13 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 - **Submitted documents are no longer served directly by the web server** — birth certificates and identity papers were written to a public folder. They now live out of the server's reach and open only through the application, which checks who is asking.
 
 - **Changing a class roster now requires a permission** — changing a class's subjects, adding students to it or removing them required no particular permission.
+
+### Fixed
+
+- **Words now agree with the student's gender** — a girl used to read her name followed by a masculine participle on her own file and on the receipt her family takes home. Agreement applies where the word describes a named person; pricing column headers and counters stay masculine, which is also the form used for a mixed group.
+
+- **State-assignment status shows again for bulk re-enrolments** — a student re-enrolled in bulk as not assigned had no badge in the list or on their file: they appeared as if the status was blank, when it is what decides the amount due.
+
 
 ---
 
