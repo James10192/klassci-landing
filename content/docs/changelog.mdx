@@ -19,6 +19,20 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 
 - **L'inscription en ligne porte les couleurs de votre établissement** — la liste « Choisissez votre établissement » affiche désormais le logo et la ville de chaque école. Une fois l'école choisie, le formulaire reprend l'identité visuelle qu'elle a réglée pour ses documents PDF : son logo, le libellé de son en-tête et sa couleur principale, qui habille les boutons, les liens et les champs actifs. Le candidat voit à qui il confie son dossier, et le reconnaît. Vous ne configurez votre identité qu'une seule fois, dans vos paramètres : elle vaut pour vos bulletins comme pour votre page d'inscription. Si votre couleur ne laisse pas un texte lisible sur un bouton, elle reste sur le bandeau d'identité et les commandes gardent le bleu KLASSCI.
 
+- **Suivi des pièces du dossier, étudiant par étudiant** — la fiche d'inscription porte désormais un bloc « Pièces du dossier » où l'on coche ce que l'étudiant vient de remettre. Une case suffit : ni téléversement obligatoire, ni formulaire. Le compteur en tête dit s'il manque quelque chose, et quoi.
+
+  Une pièce appartient d'abord à l'étudiant, pas à l'année : six photos déposées en première année en couvrent trois, et l'écran affiche ce qu'il en reste. L'établissement décide, pièce par pièce, ce qui dure et ce qui se redonne chaque rentrée. Une pièce qui ne concerne pas un étudiant cette année s'écarte avec son motif.
+
+  Trois réglages d'établissement : ce qu'on fait d'un dossier incomplet (bloquer, signaler, se taire), si une inscription annulée rend ce qu'elle avait consommé, et si cocher au guichet vaut déjà validation. Là où la personne qui reçoit la pièce est celle qui la juge, un seul geste suffit — c'est le réglage par défaut.
+
+- **Une page pour savoir qui rappeler** — « Suivi des dossiers » liste, pour une année et une classe, les étudiants dont le dossier est incomplet, avec le nom des pièces qui manquent. Cinq compteurs en tête : inscriptions examinées, dossiers complets, dossiers incomplets, pièces à réclamer, pièces à relire. Chaque ligne mène directement au dossier de l'étudiant, à l'endroit exact où l'on coche.
+
+- **La photo de l'étudiant se prend avec un téléphone** — un dialogue s'ouvre juste après la création d'une inscription, au moment où l'étudiant est devant le guichet. Trois chemins : téléverser un fichier, photographier avec la caméra du poste, ou afficher un code QR que l'on scanne avec un téléphone. La photo prise au téléphone apparaît à l'écran ; le guichet la valide ou en redemande une autre — elle ne remplace la photo de l'étudiant qu'une fois acceptée.
+
+  La page ouverte par le code QR ne demande aucun compte et n'affiche qu'un nom : le lien expire en quelques minutes, ne vaut que pour un seul envoi, et ne dit rien du dossier. À la réinscription, si l'étudiant a déjà une photo, le dialogue demande d'abord s'il faut la remplacer.
+
+- **Catalogue des pièces à fournir** — l'établissement déclare ce qu'il réclame à l'inscription : intitulé, original ou copie, nombre d'exemplaires, durée de validité, et à quelles filières et quels niveaux la pièce s'applique. Un jeu de pièces courantes est proposé en un clic.
+
 ### Améliorations
 
 - **Les pages « Entreprise » sont accessibles depuis n'importe quelle page** — À propos, Sécurité, Confidentialité et Mentions légales ne figuraient que dans le pied de page, et deux d'entre elles nulle part. Elles sont désormais regroupées sous une entrée « Entreprise » de la barre de navigation, sur l'accueil comme sur Université, Collège, Classe virtuelle, le blog et la documentation. Ces pages portaient d'ailleurs une barre de navigation absente : on y arrivait par un lien reçu ou une recherche, et le seul chemin de retour était un fil d'Ariane. Sur téléphone, les quatre liens sont posés à plat dans le menu plutôt que repliés dans un sous-menu qui aurait demandé un geste de plus.
@@ -32,6 +46,10 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 ### Sécurité
 
 - **Les composants externes de la plateforme ont été remis à jour, et le contrôle qui devait les surveiller peut enfin sonner** — KLASSCI s'appuie, comme toute plateforme moderne, sur des briques logicielles écrites par d'autres. Treize failles classées hautes ou critiques y dormaient. L'une permettait de glisser du code exécutable dans une page à travers un texte mis en forme ; une autre de faire tomber le serveur en lui soumettant un document conçu pour l'occuper indéfiniment ; une troisième d'échapper aux règles qui décident quels services extérieurs la plateforme accepte d'appeler. **Elles sont fermées.** Le point le plus gênant n'était pourtant pas les failles elles-mêmes, mais le fait que personne ne pouvait les voir : la vérification automatique chargée de les signaler était écrite de telle façon qu'elle ne pouvait jamais échouer, et annonçait donc « tout va bien » quoi qu'elle trouve. Elle décide désormais réellement, et sur ce qui part en production plutôt que sur les outils de développement. Elle s'arrête aussi sur une alerte que la base de référence n'a pas encore classée — une alerte non évaluée n'est pas une alerte bénigne, et c'est exactement ce qui avait laissé passer un défaut de vérification des clés utilisées pour signer les notifications. Quand un risque doit être assumé faute de correctif publié, il reste affiché comme tel avec son motif, plutôt que masqué : accepter un risque et le cacher sont deux choses différentes. Enfin, les tests ne s'exécutaient que lors d'une relecture de code, jamais sur une mise en ligne directe : ils s'exécutent maintenant dans les deux cas, sur la branche de développement comme sur celle de chaque établissement.
+
+- **Les pièces déposées ne sont plus servies directement par le serveur web** — extraits de naissance et pièces d'identité étaient écrits dans un dossier public. Ils vivent désormais hors de portée du serveur, et ne s'ouvrent qu'à travers l'application, qui vérifie qui demande.
+
+- **Modifier la composition d'une classe demande un droit** — changer les matières d'une classe, y ajouter ou en retirer des élèves n'exigeait aucune permission particulière.
 
 ---
 

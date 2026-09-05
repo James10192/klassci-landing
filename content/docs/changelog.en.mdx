@@ -19,6 +19,20 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 - **Online applications now carry your school's colours** — the "Choose your school" list shows each school's logo and city. Once a school is picked, the form takes on the visual identity it configured for its PDF documents: its logo, its header line and its primary colour, which drives buttons, links and active fields. Applicants can see who they are handing their file to, and recognise them. You configure your identity once, in your settings: it applies to your report cards and to your application page alike. If your colour would not carry readable text on a button, it stays on the identity banner and the controls keep KLASSCI blue.
 
+- **Document tracking, student by student** — the enrolment record now carries a "Documents" panel where you tick off what the student has just handed in. A checkbox is enough: no mandatory upload, no form. The counter at the top says whether anything is missing, and what.
+
+  A document belongs to the student first, not to the year: six photos handed in during first year cover three enrolments, and the screen shows what is left. The school decides, document by document, what carries over and what is asked for again every year. A document that does not concern a student this year is set aside with a reason.
+
+  Three school settings: what to do with an incomplete file (block, flag, stay silent), whether a cancelled enrolment gives back what it consumed, and whether ticking at the desk already counts as approval. Where the person receiving the document is the one who judges it, one gesture is enough — that is the default.
+
+- **A page to know who to chase** — "Document tracking" lists, for a given year and class, the students whose file is incomplete, with the names of the missing documents. Five counters at the top: enrolments examined, complete files, incomplete files, documents to claim, documents to review. Each row leads straight to the student's file, exactly where you tick.
+
+- **Student photos can be taken with a phone** — a dialog opens right after an enrolment is created, while the student is still at the desk. Three routes: upload a file, use the workstation camera, or display a QR code to scan with a phone. The photo taken on the phone appears on screen; the desk approves it or asks for another — it only replaces the student's photo once accepted.
+
+  The page opened by the QR code requires no account and shows only a name: the link expires within minutes, is good for a single upload, and says nothing about the file. On re-enrolment, if the student already has a photo, the dialog first asks whether to replace it.
+
+- **Required-documents catalogue** — the school declares what it asks for at enrolment: label, original or copy, number of copies, validity period, and which programmes and levels the document applies to. A set of common documents can be installed in one click.
+
 ### Improved
 
 - **The company pages are reachable from every page** — About, Security, Privacy and Legal notice only appeared in the footer, and two of them nowhere at all. They are now grouped under a "Company" entry in the navigation bar, on the home page as well as on University, Secondary, Virtual classroom, the blog and the documentation. Those pages were also missing a navigation bar entirely: you arrived from a link or a search, and the only way back was a breadcrumb. On phones the four links are laid out flat in the menu rather than folded into a submenu that would have cost one more tap.
@@ -32,6 +46,10 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 ### Security
 
 - **The platform's third-party components have been brought up to date, and the check meant to watch them can finally ring** — KLASSCI relies, like any modern platform, on software components written by others. Thirteen flaws rated high or critical were sitting in them. One allowed executable code to be slipped into a page through formatted text; another could bring the server down by handing it a document built to keep it busy indefinitely; a third could bypass the rules deciding which outside services the platform agrees to call. **They are closed.** The more troubling part, though, wasn't the flaws themselves but the fact that nobody could see them: the automated check meant to report them was written in a way that made failure impossible, so it announced "all clear" no matter what it found. It now genuinely decides, and it decides on what ships to production rather than on development tooling. It also stops on an alert the reference database hasn't rated yet — an unrated alert is not a harmless one, and that is precisely what had let through a validation flaw in the keys used to sign notifications. When a risk has to be accepted because no fix has been published, it stays visible with its stated reason rather than hidden: accepting a risk and concealing it are two different things. Finally, the test suite only ran during code review, never on a direct release: it now runs in both cases, on the development branch as well as on each school's own.
+
+- **Submitted documents are no longer served directly by the web server** — birth certificates and identity papers were written to a public folder. They now live out of the server's reach and open only through the application, which checks who is asking.
+
+- **Changing a class roster now requires a permission** — changing a class's subjects, adding students to it or removing them required no particular permission.
 
 ---
 
