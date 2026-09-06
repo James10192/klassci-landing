@@ -15,6 +15,8 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ### Added
 
+- **The LMD transcript can now use the ministry's official layout** — two-column header with emblems, semesters set in the margin, grade and decision carried unit by unit, and credits totalled across the year. A school setting picks between this layout and the application's own; schools already printing the latter see no change. The choice is fixed at the moment a transcript is issued, so a school that switches later does not alter transcripts it has already signed and handed over. The decision agrees with the student's gender, and a missing decision is never replaced by an invented one.
+
 - **The enrolment sheet now carries the whole file** — full civil status, contact details, programme down to the domain, parents and guardians with their relationship and occupation, and the list of documents with what is still missing. One full page per copy, and a signature line for the parent or guardian. Deliberately absent: account credentials, internal reasons for rejecting a document, and cashier comments — those are staff notes, not information for the family carrying the paper home.
 
 - **A blank form to fill in the waiting room** — staff print it, the student completes it by hand, brings it back, and the office types it in. The field order matches the data-entry screen so nothing is skipped, the lines are tall enough to write on, and sex and State-assignment status are ticked rather than written. It asks for the level and programme the student wants — that is what lets the school pick a class — but never the class itself, which is the school's decision. Levels and programmes are offered as tick boxes, since a ticked box is typed back without hesitation. Available from the enrolments list.
@@ -63,6 +65,8 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 - **Changing a class roster now requires a permission** — changing a class's subjects, adding students to it or removing them required no particular permission.
 
 ### Fixed
+
+- **The mobile app's timetable and upcoming sessions work again** — both screens asked the database for a field that does not exist under that name for subjects. The database refused the whole request, and the two screens stayed empty without explaining why. They show sessions and the subject name again.
 
 - **Words now agree with the student's gender** — a girl used to read her name followed by a masculine participle on her own file and on the receipt her family takes home. Agreement applies where the word describes a named person; pricing column headers and counters stay masculine, which is also the form used for a mixed group.
 
