@@ -66,6 +66,8 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ### Fixed
 
+- **A student's civil-status fields are no longer greyed out for those allowed to edit them** — surname, first names, gender, date and place of birth, nationality and student number were locked on screen except for accounts with administration access. A registrar granted "edit students" could open the record without being able to correct a single line. Those fields now follow that permission.
+
 - **The mobile app's timetable and upcoming sessions work again** — both screens asked the database for a field that does not exist under that name for subjects. The database refused the whole request, and the two screens stayed empty without explaining why. They show sessions and the subject name again.
 
 - **Words now agree with the student's gender** — a girl used to read her name followed by a masculine participle on her own file and on the receipt her family takes home. Agreement applies where the word describes a named person; pricing column headers and counters stay masculine, which is also the form used for a mixed group.
