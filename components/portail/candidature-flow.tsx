@@ -105,6 +105,8 @@ export function CandidatureFlow({
   const [choix, setChoix] = useState<ChoixPublies | null>(null);
   const [envoye, setEnvoye] = useState(false);
   const [physiques, setPhysiques] = useState<Physiques | null>(null);
+  const [reference, setReference] = useState<string | null>(null);
+  const [rdvOuvert, setRdvOuvert] = useState(false);
   const [enCours, setEnCours] = useState(false);
   const [etat, setEtat] = useState<CleEtat | null>(null);
   const [champsFautifs, setChampsFautifs] = useState<Record<string, string[]>>({});
@@ -401,6 +403,8 @@ export function CandidatureFlow({
       }
 
       setPhysiques((classement.corps.inscriptions_physiques as Physiques) ?? null);
+      setReference(typeof classement.corps.reference_publique === "string" ? classement.corps.reference_publique : null);
+      setRdvOuvert(classement.corps.rdv_ouvert === true);
       setEnvoye(true);
       // La candidature est partie : « Ce n'est pas mon cas » n'a plus de sens
       // sous cet écran, et repasser par l'autre porte ne l'annulerait pas.
@@ -419,7 +423,15 @@ export function CandidatureFlow({
   }
 
   if (envoye) {
-    return <CandidatureTransmise suiteDuParcours={suiteDuParcours} />;
+    return (
+      <CandidatureTransmise
+        suiteDuParcours={suiteDuParcours}
+        reference={reference ?? undefined}
+        lienRendezVous={rdvOuvert && reference
+          ? `/inscription/universite/${etablissement.code}/rendez-vous?ref=${encodeURIComponent(reference)}`
+          : undefined}
+      />
+    );
   }
 
   // Tant que l'école n'a pas donné ses listes, pas de formulaire. Les afficher

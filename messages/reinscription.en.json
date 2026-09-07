@@ -31,6 +31,8 @@
       "titre": "Your request has been sent.",
       "texte": "Your school will review it and get back to you.",
       "rappel": "Keep your student number: you will need it to follow up with the registrar.",
+      "reference": "Your reference: {reference}",
+      "rdv": "Choose a time slot",
       "action": "Make another request",
       "surPlace": "Your file is completed at the school: come in with your documents to finalise your re-enrolment and pay the fees.",
       "surPlaceOuvert": "On-site enrolment is open: come to the school with your documents to complete your file and pay the fees.",
@@ -167,7 +169,34 @@
       "surPlace": "Your file is completed at the school: bring your documents to finalise your enrolment and pay the fees.",
       "surPlaceOuvert": "On-site enrolment is open: go to the school with your documents to complete your file and pay the fees.",
       "surPlaceDate": "On-site enrolment starts on {date}. Come to the school from that date, with your documents, to complete your file and pay the fees.",
-      "rappel": "No student number is issued at this stage: you will receive one when you actually enrol."
+      "rappel": "No student number is issued at this stage: you will receive one when you actually enrol.",
+      "reference": "Your reference: {reference}",
+      "rdv": "Choose a time slot"
+    },
+    "rdv": {
+      "titre": "Appointment at the desk",
+      "aide": "Pick a slot to complete your file on site. Keep your reference.",
+      "reference": "Reference",
+      "jour": "Day",
+      "mois": "Month",
+      "annee": "Year",
+      "voir": "See my appointment",
+      "retrouverAide": "Lost your reference? Enter the phone number or student ID used at submission.",
+      "identifiant": "Phone or student ID",
+      "retrouver": "Find my reference",
+      "choisir": "Choose",
+      "complet": "Full",
+      "aucun": "No slots available right now.",
+      "confirme": "Appointment confirmed",
+      "annuler": "Cancel this appointment",
+      "erreurs": {
+        "introuvable": "No file matches.",
+        "complet": "That slot just filled. Pick another.",
+        "deja_reserve": "You already have an appointment.",
+        "trop_tot": "That slot is too soon to book.",
+        "ferme": "That slot is no longer open.",
+        "indisponible": "Service temporarily unavailable."
+      }
     },
     "etats": {
       "ferme": {

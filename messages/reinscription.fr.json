@@ -31,6 +31,8 @@
       "titre": "Votre demande est transmise.",
       "texte": "Votre établissement l'examinera et reviendra vers vous.",
       "rappel": "Conservez votre matricule : il vous servira à suivre votre dossier auprès de la scolarité.",
+      "reference": "Votre référence : {reference}",
+      "rdv": "Choisir un créneau",
       "action": "Faire une autre demande",
       "surPlace": "Votre dossier se termine à l'établissement : présentez-vous avec vos pièces pour finaliser votre réinscription et régler les frais.",
       "surPlaceOuvert": "Les inscriptions sur place sont ouvertes : rendez-vous à l'établissement avec vos pièces pour terminer votre dossier et régler les frais.",
@@ -167,7 +169,34 @@
       "surPlace": "Le dossier se termine à l'établissement : présentez-vous avec vos pièces pour finaliser votre inscription et régler les frais.",
       "surPlaceOuvert": "Les inscriptions sur place sont ouvertes : rendez-vous à l'établissement avec vos pièces pour terminer votre dossier et régler les frais.",
       "surPlaceDate": "Les inscriptions sur place commencent le {date}. Présentez-vous à l'établissement à partir de cette date, avec vos pièces, pour terminer votre dossier et régler les frais.",
-      "rappel": "Aucun matricule ne vous est attribué à ce stade : il vous sera donné au moment de votre inscription effective."
+      "rappel": "Aucun matricule ne vous est attribué à ce stade : il vous sera donné au moment de votre inscription effective.",
+      "reference": "Votre référence : {reference}",
+      "rdv": "Choisir un créneau"
+    },
+    "rdv": {
+      "titre": "Rendez-vous au guichet",
+      "aide": "Choisissez un créneau pour finaliser votre dossier sur place. Conservez votre référence.",
+      "reference": "Référence",
+      "jour": "Jour",
+      "mois": "Mois",
+      "annee": "Année",
+      "voir": "Voir mon rendez-vous",
+      "retrouverAide": "Référence perdue ? Indiquez le téléphone ou le matricule utilisé au dépôt.",
+      "identifiant": "Téléphone ou matricule",
+      "retrouver": "Retrouver ma référence",
+      "choisir": "Choisir",
+      "complet": "Complet",
+      "aucun": "Aucun créneau disponible pour le moment.",
+      "confirme": "Rendez-vous confirmé",
+      "annuler": "Annuler ce rendez-vous",
+      "erreurs": {
+        "introuvable": "Aucun dossier ne correspond.",
+        "complet": "Ce créneau vient de se remplir. Choisissez-en un autre.",
+        "deja_reserve": "Vous avez déjà un rendez-vous.",
+        "trop_tot": "Ce créneau est trop proche pour être réservé.",
+        "ferme": "Ce créneau n'est plus ouvert.",
+        "indisponible": "Service momentanément indisponible."
+      }
     },
     "etats": {
       "ferme": {

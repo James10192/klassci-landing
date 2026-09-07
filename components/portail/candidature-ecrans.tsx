@@ -196,7 +196,15 @@ export function EcranEtat({
  * rien, les pièces et le paiement se remettent sur place. Le texte est résolu
  * par le parcours, qui seul connaît la date que l'école a annoncée.
  */
-export function CandidatureTransmise({ suiteDuParcours }: { suiteDuParcours: string }) {
+export function CandidatureTransmise({
+  suiteDuParcours,
+  reference,
+  lienRendezVous,
+}: {
+  suiteDuParcours: string;
+  reference?: string;
+  lienRendezVous?: string;
+}) {
   const t = useTranslations("inscription");
 
   return (
@@ -221,7 +229,19 @@ export function CandidatureTransmise({ suiteDuParcours }: { suiteDuParcours: str
       <m.p {...entree(3)} className="mt-4 text-pretty text-center text-sm leading-relaxed text-text-secondary">
         {suiteDuParcours}
       </m.p>
-      <m.p {...entree(4)} className="mt-4 rounded-xl bg-bg-alt p-3 text-pretty text-center text-xs leading-relaxed text-text-muted">
+      {reference !== undefined && reference !== "" && (
+        <m.p {...entree(4)} className="mt-4 text-pretty text-center text-sm font-semibold tracking-wide">
+          {t("succes.reference", { reference })}
+        </m.p>
+      )}
+      {lienRendezVous !== undefined && (
+        <m.p {...entree(5)} className="mt-4 text-center">
+          <a href={lienRendezVous} className="inline-flex min-h-[44px] items-center rounded-xl bg-accent px-4 text-sm font-semibold text-white">
+            {t("succes.rdv")}
+          </a>
+        </m.p>
+      )}
+      <m.p {...entree(6)} className="mt-4 rounded-xl bg-bg-alt p-3 text-pretty text-center text-xs leading-relaxed text-text-muted">
         {t("succes.rappel")}
       </m.p>
     </Carte>
