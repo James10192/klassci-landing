@@ -39,6 +39,12 @@ export const CHEMINS = {
   reinscriptionSubmit: "api/public/reinscription/submit",
   inscriptionChoix: "api/public/inscription/choix",
   inscriptionSubmit: "api/public/inscription/submit",
+  rdvCreneaux: "api/public/rendez-vous/creneaux",
+  rdvReserver: "api/public/rendez-vous/reserver",
+  rdvConsulter: "api/public/rendez-vous/consulter",
+  rdvDeplacer: "api/public/rendez-vous/deplacer",
+  rdvAnnuler: "api/public/rendez-vous/annuler",
+  rdvRetrouver: "api/public/rendez-vous/retrouver",
 } as const;
 
 export type CheminPublic = (typeof CHEMINS)[keyof typeof CHEMINS];
@@ -67,10 +73,19 @@ const SEAUX: Record<CheminPublic, { groupe: string; maximum: number }> = {
   // Le catalogue a le sien, plus large : ouvrir le formulaire ne doit pas
   // coûter le droit de le déposer.
   [CHEMINS.inscriptionChoix]: { groupe: "candidatures-catalogue", maximum: 30 },
+  [CHEMINS.rdvCreneaux]: { groupe: "rendezvous-catalogue", maximum: 30 },
+  [CHEMINS.rdvReserver]: { groupe: "rendezvous", maximum: 10 },
+  [CHEMINS.rdvConsulter]: { groupe: "rendezvous", maximum: 10 },
+  [CHEMINS.rdvDeplacer]: { groupe: "rendezvous", maximum: 10 },
+  [CHEMINS.rdvAnnuler]: { groupe: "rendezvous", maximum: 10 },
+  [CHEMINS.rdvRetrouver]: { groupe: "rendezvous", maximum: 10 },
 };
 
 /** Les points d'entrée dont la réponse est la même pour tous les visiteurs. */
-const LECTURES_PARTAGEES: ReadonlySet<string> = new Set([CHEMINS.inscriptionChoix]);
+const LECTURES_PARTAGEES: ReadonlySet<string> = new Set([
+  CHEMINS.inscriptionChoix,
+  CHEMINS.rdvCreneaux,
+]);
 
 /**
  * Le seau par adresse est plein.

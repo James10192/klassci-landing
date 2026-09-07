@@ -101,6 +101,8 @@ export function ReinscriptionFlow({
 
   const [etape, setEtape] = useState<Etape>("identification");
   const [physiques, setPhysiques] = useState<Physiques | null>(null);
+  const [reference, setReference] = useState<string | null>(null);
+  const [rdvOuvert, setRdvOuvert] = useState(false);
   const [matricule, setMatricule] = useState("");
   const [jour, setJour] = useState("");
   const [mois, setMois] = useState("");
@@ -254,6 +256,10 @@ export function ReinscriptionFlow({
         // remettent et les frais se règlent au guichet. L'école renvoie donc
         // la date d'ouverture avec la confirmation.
         setPhysiques((corps as { inscriptions_physiques?: Physiques }).inscriptions_physiques ?? null);
+        setReference(typeof (corps as { reference_publique?: string }).reference_publique === "string"
+          ? (corps as { reference_publique: string }).reference_publique
+          : null);
+        setRdvOuvert((corps as { rdv_ouvert?: boolean }).rdv_ouvert === true);
         setEtape("succes");
         onAboutir?.(true);
         return;
@@ -496,8 +502,23 @@ export function ReinscriptionFlow({
               >
                 {suiteDuParcours}
               </m.p>
+              {reference !== null && (
+                <m.p {...entree(3)} className="mt-4 text-center text-sm font-semibold tracking-wide">
+                  {t("succes.reference", { reference })}
+                </m.p>
+              )}
+              {rdvOuvert && reference !== null && (
+                <m.p {...entree(4)} className="mt-4 text-center">
+                  <a
+                    href={`/inscription/universite/${etablissement.code}/rendez-vous?ref=${encodeURIComponent(reference)}`}
+                    className="inline-flex min-h-[44px] items-center rounded-xl bg-accent px-4 text-sm font-semibold text-white"
+                  >
+                    {t("succes.rdv")}
+                  </a>
+                </m.p>
+              )}
               <m.p
-                {...entree(3)}
+                {...entree(5)}
                 className="mt-4 rounded-xl bg-bg-alt p-3 text-pretty text-center text-xs leading-relaxed text-text-muted"
               >
                 {t("succes.rappel")}
