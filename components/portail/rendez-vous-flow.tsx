@@ -3,9 +3,9 @@
 import { useCallback, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 
-import type { EtablissementVisible } from "@/lib/portail/tenants";
-
 import { Carte, champ, dateNaissanceValide } from "./pieces";
+
+type Ecole = { code: string; libelle: string };
 
 type Creneau = {
   id: number;
@@ -26,7 +26,7 @@ export function RendezVousFlow({
   etablissement,
   referenceInitiale,
 }: {
-  etablissement: EtablissementVisible;
+  etablissement: Ecole;
   referenceInitiale?: string;
 }) {
   const t = useTranslations("inscription.rdv");

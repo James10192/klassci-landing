@@ -20,14 +20,14 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale, ecole } = await params;
   const safeLocale = routing.locales.includes(locale) ? locale : routing.defaultLocale;
-  const t = await getTranslations({ locale: safeLocale, namespace: "inscription.rdv" });
+  const t = await getTranslations({ locale: safeLocale, namespace: "inscription" });
   const etablissement = trouver(ecole);
 
   return buildUniverseMetadata({
     locale: safeLocale,
     noindex: true,
-    title: etablissement ? `${t("titre")} — ${etablissement.libelle}` : t("titre"),
-    description: t("aide"),
+    title: etablissement ? `${t("rdv.titre")} — ${etablissement.libelle}` : t("rdv.titre"),
+    description: t("rdv.aide"),
     path: `/inscription/universite/${ecole}/rendez-vous`,
   });
 }
