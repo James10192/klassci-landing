@@ -246,20 +246,19 @@ export function ReinscriptionFlow({
         }),
       });
 
-      const corps = await interpreter(reponse);
+      const classement = await classer(reponse);
 
-      if (corps === null) return;
+      if (classement.genre !== "ok") {
+        setEtat(ecranDe(classement, ECRANS, "indisponible"));
+        return;
+      }
 
-      if ((corps as { enregistre?: boolean }).enregistre === true) {
-        // Une réinscription se finalise SUR PLACE, comme une première
-        // inscription : l'étudiant existe déjà en base, mais les pièces se
-        // remettent et les frais se règlent au guichet. L'école renvoie donc
-        // la date d'ouverture avec la confirmation.
-        setPhysiques((corps as { inscriptions_physiques?: Physiques }).inscriptions_physiques ?? null);
-        setReference(typeof (corps as { reference_publique?: string }).reference_publique === "string"
-          ? (corps as { reference_publique: string }).reference_publique
-          : null);
-        setRdvOuvert((corps as { rdv_ouvert?: boolean }).rdv_ouvert === true);
+      const payload = classement.corps;
+
+      if (payload.enregistre === true) {
+        setPhysiques((payload.inscriptions_physiques as Physiques) ?? null);
+        setReference(typeof payload.reference_publique === "string" ? payload.reference_publique : null);
+        setRdvOuvert(payload.rdv_ouvert === true);
         setEtape("succes");
         onAboutir?.(true);
         return;
