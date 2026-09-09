@@ -22,18 +22,30 @@ type Reservation = {
   statut: string;
 };
 
+function decouperNaissance(iso?: string): { jour: string; mois: string; annee: string } {
+  const morceaux = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso ?? "");
+  if (morceaux === null) {
+    return { jour: "", mois: "", annee: "" };
+  }
+  return { annee: morceaux[1], mois: String(Number(morceaux[2])), jour: String(Number(morceaux[3])) };
+}
+
 export function RendezVousFlow({
   etablissement,
   referenceInitiale,
+  naissanceInitiale,
 }: {
   etablissement: Ecole;
   referenceInitiale?: string;
+  naissanceInitiale?: string;
 }) {
   const t = useTranslations("inscription.rdv");
+  const naissanceConnue = decouperNaissance(naissanceInitiale);
+  const connu = Boolean(referenceInitiale && naissanceInitiale && dateNaissanceValide(naissanceConnue.jour, naissanceConnue.mois, naissanceConnue.annee));
   const [reference, setReference] = useState(referenceInitiale ?? "");
-  const [jour, setJour] = useState("");
-  const [mois, setMois] = useState("");
-  const [annee, setAnnee] = useState("");
+  const [jour, setJour] = useState(naissanceConnue.jour);
+  const [mois, setMois] = useState(naissanceConnue.mois);
+  const [annee, setAnnee] = useState(naissanceConnue.annee);
   const [identifiant, setIdentifiant] = useState("");
   const [creneaux, setCreneaux] = useState<Creneau[]>([]);
   const [reservation, setReservation] = useState<Reservation | null>(null);
@@ -55,6 +67,13 @@ export function RendezVousFlow({
   useEffect(() => {
     void chargerCreneaux();
   }, [chargerCreneaux]);
+
+  useEffect(() => {
+    if (!connu) return;
+    void consulter();
+    // Premier affichage seulement : la famille arrive déjà identifiée.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [connu]);
 
   async function consulter() {
     if (!naissanceOk || reference.trim() === "" || enCours) return;
@@ -156,42 +175,46 @@ export function RendezVousFlow({
     <>
       <h2 className="text-lg font-semibold tracking-tight">{t("titre")}</h2>
       <p className="mt-1 text-pretty text-sm text-text-secondary">{t("aide")}</p>
-      <label className="mt-5 block text-sm font-medium">
-        {t("reference")}
-        <input className={champ} value={reference} onChange={(e) => setReference(e.target.value)} autoComplete="off" />
-      </label>
+      {!connu && (
+        <>
+          <label className="mt-5 block text-sm font-medium">
+            {t("reference")}
+            <input className={champ} value={reference} onChange={(e) => setReference(e.target.value)} autoComplete="off" />
+          </label>
 
-      <div className="mt-3 grid grid-cols-3 gap-2">
-        <input className={champ} inputMode="numeric" placeholder={t("jour")} value={jour} onChange={(e) => setJour(e.target.value)} />
-        <input className={champ} inputMode="numeric" placeholder={t("mois")} value={mois} onChange={(e) => setMois(e.target.value)} />
-        <input className={champ} inputMode="numeric" placeholder={t("annee")} value={annee} onChange={(e) => setAnnee(e.target.value)} />
-      </div>
+          <div className="mt-3 grid grid-cols-3 gap-2">
+            <input className={champ} inputMode="numeric" placeholder={t("jour")} value={jour} onChange={(e) => setJour(e.target.value)} />
+            <input className={champ} inputMode="numeric" placeholder={t("mois")} value={mois} onChange={(e) => setMois(e.target.value)} />
+            <input className={champ} inputMode="numeric" placeholder={t("annee")} value={annee} onChange={(e) => setAnnee(e.target.value)} />
+          </div>
 
-      <button
-        type="button"
-        onClick={() => void consulter()}
-        disabled={enCours || !naissanceOk || reference.trim() === ""}
-        className="mt-4 min-h-[44px] w-full rounded-xl bg-accent px-4 text-sm font-semibold text-white disabled:opacity-50"
-      >
-        {t("voir")}
-      </button>
+          <button
+            type="button"
+            onClick={() => void consulter()}
+            disabled={enCours || !naissanceOk || reference.trim() === ""}
+            className="mt-4 min-h-[44px] w-full rounded-xl bg-accent px-4 text-sm font-semibold text-white disabled:opacity-50"
+          >
+            {t("voir")}
+          </button>
 
-      <p className="mt-4 text-xs text-text-muted">{t("retrouverAide")}</p>
-      <input
-        className={champ}
-        value={identifiant}
-        onChange={(e) => setIdentifiant(e.target.value)}
-        placeholder={t("identifiant")}
-        autoComplete="off"
-      />
-      <button
-        type="button"
-        onClick={() => void retrouver()}
-        disabled={enCours || !naissanceOk || identifiant.trim() === ""}
-        className="mt-2 min-h-[40px] text-sm text-accent underline-offset-4 hover:underline disabled:opacity-50"
-      >
-        {t("retrouver")}
-      </button>
+          <p className="mt-4 text-xs text-text-muted">{t("retrouverAide")}</p>
+          <input
+            className={champ}
+            value={identifiant}
+            onChange={(e) => setIdentifiant(e.target.value)}
+            placeholder={t("identifiant")}
+            autoComplete="off"
+          />
+          <button
+            type="button"
+            onClick={() => void retrouver()}
+            disabled={enCours || !naissanceOk || identifiant.trim() === ""}
+            className="mt-2 min-h-[40px] text-sm text-accent underline-offset-4 hover:underline disabled:opacity-50"
+          >
+            {t("retrouver")}
+          </button>
+        </>
+      )}
 
       {erreur !== null && (
         <p className="mt-4 text-sm text-text-secondary">

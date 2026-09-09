@@ -84,6 +84,7 @@ const ECRANS: Partial<Record<Classement["genre"], RegleEcran<CleEtat>>> = {
 export function ReinscriptionFlow({
   etablissement,
   onAboutir,
+  onChoisirCreneau,
 }: {
   etablissement: EtablissementVisible;
   /**
@@ -95,6 +96,7 @@ export function ReinscriptionFlow({
    * autre demande » que cet écran propose déjà.
    */
   onAboutir?: (abouti: boolean) => void;
+  onChoisirCreneau?: (reference: string, dateNaissance: string) => void;
 }) {
   const t = useTranslations("reinscription");
   const locale = useLocale();
@@ -524,14 +526,15 @@ export function ReinscriptionFlow({
                   {t("succes.mail")}
                 </m.p>
               )}
-              {reference !== null && (
+              {reference !== null && onChoisirCreneau !== undefined && (
                 <m.p {...entree(6)} className="mt-4 text-center">
-                  <a
-                    href={`/inscription/universite/${etablissement.code}/rendez-vous?ref=${encodeURIComponent(reference)}`}
+                  <button
+                    type="button"
+                    onClick={() => onChoisirCreneau(reference, dateISO())}
                     className="inline-flex min-h-[44px] items-center rounded-xl bg-accent px-4 text-sm font-semibold text-white"
                   >
                     {t("succes.rdv")}
-                  </a>
+                  </button>
                 </m.p>
               )}
               <m.p

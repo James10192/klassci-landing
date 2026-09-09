@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { PortailHabillage } from "@/components/portail/portail-habillage";
 import { RendezVousFlow } from "@/components/portail/rendez-vous-flow";
+import { Link } from "@/i18n/navigation";
 import { routing, type Locale } from "@/i18n/routing";
 import { etablissementsOuverts } from "@/lib/portail/tenants";
 import { identiteEtablissement } from "@/lib/vitrine/etablissements";
@@ -51,9 +52,25 @@ export default async function RendezVousPage({
   }
 
   const identite = await identiteEtablissement(etablissement.code);
+  const t = await getTranslations({ locale, namespace: "inscription.rdv" });
 
   return (
-    <PortailHabillage locale={locale} etablissement={etablissement} identite={identite} dense>
+    <PortailHabillage
+      locale={locale}
+      etablissement={etablissement}
+      identite={identite}
+      dense
+      pied={
+        <p className="mt-4 text-center">
+          <Link
+            href={`/inscription/universite/${etablissement.code}`}
+            className="inline-flex min-h-[40px] items-center px-3 text-sm text-text-muted underline-offset-4 transition-colors duration-200 hover:text-text hover:underline"
+          >
+            {t("retour")}
+          </Link>
+        </p>
+      }
+    >
       <RendezVousFlow etablissement={etablissement} referenceInitiale={ref} />
     </PortailHabillage>
   );

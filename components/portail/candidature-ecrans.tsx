@@ -235,11 +235,13 @@ export function CandidatureTransmise({
   suiteDuParcours,
   reference,
   lienRendezVous,
+  onChoisirCreneau,
   creneau,
 }: {
   suiteDuParcours: string;
   reference?: string;
   lienRendezVous?: string;
+  onChoisirCreneau?: () => void;
   creneau?: CreneauAttribue | null;
 }) {
   const t = useTranslations("inscription");
@@ -285,11 +287,21 @@ export function CandidatureTransmise({
           {t("succes.mail")}
         </m.p>
       )}
-      {lienRendezVous !== undefined && (
+      {(onChoisirCreneau !== undefined || lienRendezVous !== undefined) && (
         <m.p {...entree(7)} className="mt-4 text-center">
-          <a href={lienRendezVous} className="inline-flex min-h-[44px] items-center rounded-xl bg-accent px-4 text-sm font-semibold text-white">
-            {t("succes.rdv")}
-          </a>
+          {onChoisirCreneau !== undefined ? (
+            <button
+              type="button"
+              onClick={onChoisirCreneau}
+              className="inline-flex min-h-[44px] items-center rounded-xl bg-accent px-4 text-sm font-semibold text-white"
+            >
+              {t("succes.rdv")}
+            </button>
+          ) : (
+            <a href={lienRendezVous} className="inline-flex min-h-[44px] items-center rounded-xl bg-accent px-4 text-sm font-semibold text-white">
+              {t("succes.rdv")}
+            </a>
+          )}
         </m.p>
       )}
       <m.p {...entree(6)} className="mt-4 rounded-xl bg-bg-alt p-3 text-pretty text-center text-xs leading-relaxed text-text-muted">

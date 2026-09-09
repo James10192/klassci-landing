@@ -65,6 +65,7 @@ export function CandidatureFlow({
   etablissement,
   saisie,
   onAboutir,
+  onChoisirCreneau,
 }: {
   etablissement: EtablissementVisible;
   /**
@@ -74,7 +75,8 @@ export function CandidatureFlow({
    * trompé de porte. Une fois la candidature transmise, ce bouton proposerait
    * d'annuler ce qui ne s'annule pas.
    */
-  onAboutir?: (abouti: boolean) => void;
+   onAboutir?: (abouti: boolean) => void;
+  onChoisirCreneau?: (reference: string, dateNaissance: string) => void;
   /**
    * La saisie, tenue par le composant du dessus.
    *
@@ -436,8 +438,8 @@ export function CandidatureFlow({
       <CandidatureTransmise
         suiteDuParcours={suiteDuParcours}
         reference={reference ?? undefined}
-        lienRendezVous={reference
-          ? `/inscription/universite/${etablissement.code}/rendez-vous?ref=${encodeURIComponent(reference)}`
+        onChoisirCreneau={reference && onChoisirCreneau
+          ? () => onChoisirCreneau(reference, `${form.annee}-${form.mois.padStart(2, "0")}-${form.jour.padStart(2, "0")}`)
           : undefined}
         creneau={creneau}
       />

@@ -63,6 +63,7 @@ export async function PortailHabillage({
   titre,
   sousTitre,
   dense,
+  pied,
   children,
 }: {
   locale: string;
@@ -72,6 +73,7 @@ export async function PortailHabillage({
   titre?: string;
   sousTitre?: string;
   dense?: boolean;
+  pied?: ReactNode;
   children: ReactNode;
 }) {
   const t = await getTranslations({ locale, namespace: "inscription" });
@@ -92,6 +94,7 @@ export async function PortailHabillage({
                 <BandeauIdentite identite={identite} libelle={etablissement.libelle} compact />
                 <div className="p-6 sm:p-8">{children}</div>
               </div>
+              {pied}
             ) : (
               <>
                 <header className="text-center">

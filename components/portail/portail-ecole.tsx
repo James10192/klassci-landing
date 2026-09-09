@@ -6,10 +6,11 @@ import { useState } from "react";
 
 import type { EtablissementVisible } from "@/lib/portail/tenants";
 
-import { Porte, RESSORT } from "./pieces";
+import { Carte, Porte, RESSORT } from "./pieces";
 import { FORMULAIRE_VIDE, type Formulaire } from "./candidature-champs";
 import { CandidatureFlow } from "./candidature-flow";
 import { ReinscriptionFlow } from "./reinscription-flow";
+import { RendezVousFlow } from "./rendez-vous-flow";
 
 /**
  * Le choix qui ouvre le portail d'une école : nouveau, ou déjà étudiant ?
@@ -49,6 +50,16 @@ export function PortailEcole({
   // déjà sa propre suite. Les deux parcours signalent donc leur aboutissement,
   // et le bouton disparaît — jusqu'à ce que l'un d'eux reparte de zéro.
   const [abouti, setAbouti] = useState(false);
+  const [vue, setVue] = useState<"form" | "rdv">("form");
+  const [rdvRef, setRdvRef] = useState<string | null>(null);
+  const [rdvNaissance, setRdvNaissance] = useState("");
+  const tRdv = useTranslations("inscription.rdv");
+
+  function ouvrirRdv(reference: string, dateNaissance: string) {
+    setRdvRef(reference);
+    setRdvNaissance(dateNaissance);
+    setVue("rdv");
+  }
 
   return (
     <div className="mx-auto w-full max-w-xl">
@@ -63,12 +74,12 @@ export function PortailEcole({
                 <Porte
                   titre={t("nouveau.titre")}
                   texte={t("nouveau.texte")}
-                  onClick={() => setParcours("nouveau")}
+                  onClick={() => { setVue("form"); setParcours("nouveau"); }}
                 />
                 <Porte
                   titre={t("ancien.titre")}
                   texte={t("ancien.texte")}
-                  onClick={() => setParcours("ancien")}
+                  onClick={() => { setVue("form"); setParcours("ancien"); }}
                 />
               </div>
             </div>
@@ -78,17 +89,36 @@ export function PortailEcole({
         {parcours !== "choix" && (
           <m.div key={parcours} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }} transition={RESSORT}>
-            {parcours === "nouveau" ? (
-              <CandidatureFlow
-                etablissement={etablissement}
-                saisie={{ form, setForm, consentement, setConsentement }}
-                onAboutir={setAbouti}
-              />
-            ) : (
-              <ReinscriptionFlow etablissement={etablissement} onAboutir={setAbouti} />
+            <div hidden={vue !== "form"}>
+              {parcours === "nouveau" ? (
+                <CandidatureFlow
+                  etablissement={etablissement}
+                  saisie={{ form, setForm, consentement, setConsentement }}
+                  onAboutir={setAbouti}
+                  onChoisirCreneau={ouvrirRdv}
+                />
+              ) : (
+                <ReinscriptionFlow
+                  etablissement={etablissement}
+                  onAboutir={setAbouti}
+                  onChoisirCreneau={ouvrirRdv}
+                />
+              )}
+            </div>
+
+            {vue === "rdv" && rdvRef !== null && (
+              <m.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={RESSORT}>
+                <Carte>
+                  <RendezVousFlow
+                    etablissement={etablissement}
+                    referenceInitiale={rdvRef}
+                    naissanceInitiale={rdvNaissance}
+                  />
+                </Carte>
+              </m.div>
             )}
 
-            {!abouti && (
+            {vue === "form" && !abouti && (
               <div className="mt-4 text-center">
                 <button
                   type="button"
@@ -96,6 +126,18 @@ export function PortailEcole({
                   className="min-h-[40px] px-3 text-sm text-text-muted underline-offset-4 transition-colors duration-200 hover:text-text hover:underline"
                 >
                   {t("retour")}
+                </button>
+              </div>
+            )}
+
+            {vue === "rdv" && (
+              <div className="mt-4 text-center">
+                <button
+                  type="button"
+                  onClick={() => setVue("form")}
+                  className="min-h-[40px] px-3 text-sm text-text-muted underline-offset-4 transition-colors duration-200 hover:text-text hover:underline"
+                >
+                  {tRdv("retour")}
                 </button>
               </div>
             )}

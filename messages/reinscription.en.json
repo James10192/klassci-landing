@@ -181,6 +181,7 @@
       "eyebrow": "Desk",
       "titre": "Appointment at the desk",
       "aide": "Pick a slot to complete your file on site. Keep your reference.",
+      "retour": "Back",
       "reference": "Reference",
       "jour": "Day",
       "mois": "Month",
