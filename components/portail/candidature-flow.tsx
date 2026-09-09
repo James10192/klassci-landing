@@ -15,7 +15,7 @@ import {
 } from "./candidature-champs";
 import {
   CandidatureTransmise,
-  lireCreneau,
+  chargerCreneau,
   type CreneauAttribue,
   EcranEtat,
   ecranDu,
@@ -405,8 +405,15 @@ export function CandidatureFlow({
       }
 
       setPhysiques((classement.corps.inscriptions_physiques as Physiques) ?? null);
-      setReference(typeof classement.corps.reference_publique === "string" ? classement.corps.reference_publique : null);
-      setCreneau(lireCreneau(classement.corps));
+      const referencePublique = typeof classement.corps.reference_publique === "string" ? classement.corps.reference_publique : null;
+      setReference(referencePublique);
+      if (referencePublique) {
+        setCreneau(await chargerCreneau(
+          etablissement.code,
+          referencePublique,
+          `${form.annee}-${form.mois.padStart(2, "0")}-${form.jour.padStart(2, "0")}`,
+        ));
+      }
       setEnvoye(true);
       // La candidature est partie : « Ce n'est pas mon cas » n'a plus de sens
       // sous cet écran, et repasser par l'autre porte ne l'annulerait pas.

@@ -17,7 +17,7 @@ import {
   entree,
 } from "./pieces";
 import type { Physiques } from "./candidature-echanges";
-import { lireCreneau, type CreneauAttribue } from "./candidature-ecrans";
+import { chargerCreneau, type CreneauAttribue } from "./candidature-ecrans";
 import { classer, ecranDe, type Classement, type RegleEcran } from "./reponses";
 
 /**
@@ -258,8 +258,11 @@ export function ReinscriptionFlow({
 
       if (payload.enregistre === true) {
         setPhysiques((payload.inscriptions_physiques as Physiques) ?? null);
-        setReference(typeof payload.reference_publique === "string" ? payload.reference_publique : null);
-        setCreneau(lireCreneau(payload as Record<string, unknown>));
+        const referencePublique = typeof payload.reference_publique === "string" ? payload.reference_publique : null;
+        setReference(referencePublique);
+        if (referencePublique) {
+          setCreneau(await chargerCreneau(etablissement.code, referencePublique, dateISO()));
+        }
         setEtape("succes");
         onAboutir?.(true);
         return;

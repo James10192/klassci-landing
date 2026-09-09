@@ -202,20 +202,33 @@ export type CreneauAttribue = {
   heure_fin: string;
 };
 
-export function lireCreneau(corps: Record<string, unknown>): CreneauAttribue | null {
-  const brut = corps.rendez_vous;
-  if (brut === null || typeof brut !== "object") {
+export async function chargerCreneau(
+  code: string,
+  reference: string,
+  dateNaissance: string,
+): Promise<CreneauAttribue | null> {
+  try {
+    const reponse = await fetch(`/api/rendez-vous/${code}/consulter`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ reference, date_naissance: dateNaissance }),
+    });
+    const corps = await reponse.json().catch(() => null);
+    const o = corps?.reservation;
+    if (corps?.trouve !== true || o === null || typeof o !== "object") {
+      return null;
+    }
+    if (typeof o.date !== "string" || typeof o.heure_debut !== "string") {
+      return null;
+    }
+    return {
+      date: o.date,
+      heure_debut: o.heure_debut,
+      heure_fin: typeof o.heure_fin === "string" ? o.heure_fin : "",
+    };
+  } catch {
     return null;
   }
-  const o = brut as Record<string, unknown>;
-  if (typeof o.date !== "string" || typeof o.heure_debut !== "string") {
-    return null;
-  }
-  return {
-    date: o.date,
-    heure_debut: o.heure_debut,
-    heure_fin: typeof o.heure_fin === "string" ? o.heure_fin : "",
-  };
 }
 
 export function CandidatureTransmise({
