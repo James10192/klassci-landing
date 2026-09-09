@@ -32,7 +32,9 @@
       "texte": "Your school will review it and get back to you.",
       "rappel": "Keep your student number: you will need it to follow up with the registrar.",
       "reference": "Your reference: {reference}",
-      "rdv": "Choose a time slot",
+      "creneau": "Your appointment: {jour} from {debut} to {fin}",
+      "mail": "An email with your appointment PDF has been sent to you.",
+      "rdv": "View or change my appointment",
       "action": "Make another request",
       "surPlace": "Your file is completed at the school: come in with your documents to finalise your re-enrolment and pay the fees.",
       "surPlaceOuvert": "On-site enrolment is open: come to the school with your documents to complete your file and pay the fees.",
@@ -171,7 +173,9 @@
       "surPlaceDate": "On-site enrolment starts on {date}. Come to the school from that date, with your documents, to complete your file and pay the fees.",
       "rappel": "No student number is issued at this stage: you will receive one when you actually enrol.",
       "reference": "Your reference: {reference}",
-      "rdv": "Choose a time slot"
+      "creneau": "Your appointment: {jour} from {debut} to {fin}",
+      "mail": "An email with your appointment PDF has been sent to you.",
+      "rdv": "View or change my appointment"
     },
     "rdv": {
       "titre": "Appointment at the desk",

@@ -196,14 +196,38 @@ export function EcranEtat({
  * rien, les pièces et le paiement se remettent sur place. Le texte est résolu
  * par le parcours, qui seul connaît la date que l'école a annoncée.
  */
+export type CreneauAttribue = {
+  date: string;
+  heure_debut: string;
+  heure_fin: string;
+};
+
+export function lireCreneau(corps: Record<string, unknown>): CreneauAttribue | null {
+  const brut = corps.rendez_vous;
+  if (brut === null || typeof brut !== "object") {
+    return null;
+  }
+  const o = brut as Record<string, unknown>;
+  if (typeof o.date !== "string" || typeof o.heure_debut !== "string") {
+    return null;
+  }
+  return {
+    date: o.date,
+    heure_debut: o.heure_debut,
+    heure_fin: typeof o.heure_fin === "string" ? o.heure_fin : "",
+  };
+}
+
 export function CandidatureTransmise({
   suiteDuParcours,
   reference,
   lienRendezVous,
+  creneau,
 }: {
   suiteDuParcours: string;
   reference?: string;
   lienRendezVous?: string;
+  creneau?: CreneauAttribue | null;
 }) {
   const t = useTranslations("inscription");
 
@@ -234,8 +258,22 @@ export function CandidatureTransmise({
           {t("succes.reference", { reference })}
         </m.p>
       )}
+      {creneau != null && creneau.date !== "" && (
+        <m.p {...entree(5)} className="mt-4 text-pretty text-center text-sm font-semibold tracking-wide">
+          {t("succes.creneau", {
+            jour: creneau.date,
+            debut: creneau.heure_debut,
+            fin: creneau.heure_fin,
+          })}
+        </m.p>
+      )}
+      {creneau != null && (
+        <m.p {...entree(6)} className="mt-2 text-pretty text-center text-sm leading-relaxed text-text-secondary">
+          {t("succes.mail")}
+        </m.p>
+      )}
       {lienRendezVous !== undefined && (
-        <m.p {...entree(5)} className="mt-4 text-center">
+        <m.p {...entree(7)} className="mt-4 text-center">
           <a href={lienRendezVous} className="inline-flex min-h-[44px] items-center rounded-xl bg-accent px-4 text-sm font-semibold text-white">
             {t("succes.rdv")}
           </a>

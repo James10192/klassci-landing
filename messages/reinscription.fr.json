@@ -32,7 +32,9 @@
       "texte": "Votre établissement l'examinera et reviendra vers vous.",
       "rappel": "Conservez votre matricule : il vous servira à suivre votre dossier auprès de la scolarité.",
       "reference": "Votre référence : {reference}",
-      "rdv": "Choisir un créneau",
+      "creneau": "Votre rendez-vous : {jour} de {debut} à {fin}",
+      "mail": "Un e-mail avec votre convocation (PDF) vous a été envoyé.",
+      "rdv": "Voir ou modifier mon rendez-vous",
       "action": "Faire une autre demande",
       "surPlace": "Votre dossier se termine à l'établissement : présentez-vous avec vos pièces pour finaliser votre réinscription et régler les frais.",
       "surPlaceOuvert": "Les inscriptions sur place sont ouvertes : rendez-vous à l'établissement avec vos pièces pour terminer votre dossier et régler les frais.",
@@ -171,7 +173,9 @@
       "surPlaceDate": "Les inscriptions sur place commencent le {date}. Présentez-vous à l'établissement à partir de cette date, avec vos pièces, pour terminer votre dossier et régler les frais.",
       "rappel": "Aucun matricule ne vous est attribué à ce stade : il vous sera donné au moment de votre inscription effective.",
       "reference": "Votre référence : {reference}",
-      "rdv": "Choisir un créneau"
+      "creneau": "Votre rendez-vous : {jour} de {debut} à {fin}",
+      "mail": "Un e-mail avec votre convocation (PDF) vous a été envoyé.",
+      "rdv": "Voir ou modifier mon rendez-vous"
     },
     "rdv": {
       "titre": "Rendez-vous au guichet",

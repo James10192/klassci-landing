@@ -17,6 +17,7 @@ import {
   entree,
 } from "./pieces";
 import type { Physiques } from "./candidature-echanges";
+import { lireCreneau, type CreneauAttribue } from "./candidature-ecrans";
 import { classer, ecranDe, type Classement, type RegleEcran } from "./reponses";
 
 /**
@@ -102,7 +103,7 @@ export function ReinscriptionFlow({
   const [etape, setEtape] = useState<Etape>("identification");
   const [physiques, setPhysiques] = useState<Physiques | null>(null);
   const [reference, setReference] = useState<string | null>(null);
-  const [rdvOuvert, setRdvOuvert] = useState(false);
+  const [creneau, setCreneau] = useState<CreneauAttribue | null>(null);
   const [matricule, setMatricule] = useState("");
   const [jour, setJour] = useState("");
   const [mois, setMois] = useState("");
@@ -258,7 +259,7 @@ export function ReinscriptionFlow({
       if (payload.enregistre === true) {
         setPhysiques((payload.inscriptions_physiques as Physiques) ?? null);
         setReference(typeof payload.reference_publique === "string" ? payload.reference_publique : null);
-        setRdvOuvert(payload.rdv_ouvert === true);
+        setCreneau(lireCreneau(payload as Record<string, unknown>));
         setEtape("succes");
         onAboutir?.(true);
         return;
@@ -506,8 +507,22 @@ export function ReinscriptionFlow({
                   {t("succes.reference", { reference })}
                 </m.p>
               )}
-              {rdvOuvert && reference !== null && (
-                <m.p {...entree(4)} className="mt-4 text-center">
+              {creneau !== null && creneau.date !== "" && (
+                <m.p {...entree(4)} className="mt-4 text-center text-sm font-semibold tracking-wide">
+                  {t("succes.creneau", {
+                    jour: creneau.date,
+                    debut: creneau.heure_debut,
+                    fin: creneau.heure_fin,
+                  })}
+                </m.p>
+              )}
+              {creneau !== null && (
+                <m.p {...entree(5)} className="mt-2 text-pretty text-center text-sm leading-relaxed text-text-secondary">
+                  {t("succes.mail")}
+                </m.p>
+              )}
+              {reference !== null && (
+                <m.p {...entree(6)} className="mt-4 text-center">
                   <a
                     href={`/inscription/universite/${etablissement.code}/rendez-vous?ref=${encodeURIComponent(reference)}`}
                     className="inline-flex min-h-[44px] items-center rounded-xl bg-accent px-4 text-sm font-semibold text-white"
