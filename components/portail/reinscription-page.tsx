@@ -1,15 +1,13 @@
 import { getTranslations } from "next-intl/server";
-import Link from "next/link";
 
 import { Footer } from "@/components/sections/footer";
 import type { EtablissementVisible } from "@/lib/portail/tenants";
 import type { EtablissementVitrine } from "@/lib/vitrine/etablissements";
-import { couleursBandeau, variablesEtablissement } from "@/lib/vitrine/couleurs";
 
 import { ListeEtablissements } from "./liste-etablissements";
-import { Marque } from "./marque-etablissement";
-import { ReinscriptionChrome } from "./reinscription-chrome";
 import { PortailEcole } from "./portail-ecole";
+import { PortailHabillage } from "./portail-habillage";
+import { ReinscriptionChrome } from "./reinscription-chrome";
 
 /**
  * L'habillage du portail : la barre du site, le parcours, le bloc de confiance,
@@ -49,60 +47,6 @@ type ProprietesReinscriptionPage = { locale: string } & (
     }
 );
 
-/**
- * Le bandeau d'identité, aux couleurs que l'école a réglées pour ses PDF.
- *
- * La couleur du texte n'est pas choisie ici : KLASSCI l'a calculée contre le
- * fond selon le contraste WCAG, et la recalculer de ce côté ferait diverger le
- * document imprimé et la page web.
- */
-function BandeauIdentite({
-  identite,
-  libelle,
-}: {
-  identite: EtablissementVitrine | null | undefined;
-  libelle: string;
-}) {
-  const nom = identite?.nom ?? libelle;
-
-  if (!identite) {
-    // Sans identité, on garde la pastille sobre d'origine : mieux vaut un
-    // rappel discret du nom qu'un bandeau aux couleurs de KLASSCI présenté
-    // comme celles de l'école.
-    return (
-      <p className="mt-5 inline-flex items-center rounded-full bg-accent-light px-3.5 py-1.5 text-sm font-medium text-accent">
-        {libelle}
-      </p>
-    );
-  }
-
-  // Le fond que l'école a réglé, sauf s'il est trop clair pour se distinguer
-  // du fond de page — auquel cas on se replie sur la couleur d'identité de la
-  // page. La règle et ses raisons sont dans `couleursBandeau`, avec les deux
-  // défauts qui l'ont dictée ; elle y est vérifiée à chaque construction.
-  const { fond, encre } = couleursBandeau(identite.identite);
-
-  return (
-    <div
-      className="mx-auto mt-7 flex max-w-xl items-center gap-4 rounded-[20px] px-5 py-4 text-left"
-      style={{ backgroundColor: fond, color: encre }}
-    >
-      <Marque logo={identite.logo} nom={nom} taille="bandeau" />
-      <span className="min-w-0">
-        <span className="block truncate text-[15px] font-semibold leading-tight">{nom}</span>
-        {identite.identite.entete !== "" && (
-          <span className="mt-1 block truncate text-[13px] opacity-85">
-            {identite.identite.entete}
-          </span>
-        )}
-        {identite.identite.entete === "" && identite.ville !== "" && (
-          <span className="mt-1 block truncate text-[13px] opacity-85">{identite.ville}</span>
-        )}
-      </span>
-    </div>
-  );
-}
-
 export async function ReinscriptionPage({
   locale,
   etablissement,
@@ -110,30 +54,20 @@ export async function ReinscriptionPage({
   etablissements,
   identites,
 }: ProprietesReinscriptionPage) {
-  const t = await getTranslations({ locale, namespace: "inscription" });
+  if (etablissement) {
+    return (
+      <PortailHabillage locale={locale} etablissement={etablissement} identite={identite}>
+        <PortailEcole etablissement={etablissement} />
+      </PortailHabillage>
+    );
+  }
 
-  // Les commandes du formulaire prennent la couleur de l'école. Tout le portail
-  // est écrit avec les jetons `accent` : trois variables redéfinies ici le
-  // repeignent en entier, sans qu'aucun composant n'ait à savoir qu'une école
-  // a des couleurs.
-  const theme = identite ? variablesEtablissement(identite.identite.couleurPrincipale) : undefined;
+  const t = await getTranslations({ locale, namespace: "inscription" });
 
   return (
     <>
       <ReinscriptionChrome />
-
-      {/* pt-[57px] : la barre est fixe, le contenu commence dessous.
-          Le theme est pose sur `main`, et non sur le seul conteneur du
-          contenu : le pied de page tire son fond de `--footer-bg`, defini
-          comme `var(--accent)`. Hors du conteneur, il ne voyait pas la couleur
-          de l'ecole — une page entiere aux couleurs de l'ESBTP se terminait
-          par un aplat bleu KLASSCI, et la rupture se voyait plus que
-          l'habillage. */}
-      <main
-        className="min-h-screen bg-bg pt-[57px] text-text"
-        style={theme}
-        data-theme-etablissement={theme ? "" : undefined}
-      >
+      <main className="min-h-screen bg-bg pt-[57px] text-text">
         <div className="container py-14 sm:py-20">
           <div className="mx-auto max-w-xl">
             <header className="text-center">
@@ -146,21 +80,14 @@ export async function ReinscriptionPage({
               <p className="mx-auto mt-4 max-w-lg text-pretty text-[15px] leading-relaxed text-text-secondary">
                 {t("hero.subtitle")}
               </p>
-              {etablissement && (
-                <BandeauIdentite identite={identite} libelle={etablissement.libelle} />
-              )}
             </header>
 
             <div className="mt-10">
-              {etablissement ? (
-                <PortailEcole etablissement={etablissement} />
-              ) : (
-                <ChoixEtablissement
-                  locale={locale}
-                  etablissements={etablissements!}
-                  identites={identites ?? {}}
-                />
-              )}
+              <ChoixEtablissement
+                locale={locale}
+                etablissements={etablissements!}
+                identites={identites ?? {}}
+              />
             </div>
 
             <section className="mt-12 rounded-[20px] border border-border p-6">
@@ -181,7 +108,6 @@ export async function ReinscriptionPage({
             </section>
           </div>
         </div>
-
         <Footer />
       </main>
     </>

@@ -154,10 +154,7 @@ export function RendezVousFlow({
 
   return (
     <Carte>
-      <h1 className="text-balance text-xl font-semibold tracking-tight">{t("titre")}</h1>
-      <p className="mt-1.5 text-pretty text-sm text-text-secondary">{t("aide")}</p>
-
-      <label className="mt-5 block text-sm font-medium">
+      <label className="block text-sm font-medium">
         {t("reference")}
         <input className={champ} value={reference} onChange={(e) => setReference(e.target.value)} autoComplete="off" />
       </label>

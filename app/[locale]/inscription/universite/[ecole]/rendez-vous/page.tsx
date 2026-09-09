@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
+import { PortailHabillage } from "@/components/portail/portail-habillage";
 import { RendezVousFlow } from "@/components/portail/rendez-vous-flow";
 import { routing, type Locale } from "@/i18n/routing";
 import { etablissementsOuverts } from "@/lib/portail/tenants";
+import { identiteEtablissement } from "@/lib/vitrine/etablissements";
 import { buildUniverseMetadata } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
@@ -48,5 +50,19 @@ export default async function RendezVousPage({
     notFound();
   }
 
-  return <RendezVousFlow etablissement={etablissement} referenceInitiale={ref} />;
+  const identite = await identiteEtablissement(etablissement.code);
+  const t = await getTranslations({ locale, namespace: "inscription" });
+
+  return (
+    <PortailHabillage
+      locale={locale}
+      etablissement={etablissement}
+      identite={identite}
+      eyebrow={t("rdv.eyebrow")}
+      titre={t("rdv.titre")}
+      sousTitre={t("rdv.aide")}
+    >
+      <RendezVousFlow etablissement={etablissement} referenceInitiale={ref} />
+    </PortailHabillage>
+  );
 }

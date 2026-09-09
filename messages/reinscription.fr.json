@@ -178,6 +178,7 @@
       "rdv": "Voir ou modifier mon rendez-vous"
     },
     "rdv": {
+      "eyebrow": "Guichet",
       "titre": "Rendez-vous au guichet",
       "aide": "Choisissez un créneau pour finaliser votre dossier sur place. Conservez votre référence.",
       "reference": "Référence",

@@ -178,6 +178,7 @@
       "rdv": "View or change my appointment"
     },
     "rdv": {
+      "eyebrow": "Desk",
       "titre": "Appointment at the desk",
       "aide": "Pick a slot to complete your file on site. Keep your reference.",
       "reference": "Reference",
