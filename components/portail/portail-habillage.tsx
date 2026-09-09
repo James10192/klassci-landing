@@ -110,6 +110,7 @@ export async function PortailHabillage({
                   <BandeauIdentite identite={identite} libelle={etablissement.libelle} />
                 </header>
                 <div className="mt-10">{children}</div>
+                {pied}
                 <section className="mt-12 rounded-[20px] border border-border p-6">
                   <h2 className="text-sm font-semibold">{t("confiance.titre")}</h2>
                   <ul className="mt-3 space-y-2.5">

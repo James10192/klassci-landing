@@ -34,10 +34,12 @@ export function RendezVousFlow({
   etablissement,
   referenceInitiale,
   naissanceInitiale,
+  sansTitre,
 }: {
   etablissement: Ecole;
   referenceInitiale?: string;
   naissanceInitiale?: string;
+  sansTitre?: boolean;
 }) {
   const t = useTranslations("inscription.rdv");
   const naissanceConnue = decouperNaissance(naissanceInitiale);
@@ -173,8 +175,12 @@ export function RendezVousFlow({
 
   return (
     <>
-      <h2 className="text-lg font-semibold tracking-tight">{t("titre")}</h2>
-      <p className="mt-1 text-pretty text-sm text-text-secondary">{t("aide")}</p>
+      {!sansTitre && (
+        <>
+          <h2 className="text-lg font-semibold tracking-tight">{t("titre")}</h2>
+          <p className="mt-1 text-pretty text-sm text-text-secondary">{t("aide")}</p>
+        </>
+      )}
       {!connu && (
         <>
           <label className="mt-5 block text-sm font-medium">
@@ -239,7 +245,7 @@ export function RendezVousFlow({
       )}
 
       {reservation === null && (
-        <ul className="mt-6 space-y-2">
+        <ul className="mt-6 max-h-[min(20rem,45vh)] space-y-2 overflow-y-auto overscroll-contain pr-1">
           {creneaux.map((c) => (
             <li key={c.id} className="flex items-center justify-between gap-3 rounded-xl border border-border px-3 py-2">
               <span className="text-sm">

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { PortailHabillage } from "@/components/portail/portail-habillage";
+import { Carte } from "@/components/portail/pieces";
 import { RendezVousFlow } from "@/components/portail/rendez-vous-flow";
 import { Link } from "@/i18n/navigation";
 import { routing, type Locale } from "@/i18n/routing";
@@ -59,7 +60,9 @@ export default async function RendezVousPage({
       locale={locale}
       etablissement={etablissement}
       identite={identite}
-      dense
+      eyebrow={t("eyebrow")}
+      titre={t("titre")}
+      sousTitre={t("aide")}
       pied={
         <p className="mt-4 text-center">
           <Link
@@ -71,7 +74,9 @@ export default async function RendezVousPage({
         </p>
       }
     >
-      <RendezVousFlow etablissement={etablissement} referenceInitiale={ref} />
+      <Carte>
+        <RendezVousFlow etablissement={etablissement} referenceInitiale={ref} sansTitre />
+      </Carte>
     </PortailHabillage>
   );
 }
