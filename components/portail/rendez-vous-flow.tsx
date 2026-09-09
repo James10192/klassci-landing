@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 
-import { Carte, champ, dateNaissanceValide } from "./pieces";
+import { champ, dateNaissanceValide } from "./pieces";
 
 type Ecole = { code: string; libelle: string };
 
@@ -153,8 +153,10 @@ export function RendezVousFlow({
   }
 
   return (
-    <Carte>
-      <label className="block text-sm font-medium">
+    <>
+      <h2 className="text-lg font-semibold tracking-tight">{t("titre")}</h2>
+      <p className="mt-1 text-pretty text-sm text-text-secondary">{t("aide")}</p>
+      <label className="mt-5 block text-sm font-medium">
         {t("reference")}
         <input className={champ} value={reference} onChange={(e) => setReference(e.target.value)} autoComplete="off" />
       </label>
@@ -237,6 +239,6 @@ export function RendezVousFlow({
           {creneaux.length === 0 && <li className="text-sm text-text-muted">{t("aucun")}</li>}
         </ul>
       )}
-    </Carte>
+    </>
   );
 }

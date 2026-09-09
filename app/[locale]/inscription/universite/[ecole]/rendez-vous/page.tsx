@@ -51,17 +51,9 @@ export default async function RendezVousPage({
   }
 
   const identite = await identiteEtablissement(etablissement.code);
-  const t = await getTranslations({ locale, namespace: "inscription" });
 
   return (
-    <PortailHabillage
-      locale={locale}
-      etablissement={etablissement}
-      identite={identite}
-      eyebrow={t("rdv.eyebrow")}
-      titre={t("rdv.titre")}
-      sousTitre={t("rdv.aide")}
-    >
+    <PortailHabillage locale={locale} etablissement={etablissement} identite={identite} dense>
       <RendezVousFlow etablissement={etablissement} referenceInitiale={ref} />
     </PortailHabillage>
   );
