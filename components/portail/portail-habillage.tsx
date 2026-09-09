@@ -90,11 +90,13 @@ export async function PortailHabillage({
         <div className={`container ${dense ? "py-8 sm:py-10" : "py-14 sm:py-20"}`}>
           <div className="mx-auto max-w-xl">
             {dense ? (
-              <div className="overflow-hidden rounded-[20px] bg-bg-card shadow-[0_1px_2px_rgba(16,24,40,0.04),0_4px_12px_rgba(16,24,40,0.04),0_16px_40px_-12px_rgba(16,24,40,0.10)]">
-                <BandeauIdentite identite={identite} libelle={etablissement.libelle} compact />
-                <div className="p-6 sm:p-8">{children}</div>
-              </div>
-              {pied}
+              <>
+                <div className="overflow-hidden rounded-[20px] bg-bg-card shadow-[0_1px_2px_rgba(16,24,40,0.04),0_4px_12px_rgba(16,24,40,0.04),0_16px_40px_-12px_rgba(16,24,40,0.10)]">
+                  <BandeauIdentite identite={identite} libelle={etablissement.libelle} compact />
+                  <div className="p-6 sm:p-8">{children}</div>
+                </div>
+                {pied}
+              </>
             ) : (
               <>
                 <header className="text-center">
