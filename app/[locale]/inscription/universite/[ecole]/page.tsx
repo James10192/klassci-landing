@@ -4,14 +4,24 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { ReinscriptionPage } from "@/components/portail/reinscription-page";
 import { routing, type Locale } from "@/i18n/routing";
-import { etablissementsOuverts } from "@/lib/portail/tenants";
+import { etablissementServi } from "@/lib/portail/tenants";
 import { identiteEtablissement } from "@/lib/vitrine/etablissements";
 import { buildUniverseMetadata } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
+/**
+ * La page d'une école se fonde sur les écoles SERVIES, pas sur celles que le
+ * sélecteur propose.
+ *
+ * Elle lisait la liste du sélecteur, qui écarte l'instance de démonstration —
+ * dont le module promet pourtant qu'elle « reste adressable par son URL
+ * directe ». Son lien rendait donc 404. Le même piège frapperait chaque école
+ * servie mais volontairement non proposée : ne plus offrir quelque chose n'est
+ * pas le retirer à qui vient le chercher.
+ */
 function trouver(code: string) {
-  return etablissementsOuverts().find((etablissement) => etablissement.code === code.toLowerCase());
+  return etablissementServi(code) ?? undefined;
 }
 
 export async function generateMetadata({

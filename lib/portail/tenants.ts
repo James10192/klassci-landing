@@ -60,6 +60,36 @@ type EtablissementInterne = EtablissementPortail & { secret: string };
 const LONGUEUR_MINIMALE_SECRET = 32;
 
 /**
+ * Les écoles servies mais **non proposées** dans le sélecteur.
+ *
+ * Une notion distincte de l'instance de démonstration, et il faut le dire parce
+ * que les deux aboutissent au même effet visible. `presentation` est écartée
+ * parce que **ce n'est pas une école** : elle n'a rien à faire non plus sur le
+ * mur de logos de l'accueil, et c'est `INSTANCES_DEMONSTRATION` qui s'en charge,
+ * pour les deux surfaces à la fois.
+ *
+ * Ici, il s'agit d'écoles bien réelles, bien clientes, qui doivent continuer
+ * de figurer parmi « nos établissements » — mais que klassci.com ne propose pas
+ * aux familles dans son sélecteur d'inscription. Les ranger parmi les
+ * démonstrations les ferait disparaître des deux endroits, et mentirait sur la
+ * raison.
+ *
+ * La décision est celle de klassci.com, pas celle de l'école : elle vit donc
+ * dans la configuration de klassci.com. Vide par défaut — on ne cache personne
+ * sans l'avoir demandé.
+ *
+ * L'école reste **adressable** par son lien direct. C'est la même règle que
+ * pour la démonstration : ne plus proposer quelque chose n'est pas le retirer à
+ * qui vient le chercher.
+ */
+function codesNonProposes(): string[] {
+  return (process.env.PORTAIL_NON_PROPOSES ?? "")
+    .split(",")
+    .map((code) => code.trim().toLowerCase())
+    .filter((code) => code !== "");
+}
+
+/**
  * Le code d'établissement sert de segment d'URL et de suffixe de variable
  * d'environnement. On le restreint volontairement à ce que ces deux usages
  * acceptent sans échappement : minuscules, chiffres, tirets.
@@ -77,35 +107,30 @@ function libelleParDefaut(code: string): string {
     .join(" ");
 }
 
-function lire(code: string): EtablissementInterne | null {
+function lire(code: string, rejets: string[]): EtablissementInterne | null {
   if (!CODE_VALIDE.test(code)) {
-    console.warn(
-      `[portail] Code d'etablissement ignore, format invalide : ${code}`,
-    );
+    rejets.push(`${code} (code de format invalide)`);
     return null;
   }
 
   const suffixe = suffixeEnv(code);
   const secret = process.env[`REINSCRIPTION_SECRET_${suffixe}`];
 
+  // Une école déclarée mais pas servie est une erreur de configuration, pas un
+  // choix : la taire afficherait l'école au visiteur pour lui rendre une erreur
+  // au premier envoi. Les motifs sont rassemblés et dits en UNE ligne par
+  // `tous()` — une école manquante se remarque par ce qui ne s'affiche pas,
+  // c'est-à-dire par rien, et un avertissement noyé parmi d'autres ne se
+  // remarque pas davantage.
   if (typeof secret !== "string" || secret.length < LONGUEUR_MINIMALE_SECRET) {
-    // Volontairement bruyant : une école listée sans secret utilisable est une
-    // erreur de configuration, pas un choix. La taire afficherait l'école au
-    // visiteur pour lui rendre une erreur au premier envoi.
-    console.warn(
-      `[portail] REINSCRIPTION_SECRET_${suffixe} absent ou trop court, ` +
-        `l'etablissement ${code} n'est pas servi.`,
-    );
+    rejets.push(`${code} (REINSCRIPTION_SECRET_${suffixe} absent ou de moins de ${LONGUEUR_MINIMALE_SECRET} caractères)`);
     return null;
   }
 
   const base = process.env[`REINSCRIPTION_BASE_${suffixe}`];
 
   if (typeof base !== "string" || !base.startsWith("https://")) {
-    console.warn(
-      `[portail] REINSCRIPTION_BASE_${suffixe} absent ou non https, ` +
-        `l'etablissement ${code} n'est pas servi.`,
-    );
+    rejets.push(`${code} (REINSCRIPTION_BASE_${suffixe} absent ou non https)`);
     return null;
   }
 
@@ -117,15 +142,33 @@ function lire(code: string): EtablissementInterne | null {
   };
 }
 
-function tous(): EtablissementInterne[] {
-  const liste = process.env.REINSCRIPTION_TENANTS ?? "";
+let rejetsDejaDits = false;
 
-  return liste
+function tous(): EtablissementInterne[] {
+  const declares = (process.env.REINSCRIPTION_TENANTS ?? "")
     .split(",")
     .map((code) => code.trim().toLowerCase())
-    .filter((code) => code !== "")
-    .map(lire)
+    .filter((code) => code !== "");
+
+  const rejets: string[] = [];
+
+  const servis = declares
+    .map((code) => lire(code, rejets))
     .filter((etablissement): etablissement is EtablissementInterne => etablissement !== null);
+
+  // Une fois par processus. `tous()` est appelé à chaque rendu, et par deux
+  // chemins différents : répéter l'avertissement à chaque requête le noierait
+  // exactement comme le faisaient les avertissements dispersés d'avant.
+  if (rejets.length > 0 && !rejetsDejaDits) {
+    rejetsDejaDits = true;
+    console.warn(
+      `[portail] ${rejets.length} etablissement(s) declare(s) dans REINSCRIPTION_TENANTS ` +
+        `mais NON SERVIS : ${rejets.join(", ")}. ` +
+        `Servis : ${servis.map((e) => e.code).join(", ") || "aucun"}.`,
+    );
+  }
+
+  return servis;
 }
 
 /**
@@ -145,8 +188,29 @@ export function etablissementsOuverts(): EtablissementVisible[] {
     // laissé par la dernière démonstration, et une famille pouvait y déposer un
     // dossier.
     .filter(({ code }) => !estDemonstration(code))
+    .filter(({ code }) => !codesNonProposes().includes(code))
     .map(({ code, libelle }) => ({ code, libelle }))
     .sort((a, b) => a.libelle.localeCompare(b.libelle, "fr"));
+}
+
+/**
+ * Un établissement par son code, s'il est servi — proposé ou non.
+ *
+ * La page d'une école ne doit PAS se fonder sur la liste du sélecteur. Elle le
+ * faisait, et l'instance de démonstration en payait déjà le prix : son module
+ * promet qu'elle « reste adressable par son URL directe », et son lien rendait
+ * pourtant 404. Le même piège aurait frappé chaque école non proposée.
+ *
+ * Ne rien rendre pour une école qui n'est pas servie reste le bon
+ * comportement : la page répond alors 404, et rien ne confirme à qui devine des
+ * codes dans l'URL qu'un établissement est client de KLASSCI.
+ */
+export function etablissementServi(code: string): EtablissementVisible | null {
+  const etablissement = etablissementAvecSecret(code);
+
+  return etablissement === null
+    ? null
+    : { code: etablissement.code, libelle: etablissement.libelle };
 }
 
 /**
