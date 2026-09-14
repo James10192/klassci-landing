@@ -52,3 +52,28 @@ export function codesDemonstration(): string[] {
 export function estDemonstration(code: string): boolean {
   return codesDemonstration().includes(code.trim().toLowerCase());
 }
+
+/**
+ * La démonstration est-elle délibérément ouverte à la liste d'inscription ?
+ *
+ * Deux besoins opposés, qu'une seule variable ne pouvait pas servir. Le mur
+ * d'accueil présente des écoles clientes : une instance de démonstration n'y a
+ * jamais sa place, quoi qu'il arrive. La liste d'inscription, elle, doit
+ * pouvoir l'accueillir le temps d'une présentation commerciale — c'est le
+ * parcours qu'on montre à un directeur.
+ *
+ * D'où cet interrupteur séparé. Il n'ouvre QUE la liste d'inscription.
+ * `codesDemonstration()` continue de tenir le mur à l'écart sans condition.
+ *
+ * Absent, il vaut « fermé » : le réglage dont l'oubli publie quelque chose de
+ * faux est un réglage mal choisi.
+ */
+export function demonstrationOuverteAuPublic(): boolean {
+  const declare = process.env.DEMONSTRATION_INSCRIPTION_OUVERTE;
+
+  if (declare === undefined) {
+    return false;
+  }
+
+  return ["1", "true", "oui", "on"].includes(declare.trim().toLowerCase());
+}

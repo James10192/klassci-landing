@@ -1,6 +1,9 @@
 import "server-only";
 
-import { estDemonstration } from "../instances-demonstration.ts";
+import {
+  demonstrationOuverteAuPublic,
+  estDemonstration,
+} from "../instances-demonstration.ts";
 
 /**
  * Les établissements joignables depuis klassci.com.
@@ -52,7 +55,15 @@ type EtablissementPortail = {
  * page souvent servie en 2G, et une adresse interne qui n'a aucune raison de
  * circuler.
  */
-export type EtablissementVisible = Pick<EtablissementPortail, "code" | "libelle">;
+export type EtablissementVisible = Pick<EtablissementPortail, "code" | "libelle"> & {
+  /**
+   * Cette entrée est-elle une instance de démonstration ouverte au public ?
+   *
+   * Le drapeau voyage jusqu'à l'écran parce que le visiteur doit le savoir :
+   * un dossier déposé là n'arrive dans aucune école.
+   */
+  demonstration: boolean;
+};
 
 /** Le secret ne quitte jamais le serveur, donc jamais ce module. */
 type EtablissementInterne = EtablissementPortail & { secret: string };
@@ -138,14 +149,19 @@ function tous(): EtablissementInterne[] {
  * appelant : ainsi aucun appelant ne peut la laisser filer, il ne l'a pas.
  */
 export function etablissementsOuverts(): EtablissementVisible[] {
+  // Écartée par défaut : elle s'affichait ici entre des écoles réelles, sous le
+  // nom laissé par la dernière démonstration, et une famille pouvait y déposer
+  // l'état civil de son enfant. Elle n'entre que si on l'a délibérément ouverte
+  // — le temps d'une présentation — et elle arrive alors marquée comme telle.
+  const ouverte = demonstrationOuverteAuPublic();
+
   return tous()
-    // L'instance de démonstration reste servie — son URL directe fonctionne,
-    // une démonstration du parcours doit rester possible — mais elle n'est
-    // plus PROPOSÉE. Elle s'affichait ici entre des écoles réelles, sous le nom
-    // laissé par la dernière démonstration, et une famille pouvait y déposer un
-    // dossier.
-    .filter(({ code }) => !estDemonstration(code))
-    .map(({ code, libelle }) => ({ code, libelle }))
+    .filter(({ code }) => ouverte || !estDemonstration(code))
+    .map(({ code, libelle }) => ({
+      code,
+      libelle,
+      demonstration: estDemonstration(code),
+    }))
     .sort((a, b) => a.libelle.localeCompare(b.libelle, "fr"));
 }
 

@@ -275,6 +275,7 @@
     "etablissement": {
       "title": "Choisissez votre établissement",
       "aide": "Sélectionnez l'établissement où vous souhaitez vous inscrire ou vous réinscrire.",
+      "demonstration": "Démonstration",
       "aucun": {
         "titre": "Aucun établissement disponible",
         "texte": "Aucun établissement n'a encore ouvert ses inscriptions en ligne. Rapprochez-vous directement du vôtre."

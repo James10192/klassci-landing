@@ -238,6 +238,9 @@ function identite(surcharges = {}) {
  */
 function registre(codes, reponses, exclus = "") {
   process.env.REINSCRIPTION_TENANTS = codes.join(",");
+  // L'interrupteur d'ouverture est remis a zero a chaque registre : un test qui
+  // l'allume ne doit pas contaminer le suivant.
+  delete process.env.DEMONSTRATION_INSCRIPTION_OUVERTE;
 
   // `null` : la variable n'est pas posée du tout, ce qui n'est pas la même
   // chose que posée vide — c'est le cas qui a publié « AZERTY ».
@@ -493,13 +496,24 @@ verifier("l'instance de démonstration n'est pas proposée à l'inscription", as
   assert.deepEqual(ouverts, ["esbtp-yakro"]);
 });
 
-verifier("… mais elle reste joignable par son adresse directe", async () => {
+verifier("… fermée, sa page rend 404 — seule la signature la résout encore", async () => {
   registre(["presentation", "esbtp-yakro"], {}, null);
 
-  // Une démonstration du parcours d'inscription doit rester possible. Ce qui
-  // est retiré, c'est la PROPOSITION à quelqu'un qui n'est pas venu la
-  // chercher, pas l'accès de qui a le lien.
-  assert.notEqual(etablissementAvecSecret("presentation"), null);
+  // Ce contrôle s'appelait « elle reste joignable par son adresse directe », et
+  // c'était faux : la page d'une école résout son code via `etablissementsOuverts()`,
+  // la MÊME liste filtrée. Fermée, `/fr/inscription/universite/presentation`
+  // rend 404. Seul le registre de signature la résout encore, ce dont les
+  // routes d'API ont besoin. Pour montrer le parcours, il faut l'ouvrir.
+  assert.equal(
+    etablissementsOuverts().find((e) => e.code === "presentation"),
+    undefined,
+    "la page ne la trouve pas : elle rend 404",
+  );
+  assert.notEqual(
+    etablissementAvecSecret("presentation"),
+    null,
+    "le registre de signature la résout toujours",
+  );
 });
 
 verifier("poser la liste vide inclut délibérément la démonstration", async () => {
@@ -509,6 +523,50 @@ verifier("poser la liste vide inclut délibérément la démonstration", async (
     etablissementsOuverts().map((e) => e.code).sort(),
     ["esbtp-yakro", "presentation"],
   );
+});
+
+verifier("l'interrupteur ouvre la démonstration à la liste d'inscription", async () => {
+  registre(["presentation", "esbtp-yakro"], {}, null);
+  process.env.DEMONSTRATION_INSCRIPTION_OUVERTE = "1";
+
+  const ouverts = etablissementsOuverts();
+
+  assert.deepEqual(
+    ouverts.map((e) => e.code).sort(),
+    ["esbtp-yakro", "presentation"],
+  );
+
+  const demo = ouverts.find((e) => e.code === "presentation");
+
+  assert.equal(demo.demonstration, true, "elle arrive marquée comme démonstration");
+  assert.equal(
+    ouverts.find((e) => e.code === "esbtp-yakro").demonstration,
+    false,
+    "une école réelle ne l'est pas",
+  );
+});
+
+verifier("… mais l'interrupteur ne la remet PAS sur le mur d'accueil", async () => {
+  // C'est tout l'objet de la séparation : le mur présente des écoles clientes,
+  // la liste d'inscription sert un parcours qu'on montre. Une seule variable
+  // pour les deux avait fait afficher « AZERTY » entre des écoles réelles.
+  registre(
+    ["presentation", "esbtp-yakro"],
+    { presentation: identite({ nom: "AZERTY" }), "esbtp-yakro": identite() },
+    null,
+  );
+  process.env.DEMONSTRATION_INSCRIPTION_OUVERTE = "1";
+
+  const servies = await etablissementsVitrine();
+
+  assert.deepEqual(servies.map((e) => e.code), ["esbtp-yakro"]);
+});
+
+verifier("une valeur qui n'est pas un oui franc laisse la démonstration fermée", async () => {
+  registre(["presentation", "esbtp-yakro"], {}, null);
+  process.env.DEMONSTRATION_INSCRIPTION_OUVERTE = "peut-etre";
+
+  assert.deepEqual(etablissementsOuverts().map((e) => e.code), ["esbtp-yakro"]);
 });
 
 for (const [nom, corps] of verifs) {

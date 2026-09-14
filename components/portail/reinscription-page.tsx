@@ -156,9 +156,16 @@ async function ChoixEtablissement({
             code: etablissement.code,
             // Le nom réglé par l'école prime : c'est elle qui sait comment elle
             // s'appelle, et elle le corrige sans passer par nous.
-            nom: identite?.nom ?? etablissement.libelle,
-            ville: identite?.ville ?? "",
+            //
+            // Sauf pour une instance de démonstration : son nom est celui que la
+            // dernière séance y a laissé. Le libellé du registre est posé par
+            // l'exploitant et ne bouge pas — sa ville non plus n'a pas de sens.
+            nom: etablissement.demonstration
+              ? etablissement.libelle
+              : (identite?.nom ?? etablissement.libelle),
+            ville: etablissement.demonstration ? "" : (identite?.ville ?? ""),
             logo: identite?.logo ?? null,
+            demonstration: etablissement.demonstration,
           };
         })}
         libelles={{
@@ -168,6 +175,7 @@ async function ChoixEtablissement({
           resultats: t("recherche.resultats"),
           videTitre: t("recherche.vide.titre"),
           videTexte: t("recherche.vide.texte"),
+          demonstration: t("demonstration"),
         }}
       />
     </div>
