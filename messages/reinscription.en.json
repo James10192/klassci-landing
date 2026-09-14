@@ -275,6 +275,7 @@
     "etablissement": {
       "title": "Choose your school",
       "aide": "Select the school where you want to apply or re-enrol.",
+      "demonstration": "Demo",
       "aucun": {
         "titre": "No school available",
         "texte": "No school has opened online enrolment yet. Contact yours directly."

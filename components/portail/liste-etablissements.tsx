@@ -52,6 +52,12 @@ export type EntreeEtablissement = {
   nom: string;
   ville: string;
   logo: string | null;
+  /**
+   * Instance de démonstration ouverte au public le temps d'une présentation.
+   * Un dossier déposé là n'arrive dans aucune école : il faut le dire, et le
+   * dire dans la liste, pas une fois le formulaire rempli.
+   */
+  demonstration?: boolean;
 };
 
 export type LibellesRecherche = {
@@ -61,6 +67,7 @@ export type LibellesRecherche = {
   resultats: string;
   videTitre: string;
   videTexte: string;
+  demonstration: string;
 };
 
 /** À partir de combien d'écoles le champ de recherche apparaît. */
@@ -175,7 +182,14 @@ export function ListeEtablissements({
               >
                 <Marque logo={etablissement.logo} nom={etablissement.nom} taille="liste" />
                 <span className="min-w-0 flex-1">
-                  <span className="block truncate font-medium">{etablissement.nom}</span>
+                  <span className="flex min-w-0 items-center gap-2">
+                    <span className="truncate font-medium">{etablissement.nom}</span>
+                    {etablissement.demonstration === true && (
+                      <span className="shrink-0 rounded-md bg-amber-100 px-1.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-amber-800">
+                        {libelles.demonstration}
+                      </span>
+                    )}
+                  </span>
                   {etablissement.ville !== "" && (
                     <span className="mt-0.5 block truncate text-[13px] text-text-muted">
                       {etablissement.ville}
