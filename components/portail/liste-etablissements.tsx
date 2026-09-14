@@ -182,18 +182,20 @@ export function ListeEtablissements({
               >
                 <Marque logo={etablissement.logo} nom={etablissement.nom} taille="liste" />
                 <span className="min-w-0 flex-1">
-                  <span className="flex min-w-0 items-center gap-2">
-                    <span className="truncate font-medium">{etablissement.nom}</span>
-                    {etablissement.demonstration === true && (
-                      <span className="shrink-0 rounded-md bg-amber-100 px-1.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-amber-800">
-                        {libelles.demonstration}
-                      </span>
-                    )}
-                  </span>
-                  {etablissement.ville !== "" && (
-                    <span className="mt-0.5 block truncate text-[13px] text-text-muted">
-                      {etablissement.ville}
+                  <span className="block truncate font-medium">{etablissement.nom}</span>
+                  {/* L'étiquette prend la seconde ligne, là où une école réelle
+                      montre sa ville : côte à côte, un nom d'établissement un peu
+                      long se faisait tronquer. */}
+                  {etablissement.demonstration === true ? (
+                    <span className="mt-1 inline-block rounded-md bg-amber-100 px-1.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-amber-800">
+                      {libelles.demonstration}
                     </span>
+                  ) : (
+                    etablissement.ville !== "" && (
+                      <span className="mt-0.5 block truncate text-[13px] text-text-muted">
+                        {etablissement.ville}
+                      </span>
+                    )
                   )}
                 </span>
                 <svg
