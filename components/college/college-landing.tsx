@@ -72,7 +72,9 @@ function CollegeLogo({
         alt="KLASSCI"
         width={imageWidth}
         height={imageHeight}
-        sizes={`${imageWidth}px`}
+        // Pas de `sizes` : `width` est deja la taille d'affichage (elle est
+        // reprise telle quelle dans `style` juste dessous). Next en tire 1x et
+        // 2x ; avec `sizes`, il publiait les quinze largeurs configurees.
         className="block object-contain"
         style={{ width: imageWidth, height: imageHeight }}
       />

@@ -128,9 +128,14 @@ export function SceneProduit({ etiquettes }: { etiquettes: EtiquettesScene }) {
           <Image
             src="/img/college/current-mobile-dashboard.png"
             alt=""
-            width={390}
-            height={844}
-            sizes="128px"
+            // La maquette est affichee dans un cadre de 128 sur 256 (`w-32
+            // h-64`). `width`/`height` decrivent donc cette taille-la, au
+            // rapport du fichier source (390x844), et non le fichier lui-meme :
+            // c'est ce couple que l'optimiseur prend pour cible. Sans `sizes`,
+            // il en tire deux variantes — 128 et 256 — au lieu des quinze
+            // largeurs configurees.
+            width={128}
+            height={277}
             className="h-full w-full rounded-[1rem] object-cover object-top"
           />
         </div>
