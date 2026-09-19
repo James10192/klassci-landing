@@ -12,8 +12,30 @@ const nextConfig = {
   productionBrowserSourceMaps: false,
 
   images: {
+    // AVIF est conserve malgre son cout : il pese 20 a 30 % de moins que WebP,
+    // et le visiteur vise ici est sur un telephone d'entree de gamme en 4G
+    // instable. Ce que coute le format se compte en transformations, ce que
+    // gagne l'octet se compte chez le visiteur — et depuis que les adresses de
+    // logos portent leur empreinte, la transformation ne se paie plus qu'une
+    // fois par version.
     formats: ["image/webp", "image/avif"],
-    minimumCacheTTL: 60,
+
+    // Trente et un jours, la duree recommandee par Vercel pour des images qui
+    // ne changent pas tous les mois.
+    //
+    // Cette valeur etait a 60 secondes, mais ce n'est pas elle qui faisait le
+    // degat : Next retient la PLUS GRANDE valeur entre celle-ci et l'en-tete
+    // `Cache-Control` de l'image amont. Les instances KLASSCI annoncent
+    // `max-age=3600` sur leur logo, donc chaque variante expirait toutes les
+    // heures et etait refacturee vingt-quatre fois par jour. Le quota mensuel
+    // de cinq mille transformations partait en quelques jours.
+    //
+    // Une duree longue n'est tenable que parce que le cache d'images de Vercel
+    // ne sait PAS s'invalider : l'adresse d'un logo porte desormais l'empreinte
+    // de son contenu (`?v=`, voir `lib/vitrine/etablissements.ts`). Elle change
+    // quand le logo change, jamais autrement. Sans ce suffixe, ce reglage
+    // servirait des logos peries pendant un mois.
+    minimumCacheTTL: 2_678_400,
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     remotePatterns: [

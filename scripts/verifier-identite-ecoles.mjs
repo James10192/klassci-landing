@@ -229,14 +229,24 @@ function identite(surcharges = {}) {
   };
 }
 
+/** Les en-têtes que rend un logo d'instance, et dont on tire son empreinte. */
+const LOGO_MODIFIE = "Fri, 30 Jan 2026 10:50:57 GMT";
+const LOGO_TAILLE = "11739";
+/** L'empreinte qui en découle : horodatage Unix, puis taille. */
+const LOGO_EMPREINTE = "1769770257-11739";
+
 /**
  * Installe un registre d'écoles et les réponses qu'elles rendent.
  *
  * `reponses` associe un code à un corps, à un statut, ou à une erreur — de quoi
  * jouer une instance à jour, une qui n'a pas encore reçu le déploiement, et une
  * qui ne répond pas du tout.
+ *
+ * `entetesLogo` remplace les en-têtes rendues par le logo lui-même. Laissé de
+ * côté, le logo annonce une date et une taille : c'est le cas courant, et
+ * l'empreinte qui suffixe son adresse en découle.
  */
-function registre(codes, reponses, exclus = "") {
+function registre(codes, reponses, exclus = "", entetesLogo = undefined) {
   process.env.REINSCRIPTION_TENANTS = codes.join(",");
   // L'interrupteur d'ouverture est remis a zero a chaque registre : un test qui
   // l'allume ne doit pas contaminer le suivant.
@@ -264,7 +274,8 @@ function registre(codes, reponses, exclus = "") {
   globalThis.fetch = async (url) => {
     appels.push(String(url));
 
-    const code = new URL(String(url)).hostname.split(".")[0];
+    const adresse = new URL(String(url));
+    const code = adresse.hostname.split(".")[0];
     const reponse = reponses[code];
 
     if (reponse === undefined || reponse instanceof Error) {
@@ -275,7 +286,29 @@ function registre(codes, reponses, exclus = "") {
       return { ok: false, status: reponse, json: async () => ({}) };
     }
 
-    return { ok: true, status: 200, json: async () => reponse };
+    // L'appel au logo lui-même : seules ses en-têtes comptent, ce sont elles
+    // qui donnent l'empreinte suffixée à son adresse. `entetesLogo` permet à
+    // un contrôle de simuler une instance qui n'en annonce aucune.
+    if (adresse.pathname.endsWith("/logo")) {
+      const entetes =
+        entetesLogo === undefined
+          ? { "last-modified": LOGO_MODIFIE, "content-length": LOGO_TAILLE }
+          : entetesLogo;
+
+      return {
+        ok: true,
+        status: 200,
+        headers: { get: (nom) => entetes[nom.toLowerCase()] ?? null },
+        json: async () => ({}),
+      };
+    }
+
+    return {
+      ok: true,
+      status: 200,
+      headers: { get: () => null },
+      json: async () => reponse,
+    };
   };
 
   return appels;
@@ -288,7 +321,10 @@ verifier("une école qui répond est servie avec son identité", async () => {
 
   assert.equal(ecole.nom, "ESBTP Yamoussoukro");
   assert.equal(ecole.ville, "Yamoussoukro");
-  assert.equal(ecole.logo, "https://esbtp-yakro.klassci.com/api/public/etablissement/logo");
+  assert.equal(
+    ecole.logo,
+    `https://esbtp-yakro.klassci.com/api/public/etablissement/logo?v=${LOGO_EMPREINTE}`,
+  );
   assert.equal(ecole.identite.couleurPrincipale, "#8b1d3f");
   assert.equal(ecole.identite.entete, "Ministère de l'Enseignement Supérieur");
 });
@@ -425,6 +461,76 @@ verifier("une école sans logo n'en reçoit pas un par accident", async () => {
   const [ecole] = await etablissementsVitrine();
 
   assert.equal(ecole.logo, null);
+});
+
+verifier("l'adresse d'un logo porte l'empreinte de son contenu", async () => {
+  // Sans ce suffixe, le cache d'images de Vercel — qui ne sait pas
+  // s'invalider — ne pourrait pas garder un logo plus longtemps que son
+  // en-tête ne le permet. Les instances annoncent une heure, donc chaque
+  // variante était refabriquée, et facturée, vingt-quatre fois par jour.
+  registre(["esbtp-yakro"], { "esbtp-yakro": identite() });
+
+  const [ecole] = await etablissementsVitrine();
+
+  assert.equal(new URL(ecole.logo).searchParams.get("v"), LOGO_EMPREINTE);
+});
+
+verifier("… et cette empreinte change quand le logo change", async () => {
+  // C'est toute la raison d'être du dispositif : garder longtemps sans jamais
+  // servir un logo périmé. Une empreinte qui ne bougerait pas rendrait le
+  // cache d'un mois dangereux.
+  registre(["esbtp-yakro"], { "esbtp-yakro": identite() });
+  const [avant] = await etablissementsVitrine();
+
+  registre(["esbtp-yakro"], { "esbtp-yakro": identite() }, "", {
+    "last-modified": "Sat, 22 Aug 2026 03:06:43 GMT",
+    "content-length": "40000",
+  });
+  const [apres] = await etablissementsVitrine();
+
+  assert.notEqual(avant.logo, apres.logo);
+});
+
+verifier("… et une taille identique ne suffit pas à la figer", async () => {
+  // `last-modified` seul raterait un remplacement qui garderait l'horodatage,
+  // `content-length` seul raterait un remplacement de même taille. Les deux
+  // ensemble ne ratent que la coïncidence des deux.
+  registre(["esbtp-yakro"], { "esbtp-yakro": identite() }, "", {
+    "last-modified": "Sat, 22 Aug 2026 03:06:43 GMT",
+    "content-length": LOGO_TAILLE,
+  });
+  const [ecole] = await etablissementsVitrine();
+
+  assert.notEqual(new URL(ecole.logo).searchParams.get("v"), LOGO_EMPREINTE);
+});
+
+verifier("une instance muette sur son logo borne le cache à la journée", async () => {
+  // Repli : sans en-tête de validation, on ne peut pas savoir si le logo a
+  // changé. Laisser l'adresse nue la figerait un mois entier ; le jour ramène
+  // ce risque à vingt-quatre heures, pour une transformation par jour — bien
+  // moins que les vingt-quatre que coûtait l'expiration horaire.
+  registre(["esbtp-yakro"], { "esbtp-yakro": identite() }, "", {});
+
+  const [ecole] = await etablissementsVitrine();
+  const version = new URL(ecole.logo).searchParams.get("v");
+
+  assert.equal(version, new Date().toISOString().slice(0, 10));
+});
+
+verifier("une école sans logo ne déclenche aucun appel d'empreinte", async () => {
+  // Une école qui n'a pas configuré de logo ne doit pas coûter un
+  // aller-retour de plus à chaque revalidation.
+  const appels = registre(["esbtp-yakro"], {
+    "esbtp-yakro": identite({ logo: { present: false, url: null } }),
+  });
+
+  await etablissementsVitrine();
+
+  assert.equal(
+    appels.filter((a) => a.endsWith("/logo")).length,
+    0,
+    "aucun appel ne doit viser le logo",
+  );
 });
 
 verifier("une base qui n'est pas en https n'est jamais appelée", async () => {

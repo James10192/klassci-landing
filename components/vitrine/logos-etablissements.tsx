@@ -99,7 +99,8 @@ function Marque({ vignette }: { vignette: Vignette }) {
         alt=""
         width={208}
         height={160}
-        sizes="208px"
+        // Pas de `sizes` : la tuile a une taille fixe. Present, il ferait
+        // publier les quinze largeurs configurees au lieu de deux (1x, 2x).
         loading="lazy"
         className="h-full w-full object-contain"
       />

@@ -200,6 +200,93 @@ function urlLogo(valeur: unknown, base: string): string | null {
   }
 }
 
+/**
+ * L'empreinte d'un logo — ce qui change quand le logo change.
+ *
+ * Elle existe pour une raison précise : le cache d'images de Vercel **ne sait
+ * pas s'invalider**. Tant que l'adresse d'un logo reste la même, la seule
+ * façon d'en obtenir une version fraîche est d'attendre son expiration — et
+ * donc de la refabriquer, à facturer, à chaque expiration. Les instances
+ * annoncent une heure : chaque variante de chaque logo était refaite vingt-
+ * quatre fois par jour, ce qui épuisait le quota mensuel en quelques jours.
+ *
+ * En suffixant l'adresse de cette empreinte, on inverse le problème : l'URL
+ * ne bouge que si le logo bouge. On peut alors la garder en cache un mois
+ * sans jamais servir un logo périmé.
+ *
+ * Deux en-têtes plutôt qu'un : `last-modified` rate un remplacement qui
+ * conserverait l'horodatage, `content-length` rate un remplacement de même
+ * taille. Ensemble, ils ne ratent que la coïncidence des deux.
+ *
+ * Une empreinte qui bougerait sans que le logo bouge rendrait ce dispositif
+ * pire que son absence — elle refabriquerait les variantes pour rien. Elle a
+ * donc été vérifiée : quatre appels successifs rendent la même valeur. La
+ * taille annoncée diffère en revanche entre deux CLIENTS (`curl` et `fetch`
+ * ne négocient pas l'encodage pareil) ; c'est sans effet ici, où c'est
+ * toujours le même runtime qui interroge.
+ *
+ * L'appel est un `GET`, alors qu'un `HEAD` suffirait à lire ces deux en-têtes.
+ * C'est délibéré : la page de la liste d'inscription est `force-dynamic`, donc
+ * sans mise en cache chaque visiteur déclencherait une requête vers CHAQUE
+ * instance. Or la documentation de Next ne garantit le cache de données que
+ * pour `GET` et `POST` ; elle ne dit rien de `HEAD`. Le corps téléchargé — de
+ * douze à deux cents kilo-octets, une fois par heure et par région — est un
+ * prix dérisoire à côté d'un aller-retour par visiteur.
+ */
+async function empreinteLogo(url: string): Promise<string | null> {
+  try {
+    const reponse = await fetch(url, {
+      signal: AbortSignal.timeout(DELAI_MAX_MS),
+      next: { revalidate: DUREE_REVALIDATION_S },
+    });
+
+    if (!reponse.ok) return null;
+
+    const modifie = reponse.headers.get("last-modified");
+    const taille = reponse.headers.get("content-length");
+
+    if (modifie === null && taille === null) return null;
+
+    const date = modifie === null ? 0 : Date.parse(modifie);
+    const horodatage = Number.isNaN(date) ? 0 : Math.floor(date / 1000);
+
+    return `${horodatage}-${taille ?? "0"}`;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Le jour courant, en repli d'empreinte.
+ *
+ * Quand l'instance ne répond pas à l'appel d'empreinte, on ne peut pas savoir
+ * si son logo a changé. Laisser l'adresse nue serait alors pire que le mal :
+ * avec un cache d'un mois, un logo remplacé resterait invisible un mois.
+ *
+ * Le jour borne ce risque à vingt-quatre heures, pour une transformation par
+ * variante et par jour — vingt-quatre fois moins que ce que coûtait l'heure
+ * d'expiration d'origine. C'est le repli le plus cher du dispositif, et il
+ * reste moins cher que la situation qu'il remplace.
+ */
+function jourCourant(): string {
+  return new Date().toISOString().slice(0, 10);
+}
+
+/**
+ * L'adresse du logo, suffixée de son empreinte.
+ *
+ * Le suffixe ne quitte jamais le domaine de l'école : `urlLogo` a déjà vérifié
+ * l'origine, et ajouter un paramètre ne la change pas.
+ */
+function logoVersionne(url: string | null, empreinte: string | null): string | null {
+  if (url === null) return null;
+
+  const adresse = new URL(url);
+  adresse.searchParams.set("v", empreinte ?? jourCourant());
+
+  return adresse.toString();
+}
+
 async function interroger(
   ecole: { code: string; base: string; libelle: string },
 ): Promise<EtablissementVitrine | null> {
@@ -221,6 +308,13 @@ async function interroger(
 
     const brut = (await reponse.json()) as ReponseIdentite;
 
+    const logo =
+      (brut.logo?.present ?? false) === true ? urlLogo(brut.logo?.url, ecole.base) : null;
+
+    // L'empreinte n'est demandée que s'il y a un logo : une école qui n'en a
+    // pas configuré ne doit pas coûter un aller-retour de plus.
+    const logoAVersion = logo === null ? null : logoVersionne(logo, await empreinteLogo(logo));
+
     return {
       code: ecole.code,
       // Le nom réglé par l'école prime sur le libellé du registre : c'est elle
@@ -229,7 +323,7 @@ async function interroger(
       nom: nomEcole(brut.nom, ecole.libelle),
       sigle: texte(brut.sigle),
       ville: texte(brut.ville),
-      logo: (brut.logo?.present ?? false) === true ? urlLogo(brut.logo?.url, ecole.base) : null,
+      logo: logoAVersion,
       identite: {
         couleurPrincipale: couleur(brut.identite_visuelle?.couleur_principale),
         bandeauFond: couleur(brut.identite_visuelle?.bandeau_fond),

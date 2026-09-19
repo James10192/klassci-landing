@@ -83,7 +83,10 @@ export function Marque({
         alt={nom}
         width={176}
         height={128}
-        sizes="176px"
+        // Pas de `sizes` : la tuile a une taille fixe. Present, il ferait
+        // publier les quinze largeurs configurees au lieu de deux (1x, 2x) —
+        // et ces logos-la sont distants, donc les plus chers du site.
+
         className="h-full w-full object-contain"
       />
     </span>
