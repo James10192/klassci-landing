@@ -105,8 +105,12 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      # `playwright-core`, pas `playwright` : le depot n'installe que le premier,
+      # a dessein — le paquet complet imposerait le telechargement de trois
+      # navigateurs a quiconque clone pour corriger une faute de frappe. Sa CLI
+      # sait neanmoins poser un navigateur, et c'est elle qu'il faut appeler.
       - name: Chromium
-        run: pnpm exec playwright install --with-deps chromium
+        run: pnpm exec playwright-core install --with-deps chromium
 
       - name: Construction
         run: pnpm build
