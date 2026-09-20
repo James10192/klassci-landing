@@ -86,6 +86,28 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
           posthog.init(CLE, {
             api_host: HOTE,
             ui_host: "https://us.posthog.com",
+            // RIEN n'est depose sur le terminal du visiteur : ni cookie, ni
+            // `localStorage`, ni `sessionStorage`. PostHog compte les visiteurs
+            // par une empreinte calculee sur SES serveurs, qui ne redescend
+            // jamais chez eux.
+            //
+            // Ce n'est pas un reglage de confort, c'est ce qui rend la mesure
+            // licite sans bandeau. Par defaut, `posthog-js` ecrit un cookie et
+            // du `localStorage` : un traceur d'audience non essentiel, que la
+            // loi ivoirienne 2013-450 comme le RGPD soumettent a un accord
+            // PREALABLE. Le signal « Do Not Track » lu plus haut est un
+            // opt-out — il ne vaut pas accord, et presque personne ne l'active.
+            // La mesure partait donc avant que le visiteur ait eu voix au
+            // chapitre.
+            //
+            // Le prix est assume : un meme visiteur revenu le lendemain n'est
+            // plus reconnu. On mesure des pages et des parcours, pas des
+            // personnes — c'est tout ce dont ce site a besoin.
+            //
+            // `identify()` et `alias()` sont a proscrire dans ce mode : ils
+            // rattacheraient un evenement a une personne nommee, ce que tout
+            // ceci vise precisement a eviter.
+            cookieless_mode: "always",
             // Les vues de page sont emises par `SuiviDePage`, qui connait la
             // langue et le chemin applicatif.
             capture_pageview: false,
