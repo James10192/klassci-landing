@@ -21,7 +21,8 @@
     "verifier:couleurs:prod": "node --experimental-strip-types scripts/verifier-couleurs-prod.mjs",
     "verifier:citations": "node scripts/verifier-citations.mjs",
     "verifier:navigation": "node scripts/verifier-navigation.mjs",
-    "verifier:traceurs": "node scripts/verifier-traceurs.mjs"
+    "verifier:traceurs": "node scripts/verifier-traceurs.mjs",
+    "verifier:accessibilite": "node scripts/verifier-accessibilite.mjs"
   },
   "dependencies": {
     "@types/mdx": "^2.0.13",
@@ -45,6 +46,7 @@
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "autoprefixer": "^10.4.20",
+    "axe-core": "^4.13.0",
     "eslint": "^9.18.0",
     "eslint-config-next": "14.2.16",
     "playwright-core": "^1.62.1",
