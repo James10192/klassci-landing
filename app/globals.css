@@ -67,7 +67,21 @@ html.dark {
 
   --text: #1a1a1a;
   --text-secondary: #3a3d43;
-  --text-muted: #8a8a8a;
+  /* #8a8a8a ne passait pas : 3,45 contre le blanc et 3,14 contre le fond crème,
+     là où la WCAG AA exige 4,5. Mesuré par axe-core sur six éléments de
+     l'accueil et des pages institutionnelles.
+
+     Le même constat avait déjà été fait pour la barre latérale de la
+     documentation — voir `--fd-muted-foreground` plus haut, « was too pale at
+     #8a8a8a, sidebar items unreadable ». La décision était donc déjà prise ;
+     elle n'avait simplement pas été reportée ici.
+
+     La couleur doit tenir contre les TROIS fonds du thème clair, pas deux :
+     #6e6e6e passait le blanc (5,10) et le crème (4,64) mais échouait #edeae4
+     (4,25), le fond des en-têtes de tableau — que la mesure a rattrapé.
+
+     #686868 donne 5,57 sur blanc, 5,07 sur crème, 4,64 sur #edeae4. */
+  --text-muted: #686868;
 
   --accent: #0453cb;
   --accent-hover: #0340a0;
@@ -86,7 +100,11 @@ html.dark {
 
   --footer-bg: var(--accent);
   --footer-text: #ffffff;
-  --footer-link: rgba(255, 255, 255, 0.7);
+  /* 0.7 compose #b4cbef sur le bleu du pied de page : 4,09 contre les 4,5
+     exigés — vingt éléments, soit tous les liens et tout le texte du pied.
+     0.8 compose #cdddf5 et donne 4,91. L'écart se mesure, il ne se voit pas.
+     Le pied du thème sombre passe déjà (5,65) et ne bouge pas. */
+  --footer-link: rgba(255, 255, 255, 0.8);
   --footer-border: rgba(255, 255, 255, 0.15);
 
   --dot-color: rgba(0, 0, 0, 0.06);

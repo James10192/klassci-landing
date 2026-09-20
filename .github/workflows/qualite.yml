@@ -78,6 +78,54 @@ jobs:
       - name: Budget de performance
         run: node scripts/verifier-budget.mjs
 
+  # Ce que seul un vrai navigateur peut dire.
+  #
+  # Ces deux contrôles existaient déjà mais ne tournaient nulle part : ils
+  # demandent un site en marche, donc ils ne partaient qu'à la main, donc
+  # presque jamais. C'est exactement ce que le dépôt s'était reproché en
+  # branchant le contrôle des notes internes — un garde-fou qui ne tourne que
+  # sur la machine de celui qui l'a écrit ne garde rien.
+  #
+  # Ils ont leur propre tâche parce qu'ils coûtent une construction ET un
+  # serveur, et qu'un échec de l'un ne doit pas masquer l'autre.
+  navigateur:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Chromium
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Construction
+        run: pnpm build
+        env:
+          NEXT_PUBLIC_SITE_URL: https://www.klassci.com
+
+      - name: Demarrer le site
+        run: |
+          pnpm start -p 3100 &
+          # Attendre qu'il reponde plutot que de dormir un temps arbitraire :
+          # un `sleep` trop court rend seize echecs illisibles.
+          for i in $(seq 1 40); do
+            curl -sf -o /dev/null http://127.0.0.1:3100/fr && exit 0
+            sleep 2
+          done
+          echo "le site n'a pas repondu en 80 secondes"; exit 1
+
+      - name: Accessibilite (axe-core, WCAG 2.1 A et AA)
+        run: node scripts/verifier-accessibilite.mjs
+
+      - name: La navigation se comporte-t-elle comme prevu ?
+        run: node scripts/verifier-navigation.mjs
+
   # Séparé du portail : ce contrôle dépend du réseau et de sites tiers. Une
   # panne chez le CAMES ou un pare-feu qui refuse un centre de données ne doit
   # pas empêcher un déploiement. Il tourne donc seul, chaque lundi, et son
