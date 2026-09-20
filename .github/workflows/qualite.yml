@@ -61,6 +61,9 @@ jobs:
       - name: Aucune note interne servie au public
         run: node scripts/verifier-notes-internes.mjs
 
+      - name: Aucun traceur depose sans accord
+        run: node scripts/verifier-traceurs.mjs
+
       - name: Construction
         run: pnpm build
         env:

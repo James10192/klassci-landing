@@ -111,11 +111,28 @@ Where the applicant is a minor, consent rests with the person holding parental a
 
 ## Cookies and trackers
 
-**This site carries no advertising and uses no advertising tracker.**
+**This site carries no advertising, uses no advertising tracker, and sets no analytics cookie.**
 
-- The audience and performance statistics provided by the host **set no cookie** and rely on anonymised data.
-- Detailed audience measurement does use browser storage. It **does not start at all** if your browser sends the *Do Not Track* signal, or if you add `?noanalytics` to a page address. It is also loaded only once the page has rendered, so that it never slows down reading.
-- The **light or dark theme** and the **language** you choose are remembered by your browser, so they can be served back to you on your next visit.
+Here is the complete list of what is written to your browser. It contains only items the site needs to work, and none of them is used to follow you.
+
+| Name | Set by | What it does | Lifetime |
+|---|---|---|---|
+| `NEXT_LOCALE` | this site | Remember whether you read in French or English | the session |
+| `theme` | this site | Remember the light or dark theme you chose | until cleared |
+
+That is all. The second is only written if you change the theme.
+
+### What the audience measurement does not do
+
+We measure page traffic with **PostHog**, configured in cookieless mode: it **writes nothing** to your browser — no cookie, no local storage, no session storage. Traffic is counted through a fingerprint computed on PostHog's own servers, which never travels back to you.
+
+What this means in practice: we can see which pages are read and in what order, but we **cannot recognise you** from one visit to the next, nor match your browsing against another site.
+
+This measurement **does not start at all** if your browser sends the *Do Not Track* signal, or if you add `?noanalytics` to a page address. It is also loaded only once the page has rendered, so that it never slows down reading.
+
+The performance statistics provided by the host set no cookie either, and rely on anonymised data.
+
+**This is why the site shows you no consent banner**: prior agreement is required for non-essential trackers, and there is none here to authorise.
 
 ## Security
 

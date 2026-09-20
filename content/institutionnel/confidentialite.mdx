@@ -111,11 +111,28 @@ Lorsque le candidat est mineur, le consentement relève de la personne exerçant
 
 ## Cookies et traceurs
 
-**Ce site n'affiche aucune publicité et n'utilise aucun traceur publicitaire.**
+**Ce site n'affiche aucune publicité, n'utilise aucun traceur publicitaire, et ne dépose aucun cookie de mesure d'audience.**
 
-- Les statistiques d'audience et de performance fournies par l'hébergeur **ne déposent pas de cookie** et reposent sur des données anonymisées.
-- La mesure d'audience détaillée, elle, utilise le stockage du navigateur. Elle **ne démarre pas du tout** si votre navigateur envoie le signal *Do Not Track*, ni si vous ajoutez `?noanalytics` à l'adresse d'une page. Elle n'est par ailleurs chargée qu'une fois la page affichée, pour ne pas ralentir la lecture.
-- Le **thème clair ou sombre** et la **langue** que vous choisissez sont retenus par votre navigateur, afin de vous les resservir à la visite suivante.
+Voici la liste complète de ce qui est écrit dans votre navigateur. Elle ne comporte que des éléments nécessaires au fonctionnement du site, et aucun ne sert à vous suivre.
+
+| Nom | Déposé par | À quoi il sert | Durée |
+|---|---|---|---|
+| `NEXT_LOCALE` | ce site | Retenir si vous lisez en français ou en anglais | la session |
+| `theme` | ce site | Retenir le thème clair ou sombre que vous avez choisi | jusqu'à effacement |
+
+C'est tout. Le second n'est écrit que si vous changez de thème.
+
+### Ce que la mesure d'audience ne fait pas
+
+Nous mesurons la fréquentation des pages avec **PostHog**, configuré en mode sans cookie : il **n'écrit rien** dans votre navigateur — ni cookie, ni stockage local, ni stockage de session. La fréquentation est comptée par une empreinte calculée sur les serveurs de PostHog, qui ne redescend jamais chez vous.
+
+Ce que cela implique, concrètement : nous voyons quelles pages sont lues et dans quel ordre, **nous ne pouvons pas vous reconnaître** d'une visite à la suivante, ni recouper votre navigation avec un autre site.
+
+Cette mesure **ne démarre pas du tout** si votre navigateur envoie le signal *Do Not Track*, ni si vous ajoutez `?noanalytics` à l'adresse d'une page. Elle n'est par ailleurs chargée qu'une fois la page affichée, pour ne pas ralentir la lecture.
+
+Les statistiques de performance fournies par l'hébergeur ne déposent pas de cookie non plus et reposent sur des données anonymisées.
+
+**C'est pourquoi ce site ne vous présente pas de bandeau de consentement** : un accord préalable est exigé pour les traceurs non nécessaires, et il n'y en a aucun à autoriser.
 
 ## Sécurité
 
