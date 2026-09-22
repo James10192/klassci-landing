@@ -138,11 +138,11 @@ Les logos et couleurs affichés sur la page d'inscription d'une école ne sont a
 
 ### Références d'hébergement
 
-Instances des établissements : plage `2a00:7ee0:9::/48`, déclarée au registre RIPE sous la référence `FR-LWS-20150429`. Site vitrine : Vercel, région `iad1`.
+Instances des établissements : LWS, France. Site vitrine : Vercel, région `iad1`. Les plages d'adresses et leurs références au registre sont communiquées sur demande écrite, avec la localisation physique.
 
 ### Chiffrement des archives
 
-AES-256 en mode CBC, dérivation de clé PBKDF2 à cent mille itérations, sel aléatoire par archive.
+AES-256 en mode CBC, avec un sel aléatoire par archive. La clé de chaque archive est dérivée par PBKDF2 d'une clé maîtresse aléatoire d'au moins trente-deux caractères, conservée hors du serveur sauvegardé. C'est la longueur de cette clé, et non le nombre d'itérations de la dérivation, qui la met hors de portée d'un essai systématique.
 
 ## Une question ?
 
