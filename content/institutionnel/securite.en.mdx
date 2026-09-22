@@ -1,8 +1,8 @@
 ---
 title: "Security and data protection"
-description: "Where your institution's data lives, how it is backed up and verified, who can reach it, and what you take with you if you leave."
-dateMaj: "2026-09-03"
-resume: "This page is written for heads of institution and their IT providers. It covers hosting, data isolation, backups and their verification, access control, and the terms of reversibility. A technical appendix at the end gathers the material intended for technical review."
+description: "Where your institution's data lives, how it is backed up, who can reach it, and what you take with you if you leave."
+dateMaj: "2026-09-23"
+resume: "This page is written for heads of institution and their IT providers. It covers hosting, data isolation, backups, access control, and the terms of reversibility. A technical appendix at the end gathers the material intended for technical review."
 ---
 
 Entrusting a piece of software with your pupil records, the grades that decide whether a student moves up a year, and the money families pay means knowing where that data lives, who can read it, and what becomes of it if the relationship ends.
@@ -16,7 +16,6 @@ This page answers those questions. It is written to be read by a head of institu
 | Where is my institution's data hosted? | In France, with LWS (Ligne Web Services) |
 | Is my database shared with other schools? | No. One database per institution, on its own instance |
 | How often do you back up? | The database nightly, everything on Sundays, kept thirty days |
-| Are those backups verified? | Yes — restored and recounted every Sunday, with a dated verdict |
 | Who is responsible for the data? | Your institution. KLASSCI acts as a processor |
 | Can I leave with my data? | Yes, in spreadsheet format, uploaded documents included |
 | Do you hold a certification? | No. No external audit to date |
@@ -40,22 +39,13 @@ The distinction matters: your pupils' data does not leave French hosting, even t
 
 The RIPE registry gives the country where the address range is registered, not the address of the data centre. If you need the exact physical location, for a contractual clause or a formality, ask in writing: we hold it from the provider.
 
-## Backups, and the proof that they work
+## Backups
 
 | | |
 | --- | --- |
 | **Database** | Every night at 2 a.m. |
 | **Database and uploaded documents** | Every Sunday at 3 a.m. |
 | **Retention** | Thirty days, then automatic deletion |
-| **Encryption** | AES-256, key held off the server being backed up |
-| **Off-site copy** | Yes, on storage separate from the protected server |
-| **Verification** | Every Sunday at 5 a.m., by an actual restore |
-
-Two points deserve expanding, because they separate a backup from a file one hopes will be useful.
-
-**The key is not kept next to the safe.** It is held somewhere other than the server being backed up, and a copy of the archive is placed off that server. A backup that lives beside the database it protects covers a mistaken deletion, not the loss of the server: it disappears with it.
-
-**Backups are actually restored, not merely produced.** Every Sunday the latest archive for each institution is restored into a throwaway database and recounted: number of tables, and number of rows in the tables that carry the business — pupils, enrolments, payments, grades. Counting tables would not be enough, since an archive empty of content would return the exact same count. The verdict is dated and kept, which lets us answer "when were your backups last tested?" with a date.
 
 ## Who can reach what
 
@@ -95,7 +85,7 @@ The split is developed channel by channel in the [privacy policy](/en/confidenti
 
 Four points, stated here rather than discovered later.
 
-**Live databases are not encrypted at the storage level.** The backups are. Encryption at rest protects against a stolen disk or a discarded drive being read, not against access obtained to a running server.
+**Live databases are not encrypted at the storage level.** Encryption at rest protects against a stolen disk or a discarded drive being read, not against access obtained to a running server.
 
 **The relay's rate limiting is a shock absorber, not a guarantee.** It divides the effect of a burst of requests; it does not remove it. A watertight limit requires a store shared between instances, and will be put in place if an institution is actually targeted.
 
@@ -139,10 +129,6 @@ Logos and colours shown on a school's enrolment page are accepted only if they c
 ### Hosting references
 
 Institution instances: LWS, France. Marketing site: Vercel, `iad1` region. Address ranges and their registry references are provided on written request, together with the physical location.
-
-### Archive encryption
-
-AES-256 in CBC mode, with a random salt per archive. Each archive key is derived with PBKDF2 from a random master key of at least thirty-two characters, held off the server being backed up. It is the length of that key, not the iteration count of the derivation, that puts it beyond the reach of systematic guessing.
 
 ## A question?
 
