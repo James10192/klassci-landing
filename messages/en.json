@@ -563,7 +563,7 @@
     "items": [
       {
         "q": "Is my data secure?",
-        "a": "Each school runs on its own isolated database. Data is encrypted in transit and at rest. No school can access another school's data."
+        "a": "Each school runs on its own isolated database. Traffic to and from the platform is encrypted (HTTPS). Backup and access details are on the Security page. No school can access another school's data."
       },
       {
         "q": "Can I migrate my data from Excel?",
