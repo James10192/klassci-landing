@@ -22,7 +22,6 @@ export async function generateMetadata({
     title: t("title"),
     description: t("description"),
     path: "/college",
-    image: "/img/og/college.png",
   });
 }
 
