@@ -1,0 +1,60 @@
+{
+  "email": {
+    "suggestion": "Did you mean {suggestion}?",
+    "appliquer": "Change to {suggestion}",
+    "confirmer": "No, my address is correct",
+    "confirmee": "Address kept as you typed it.",
+    "factice": "The domain {domaine} does not receive mail. Please enter an address you actually read.",
+    "invalide": "This e-mail address is incomplete. Example: first.last@gmail.com",
+    "requis": "Enter your e-mail address, or tick “I don't have an e-mail address”.",
+    "fauteServeur": "This address contains a typo. Check the domain after the @."
+  },
+  "canal": {
+    "sansEmail": "I don't have an e-mail address",
+    "sansEmailAide": "We will send you a verification code on WhatsApp instead.",
+    "whatsapp": "WhatsApp number",
+    "whatsappAide": "Ivorian mobile number (01, 05 or 07), for example +225 07 07 12 12 34. You will receive a code on WhatsApp.",
+    "whatsappInvalide": "This is not an Ivorian mobile number. Example: +225 07 07 12 12 34."
+  },
+  "verification": {
+    "titreEmail": "Check your e-mail address",
+    "titreTelephone": "Check your WhatsApp number",
+    "texteEmail": "We sent a 6-digit code to {destination}. Your request will only reach the school once it is verified.",
+    "texteTelephone": "We sent a 6-digit code on WhatsApp to {destination}. Your request will only reach the school once it is verified.",
+    "code": "Verification code",
+    "codeAide": "Six digits. You can also click the link you received.",
+    "codeIncomplet": "The code has 6 digits.",
+    "valider": "Verify the code",
+    "validation": "Verifying…",
+    "renvoyer": "Resend the code",
+    "renvoyerDans": "Resend the code in {secondes} s",
+    "renvoye": "A new code has just been sent.",
+    "renvoiImpossible": "The code could not be resent. Please try again shortly.",
+    "modifierEmail": "Change the address",
+    "modifierTelephone": "Change the number",
+    "spam": "Nothing received? Check your Spam or Junk folder, then resend the code.",
+    "spamTelephone": "Nothing received? Make sure this number uses WhatsApp, then resend the code.",
+    "motifs": {
+      "code_invalide": "This code does not match. Check the 6 digits you received.",
+      "expire": "This code has expired. Request a new one.",
+      "trop_de_tentatives": "Too many wrong codes. Request a new code.",
+      "inconnu": "Verification failed. Please try again shortly."
+    },
+    "page": {
+      "titre": "E-mail verification",
+      "chargement": "Checking your link…",
+      "succesTitre": "Application confirmed",
+      "succesTexte": "Your address is verified and your request has been sent to the school. You can close this page.",
+      "succesReinscription": "Re-enrolment confirmed",
+      "expireTitre": "This link has expired",
+      "expireTexte": "For security reasons, a verification link is only valid for a short time. Request a new link.",
+      "erreurTitre": "This link does not work",
+      "erreurTexte": "It is incomplete, already used or badly copied. Open the link from your e-mail again, or enter the code on the page where you made your request.",
+      "indisponibleTexte": "We cannot reach the school right now. Please try again in a few minutes.",
+      "reessayer": "Try again",
+      "renvoyerLien": "Get a new link",
+      "lienRenvoye": "A new link has just been sent to you.",
+      "accueil": "Back to home"
+    }
+  }
+}

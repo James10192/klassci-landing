@@ -4,6 +4,7 @@ import { AlertCircle, Check, Mail, MapPin } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useId, type FormEvent } from "react";
 
+import { ChampEmailAutonome } from "@/components/ui/champ-email";
 import { CONTACT_ENDPOINT, WEB3FORMS_ACCESS_KEY, useContactSubmission } from "@/hooks/use-contact-submission";
 import { CONTACT_FIELD_LIMITS } from "@/lib/contact";
 
@@ -188,22 +189,16 @@ export function Contact() {
                     className={FIELD_CLS}
                   />
                 </div>
-                <div>
-                  <label htmlFor="contact-email" className={LABEL_CLS}>
-                    {form.email.label}
-                  </label>
-                  <input
-                    type="email"
-                    id="contact-email"
-                    name="email"
-                    placeholder={form.email.placeholder}
-                    autoComplete="email"
-                    maxLength={CONTACT_FIELD_LIMITS.email}
-                    required
-                    aria-required="true"
-                    className={FIELD_CLS}
-                  />
-                </div>
+                <ChampEmailAutonome
+                  id="contact-email"
+                  name="email"
+                  label={form.email.label}
+                  placeholder={form.email.placeholder}
+                  maxLength={CONTACT_FIELD_LIMITS.email}
+                  required
+                  classeLabel={LABEL_CLS}
+                  classeChamp={FIELD_CLS}
+                />
               </div>
 
               {/* School + Phone row */}

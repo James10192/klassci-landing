@@ -4,6 +4,7 @@ import { AlertCircle, Check, Mail, MapPin, Send, X } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useEffect, useId, useRef, type FormEvent, type MouseEvent } from "react";
 
+import { ChampEmailAutonome } from "@/components/ui/champ-email";
 import { CONTACT_ENDPOINT, WEB3FORMS_ACCESS_KEY, useContactSubmission } from "@/hooks/use-contact-submission";
 import { CONTACT_FIELD_LIMITS } from "@/lib/contact";
 
@@ -182,10 +183,16 @@ export function UniverseContactDialog({ open, onClose }: UniverseContactDialogPr
                     <label htmlFor="hub-contact-name" className={labelClass}>{form.name.label}</label>
                     <input id="hub-contact-name" name="name" required maxLength={CONTACT_FIELD_LIMITS.name} autoComplete="name" placeholder={form.name.placeholder} className={fieldClass} />
                   </div>
-                  <div>
-                    <label htmlFor="hub-contact-email" className={labelClass}>{form.email.label}</label>
-                    <input id="hub-contact-email" name="email" type="email" required maxLength={CONTACT_FIELD_LIMITS.email} autoComplete="email" placeholder={form.email.placeholder} className={fieldClass} />
-                  </div>
+                  <ChampEmailAutonome
+                    id="hub-contact-email"
+                    name="email"
+                    label={form.email.label}
+                    placeholder={form.email.placeholder}
+                    maxLength={CONTACT_FIELD_LIMITS.email}
+                    required
+                    classeLabel={labelClass}
+                    classeChamp={fieldClass}
+                  />
                 </div>
 
                 <div className="grid gap-4 md:grid-cols-2">

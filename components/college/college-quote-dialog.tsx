@@ -8,6 +8,7 @@ import X from "lucide-react/dist/esm/icons/x";
 import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useEffect, useId, useRef, type FormEvent, type MouseEvent, type ReactNode } from "react";
 
+import { ChampEmailAutonome } from "@/components/ui/champ-email";
 import { CONTACT_ENDPOINT, WEB3FORMS_ACCESS_KEY, useContactSubmission } from "@/hooks/use-contact-submission";
 import type { CollegePlanKey } from "@/lib/college-pricing";
 import { CONTACT_FIELD_LIMITS } from "@/lib/contact";
@@ -150,9 +151,16 @@ export function CollegeQuoteDialog({ open, plan, studentCount, onClose }: Colleg
                   <Field id="college-quote-name" label={t("name")}>
                     <input id="college-quote-name" name="name" required maxLength={CONTACT_FIELD_LIMITS.name} autoComplete="name" placeholder={t("namePlaceholder")} className={fieldClass} />
                   </Field>
-                  <Field id="college-quote-email" label={t("email")}>
-                    <input id="college-quote-email" name="email" type="email" required maxLength={CONTACT_FIELD_LIMITS.email} autoComplete="email" placeholder={t("emailPlaceholder")} className={fieldClass} />
-                  </Field>
+                  <ChampEmailAutonome
+                    id="college-quote-email"
+                    name="email"
+                    label={t("email")}
+                    placeholder={t("emailPlaceholder")}
+                    maxLength={CONTACT_FIELD_LIMITS.email}
+                    required
+                    classeLabel={labelClass}
+                    classeChamp={fieldClass}
+                  />
                 </div>
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Field id="college-quote-school" label={t("school")}>
