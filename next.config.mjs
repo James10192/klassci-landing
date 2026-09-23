@@ -53,6 +53,14 @@ const nextConfig = {
 
   experimental: {
     optimizePackageImports: ["framer-motion", "lucide-react", "next-intl"],
+    // Les cartes de partage lisent leurs polices et le logo sur le disque
+    // (lib/og/carte.tsx). La plupart sont construites au déploiement, mais
+    // celles des écoles sont dessinées à la demande : sans cette ligne, la
+    // fonction serverless ne contiendrait ni `assets/og` ni `public/`, et
+    // chaque carte d'école échouerait en production seulement.
+    outputFileTracingIncludes: {
+      "/**/opengraph-image*": ["./assets/og/**", "./public/img/logo-klassci-full.png"],
+    },
   },
 
   async headers() {
