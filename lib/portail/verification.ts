@@ -1,3 +1,5 @@
+import { estObjet } from "./aboutissement.ts";
+
 /**
  * La vérification d'une demande avant qu'elle n'atteigne l'école.
  *
@@ -22,7 +24,11 @@ export type DemandeVerification = {
 
 export type MotifRefus = "code_invalide" | "expire" | "trop_de_tentatives";
 
-const MOTIFS: readonly MotifRefus[] = ["code_invalide", "expire", "trop_de_tentatives"];
+const MOTIFS: readonly string[] = ["code_invalide", "expire", "trop_de_tentatives"] satisfies MotifRefus[];
+
+export function estMotif(valeur: unknown): valeur is MotifRefus {
+  return typeof valeur === "string" && MOTIFS.includes(valeur);
+}
 
 /**
  * La réponse de création demande-t-elle une vérification ?
@@ -49,13 +55,7 @@ export function lireDemandeVerification(corps: Record<string, unknown>): Demande
 
 /** Un motif de refus connu, ou `null` pour un motif que ce site ne sait pas nommer. */
 export function lireMotif(corps: unknown): MotifRefus | null {
-  if (corps === null || typeof corps !== "object") return null;
-
-  const motif = (corps as Record<string, unknown>).motif;
-
-  return typeof motif === "string" && (MOTIFS as readonly string[]).includes(motif)
-    ? (motif as MotifRefus)
-    : null;
+  return estObjet(corps) && estMotif(corps.motif) ? corps.motif : null;
 }
 
 /** Un code saisi ou collé : seuls les chiffres comptent, six au plus. */
@@ -65,58 +65,54 @@ export function nettoyerCode(brut: string): string {
 
 export type ResultatVerification =
   | { genre: "verifie"; corps: Record<string, unknown> }
-  | { genre: "refuse"; motif: MotifRefus | null; corps: Record<string, unknown> | null }
+  /** `demandeId` : rendu avec un lien expiré, il permet d'en demander un autre. */
+  | { genre: "refuse"; motif: MotifRefus | null; demandeId: string | null }
   | { genre: "tropDeTentatives" }
   | { genre: "indisponible" };
 
 export type ResultatRenvoi = "envoye" | "tropTot" | "indisponible";
 
-export type CorpsVerification =
-  | { jeton: string }
-  | { demande_id: string; code: string };
+export type CorpsVerification = { jeton: string } | { demande_id: string; code: string };
 
 /**
- * L'UNIQUE point de contact avec les routes de vérification.
+ * L'UNIQUE point de contact du navigateur avec la vérification.
  *
  * Le navigateur parle au relais de klassci.com, qui signe et transmet à
  * l'instance de l'école. Le canal voyage dans le corps : c'est le relais qui
- * décide du chemin côté KLASSCI (voir `verification-relais.ts`), pour que ce
- * choix ne se fasse qu'à un seul endroit.
+ * choisit le chemin côté KLASSCI (`verification-relais.ts`).
  */
-export async function appelerVerification(
-  ecole: string,
-  action: "verifier" | "renvoyer",
-  canal: Canal,
-  corps: Record<string, string>,
-): Promise<Response> {
+async function appeler(ecole: string, action: "verifier" | "renvoyer", corps: Record<string, string>): Promise<Response> {
   return fetch(`/api/verification/${encodeURIComponent(ecole)}/${action}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ ...corps, canal }),
+    body: JSON.stringify(corps),
   });
 }
 
 async function corpsDe(reponse: Response): Promise<Record<string, unknown> | null> {
-  return reponse
-    .json()
-    .then((c) => (c !== null && typeof c === "object" ? (c as Record<string, unknown>) : null))
-    .catch(() => null);
+  const lu: unknown = await reponse.json().catch(() => null);
+
+  return estObjet(lu) ? lu : null;
 }
 
-export async function verifier(
-  ecole: string,
-  canal: Canal,
-  corps: CorpsVerification,
-): Promise<ResultatVerification> {
+export async function verifier(ecole: string, canal: Canal, corps: CorpsVerification): Promise<ResultatVerification> {
   try {
-    const reponse = await appelerVerification(ecole, "verifier", canal, corps);
+    const reponse = await appeler(ecole, "verifier", { ...corps, canal });
     const lu = await corpsDe(reponse);
 
-    if (reponse.ok && lu?.verifie === true) return { genre: "verifie", corps: lu };
+    if (reponse.ok && lu !== null && lu.verifie === true) return { genre: "verifie", corps: lu };
+
     // 400 : le relais a refusé un jeton ou un code malformé, avant même l'école.
     if (reponse.status === 422 || reponse.status === 400) {
-      return { genre: "refuse", motif: lireMotif(lu), corps: lu };
+      const demandeId = lu?.demande_id;
+
+      return {
+        genre: "refuse",
+        motif: lireMotif(lu),
+        demandeId: typeof demandeId === "string" && demandeId !== "" ? demandeId : null,
+      };
     }
+
     if (reponse.status === 429) return { genre: "tropDeTentatives" };
 
     return { genre: "indisponible" };
@@ -127,9 +123,9 @@ export async function verifier(
 
 export async function renvoyer(ecole: string, canal: Canal, demandeId: string): Promise<ResultatRenvoi> {
   try {
-    const reponse = await appelerVerification(ecole, "renvoyer", canal, { demande_id: demandeId });
+    const reponse = await appeler(ecole, "renvoyer", { demande_id: demandeId, canal });
 
-    if (reponse.status === 202 || reponse.ok) return "envoye";
+    if (reponse.ok) return "envoye";
     if (reponse.status === 429) return "tropTot";
 
     return "indisponible";

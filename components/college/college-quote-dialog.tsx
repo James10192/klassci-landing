@@ -152,14 +152,9 @@ export function CollegeQuoteDialog({ open, plan, studentCount, onClose }: Colleg
                     <input id="college-quote-name" name="name" required maxLength={CONTACT_FIELD_LIMITS.name} autoComplete="name" placeholder={t("namePlaceholder")} className={fieldClass} />
                   </Field>
                   <ChampEmailAutonome
-                    id="college-quote-email"
-                    name="email"
-                    label={t("email")}
-                    placeholder={t("emailPlaceholder")}
-                    maxLength={CONTACT_FIELD_LIMITS.email}
-                    required
-                    classeLabel={labelClass}
-                    classeChamp={fieldClass}
+                    textes={{ label: t("email"), placeholder: t("emailPlaceholder") }}
+                    attributs={{ id: "college-quote-email", name: "email", maxLength: CONTACT_FIELD_LIMITS.email, required: true }}
+                    classes={{ champ: fieldClass, label: labelClass }}
                   />
                 </div>
                 <div className="grid gap-4 sm:grid-cols-2">

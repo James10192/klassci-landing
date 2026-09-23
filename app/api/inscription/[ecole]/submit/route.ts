@@ -83,11 +83,18 @@ export async function POST(
 
   // La même règle que sous le champ, rejouée ici : un navigateur ancien, un
   // script ou une extension peuvent envoyer sans passer par le formulaire.
-  const canal = verifierCanal(corps);
+  // `email_confirme` n'est PAS relayé : il ne sert qu'à cette règle.
+  const canal = verifierCanal({
+    email: typeof corps.email === "string" ? corps.email : undefined,
+    telephone: corps.telephone,
+    emailConfirme: source.email_confirme === true,
+  });
 
-  if (canal !== null) {
-    return Response.json({ erreur: "champs_invalides", champs: canal }, { status: 422 });
+  if ("erreurs" in canal) {
+    return Response.json({ erreur: "champs_invalides", champs: canal.erreurs }, { status: 422 });
   }
+
+  corps.telephone = canal.telephone;
 
   return relayer(params.ecole, CHEMINS.inscriptionSubmit, corps, requete);
 }

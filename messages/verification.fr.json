@@ -3,24 +3,21 @@
     "suggestion": "Vouliez-vous dire {suggestion} ?",
     "appliquer": "Corriger en {suggestion}",
     "confirmer": "Non, mon adresse est correcte",
-    "confirmee": "Adresse conservée telle que vous l'avez saisie.",
     "factice": "Le domaine {domaine} ne reçoit pas de courrier. Indiquez une adresse que vous consultez vraiment.",
     "invalide": "Cette adresse e-mail est incomplète. Exemple : prenom.nom@gmail.com",
-    "requis": "Indiquez votre adresse e-mail, ou cochez « Je n'ai pas d'adresse e-mail ».",
-    "fauteServeur": "Cette adresse contient une faute de frappe. Vérifiez le domaine après le @."
+    "aCorriger": "Choisissez la correction proposée, ou confirmez que votre adresse est correcte."
   },
   "canal": {
-    "sansEmail": "Je n'ai pas d'adresse e-mail",
+    "sansEmail": "Je n’ai pas d’adresse e-mail",
     "sansEmailAide": "Nous vous enverrons alors un code de vérification par WhatsApp.",
     "whatsapp": "Numéro WhatsApp",
-    "whatsappAide": "Numéro mobile ivoirien (01, 05 ou 07), par exemple +225 07 07 12 12 34. Vous y recevrez un code par WhatsApp.",
-    "whatsappInvalide": "Ce numéro n'est pas un mobile ivoirien. Exemple : +225 07 07 12 12 34."
+    "whatsappAide": "Numéro mobile ivoirien (01, 05 ou 07), par exemple +225 07 07 12 12 34. Vous y recevrez un code par WhatsApp."
   },
   "verification": {
     "titreEmail": "Vérifiez votre adresse e-mail",
     "titreTelephone": "Vérifiez votre numéro WhatsApp",
-    "texteEmail": "Nous avons envoyé un code à 6 chiffres à {destination}. Votre demande ne sera transmise à l'établissement qu'après cette vérification.",
-    "texteTelephone": "Nous avons envoyé un code à 6 chiffres par WhatsApp au {destination}. Votre demande ne sera transmise à l'établissement qu'après cette vérification.",
+    "texteEmail": "Nous avons envoyé un code à 6 chiffres à {destination}. Votre demande ne sera transmise à l’établissement qu’après cette vérification.",
+    "texteTelephone": "Nous avons envoyé un code à 6 chiffres par WhatsApp au {destination}. Votre demande ne sera transmise à l’établissement qu’après cette vérification.",
     "code": "Code de vérification",
     "codeAide": "Six chiffres. Vous pouvez aussi cliquer sur le lien reçu.",
     "codeIncomplet": "Le code comporte 6 chiffres.",
@@ -28,33 +25,35 @@
     "validation": "Vérification…",
     "renvoyer": "Renvoyer le code",
     "renvoyerDans": "Renvoyer le code dans {secondes} s",
-    "renvoye": "Un nouveau code vient d'être envoyé.",
-    "renvoiImpossible": "Le code n'a pas pu être renvoyé. Réessayez dans un instant.",
-    "modifierEmail": "Modifier l'adresse",
+    "renvoye": "Un nouveau code vient d’être envoyé.",
+    "renvoiImpossible": "Le code n’a pas pu être renvoyé. Réessayez dans un instant.",
+    "modifierEmail": "Modifier l’adresse",
     "modifierTelephone": "Modifier le numéro",
     "spam": "Rien reçu ? Regardez dans le dossier Spam ou Courrier indésirable, puis renvoyez le code.",
     "spamTelephone": "Rien reçu ? Vérifiez que ce numéro utilise bien WhatsApp, puis renvoyez le code.",
     "motifs": {
       "code_invalide": "Ce code ne correspond pas. Vérifiez les 6 chiffres reçus.",
       "expire": "Ce code a expiré. Demandez-en un nouveau.",
-      "trop_de_tentatives": "Trop d'essais avec un code faux. Demandez un nouveau code.",
-      "inconnu": "La vérification n'a pas abouti. Réessayez dans un instant."
+      "trop_de_tentatives": "Trop d’essais avec un code faux. Demandez un nouveau code.",
+      "inconnu": "La vérification n’a pas abouti. Réessayez dans un instant."
     },
     "page": {
       "titre": "Vérification de votre adresse e-mail",
       "chargement": "Vérification de votre lien en cours…",
       "succesTitre": "Candidature confirmée",
-      "succesTexte": "Votre adresse est vérifiée et votre demande a été transmise à l'établissement. Vous pouvez fermer cette page.",
+      "succesTexte": "Votre adresse est vérifiée et votre demande a été transmise à l’établissement. Vous pouvez fermer cette page.",
       "succesReinscription": "Réinscription confirmée",
       "expireTitre": "Ce lien a expiré",
-      "expireTexte": "Pour des raisons de sécurité, un lien de vérification n'est valable que peu de temps. Demandez un nouveau lien.",
+      "expireTexte": "Pour des raisons de sécurité, un lien de vérification n’est valable que peu de temps. Demandez un nouveau lien.",
       "erreurTitre": "Ce lien ne fonctionne pas",
       "erreurTexte": "Il est incomplet, déjà utilisé ou mal copié. Ouvrez de nouveau le lien reçu par e-mail, ou saisissez le code sur la page où vous avez fait votre demande.",
-      "indisponibleTexte": "Nous n'arrivons pas à joindre l'établissement pour le moment. Réessayez dans quelques minutes.",
+      "indisponibleTexte": "Nous n’arrivons pas à joindre l’établissement pour le moment. Réessayez dans quelques minutes.",
       "reessayer": "Réessayer",
       "renvoyerLien": "Recevoir un nouveau lien",
       "lienRenvoye": "Un nouveau lien vient de vous être envoyé.",
-      "accueil": "Retour à l'accueil"
-    }
+      "accueil": "Retour à l’accueil",
+      "description": "Confirmez votre adresse e-mail pour que votre demande soit transmise à l’établissement."
+    },
+    "renvoiTropTot": "Un code vient déjà d’être envoyé. Patientez une minute avant d’en demander un autre."
   }
 }

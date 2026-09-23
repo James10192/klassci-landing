@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 
-import { champ, dateNaissanceValide } from "./pieces";
+import { champ, dateIso, dateNaissanceValide } from "./pieces";
 
 type Ecole = { code: string; libelle: string };
 
@@ -55,7 +55,7 @@ export function RendezVousFlow({
   const [enCours, setEnCours] = useState(false);
   const [erreur, setErreur] = useState<string | null>(null);
 
-  const naissance = `${annee}-${mois.padStart(2, "0")}-${jour.padStart(2, "0")}`;
+  const naissance = dateIso(jour, mois, annee);
   const naissanceOk = dateNaissanceValide(jour, mois, annee);
 
   const chargerCreneaux = useCallback(async () => {

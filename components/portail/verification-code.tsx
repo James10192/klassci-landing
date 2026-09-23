@@ -9,14 +9,27 @@ import {
   renvoyer,
   verifier,
   type DemandeVerification,
-  type MotifRefus,
+  type ResultatRenvoi,
+  type ResultatVerification,
 } from "@/lib/portail/verification";
 
 import { BoutonPrincipal, Carte, champ, entree } from "./pieces";
 
 const DELAI_RENVOI_S = 60;
 
-type Retour = { ton: "erreur" | "info"; texte: string } | null;
+/** L'échec d'une vérification, traduit en clé de message. `verifie` n'en a pas besoin. */
+function cleEchec(resultat: Exclude<ResultatVerification, { genre: "verifie" }>): string {
+  if (resultat.genre === "refuse") return `motifs.${resultat.motif ?? "inconnu"}`;
+  if (resultat.genre === "tropDeTentatives") return "motifs.trop_de_tentatives";
+
+  return "motifs.inconnu";
+}
+
+const MESSAGE_RENVOI: Record<ResultatRenvoi, { ton: "info" | "erreur"; cle: string }> = {
+  envoye: { ton: "info", cle: "renvoye" },
+  tropTot: { ton: "erreur", cle: "renvoiTropTot" },
+  indisponible: { ton: "erreur", cle: "renvoiImpossible" },
+};
 
 /**
  * « Vérifiez votre adresse e-mail », ou votre numéro WhatsApp.
@@ -26,8 +39,9 @@ type Retour = { ton: "erreur" | "info"; texte: string } | null;
  * (candidature, réinscription) : seuls le titre, la destination masquée et le
  * conseil de la dernière ligne changent.
  *
- * Le code se colle d'un bloc — `one-time-code` laisse le téléphone le proposer
- * depuis le SMS ou le courriel — et part tout seul au sixième chiffre.
+ * Le code se colle d'un bloc (`one-time-code` laisse le téléphone le proposer)
+ * et part tout seul au sixième chiffre. Deux régions annoncées séparément :
+ * l'erreur, en alerte, et l'information (« code renvoyé »), en statut poli.
  */
 export function VerificationCode({
   ecole,
@@ -38,15 +52,18 @@ export function VerificationCode({
   ecole: string;
   demande: DemandeVerification;
   onVerifie: (corps: Record<string, unknown>) => void;
-  /** Absent en réinscription : l'adresse vient du dossier de l'école, pas d'une saisie. */
   onModifier?: () => void;
 }) {
   const t = useTranslations("verification");
   const id = useId();
   const champCode = useRef<HTMLInputElement>(null);
+  // Un appel à la fois : le sixième chiffre, « Entrée » et le bouton partent
+  // parfois dans le même instant, avant que l'état « en cours » ne soit rendu.
+  const enVol = useRef(false);
   const [code, setCode] = useState("");
   const [enCours, setEnCours] = useState(false);
-  const [retour, setRetour] = useState<Retour>(null);
+  const [erreur, setErreur] = useState<string | null>(null);
+  const [info, setInfo] = useState<string | null>(null);
   const [attente, setAttente] = useState(DELAI_RENVOI_S);
   const email = demande.canal === "email";
 
@@ -59,17 +76,18 @@ export function VerificationCode({
 
   const valider = useCallback(
     async (saisi: string) => {
-      const motif = (cause: MotifRefus | null) => t(`motifs.${cause ?? "inconnu"}`);
-
-      if (enCours) return;
+      if (enVol.current) return;
       if (saisi.length !== 6) {
-        setRetour({ ton: "erreur", texte: t("codeIncomplet") });
+        setErreur(t("codeIncomplet"));
         return;
       }
 
+      enVol.current = true;
       setEnCours(true);
-      setRetour(null);
+      setErreur(null);
+      setInfo(null);
       const resultat = await verifier(ecole, demande.canal, { demande_id: demande.demandeId, code: saisi });
+      enVol.current = false;
       setEnCours(false);
 
       if (resultat.genre === "verifie") {
@@ -79,38 +97,26 @@ export function VerificationCode({
 
       setCode("");
       champCode.current?.focus();
+      setErreur(t(cleEchec(resultat)));
       // Un code expiré ou épuisé ne se rattrape qu'avec un nouveau : le renvoi
       // s'ouvre tout de suite au lieu de faire attendre la fin du décompte.
       if (resultat.genre === "refuse" && resultat.motif !== null && resultat.motif !== "code_invalide") {
         setAttente(0);
       }
-      setRetour({
-        ton: "erreur",
-        texte:
-          resultat.genre === "refuse"
-            ? motif(resultat.motif)
-            : resultat.genre === "tropDeTentatives"
-              ? motif("trop_de_tentatives")
-              : motif(null),
-      });
     },
-    [demande, ecole, enCours, onVerifie, t],
+    [demande, ecole, onVerifie, t],
   );
 
   const demanderRenvoi = useCallback(async () => {
     if (attente > 0) return;
     setAttente(DELAI_RENVOI_S);
-    const resultat = await renvoyer(ecole, demande.canal, demande.demandeId);
+    const message = MESSAGE_RENVOI[await renvoyer(ecole, demande.canal, demande.demandeId)];
 
-    setRetour(
-      resultat === "envoye"
-        ? { ton: "info", texte: t("renvoye") }
-        : { ton: "erreur", texte: t("renvoiImpossible") },
-    );
+    setErreur(message.ton === "erreur" ? t(message.cle) : null);
+    setInfo(message.ton === "info" ? t(message.cle) : null);
   }, [attente, demande, ecole, t]);
 
-  const idAide = `${id}-aide`;
-  const idRetour = `${id}-retour`;
+  const ids = { aide: `${id}-aide`, erreur: `${id}-erreur`, info: `${id}-info` };
 
   return (
     <Carte>
@@ -141,17 +147,16 @@ export function VerificationCode({
           autoComplete="one-time-code"
           autoFocus
           placeholder="123456"
-          aria-invalid={retour?.ton === "erreur" || undefined}
-          aria-describedby={`${idAide} ${idRetour}`}
+          aria-invalid={erreur !== null || undefined}
+          aria-describedby={`${ids.aide} ${ids.erreur} ${ids.info}`}
           className={`${champ} text-center text-xl tracking-[0.5em] tabular-nums`}
         />
-        <p id={idAide} className="mt-1 text-xs text-text-muted">{t("codeAide")}</p>
-        <p
-          id={idRetour}
-          role={retour?.ton === "erreur" ? "alert" : "status"}
-          className={`mt-1 min-h-[1rem] text-xs ${retour?.ton === "erreur" ? "text-[#b91c1c]" : "text-text-secondary"}`}
-        >
-          {retour?.texte}
+        <p id={ids.aide} className="mt-1 text-xs text-text-muted">{t("codeAide")}</p>
+        <p id={ids.erreur} role="alert" className="text-xs text-erreur empty:hidden [&:not(:empty)]:mt-1">
+          {erreur}
+        </p>
+        <p id={ids.info} role="status" aria-live="polite" className="text-xs text-text-secondary empty:hidden [&:not(:empty)]:mt-1">
+          {info}
         </p>
       </m.div>
 

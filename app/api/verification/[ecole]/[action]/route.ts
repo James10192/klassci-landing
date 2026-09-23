@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 
-import { CHEMINS, relayer } from "@/lib/portail/relais";
+import { relayer } from "@/lib/portail/relais";
 import { preparerVerification } from "@/lib/portail/verification-relais";
 
 export const runtime = "nodejs";
@@ -27,5 +27,5 @@ export async function POST(
     );
   }
 
-  return relayer(params.ecole, CHEMINS[appel.cle], appel.corps, requete);
+  return relayer(params.ecole, appel.chemin, appel.corps, requete);
 }

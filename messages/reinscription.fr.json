@@ -166,7 +166,8 @@
       "voeuRequis": "Indiquez la filière, le niveau, ou décrivez la formation qui vous intéresse.",
       "emailRequis": "Indiquez votre adresse e-mail, ou cochez « Je n’ai pas d’adresse e-mail ».",
       "whatsappInvalide": "Ce numéro n’est pas un mobile ivoirien joignable sur WhatsApp. Exemple : +225 07 07 12 12 34.",
-      "whatsappRequis": "Sans adresse e-mail, ce numéro WhatsApp est nécessaire pour recevoir votre code."
+      "whatsappRequis": "Sans adresse e-mail, ce numéro WhatsApp est nécessaire pour recevoir votre code.",
+      "emailACorriger": "Choisissez la correction proposée sous l’adresse, ou confirmez qu’elle est correcte."
     },
     "succes": {
       "titre": "Votre candidature est transmise.",

@@ -61,6 +61,11 @@ export type Formulaire = {
    * vérification, par WhatsApp. Jamais envoyé tel quel à l'école.
    */
   sans_email: boolean;
+  /**
+   * L'adresse telle quelle a été confirmée malgré une faute seulement probable
+   * (« Non, mon adresse est correcte »). Retombe à `false` dès qu'on la retape.
+   */
+  email_confirme: boolean;
   ville: string;
   commune: string;
   filiere_id: string;
@@ -88,7 +93,7 @@ export type Formulaire = {
 export const FORMULAIRE_VIDE: Formulaire = {
   nom: "", prenoms: "", jour: "", mois: "", annee: "",
   lieu_naissance: "", sexe: "", nationalite: "",
-  telephone: "", email: "", sans_email: false, ville: "", commune: "",
+  telephone: "", email: "", sans_email: false, email_confirme: false, ville: "", commune: "",
   filiere_id: "", niveau_id: "", voeu_libre: "",
   serie_bac: "", etablissement_origine: "", annee_bac: "", affectation_status: "",
   est_transfert: false,
@@ -186,8 +191,7 @@ export type ProprietesChamps = {
   messagesDe: (champ: string) => string[] | undefined;
   choix: ChoixPublies;
   /** Un envoi a-t-il déjà été tenté ? Le champ e-mail montre alors ses messages sans attendre. */
-  tentative: boolean;
-  onEmailBloque: (bloque: boolean) => void;
+  contact: { tentative: boolean; focaliser: boolean };
 };
 
 export function ChampsCandidature({
@@ -195,8 +199,7 @@ export function ChampsCandidature({
   set,
   messagesDe,
   choix: { filieres, niveaux, affectations, liens_tuteur, nationalites },
-  tentative,
-  onEmailBloque,
+  contact,
 }: ProprietesChamps) {
   const t = useTranslations("inscription");
 
@@ -249,9 +252,8 @@ export function ChampsCandidature({
 
       <m.div {...entree(2)}>
         <Section titre={t("formulaire.contact")} />
-        <ChampsContact form={form} set={set} messagesDe={messagesDe} tentative={tentative}
-                       longueurs={{ telephone: LONGUEURS.telephone, email: LONGUEURS.email }}
-                       onEmailBloque={onEmailBloque} />
+        <ChampsContact form={form} set={set} messagesDe={messagesDe} {...contact}
+                       longueurs={{ telephone: LONGUEURS.telephone, email: LONGUEURS.email }} />
         <div className="mt-3 grid gap-3 sm:grid-cols-2">
           <Champ label={t("formulaire.ville")} value={form.ville} onChange={set("ville")}
                  maxLength={LONGUEURS.ville} erreurs={messagesDe("ville")} autoComplete="address-level2" />

@@ -166,7 +166,8 @@
       "voeuRequis": "Choose a programme, a level, or describe the course you are interested in.",
       "emailRequis": "Enter your e-mail address, or tick “I don’t have an e-mail address”.",
       "whatsappInvalide": "This is not an Ivorian mobile number reachable on WhatsApp. Example: +225 07 07 12 12 34.",
-      "whatsappRequis": "Without an e-mail address, this WhatsApp number is needed to receive your code."
+      "whatsappRequis": "Without an e-mail address, this WhatsApp number is needed to receive your code.",
+      "emailACorriger": "Pick the correction suggested under the address, or confirm it is correct."
     },
     "succes": {
       "titre": "Your application has been sent.",

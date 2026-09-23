@@ -4,6 +4,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { useLocale } from "next-intl";
 import { Suspense, useEffect } from "react";
 
+import { filtrerEvenement, nettoyerUrl, pageNonMesuree } from "@/lib/analytics/confidentialite";
 import { enregistrerCollecteur, envoyer } from "@/lib/analytics/track";
 
 /**
@@ -63,10 +64,13 @@ function SuiviDePage() {
   const locale = useLocale();
 
   useEffect(() => {
-    if (!chemin) return;
+    // La page de vérification porte un jeton à usage unique : elle n'est pas
+    // mesurée du tout, et aucune autre adresse ne part avec un paramètre sensible.
+    if (!chemin || pageNonMesuree(chemin)) return;
     let adresse = window.location.origin + chemin;
     const requete = parametres?.toString();
     if (requete) adresse += `?${requete}`;
+    adresse = nettoyerUrl(adresse);
 
     // L'evenement part meme si la bibliotheque n'est pas encore chargee : il
     // attend dans la file de `track` et sera emis au branchement.
@@ -111,7 +115,11 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
             // Les vues de page sont emises par `SuiviDePage`, qui connait la
             // langue et le chemin applicatif.
             capture_pageview: false,
+            // `$pageleave` est émis par la bibliothèque elle-même, avec
+            // l'adresse courante : `before_send` l'écarte sur la page de
+            // vérification et nettoie les paramètres sensibles partout ailleurs.
             capture_pageleave: true,
+            before_send: filtrerEvenement,
           });
         }
         enregistrerCollecteur((nom, props) => posthog.capture(nom, props));

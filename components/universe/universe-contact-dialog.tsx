@@ -184,14 +184,9 @@ export function UniverseContactDialog({ open, onClose }: UniverseContactDialogPr
                     <input id="hub-contact-name" name="name" required maxLength={CONTACT_FIELD_LIMITS.name} autoComplete="name" placeholder={form.name.placeholder} className={fieldClass} />
                   </div>
                   <ChampEmailAutonome
-                    id="hub-contact-email"
-                    name="email"
-                    label={form.email.label}
-                    placeholder={form.email.placeholder}
-                    maxLength={CONTACT_FIELD_LIMITS.email}
-                    required
-                    classeLabel={labelClass}
-                    classeChamp={fieldClass}
+                    textes={{ label: form.email.label, placeholder: form.email.placeholder }}
+                    attributs={{ id: "hub-contact-email", name: "email", maxLength: CONTACT_FIELD_LIMITS.email, required: true }}
+                    classes={{ champ: fieldClass, label: labelClass }}
                   />
                 </div>
 

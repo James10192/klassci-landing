@@ -1,27 +1,33 @@
 import {
   CORRECTIONS_CONNUES,
+  CORRECTIONS_TLD,
   DISTANCE_MAXIMALE,
   DOMAINES_FACTICES,
-  DOMAINES_REELS_VOISINS,
   DOMAINES_REFERENCE,
+  NOMS_REELS_VOISINS,
 } from "./domaines-suspects.ts";
 
 /**
  * Ce qu'on peut dire d'une adresse e-mail AVANT de l'envoyer.
  *
- * Module pur, sans React ni `server-only` : la même fonction tourne sous le
- * champ du formulaire et dans la route qui relaie à l'école. Deux règles
- * écrites séparément finiraient par diverger, et un domaine refusé d'un côté
- * passerait de l'autre.
+ * Module pur, sans React ni `server-only` : la même règle tourne sous le champ
+ * du formulaire et dans la route qui relaie à l'école. KLASSCIv2 applique la
+ * même règle, sur le même fichier de données.
  *
- * Deux degrés de certitude, et ils ne se traitent pas pareil :
+ * Un domaine se lit en deux parties, le nom et l'extension (`gmail` + `com`) :
  *
- * - `certaine` : le domaine est dans la liste des fautes connues. `gmail.con`
- *   n'existe pas, on bloque l'envoi jusqu'à correction, côté navigateur comme
- *   côté serveur.
- * - `probable` : le domaine est à deux lettres au plus d'une messagerie
- *   courante. C'est probablement une faute, mais pas sûrement : on le dit, et
- *   on laisse la personne confirmer que son adresse est bien celle-là.
+ * - l'extension ne se corrige QUE par la table explicite (`con` → `com`,
+ *   `fe` → `fr`…). `live.ca` ou `yahoo.de` sont de vraies adresses : on ne
+ *   remplace jamais un pays valide par un autre ;
+ * - le nom se compare aux messageries de référence DE LA MÊME extension, par
+ *   distance d'édition (une inversion de deux lettres compte pour une).
+ *
+ * Deux degrés de certitude :
+ *
+ * - `certaine` : faute connue, ou extension fautive sur un nom exact. On bloque
+ *   l'envoi jusqu'à correction, côté navigateur comme côté serveur.
+ * - `probable` : le nom est à deux lettres au plus d'une référence. On le dit,
+ *   et la personne peut confirmer que son adresse est bien celle-là.
  */
 
 export type AnalyseEmail =
@@ -37,55 +43,79 @@ export type AnalyseEmail =
     }
   | { statut: "valide" };
 
+export type RefusEmail = "invalide" | "factice" | "faute_de_frappe";
+
 /** Assez strict pour refuser l'évidence, assez lâche pour ne jamais refuser une vraie adresse. */
 const FORME_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-/** Distance de Levenshtein, bornée : au-delà de `plafond`, on renvoie `plafond + 1`. */
-export function distanceEdition(a: string, b: string, plafond = Number.POSITIVE_INFINITY): number {
-  if (Math.abs(a.length - b.length) > plafond) return plafond + 1;
-
-  let precedente = Array.from({ length: b.length + 1 }, (_, j) => j);
+/**
+ * Distance d'alignement optimal (Damerau restreinte) : insertion, suppression,
+ * substitution, et inversion de deux lettres voisines, chacune pour 1.
+ * `gmali` est donc à 1 de `gmail`, pas à 2.
+ */
+export function distanceEdition(a: string, b: string): number {
+  const d: number[][] = Array.from({ length: a.length + 1 }, (_, i) =>
+    Array.from({ length: b.length + 1 }, (_, j) => (i === 0 ? j : j === 0 ? i : 0)),
+  );
 
   for (let i = 1; i <= a.length; i += 1) {
-    const courante = [i];
-    let minimumLigne = i;
-
     for (let j = 1; j <= b.length; j += 1) {
       const cout = a[i - 1] === b[j - 1] ? 0 : 1;
-      const valeur = Math.min(precedente[j] + 1, courante[j - 1] + 1, precedente[j - 1] + cout);
+      d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + cout);
 
-      courante.push(valeur);
-      minimumLigne = Math.min(minimumLigne, valeur);
+      if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) {
+        d[i][j] = Math.min(d[i][j], d[i - 2][j - 2] + 1);
+      }
     }
-
-    if (minimumLigne > plafond) return plafond + 1;
-    precedente = courante;
   }
 
-  return precedente[b.length];
+  return d[a.length][b.length];
+}
+
+/** `univ-fhb.edu.ci` → nom `univ-fhb.edu`, extension `ci`. */
+function decouper(domaine: string): { nom: string; tld: string } {
+  const point = domaine.lastIndexOf(".");
+
+  return { nom: domaine.slice(0, point), tld: domaine.slice(point + 1) };
 }
 
 function estFactice(domaine: string): boolean {
   return DOMAINES_FACTICES.some((f) => domaine === f || domaine.endsWith(`.${f}`));
 }
 
-/** La messagerie de référence la plus proche, si elle est assez proche. */
-function referenceVoisine(domaine: string): string | null {
-  if (DOMAINES_REFERENCE.includes(domaine) || DOMAINES_REELS_VOISINS.has(domaine)) return null;
+/** Le domaine voulu et la certitude, ou `null` si rien ne cloche. */
+function corriger(domaine: string): { domaine: string; certitude: "certaine" | "probable" } | null {
+  const connue = CORRECTIONS_CONNUES[domaine];
 
-  let meilleure: string | null = null;
-  let meilleureDistance = DISTANCE_MAXIMALE + 1;
+  if (connue !== undefined) return { domaine: connue, certitude: "certaine" };
 
-  for (const reference of DOMAINES_REFERENCE) {
-    const distance = distanceEdition(domaine, reference, DISTANCE_MAXIMALE);
+  const { nom, tld } = decouper(domaine);
+  const tldCorrige = CORRECTIONS_TLD[tld] ?? tld;
+  const extensionFautive = tldCorrige !== tld;
 
-    if (distance < meilleureDistance) {
-      meilleure = reference;
-      meilleureDistance = distance;
+  let meilleur: { nom: string; distance: number } | null = null;
+
+  if (!NOMS_REELS_VOISINS.has(nom)) {
+    for (const reference of DOMAINES_REFERENCE) {
+      const ref = decouper(reference);
+
+      if (ref.tld !== tldCorrige) continue;
+
+      const distance = distanceEdition(nom, ref.nom);
+
+      if (distance <= DISTANCE_MAXIMALE && (meilleur === null || distance < meilleur.distance)) {
+        meilleur = { nom: ref.nom, distance };
+      }
     }
   }
 
-  return meilleureDistance <= DISTANCE_MAXIMALE ? meilleure : null;
+  if (meilleur !== null && meilleur.distance > 0) {
+    return { domaine: `${meilleur.nom}.${tldCorrige}`, certitude: "probable" };
+  }
+
+  // Nom exact (ou nom inconnu) : seule l'extension peut être fautive, et elle
+  // ne l'est que si la table le dit.
+  return extensionFautive ? { domaine: `${nom}.${tldCorrige}`, certitude: "certaine" } : null;
 }
 
 export function analyserEmail(brut: string): AnalyseEmail {
@@ -100,19 +130,11 @@ export function analyserEmail(brut: string): AnalyseEmail {
 
   if (estFactice(domaine)) return { statut: "factice", domaine };
 
-  const connue = CORRECTIONS_CONNUES[domaine];
+  const correction = corriger(domaine);
 
-  if (connue !== undefined) {
-    return { statut: "faute", domaine, suggestion: `${local}@${connue}`, certitude: "certaine" };
-  }
-
-  const voisine = referenceVoisine(domaine);
-
-  if (voisine !== null) {
-    return { statut: "faute", domaine, suggestion: `${local}@${voisine}`, certitude: "probable" };
-  }
-
-  return { statut: "valide" };
+  return correction === null
+    ? { statut: "valide" }
+    : { statut: "faute", domaine, suggestion: `${local}@${correction.domaine}`, certitude: correction.certitude };
 }
 
 /** L'adresse corrigée à proposer, ou `null` s'il n'y a rien à proposer. */
@@ -123,17 +145,23 @@ export function suggererEmail(brut: string): string | null {
 }
 
 /**
- * Le serveur refuse-t-il cette adresse ?
+ * Pourquoi cette adresse empêche l'envoi, ou `null` si elle ne l'empêche pas.
  *
- * Uniquement ce qui est CERTAIN : forme cassée, domaine factice, faute connue.
- * Une faute « probable » passe, puisque la personne a pu la confirmer.
+ * `vide` n'en fait pas partie : c'est au formulaire de dire si le champ est
+ * requis. Une faute `probable` bloque tant que la personne n'a pas confirmé
+ * son adresse ; une faute `certaine` bloque toujours.
  */
-export function refusServeur(brut: string): "invalide" | "factice" | "faute_de_frappe" | null {
-  const analyse = analyserEmail(brut);
-
+export function emailBloque(analyse: AnalyseEmail, probableConfirme: boolean): RefusEmail | null {
   if (analyse.statut === "invalide") return "invalide";
   if (analyse.statut === "factice") return "factice";
-  if (analyse.statut === "faute" && analyse.certitude === "certaine") return "faute_de_frappe";
+  if (analyse.statut === "faute" && (analyse.certitude === "certaine" || !probableConfirme)) {
+    return "faute_de_frappe";
+  }
 
   return null;
+}
+
+/** La même règle côté serveur, qui reçoit la confirmation avec l'adresse. */
+export function refusServeur(brut: string, probableConfirme: boolean): RefusEmail | null {
+  return emailBloque(analyserEmail(brut), probableConfirme);
 }

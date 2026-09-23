@@ -6,23 +6,14 @@ import { useCallback, useId, useMemo, useRef, useState } from "react";
 
 import type { EtablissementVisible } from "@/lib/portail/tenants";
 
-import {
-  Alerte,
-  BoutonPrincipal,
-  Carte,
-  CaseDate,
-  RESSORT,
-  champ,
-  dateNaissanceValide,
-  entree,
-} from "./pieces";
-import type { Physiques } from "./candidature-echanges";
-import { chargerCreneau, type CreneauAttribue } from "./candidature-ecrans";
-import { ReinscriptionSucces } from "./reinscription-succes";
-import { VerificationCode } from "./verification-code";
-import { lireDemandeVerification, type DemandeVerification } from "@/lib/portail/verification";
+import { suiteSurPlace } from "@/lib/portail/aboutissement";
+import { lireDemandeVerification } from "@/lib/portail/verification";
+
+import { Alerte, BoutonPrincipal, Carte, CaseDate, RESSORT, champ, dateIso, dateNaissanceValide, entree } from "./pieces";
 import { ECRANS, type CleEtat, type Etape, type Situation } from "./reinscription-ecrans";
+import { ReinscriptionSucces } from "./reinscription-succes";
 import { classer, ecranDe } from "./reponses";
+import { EtapeVerification, useSuiviDemande } from "./suivi-demande";
 
 /**
  * Le parcours de réinscription, d'un bout à l'autre, sans changer de page.
@@ -55,9 +46,6 @@ export function ReinscriptionFlow({
   const idBase = useId();
 
   const [etape, setEtape] = useState<Etape>("identification");
-  const [physiques, setPhysiques] = useState<Physiques | null>(null);
-  const [reference, setReference] = useState<string | null>(null);
-  const [creneau, setCreneau] = useState<CreneauAttribue | null>(null);
   const [matricule, setMatricule] = useState("");
   const [jour, setJour] = useState("");
   const [mois, setMois] = useState("");
@@ -66,33 +54,18 @@ export function ReinscriptionFlow({
   const [etat, setEtat] = useState<CleEtat | null>(null);
   const [enCours, setEnCours] = useState(false);
   const [consentement, setConsentement] = useState(false);
-  const [verification, setVerification] = useState<DemandeVerification | null>(null);
+  const dateNaissance = dateIso(jour, mois, annee);
+  const suivi = useSuiviDemande({
+    ecole: etablissement.code,
+    dateNaissance,
+    onAbouti: useCallback(() => {
+      setEtape("succes");
+      onAboutir?.(true);
+    }, [onAboutir]),
+  });
 
-  // Résolu ici, où l'espace de messages est écrit en dur : c'est la seule
-  // façon pour next-intl de vérifier que la clé existe vraiment.
-  /**
-   * Ce qui se passe après la demande.
-   *
-   * Trois cas, comme pour une candidature : l'école n'a pas annoncé de date,
-   * elle en a annoncé une à venir, ou le guichet est ouvert.
-   */
-  const suiteDuParcours = (() => {
-    if (physiques === null || physiques.debut === null) {
-      return t("succes.surPlace");
-    }
-
-    if (physiques.ouvertes) {
-      return t("succes.surPlaceOuvert");
-    }
-
-    return t("succes.surPlaceDate", {
-      date: new Intl.DateTimeFormat(locale, {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      }).format(new Date(`${physiques.debut}T00:00:00`)),
-    });
-  })();
+  // Ce qui reste à faire sur place : même règle que pour une candidature.
+  const suite = suiteSurPlace(suivi.abouti?.physiques ?? null, locale);
 
   const messageEtat = etat
     ? { cle: etat, titre: t(`etats.${etat}.titre`), texte: t(`etats.${etat}.texte`) }
@@ -108,10 +81,6 @@ export function ReinscriptionFlow({
 
   const peutChercher = matricule.trim().length > 0 && dateComplete && !enCours;
 
-  const dateISO = useCallback(
-    () => `${annee}-${mois.padStart(2, "0")}-${jour.padStart(2, "0")}`,
-    [annee, mois, jour],
-  );
 
   /**
    * Traduit la réponse du relais en un état d'écran.
@@ -152,7 +121,7 @@ export function ReinscriptionFlow({
       const reponse = await fetch(`/api/reinscription/${etablissement.code}/lookup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ matricule: matricule.trim(), dateNaissance: dateISO() }),
+        body: JSON.stringify({ matricule: matricule.trim(), dateNaissance: dateNaissance }),
       });
 
       const corps = await interpreter(reponse);
@@ -183,20 +152,8 @@ export function ReinscriptionFlow({
     } finally {
       setEnCours(false);
     }
-  }, [peutChercher, etablissement.code, matricule, dateISO, interpreter]);
+  }, [peutChercher, etablissement.code, matricule, dateNaissance, interpreter]);
 
-  /** La réinscription est enregistrée : directement, ou après vérification du contact. */
-  const conclure = useCallback(async (payload: Record<string, unknown>) => {
-    setPhysiques((payload.inscriptions_physiques as Physiques) ?? null);
-    const referencePublique = typeof payload.reference_publique === "string" ? payload.reference_publique : null;
-    setReference(referencePublique);
-    if (referencePublique) {
-      setCreneau(await chargerCreneau(etablissement.code, referencePublique, dateISO()));
-    }
-    setVerification(null);
-    setEtape("succes");
-    onAboutir?.(true);
-  }, [etablissement.code, dateISO, onAboutir]);
 
   const confirmer = useCallback(async () => {
     if (!consentement || enCours) return;
@@ -210,7 +167,7 @@ export function ReinscriptionFlow({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           matricule: matricule.trim(),
-          dateNaissance: dateISO(),
+          dateNaissance: dateNaissance,
           consentement: true,
         }),
       });
@@ -223,16 +180,10 @@ export function ReinscriptionFlow({
       }
 
       const payload = classement.corps;
-      // L'école ne traitera la réinscription qu'une fois le contact vérifié.
-      const demandeVerification = lireDemandeVerification(payload);
 
-      if (demandeVerification !== null) {
-        setVerification(demandeVerification);
-        return;
-      }
-
-      if (payload.enregistre === true) {
-        await conclure(payload);
+      // Vérification du contact demandée, ou dossier enregistré.
+      if (lireDemandeVerification(payload) !== null || payload.enregistre === true) {
+        await suivi.recevoir(payload);
         return;
       }
 
@@ -248,10 +199,11 @@ export function ReinscriptionFlow({
     } finally {
       setEnCours(false);
     }
-  }, [conclure, consentement, enCours, etablissement.code, matricule, dateISO, interpreter]);
+  }, [consentement, enCours, etablissement.code, matricule, dateNaissance, interpreter, suivi]);
 
   const recommencer = useCallback(() => {
     onAboutir?.(false);
+    suivi.reinitialiser();
     setEtape("identification");
     setSituation(null);
     setEtat(null);
@@ -260,14 +212,13 @@ export function ReinscriptionFlow({
     setJour("");
     setMois("");
     setAnnee("");
-  }, [onAboutir]);
+  }, [onAboutir, suivi]);
 
   // L'adresse vient du dossier de l'école : pas de « Modifier l'adresse » ici.
-  if (verification !== null && etape !== "succes") {
+  if (suivi.verification !== null && etape !== "succes") {
     return (
       <div className="mx-auto w-full max-w-xl">
-        <VerificationCode ecole={etablissement.code} demande={verification}
-                          onVerifie={(corps) => void conclure(corps)} />
+        <EtapeVerification ecole={etablissement.code} demande={suivi.verification} suivi={suivi} />
       </div>
     );
   }
@@ -433,7 +384,7 @@ export function ReinscriptionFlow({
           </m.div>
         )}
 
-        {etape === "succes" && (
+        {etape === "succes" && suivi.abouti !== null && (
           <m.div
             key="succes"
             initial={{ opacity: 0, y: 8 }}
@@ -442,11 +393,11 @@ export function ReinscriptionFlow({
             transition={RESSORT}
           >
             <ReinscriptionSucces
-              suiteDuParcours={suiteDuParcours}
-              reference={reference}
-              creneau={creneau}
-              onChoisirCreneau={reference !== null && onChoisirCreneau !== undefined
-                ? () => onChoisirCreneau(reference, dateISO())
+              suiteDuParcours={t(`succes.${suite.cle}`, { date: suite.date })}
+              reference={suivi.abouti.reference}
+              creneau={suivi.abouti.creneau}
+              onChoisirCreneau={suivi.abouti.reference !== null && onChoisirCreneau !== undefined
+                ? () => onChoisirCreneau(suivi.abouti?.reference ?? "", dateNaissance)
                 : undefined}
               onRecommencer={recommencer}
             />

@@ -21,37 +21,43 @@ export async function generateMetadata({
   const safeLocale = routing.locales.includes(locale) ? locale : routing.defaultLocale;
   const t = await getTranslations({ locale: safeLocale, namespace: "verification.page" });
 
-  return buildUniverseMetadata({
-    locale: safeLocale,
-    noindex: true,
-    title: t("titre"),
-    description: t("chargement"),
-    path: "/verification-email",
-  });
+  return {
+    ...buildUniverseMetadata({
+      locale: safeLocale,
+      noindex: true,
+      title: t("titre"),
+      description: t("description"),
+      path: "/verification-email",
+    }),
+    // Défense en profondeur : même un ancien lien en `?jeton=` ne part jamais
+    // dans l'en-tête Referer d'une ressource tierce.
+    referrer: "no-referrer",
+  };
 }
 
 /**
- * La page du lien envoyé par e-mail : `/verification-email?ecole=<code>&jeton=<jeton>`.
+ * La page du lien envoyé par e-mail : `/verification-email?ecole=<code>#jeton=<jeton>`.
  *
- * `ecole` désigne l'instance à qui relayer le jeton, parce que klassci.com sert
- * plusieurs écoles et que le jeton seul ne dit pas laquelle. Sans elle, ou pour
- * une école inconnue, la page affiche l'état « lien incomplet » plutôt qu'un 404 :
- * la personne a cliqué un lien reçu, elle doit savoir quoi faire ensuite.
+ * Le jeton est dans le FRAGMENT : le serveur ne le reçoit jamais, c'est le
+ * navigateur qui le lit puis l'efface (`VerificationLien`). `ecole` désigne
+ * l'instance à qui le relayer, parce que klassci.com sert plusieurs écoles.
+ * Sans elle, ou pour une école inconnue, la page affiche « lien incomplet »
+ * plutôt qu'un 404 : la personne a cliqué un lien reçu, elle doit savoir quoi
+ * faire ensuite. Cette page n'est pas mesurée (voir `confidentialite.ts`).
  */
 export default async function VerificationEmailPage({
   params,
   searchParams,
 }: {
   params: Promise<{ locale: string }>;
-  searchParams: { ecole?: string | string[]; jeton?: string | string[] };
+  searchParams: { ecole?: string | string[] };
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const jeton = typeof searchParams.jeton === "string" ? searchParams.jeton.trim() : "";
   const code = typeof searchParams.ecole === "string" ? searchParams.ecole.trim().toLowerCase() : "";
   const etablissement = etablissementsOuverts().find((e) => e.code === code) ?? null;
-  const contenu = <VerificationLien ecole={etablissement?.code ?? null} jeton={jeton} />;
+  const contenu = <VerificationLien ecole={etablissement?.code ?? null} />;
 
   if (etablissement === null) {
     return (

@@ -14,21 +14,24 @@ import { Champ, champ } from "./pieces";
  * à l'adresse e-mail, ou, pour qui n'en a pas, par WhatsApp au numéro donné.
  * La case « Je n'ai pas d'adresse e-mail » bascule de l'un à l'autre, et le
  * numéro devient alors un mobile ivoirien obligatoire.
+ *
+ * `focaliser` rend la main au champ du canal après « Modifier l'adresse » ou
+ * « Modifier le numéro » : c'est lui que la personne est revenue corriger.
  */
 export function ChampsContact({
   form,
   set,
   messagesDe,
   tentative,
+  focaliser,
   longueurs,
-  onEmailBloque,
 }: {
   form: Formulaire;
   set: (cle: keyof Formulaire) => (valeur: string | boolean) => void;
   messagesDe: (champ: string) => string[] | undefined;
   tentative: boolean;
+  focaliser: boolean;
   longueurs: { telephone: number; email: number };
-  onEmailBloque: (bloque: boolean) => void;
 }) {
   const t = useTranslations("inscription");
   const tc = useTranslations("canal");
@@ -44,25 +47,27 @@ export function ChampsContact({
         maxLength={longueurs.telephone}
         erreurs={messagesDe("telephone")}
         autoComplete="tel"
+        autoFocus={focaliser && form.sans_email}
       />
 
       {!form.sans_email && (
         <div className="mt-3">
           <ChampEmail
-            label={t("formulaire.email")}
-            value={form.email}
-            onChange={set("email")}
-            classeChamp={champ}
-            maxLength={longueurs.email}
-            required
+            valeur={{ email: form.email, confirme: form.email_confirme }}
+            onChange={({ email, confirme }) => {
+              set("email")(email);
+              set("email_confirme")(confirme);
+            }}
+            textes={{ label: t("formulaire.email") }}
+            attributs={{ maxLength: longueurs.email, required: true, autoFocus: focaliser }}
+            classes={{ champ }}
             erreurs={messagesDe("email")}
             forcerMessages={tentative}
-            onBlocage={onEmailBloque}
           />
         </div>
       )}
 
-      <label className="mt-3 flex cursor-pointer items-start gap-3 rounded-xl p-3 transition-colors duration-200 hover:bg-accent-light">
+      <label className="mt-3 flex min-h-[44px] cursor-pointer items-start gap-3 rounded-xl p-3 transition-colors duration-200 hover:bg-accent-light">
         <input
           type="checkbox"
           checked={form.sans_email}

@@ -4,36 +4,42 @@ import { refusServeur } from "./verifier-email.ts";
 /**
  * Le canal de vérification d'une candidature tient-il, côté serveur ?
  *
- * Rend les erreurs par champ, au format que le portail sait déjà afficher
- * (`champs` d'un 422), ou `null` si tout va bien. Les phrases sont en
- * français : c'est la langue des messages de validation de KLASSCI, et le
- * portail les traduit déjà en anglais champ par champ.
+ * Deux issues, nommées : `{ erreurs }` au format que le portail sait déjà
+ * afficher (`champs` d'un 422), ou `{ telephone }`, le numéro à transmettre à
+ * l'école. Rien n'est modifié en place.
  *
- * Sans adresse e-mail, le téléphone devient le canal : il doit être un mobile
- * ivoirien. Il est alors réécrit au format `+225…` dans le corps transmis,
- * pour que l'école reçoive un numéro qu'elle peut appeler sur WhatsApp.
+ * Avec une adresse e-mail, elle doit passer la règle commune ; le téléphone
+ * part alors tel que saisi. Sans adresse, le téléphone devient le canal : il
+ * doit être un mobile ivoirien, et part au format `+225…` pour que l'école
+ * puisse l'appeler sur WhatsApp.
+ *
+ * Les phrases sont en français, la langue des messages de validation de
+ * KLASSCI ; le portail les traduit déjà champ par champ.
  */
 const MESSAGES = {
-  invalide: "L'adresse e-mail est incomplète.",
+  invalide: "L’adresse e-mail est incomplète.",
   factice: "Ce domaine ne reçoit pas de courrier. Indiquez une adresse que vous consultez.",
-  faute_de_frappe: "Cette adresse contient une faute de frappe. Vérifiez le domaine après le @.",
+  faute_de_frappe: "Cette adresse contient probablement une faute de frappe. Vérifiez le domaine après le @.",
   whatsapp: "Sans adresse e-mail, indiquez un mobile ivoirien joignable sur WhatsApp (01, 05 ou 07).",
 } as const;
 
-export function verifierCanal(corps: Record<string, unknown>): Record<string, string[]> | null {
-  const email = corps.email;
+export type Canal = { erreurs: Record<string, string[]> } | { telephone: string };
 
-  if (typeof email === "string" && email.trim() !== "") {
-    const refus = refusServeur(email);
+export function verifierCanal(saisie: {
+  email?: string;
+  telephone: string;
+  /** La personne a-t-elle confirmé son adresse malgré une faute seulement probable ? */
+  emailConfirme: boolean;
+}): Canal {
+  const email = saisie.email?.trim() ?? "";
 
-    return refus === null ? null : { email: [MESSAGES[refus]] };
+  if (email !== "") {
+    const refus = refusServeur(email, saisie.emailConfirme);
+
+    return refus === null ? { telephone: saisie.telephone } : { erreurs: { email: [MESSAGES[refus]] } };
   }
 
-  const telephone = typeof corps.telephone === "string" ? normaliserWhatsapp(corps.telephone) : null;
+  const telephone = normaliserWhatsapp(saisie.telephone);
 
-  if (telephone === null) return { telephone: [MESSAGES.whatsapp] };
-
-  corps.telephone = telephone;
-
-  return null;
+  return telephone === null ? { erreurs: { telephone: [MESSAGES.whatsapp] } } : { telephone };
 }

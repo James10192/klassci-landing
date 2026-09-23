@@ -3,18 +3,15 @@
     "suggestion": "Did you mean {suggestion}?",
     "appliquer": "Change to {suggestion}",
     "confirmer": "No, my address is correct",
-    "confirmee": "Address kept as you typed it.",
     "factice": "The domain {domaine} does not receive mail. Please enter an address you actually read.",
     "invalide": "This e-mail address is incomplete. Example: first.last@gmail.com",
-    "requis": "Enter your e-mail address, or tick “I don't have an e-mail address”.",
-    "fauteServeur": "This address contains a typo. Check the domain after the @."
+    "aCorriger": "Pick the suggested correction, or confirm your address is correct."
   },
   "canal": {
-    "sansEmail": "I don't have an e-mail address",
+    "sansEmail": "I don’t have an e-mail address",
     "sansEmailAide": "We will send you a verification code on WhatsApp instead.",
     "whatsapp": "WhatsApp number",
-    "whatsappAide": "Ivorian mobile number (01, 05 or 07), for example +225 07 07 12 12 34. You will receive a code on WhatsApp.",
-    "whatsappInvalide": "This is not an Ivorian mobile number. Example: +225 07 07 12 12 34."
+    "whatsappAide": "Ivorian mobile number (01, 05 or 07), for example +225 07 07 12 12 34. You will receive a code on WhatsApp."
   },
   "verification": {
     "titreEmail": "Check your e-mail address",
@@ -54,7 +51,9 @@
       "reessayer": "Try again",
       "renvoyerLien": "Get a new link",
       "lienRenvoye": "A new link has just been sent to you.",
-      "accueil": "Back to home"
-    }
+      "accueil": "Back to home",
+      "description": "Confirm your e-mail address so your request can reach the school."
+    },
+    "renvoiTropTot": "A code was just sent. Please wait a minute before asking for another."
   }
 }

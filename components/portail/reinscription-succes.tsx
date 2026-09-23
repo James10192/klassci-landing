@@ -4,7 +4,7 @@ import { m } from "framer-motion";
 import { useTranslations } from "next-intl";
 
 import type { CreneauAttribue } from "./candidature-ecrans";
-import { Carte, RESSORT, entree } from "./pieces";
+import { Carte, PastilleSucces, entree } from "./pieces";
 
 /**
  * L'écran de fin de la réinscription.
@@ -29,25 +29,7 @@ export function ReinscriptionSucces({
 
   return (
     <Carte>
-      <m.div
-        initial={{ scale: 0.25, opacity: 0, filter: "blur(4px)" }}
-        animate={{ scale: 1, opacity: 1, filter: "blur(0px)" }}
-        transition={RESSORT}
-        className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-accent-light"
-      >
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={2.2}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="h-7 w-7 text-accent"
-          aria-hidden="true"
-        >
-          <path d="M20 6 9 17l-5-5" />
-        </svg>
-      </m.div>
+      <PastilleSucces />
 
       <m.h2
         {...entree(1)}
@@ -111,7 +93,7 @@ export function ReinscriptionSucces({
         <button
           type="button"
           onClick={onRecommencer}
-          className="min-h-[40px] px-3 text-sm text-accent underline-offset-4 transition-colors duration-200 hover:underline"
+          className="min-h-[44px] px-3 text-sm text-accent underline-offset-4 transition-colors duration-200 hover:underline"
         >
           {t("succes.action")}
         </button>

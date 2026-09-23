@@ -190,14 +190,9 @@ export function Contact() {
                   />
                 </div>
                 <ChampEmailAutonome
-                  id="contact-email"
-                  name="email"
-                  label={form.email.label}
-                  placeholder={form.email.placeholder}
-                  maxLength={CONTACT_FIELD_LIMITS.email}
-                  required
-                  classeLabel={LABEL_CLS}
-                  classeChamp={FIELD_CLS}
+                  textes={{ label: form.email.label, placeholder: form.email.placeholder }}
+                  attributs={{ id: "contact-email", name: "email", maxLength: CONTACT_FIELD_LIMITS.email, required: true }}
+                  classes={{ champ: FIELD_CLS, label: LABEL_CLS }}
                 />
               </div>
 

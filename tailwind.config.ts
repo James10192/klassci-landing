@@ -55,6 +55,8 @@ const config: Config = {
         success: "#10b981",
         warning: "#f59e0b",
         danger: "#ef4444",
+        // Texte d'erreur de formulaire, contrasté dans les deux thèmes.
+        erreur: "var(--erreur)",
         // Footer (uses accent)
         "footer-bg": "var(--footer-bg)",
         "footer-text": "var(--footer-text)",

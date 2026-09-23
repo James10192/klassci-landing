@@ -10,12 +10,23 @@
  * boîte que personne ne lit.
  */
 
+import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
+
+import { filtrerEvenement, nettoyerUrl, pageNonMesuree } from "../lib/analytics/confidentialite.ts";
 import { CORRECTIONS_CONNUES } from "../lib/email/domaines-suspects.ts";
 import { normaliserWhatsapp } from "../lib/email/telephone-whatsapp.ts";
 import { verifierCanal } from "../lib/email/verifier-canal.ts";
-import { analyserEmail, distanceEdition, refusServeur, suggererEmail } from "../lib/email/verifier-email.ts";
-import { lireDemandeVerification, lireMotif, nettoyerCode } from "../lib/portail/verification.ts";
+import { analyserEmail, distanceEdition, emailBloque, refusServeur, suggererEmail } from "../lib/email/verifier-email.ts";
+import { lireAboutissement, suiteSurPlace } from "../lib/portail/aboutissement.ts";
+import { lireDemandeVerification, lireMotif, nettoyerCode, renvoyer, verifier as verifierCode } from "../lib/portail/verification.ts";
 import { preparerVerification } from "../lib/portail/verification-relais.ts";
+
+/**
+ * Empreinte du fichier de données, partagée avec KLASSCIv2 : SHA-256 du JSON
+ * compact, clés dans l'ordre du fichier. Si elle change ici, elle change là-bas.
+ */
+const EMPREINTE_DONNEES = "438e81bc5824180a88a7dc135a1be4c4075a2c541b2febba84eef88f12a63257";
 
 let echecs = 0;
 let total = 0;
@@ -32,7 +43,12 @@ function verifier(intention, obtenu, attendu) {
   console.log(`         obtenu  : ${JSON.stringify(obtenu)}`);
 }
 
-console.log("Suggestion : fautes connues");
+console.log("Parité du fichier de données avec KLASSCIv2");
+const donnees = JSON.parse(readFileSync(new URL("../lib/email/domaines-suspects.json", import.meta.url), "utf8"));
+verifier("empreinte SHA-256 du JSON compact", createHash("sha256").update(JSON.stringify(donnees)).digest("hex"), EMPREINTE_DONNEES);
+verifier("le fichier reste en ASCII (même octets en PHP)", /^[\x00-\x7f]*$/.test(JSON.stringify(donnees)), true);
+
+console.log("\nSuggestion : fautes connues");
 for (const [fautif, voulu] of Object.entries(CORRECTIONS_CONNUES)) {
   verifier(`k.yao@${fautif} → k.yao@${voulu}`, suggererEmail(`k.yao@${fautif}`), `k.yao@${voulu}`);
 }
@@ -41,21 +57,26 @@ verifier("une faute connue est certaine", analyserEmail("awa@gmail.con").certitu
 verifier("le domaine se compare sans casse, la partie locale est gardée", suggererEmail("Kone.Awa@GMAIL.CON"), "Kone.Awa@gmail.com");
 verifier("les espaces autour sont ignorés", suggererEmail("  awa@gmial.com "), "awa@gmail.com");
 
-console.log("\nSuggestion : distance d'édition");
+console.log("\nSuggestion : nom et extension séparés");
 verifier("gmaill.com (1 lettre) → gmail.com", suggererEmail("a@gmaill.com"), "a@gmail.com");
-verifier("hotmai.fr (1 lettre) → hotmail.fr", suggererEmail("a@hotmai.fr"), "a@hotmail.fr");
-verifier("icoud.com (1 lettre) → icloud.com", suggererEmail("a@icoud.com"), "a@icloud.com");
-verifier("outlook.fe (1 lettre) → outlook.fr", suggererEmail("a@outlook.fe"), "a@outlook.fr");
-verifier("une faute par distance est seulement probable", analyserEmail("a@gmaill.com").certitude, "probable");
-verifier("gmaiiil.com (2 lettres) → gmail.com", suggererEmail("a@gmaiiil.com"), "a@gmail.com");
-verifier("gmaiiiil.com (3 lettres) : trop loin, rien", suggererEmail("a@gmaiiiil.com"), null);
-verifier("distanceEdition(gmail.com, gmial.com) = 2", distanceEdition("gmail.com", "gmial.com"), 2);
-verifier("distanceEdition bornée rend plafond + 1", distanceEdition("abcdefgh", "a", 2), 3);
+verifier("hotmai.fr → hotmail.fr (même extension)", suggererEmail("a@hotmai.fr"), "a@hotmail.fr");
+verifier("icoud.com → icloud.com", suggererEmail("a@icoud.com"), "a@icloud.com");
+verifier("une faute sur le nom est seulement probable", analyserEmail("a@gmaill.com").certitude, "probable");
+verifier("inversion gmali.com → gmail.com (distance 1)", suggererEmail("a@gmali.com"), "a@gmail.com");
+verifier("distance OSA : une inversion compte 1", distanceEdition("gmali", "gmail"), 1);
+verifier("distance OSA : gmaiiil / gmail = 2", distanceEdition("gmaiiil", "gmail"), 2);
+verifier("gmaiiil.com (2) → gmail.com", suggererEmail("a@gmaiiil.com"), "a@gmail.com");
+verifier("gmaiiiil.com (3) : trop loin, rien", suggererEmail("a@gmaiiiil.com"), null);
+verifier("extension par table : outlook.fe → outlook.fr, certaine", analyserEmail("a@outlook.fe").certitude, "certaine");
+verifier("extension par table : hotmail.frr → hotmail.fr", suggererEmail("a@hotmail.frr"), "a@hotmail.fr");
+verifier("extension et nom : gmial.con → gmail.com", suggererEmail("a@gmial.con"), "a@gmail.com");
+verifier("inconnu.con → inconnu.com (table d'extensions)", suggererEmail("a@inconnu.con"), "a@inconnu.com");
 
-console.log("\nPas de faux positif");
-for (const reel of ["gmail.com", "yahoo.fr", "outlook.com", "ymail.com", "mail.com", "email.com", "live.com", "orange.ci", "univ-fhb.edu.ci", "klassci.com"]) {
+console.log("\nPas de faux positif, jamais de pays remplacé");
+for (const reel of ["gmail.com", "yahoo.fr", "outlook.com", "ymail.com", "mail.com", "email.com", "gmx.com", "live.com", "live.ca", "yahoo.de", "hotmail.be", "outlook.es", "orange.ci", "univ-fhb.edu.ci", "klassci.com", "aol.com"]) {
   verifier(`${reel} est valide`, analyserEmail(`a@${reel}`).statut, "valide");
 }
+verifier("gmail.de n'est pas « corrigé » en gmail.com", suggererEmail("a@gmail.de"), null);
 
 console.log("\nDomaines factices et forme");
 for (const factice of ["esbtp.edu.ci", "example.com", "example.org", "test.com", "mail.example.com", "ESBTP.EDU.CI"]) {
@@ -67,11 +88,16 @@ for (const casse of ["awa", "awa@", "awa@gmail", "@gmail.com", "a wa@gmail.com",
   verifier(`« ${casse} » est invalide`, analyserEmail(casse).statut, "invalide");
 }
 
-console.log("\nRefus côté serveur");
-verifier("faute connue refusée", refusServeur("a@yahoo.con"), "faute_de_frappe");
-verifier("faute probable acceptée (la personne a pu confirmer)", refusServeur("a@gmaill.com"), null);
-verifier("factice refusé", refusServeur("a@esbtp.edu.ci"), "factice");
-verifier("adresse correcte acceptée", refusServeur("a@gmail.com"), null);
+console.log("\nBlocage (emailBloque), règle commune au champ et au serveur");
+verifier("vide : ne bloque pas (le formulaire décide du requis)", emailBloque(analyserEmail(""), false), null);
+verifier("invalide bloque", emailBloque(analyserEmail("awa@"), true), "invalide");
+verifier("factice bloque même confirmé", emailBloque(analyserEmail("a@test.com"), true), "factice");
+verifier("faute certaine bloque même confirmée", emailBloque(analyserEmail("a@gmail.con"), true), "faute_de_frappe");
+verifier("faute probable bloque tant qu'elle n'est pas confirmée", emailBloque(analyserEmail("a@gmaill.com"), false), "faute_de_frappe");
+verifier("faute probable confirmée passe", emailBloque(analyserEmail("a@gmaill.com"), true), null);
+verifier("adresse correcte passe", emailBloque(analyserEmail("a@gmail.com"), false), null);
+verifier("serveur : même règle, confirmation transmise", refusServeur("a@gmaill.com", true), null);
+verifier("serveur : faute probable non confirmée refusée", refusServeur("a@gmaill.com", false), "faute_de_frappe");
 
 console.log("\nWhatsApp ivoirien");
 verifier("07 07 12 12 34 → +2250707121234", normaliserWhatsapp("07 07 12 12 34"), "+2250707121234");
@@ -81,53 +107,94 @@ verifier("un fixe (27…) refusé", normaliserWhatsapp("27 22 44 55 66"), null);
 verifier("un ancien numéro à 8 chiffres refusé", normaliserWhatsapp("07 12 12 34"), null);
 
 console.log("\nCanal de la candidature (route serveur)");
-verifier("e-mail fautif → erreur sur email", verifierCanal({ email: "a@gmail.con", telephone: "0707121234" }), {
-  email: ["Cette adresse contient une faute de frappe. Vérifiez le domaine après le @."],
-});
-verifier("e-mail correct → rien", verifierCanal({ email: "a@gmail.com", telephone: "27 22 44 55 66" }), null);
-const sansEmail = { telephone: "07 07 12 12 34" };
-verifier("sans e-mail, mobile valide → rien", verifierCanal(sansEmail), null);
-verifier("sans e-mail, numéro réécrit au format international", sansEmail.telephone, "+2250707121234");
-verifier("e-mail vide : le téléphone devient le canal", Object.keys(verifierCanal({ email: "", telephone: "27 22 44 55 66" }) ?? {}), ["telephone"]);
-verifier("sans e-mail, fixe refusé", Object.keys(verifierCanal({ telephone: "27 22 44 55 66" }) ?? {}), ["telephone"]);
+verifier("e-mail fautif → erreurs sur email",
+  Object.keys(verifierCanal({ email: "a@gmail.con", telephone: "0707121234", emailConfirme: false }).erreurs ?? {}), ["email"]);
+verifier("e-mail correct → téléphone transmis tel quel",
+  verifierCanal({ email: "a@gmail.com", telephone: "27 22 44 55 66", emailConfirme: false }), { telephone: "27 22 44 55 66" });
+verifier("sans e-mail, mobile → format international",
+  verifierCanal({ telephone: "07 07 12 12 34", emailConfirme: false }), { telephone: "+2250707121234" });
+verifier("e-mail vide : le téléphone devient le canal",
+  Object.keys(verifierCanal({ email: "  ", telephone: "27 22 44 55 66", emailConfirme: false }).erreurs ?? {}), ["telephone"]);
 
 console.log("\nVérification : lecture des réponses");
-verifier(
-  "statut e-mail lu",
+verifier("statut e-mail lu",
   lireDemandeVerification({ statut: "verification_email_requise", demande_id: "d1", email_masque: "k***@gmail.com" }),
-  { canal: "email", demandeId: "d1", destination: "k***@gmail.com" },
-);
-verifier(
-  "statut téléphone lu",
+  { canal: "email", demandeId: "d1", destination: "k***@gmail.com" });
+verifier("statut téléphone lu",
   lireDemandeVerification({ statut: "verification_telephone_requise", demande_id: "d2", telephone_masque: "+225 07 ** ** 34" }),
-  { canal: "telephone", demandeId: "d2", destination: "+225 07 ** ** 34" },
-);
+  { canal: "telephone", demandeId: "d2", destination: "+225 07 ** ** 34" });
 verifier("réponse d'enregistrement classique : pas de vérification", lireDemandeVerification({ enregistre: true }), null);
 verifier("statut sans demande_id : ignoré", lireDemandeVerification({ statut: "verification_email_requise", email_masque: "x" }), null);
 verifier("motif connu", lireMotif({ verifie: false, motif: "expire" }), "expire");
 verifier("motif inconnu → null", lireMotif({ motif: "autre" }), null);
 verifier("code collé avec espaces", nettoyerCode(" 123 456 "), "123456");
 verifier("code tronqué à 6 chiffres", nettoyerCode("12345678"), "123456");
+verifier("aboutissement lu sans transtypage",
+  lireAboutissement({ reference_publique: "C-12", inscriptions_physiques: { debut: "2026-10-01", ouvertes: false } }),
+  { reference: "C-12", physiques: { debut: "2026-10-01", ouvertes: false } });
+verifier("aboutissement mal formé : rien n'est cru",
+  lireAboutissement({ reference_publique: 12, inscriptions_physiques: { debut: 3, ouvertes: "oui" } }),
+  { reference: null, physiques: null });
+verifier("suite sur place, guichet ouvert", suiteSurPlace({ debut: "2026-10-01", ouvertes: true }, "fr").cle, "surPlaceOuvert");
 
 console.log("\nVérification : corps relayé à l'école");
-verifier(
-  "code : seuls demande_id, code et canal passent",
+verifier("code : seuls demande_id, code et canal passent",
   preparerVerification("verifier", { demande_id: "abc-1", code: "123456", canal: "telephone", intrus: "x" }),
-  { cle: "verificationVerifier", corps: { demande_id: "abc-1", code: "123456", canal: "telephone" } },
-);
-verifier(
-  "jeton : canal e-mail par défaut",
+  { chemin: "api/portail/email/verifier", corps: { demande_id: "abc-1", code: "123456", canal: "telephone" } });
+verifier("canal absent → email",
   preparerVerification("verifier", { jeton: "Abcdefghijklmnop.qrst" }),
-  { cle: "verificationVerifier", corps: { jeton: "Abcdefghijklmnop.qrst", canal: "email" } },
-);
+  { chemin: "api/portail/email/verifier", corps: { jeton: "Abcdefghijklmnop.qrst", canal: "email" } });
+verifier("canal hors énumération → refusé, sans repli",
+  preparerVerification("verifier", { jeton: "Abcdefghijklmnop.qrst", canal: "sms" }), { erreur: "corps_invalide" });
 verifier("code à 5 chiffres refusé avant l'école", preparerVerification("verifier", { demande_id: "a", code: "12345" }), { erreur: "corps_invalide" });
 verifier("jeton trop court refusé", preparerVerification("verifier", { jeton: "court" }), { erreur: "corps_invalide" });
-verifier(
-  "renvoi",
-  preparerVerification("renvoyer", { demande_id: "abc-1" }),
-  { cle: "verificationRenvoyer", corps: { demande_id: "abc-1", canal: "email" } },
-);
+verifier("renvoi", preparerVerification("renvoyer", { demande_id: "abc-1" }),
+  { chemin: "api/portail/email/renvoyer", corps: { demande_id: "abc-1", canal: "email" } });
 verifier("action inconnue", preparerVerification("supprimer", { demande_id: "a" }), { erreur: "action_inconnue" });
+
+console.log("\nVérification : appels réseau (fetch simulé)");
+const appels = [];
+function simuler(statut, corps) {
+  globalThis.fetch = async (url, init) => {
+    appels.push({ url, corps: JSON.parse(init.body) });
+    if (statut === "panne") throw new TypeError("réseau coupé");
+    return new Response(corps === undefined ? "" : JSON.stringify(corps), { status: statut });
+  };
+}
+simuler(200, { verifie: true, type: "candidature" });
+verifier("code juste → vérifié", (await verifierCode("esbtp", "email", { demande_id: "d1", code: "123456" })).genre, "verifie");
+verifier("l'appel part au relais du site, canal dans le corps",
+  appels.at(-1), { url: "/api/verification/esbtp/verifier", corps: { demande_id: "d1", code: "123456", canal: "email" } });
+simuler(422, { verifie: false, motif: "expire", demande_id: "d1" });
+verifier("expiré → motif et demandeId exposés",
+  await verifierCode("esbtp", "email", { jeton: "x".repeat(20) }), { genre: "refuse", motif: "expire", demandeId: "d1" });
+simuler(422, { verifie: false, motif: "nouveau_motif" });
+verifier("motif inconnu → null", (await verifierCode("esbtp", "email", { demande_id: "d1", code: "111111" })).motif, null);
+simuler(429, {});
+verifier("429 → trop de tentatives", (await verifierCode("esbtp", "telephone", { demande_id: "d1", code: "111111" })).genre, "tropDeTentatives");
+simuler(200, { verifie: false });
+verifier("200 sans verifie:true n'est pas un succès", (await verifierCode("esbtp", "email", { demande_id: "d1", code: "111111" })).genre, "indisponible");
+simuler("panne");
+verifier("réseau coupé → indisponible", (await verifierCode("esbtp", "email", { demande_id: "d1", code: "111111" })).genre, "indisponible");
+simuler(202);
+verifier("renvoi accepté (202)", await renvoyer("esbtp", "telephone", "d1"), "envoye");
+verifier("renvoi : canal transmis", appels.at(-1).corps, { demande_id: "d1", canal: "telephone" });
+simuler(429);
+verifier("renvoi trop tôt (429)", await renvoyer("esbtp", "email", "d1"), "tropTot");
+simuler(503);
+verifier("renvoi en panne", await renvoyer("esbtp", "email", "d1"), "indisponible");
+
+console.log("\nMesure d'audience : rien de sensible ne sort");
+verifier("la page de vérification n'est pas mesurée", pageNonMesuree("/verification-email"), true);
+verifier("ni sa version anglaise", pageNonMesuree("/en/verification-email"), true);
+verifier("les autres pages le sont", pageNonMesuree("/inscription/universite/esbtp"), false);
+verifier("jeton et fragment retirés d'une adresse",
+  nettoyerUrl("https://www.klassci.com/x?ecole=a&jeton=secret&code=123456#jeton=secret"), "https://www.klassci.com/x?ecole=a");
+verifier("$pageleave de la page de vérification jeté",
+  filtrerEvenement({ properties: { $current_url: "https://www.klassci.com/verification-email?ecole=a", $pathname: "/verification-email" } }), null);
+verifier("référent nettoyé sur les autres pages",
+  filtrerEvenement({ properties: { $current_url: "https://www.klassci.com/", $referrer: "https://www.klassci.com/x?jeton=s" } }).properties.$referrer,
+  "https://www.klassci.com/x");
 
 console.log(`\n${total - echecs}/${total} vérifications passées`);
 if (echecs > 0) {

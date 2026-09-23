@@ -12,19 +12,11 @@
  * deux portes du portail qu'il évite de facturer au seau de débit.
  */
 
-import { normaliserWhatsapp } from "@/lib/email/telephone-whatsapp";
-
 import type { ChoixPublies, Formulaire } from "./candidature-champs";
 import type { CleEtat } from "./candidature-ecrans";
+import { dateIso } from "./pieces";
 
-/**
- * Quand l'école reçoit sur place, tel que le serveur le dit.
- *
- * `debut` est une date ISO ou null quand l'école n'en a pas renseigné ;
- * `ouvertes` dit si ce jour est arrivé — le calcul se fait côté serveur,
- * où l'on connaît le fuseau de l'école, pas celui du visiteur.
- */
-export type Physiques = { debut: string | null; ouvertes: boolean };
+export type { Physiques } from "@/lib/portail/aboutissement";
 
 /**
  * Ce que l'école a déjà publié, gardé pour la durée de la page.
@@ -71,17 +63,17 @@ export function refusStable(etat: CleEtat): boolean {
  * de sécurité, et elle doit continuer à nommer ce qu'elle laisse passer.
  */
 export function corpsAEnvoyer(form: Formulaire, consentement: boolean): Record<string, unknown> {
-  const { jour, mois, annee, sans_email, ...reste } = form;
+  const { jour, mois, annee, sans_email, email_confirme, ...reste } = form;
 
-  // Sans adresse e-mail, le téléphone est le canal de vérification : il part au
-  // format international, et une adresse tapée puis abandonnée ne part pas.
-  if (sans_email) {
-    reste.email = "";
-    reste.telephone = normaliserWhatsapp(reste.telephone) ?? reste.telephone;
-  }
+  // Sans adresse e-mail, une adresse tapée puis abandonnée ne part pas. Le
+  // numéro part tel que saisi : c'est la route serveur qui le valide et le
+  // réécrit au format international, une seule fois, au même endroit.
+  if (sans_email) reste.email = "";
 
   const corps: Record<string, unknown> = {
-    date_naissance: `${annee}-${mois.padStart(2, "0")}-${jour.padStart(2, "0")}`,
+    date_naissance: dateIso(jour, mois, annee),
+    // Ne sert qu'au contrôle de la route serveur ; jamais relayé à l'école.
+    email_confirme: !sans_email && email_confirme,
     // La VRAIE réponse de la case, et non `true` en dur. Écrit en dur, le
     // contrôle du BFF — annoté « obligation de la loi ivoirienne 2013-450 » —
     // ne pouvait plus jamais se déclencher depuis le portail : la donnée
