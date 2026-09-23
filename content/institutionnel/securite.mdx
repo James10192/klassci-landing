@@ -1,8 +1,8 @@
 ---
 title: "Sécurité et protection des données"
-description: "Où sont hébergées les données de votre établissement, comment elles sont sauvegardées et vérifiées, qui y accède, et ce que vous récupérez si vous partez."
-dateMaj: "2026-09-03"
-resume: "Cette page s'adresse aux directions d'établissement et à leurs prestataires informatiques. Elle décrit l'hébergement, l'isolation des données, les sauvegardes et leur vérification, la gestion des accès et les conditions de réversibilité. Une annexe technique en fin de page reprend les éléments destinés à un examen technique."
+description: "Où sont hébergées les données de votre établissement, comment elles sont sauvegardées, qui y accède, et ce que vous récupérez si vous partez."
+dateMaj: "2026-09-23"
+resume: "Cette page s'adresse aux directions d'établissement et à leurs prestataires informatiques. Elle décrit l'hébergement, l'isolation des données, les sauvegardes, la gestion des accès et les conditions de réversibilité. Une annexe technique en fin de page reprend les éléments destinés à un examen technique."
 ---
 
 Confier à un logiciel les dossiers de ses élèves, les notes qui décident d'un passage en année supérieure et les paiements des familles suppose de savoir où ces données vivent, qui peut les lire et ce qu'il advient d'elles si la relation s'arrête.
@@ -16,7 +16,6 @@ Cette page répond à ces questions. Elle est écrite pour être lue par une dir
 | Où sont hébergées les données de mon établissement ? | En France, chez LWS (Ligne Web Services) |
 | Ma base est-elle partagée avec d'autres écoles ? | Non. Une base de données par établissement, sur sa propre instance |
 | À quelle fréquence sauvegardez-vous ? | La base chaque nuit, l'ensemble chaque dimanche, conservation trente jours |
-| Ces sauvegardes sont-elles vérifiées ? | Oui, restaurées et recomptées chaque dimanche, avec un verdict daté |
 | Qui est responsable des données ? | Votre établissement. KLASSCI intervient comme sous-traitant |
 | Puis-je repartir avec mes données ? | Oui, au format tableur, documents déposés compris |
 | Avez-vous une certification ? | Non. Aucun audit externe à ce jour |
@@ -40,22 +39,13 @@ La distinction compte : les données de vos élèves ne quittent pas l'hébergem
 
 Le registre RIPE donne le pays d'enregistrement de la plage d'adresses, non l'adresse du centre de données. Si vous avez besoin de la localisation physique exacte, pour une clause contractuelle ou une formalité, demandez-la par écrit : nous la tenons du prestataire.
 
-## Sauvegardes, et la preuve qu'elles fonctionnent
+## Sauvegardes
 
 | | |
 | --- | --- |
 | **Base de données** | Chaque nuit à 2 h |
 | **Base et documents déposés** | Chaque dimanche à 3 h |
 | **Conservation** | Trente jours, puis effacement automatique |
-| **Chiffrement** | AES-256, clé conservée hors du serveur sauvegardé |
-| **Copie hors site** | Oui, sur un support distinct du serveur protégé |
-| **Vérification** | Chaque dimanche à 5 h, par restauration réelle |
-
-Deux points méritent d'être développés, parce qu'ils distinguent une sauvegarde d'un fichier qu'on espère utile.
-
-**La clé n'est pas rangée à côté du coffre.** Elle est conservée ailleurs que sur le serveur sauvegardé, et une copie de l'archive est déposée hors de ce serveur. Une sauvegarde qui vit à côté de la base qu'elle protège couvre la fausse manipulation, pas la perte du serveur : elle disparaît avec lui.
-
-**Les sauvegardes sont réellement restaurées, pas seulement produites.** Chaque dimanche, la dernière archive de chaque établissement est restaurée dans une base jetable, puis recomptée : nombre de tables, et nombre de lignes des tables qui portent le métier — élèves, inscriptions, paiements, notes. Compter les tables ne suffirait pas, une archive vide de contenu en restituerait le compte exact. Le verdict est daté et conservé, ce qui permet de répondre à la question « quand vos sauvegardes ont-elles été testées pour la dernière fois ? » par une date.
 
 ## Qui accède à quoi
 
@@ -95,7 +85,7 @@ La répartition est développée, canal par canal, dans la [politique de confide
 
 Quatre points, énoncés ici plutôt que découverts plus tard.
 
-**Les bases en exploitation ne sont pas chiffrées au niveau du support.** Les sauvegardes le sont. Le chiffrement au repos protège contre le vol d'un disque ou la lecture d'un support mis au rebut, non contre un accès obtenu à un serveur en fonctionnement.
+**Les bases en exploitation ne sont pas chiffrées au niveau du support.** Le chiffrement au repos protège contre le vol d'un disque ou la lecture d'un support mis au rebut, non contre un accès obtenu à un serveur en fonctionnement.
 
 **La limitation de débit du relais est un amortisseur, non une garantie.** Elle divise l'effet d'une rafale de requêtes, elle ne le supprime pas. Une borne étanche suppose un magasin partagé entre les instances ; elle sera posée si un établissement est visé.
 
@@ -139,10 +129,6 @@ Les logos et couleurs affichés sur la page d'inscription d'une école ne sont a
 ### Références d'hébergement
 
 Instances des établissements : LWS, France. Site vitrine : Vercel, région `iad1`. Les plages d'adresses et leurs références au registre sont communiquées sur demande écrite, avec la localisation physique.
-
-### Chiffrement des archives
-
-AES-256 en mode CBC, avec un sel aléatoire par archive. La clé de chaque archive est dérivée par PBKDF2 d'une clé maîtresse aléatoire d'au moins trente-deux caractères, conservée hors du serveur sauvegardé. C'est la longueur de cette clé, et non le nombre d'itérations de la dérivation, qui la met hors de portée d'un essai systématique.
 
 ## Une question ?
 

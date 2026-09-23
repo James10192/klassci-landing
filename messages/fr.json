@@ -563,7 +563,7 @@
     "items": [
       {
         "q": "Mes données sont-elles en sécurité ?",
-        "a": "Chaque établissement dispose de sa propre base de données isolée. Les données sont chiffrées en transit et au repos. Aucun établissement ne peut accéder aux données d'un autre."
+        "a": "Chaque établissement dispose de sa propre base de données isolée. Les échanges avec la plateforme sont chiffrés (HTTPS). Le détail des sauvegardes et des accès figure sur la page Sécurité. Aucun établissement ne peut accéder aux données d'un autre."
       },
       {
         "q": "Puis-je migrer mes données depuis Excel ?",
