@@ -26,7 +26,7 @@ import { preparerVerification } from "../lib/portail/verification-relais.ts";
  * Empreinte du fichier de données, partagée avec KLASSCIv2 : SHA-256 du JSON
  * compact, clés dans l'ordre du fichier. Si elle change ici, elle change là-bas.
  */
-const EMPREINTE_DONNEES = "3c28ba33a7e1128c1890df821460348f1abf08180822ce4cac5e51b085357eff";
+const EMPREINTE_DONNEES = "021ecd8807b450edfa1ab7aa5ce331b79d30157e17c6a2d06a790770ea110439";
 
 /** La suggestion proposée sous le champ, ou `null`. */
 function suggererEmail(brut) {
@@ -88,10 +88,17 @@ verifier("a@camtel.cm (Cameroun) est valide", analyserEmail("a@camtel.cm").statu
 verifier("gmail.cm reste une faute connue → gmail.com", suggererEmail("a@gmail.cm"), "a@gmail.com");
 
 console.log("\nDomaines factices et forme");
-for (const factice of ["esbtp.edu.ci", "example.com", "example.org", "test.com", "mail.example.com", "ESBTP.EDU.CI"]) {
+for (const factice of ["esbtp.edu.ci", "esbtp.edu", "demo.klassci.local", "example.com", "example.org", "example.net", "test.com", "mail.example.com", "ESBTP.EDU.CI"]) {
   verifier(`${factice} est refusé`, analyserEmail(`etudiant@${factice}`).statut, "factice");
 }
 verifier("latest.com n'est pas pris pour test.com", analyserEmail("a@latest.com").statut, "valide");
+for (const reserve of ["x.local", "y.test", "z.invalid", "w.example", "v.localhost"]) {
+  verifier(`extension réservée : a@${reserve} refusée`, analyserEmail(`a@${reserve}`).statut, "factice");
+}
+verifier("a@orange.cm reste valide", analyserEmail("a@orange.cm").statut, "valide");
+verifier("un « test » dans le nom n'est pas une extension réservée", analyserEmail("a@test.fr").statut, "valide");
+verifier("serveur : extension réservée refusée",
+  Object.keys(verifierCanal({ email: "a@x.local", telephone: "0707121234", emailConfirme: true }).erreurs ?? {}), ["email"]);
 verifier("vide", analyserEmail("   ").statut, "vide");
 for (const casse of ["awa", "awa@", "awa@gmail", "@gmail.com", "a wa@gmail.com", "awa@gmail.c", "awa@gmail.com.", "awa@gmail..com"]) {
   verifier(`« ${casse} » est invalide`, analyserEmail(casse).statut, "invalide");

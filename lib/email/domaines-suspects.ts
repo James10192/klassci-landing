@@ -31,4 +31,10 @@ export const NOMS_REELS_VOISINS: ReadonlySet<string> = new Set(donnees.noms_reel
 /** Domaines qui ne reçoivent aucun courrier ; leurs sous-domaines non plus. */
 export const DOMAINES_FACTICES: readonly string[] = donnees.domaines_factices;
 
+/**
+ * Extensions réservées (RFC 2606 et 6761) : aucune adresse sous `.local`,
+ * `.test`, `.invalid`, `.example` ou `.localhost` ne reçoit de courrier.
+ */
+export const EXTENSIONS_RESERVEES: ReadonlySet<string> = new Set(donnees.extensions_reservees);
+
 export const DISTANCE_MAXIMALE: number = donnees.distance_maximale;

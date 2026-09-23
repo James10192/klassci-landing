@@ -4,6 +4,7 @@ import {
   DISTANCE_MAXIMALE,
   DOMAINES_FACTICES,
   DOMAINES_REFERENCE,
+  EXTENSIONS_RESERVEES,
   NOMS_REELS_VOISINS,
 } from "./domaines-suspects.ts";
 
@@ -79,8 +80,12 @@ function decouper(domaine: string): { nom: string; tld: string } {
   return { nom: domaine.slice(0, point), tld: domaine.slice(point + 1) };
 }
 
+/** Domaine généré qui n'existe pas, ou extension réservée qui ne reçoit jamais de courrier. */
 function estFactice(domaine: string): boolean {
-  return DOMAINES_FACTICES.some((f) => domaine === f || domaine.endsWith(`.${f}`));
+  return (
+    EXTENSIONS_RESERVEES.has(decouper(domaine).tld) ||
+    DOMAINES_FACTICES.some((f) => domaine === f || domaine.endsWith(`.${f}`))
+  );
 }
 
 /** Le domaine voulu et la certitude, ou `null` si rien ne cloche. */
