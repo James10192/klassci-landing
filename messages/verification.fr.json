@@ -52,7 +52,9 @@
       "renvoyerLien": "Recevoir un nouveau lien",
       "lienRenvoye": "Un nouveau lien vient de vous être envoyé.",
       "accueil": "Retour à l’accueil",
-      "description": "Confirmez votre adresse e-mail pour que votre demande soit transmise à l’établissement."
+      "description": "Confirmez votre adresse e-mail pour que votre demande soit transmise à l’établissement.",
+      "lienTropTot": "Un lien vient déjà d’être envoyé. Patientez une minute avant d’en demander un autre.",
+      "envoiLien": "Envoi en cours…"
     },
     "renvoiTropTot": "Un code vient déjà d’être envoyé. Patientez une minute avant d’en demander un autre."
   }

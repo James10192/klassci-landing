@@ -1,4 +1,5 @@
 import { CHEMINS, type CheminPublic } from "./chemins.ts";
+import type { Canal } from "./verification.ts";
 
 /**
  * Ce que le relais transmet à KLASSCI pour vérifier une demande.
@@ -14,7 +15,6 @@ import { CHEMINS, type CheminPublic } from "./chemins.ts";
  * un champ ajouté par l'appelant n'entre jamais dans la charge signée.
  */
 
-export type Canal = "email" | "telephone";
 type Action = "verifier" | "renvoyer";
 
 const CHEMIN_PAR_CANAL: Record<Canal, Record<Action, CheminPublic>> = {

@@ -29,8 +29,8 @@ export async function generateMetadata({
       description: t("description"),
       path: "/verification-email",
     }),
-    // Défense en profondeur : même un ancien lien en `?jeton=` ne part jamais
-    // dans l'en-tête Referer d'une ressource tierce.
+    // Défense en profondeur : cette page n'envoie aucun en-tête Referer, donc
+    // un ancien lien en `?jeton=` ne fuit pas vers une ressource chargée par elle.
     referrer: "no-referrer",
   };
 }
@@ -38,12 +38,14 @@ export async function generateMetadata({
 /**
  * La page du lien envoyé par e-mail : `/verification-email?ecole=<code>#jeton=<jeton>`.
  *
- * Le jeton est dans le FRAGMENT : le serveur ne le reçoit jamais, c'est le
- * navigateur qui le lit puis l'efface (`VerificationLien`). `ecole` désigne
- * l'instance à qui le relayer, parce que klassci.com sert plusieurs écoles.
- * Sans elle, ou pour une école inconnue, la page affiche « lien incomplet »
- * plutôt qu'un 404 : la personne a cliqué un lien reçu, elle doit savoir quoi
- * faire ensuite. Cette page n'est pas mesurée (voir `confidentialite.ts`).
+ * Le jeton est dans le FRAGMENT : ce serveur ne le reçoit pas pour les liens à
+ * ce format (un ancien lien en `?jeton=` arrive encore dans ses journaux).
+ * C'est le navigateur qui le lit puis l'efface (`VerificationLien`). `ecole`
+ * désigne l'instance à qui le relayer, parce que klassci.com sert plusieurs
+ * écoles. Sans elle, ou pour une école inconnue, la page affiche « Ce lien ne
+ * fonctionne pas » plutôt qu'un 404 : la personne a cliqué un lien reçu, elle
+ * doit savoir quoi faire ensuite. Aucun des trois outils de mesure du site ne
+ * l'enregistre (filtres de `lib/analytics/confidentialite.ts`).
  */
 export default async function VerificationEmailPage({
   params,

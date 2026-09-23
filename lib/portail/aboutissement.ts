@@ -22,12 +22,15 @@ export function estObjet(valeur: unknown): valeur is Record<string, unknown> {
   return valeur !== null && typeof valeur === "object" && !Array.isArray(valeur);
 }
 
+/** Une date ISO courte : c'est ce que l'écran met en forme, rien d'autre ne passe. */
+const DATE_ISO = /^\d{4}-\d{2}-\d{2}$/;
+
 export function lirePhysiques(valeur: unknown): Physiques | null {
   if (!estObjet(valeur) || typeof valeur.ouvertes !== "boolean") return null;
 
   const debut = valeur.debut;
 
-  if (debut !== null && typeof debut !== "string") return null;
+  if (debut !== null && (typeof debut !== "string" || !DATE_ISO.test(debut))) return null;
 
   return { debut, ouvertes: valeur.ouvertes };
 }

@@ -20,7 +20,8 @@ import { manquantsCandidature } from "./candidature-manquants";
 import { useMessageEtat } from "./candidature-message-etat";
 import { Alerte, BoutonPrincipal, Carte, Erreurs, dateIso, entree } from "./pieces";
 import { classer } from "./reponses";
-import { EtapeVerification, useSuiviDemande } from "./suivi-demande";
+import { useSuiviDemande } from "./suivi-demande";
+import { VerificationCode } from "./verification-code";
 
 /**
  * La candidature d'un NOUVEL étudiant : ce qui se passe autour des champs.
@@ -111,6 +112,12 @@ export function CandidatureFlow({
   const [refocaliser, setRefocaliser] = useState(false);
   const demande = useRef(0);
   const { form, setForm, consentement, setConsentement } = saisie;
+
+  // `autoFocus` n'agit qu'au montage du champ : une fois le formulaire revenu,
+  // le drapeau retombe, pour ne pas voler le focus à un champ remonté plus tard.
+  useEffect(() => {
+    if (refocaliser) setRefocaliser(false);
+  }, [refocaliser]);
   const dateNaissance = dateIso(form.jour, form.mois, form.annee);
   // La candidature est partie : « Ce n'est pas mon cas » n'a plus de sens sous
   // l'écran de fin, et repasser par l'autre porte ne l'annulerait pas.
@@ -288,7 +295,7 @@ export function CandidatureFlow({
       }
 
       // Vérification du contact demandée, ou dossier enregistré.
-      await suivi.recevoir(classement.corps);
+      await suivi.recevoir(classement.corps, true);
     } catch {
       setEtat("indisponible");
     } finally {
@@ -306,10 +313,10 @@ export function CandidatureFlow({
   // non vérifiée reste sans suite côté école, un nouvel envoi la remplace.
   if (suivi.verification !== null && suivi.abouti === null) {
     return (
-      <EtapeVerification
+      <VerificationCode
         ecole={etablissement.code}
         demande={suivi.verification}
-        suivi={suivi}
+        onVerifie={(corps) => void suivi.conclure(corps)}
         onModifier={() => {
           suivi.abandonnerVerification();
           setRefocaliser(true);

@@ -13,11 +13,11 @@
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 
-import { filtrerEvenement, nettoyerUrl, pageNonMesuree } from "../lib/analytics/confidentialite.ts";
+import { filtrerEvenement, filtrerMesureVercel, nettoyerUrl, pageNonMesuree } from "../lib/analytics/confidentialite.ts";
 import { CORRECTIONS_CONNUES } from "../lib/email/domaines-suspects.ts";
 import { normaliserWhatsapp } from "../lib/email/telephone-whatsapp.ts";
 import { verifierCanal } from "../lib/email/verifier-canal.ts";
-import { analyserEmail, distanceEdition, emailBloque, refusServeur, suggererEmail } from "../lib/email/verifier-email.ts";
+import { analyserEmail, distanceEdition, emailBloque } from "../lib/email/verifier-email.ts";
 import { lireAboutissement, suiteSurPlace } from "../lib/portail/aboutissement.ts";
 import { lireDemandeVerification, lireMotif, nettoyerCode, renvoyer, verifier as verifierCode } from "../lib/portail/verification.ts";
 import { preparerVerification } from "../lib/portail/verification-relais.ts";
@@ -26,7 +26,13 @@ import { preparerVerification } from "../lib/portail/verification-relais.ts";
  * Empreinte du fichier de données, partagée avec KLASSCIv2 : SHA-256 du JSON
  * compact, clés dans l'ordre du fichier. Si elle change ici, elle change là-bas.
  */
-const EMPREINTE_DONNEES = "438e81bc5824180a88a7dc135a1be4c4075a2c541b2febba84eef88f12a63257";
+const EMPREINTE_DONNEES = "3c28ba33a7e1128c1890df821460348f1abf08180822ce4cac5e51b085357eff";
+
+/** La suggestion proposée sous le champ, ou `null`. */
+function suggererEmail(brut) {
+  const analyse = analyserEmail(brut);
+  return analyse.statut === "faute" ? analyse.suggestion : null;
+}
 
 let echecs = 0;
 let total = 0;
@@ -77,6 +83,9 @@ for (const reel of ["gmail.com", "yahoo.fr", "outlook.com", "ymail.com", "mail.c
   verifier(`${reel} est valide`, analyserEmail(`a@${reel}`).statut, "valide");
 }
 verifier("gmail.de n'est pas « corrigé » en gmail.com", suggererEmail("a@gmail.de"), null);
+verifier("a@orange.cm (Cameroun) est valide", analyserEmail("a@orange.cm").statut, "valide");
+verifier("a@camtel.cm (Cameroun) est valide", analyserEmail("a@camtel.cm").statut, "valide");
+verifier("gmail.cm reste une faute connue → gmail.com", suggererEmail("a@gmail.cm"), "a@gmail.com");
 
 console.log("\nDomaines factices et forme");
 for (const factice of ["esbtp.edu.ci", "example.com", "example.org", "test.com", "mail.example.com", "ESBTP.EDU.CI"]) {
@@ -84,7 +93,7 @@ for (const factice of ["esbtp.edu.ci", "example.com", "example.org", "test.com",
 }
 verifier("latest.com n'est pas pris pour test.com", analyserEmail("a@latest.com").statut, "valide");
 verifier("vide", analyserEmail("   ").statut, "vide");
-for (const casse of ["awa", "awa@", "awa@gmail", "@gmail.com", "a wa@gmail.com", "awa@gmail.c"]) {
+for (const casse of ["awa", "awa@", "awa@gmail", "@gmail.com", "a wa@gmail.com", "awa@gmail.c", "awa@gmail.com.", "awa@gmail..com"]) {
   verifier(`« ${casse} » est invalide`, analyserEmail(casse).statut, "invalide");
 }
 
@@ -96,8 +105,10 @@ verifier("faute certaine bloque même confirmée", emailBloque(analyserEmail("a@
 verifier("faute probable bloque tant qu'elle n'est pas confirmée", emailBloque(analyserEmail("a@gmaill.com"), false), "faute_de_frappe");
 verifier("faute probable confirmée passe", emailBloque(analyserEmail("a@gmaill.com"), true), null);
 verifier("adresse correcte passe", emailBloque(analyserEmail("a@gmail.com"), false), null);
-verifier("serveur : même règle, confirmation transmise", refusServeur("a@gmaill.com", true), null);
-verifier("serveur : faute probable non confirmée refusée", refusServeur("a@gmaill.com", false), "faute_de_frappe");
+verifier("serveur : faute probable confirmée acceptée",
+  verifierCanal({ email: "a@gmaill.com", telephone: "0707121234", emailConfirme: true }), { telephone: "0707121234" });
+verifier("serveur : faute probable non confirmée refusée",
+  Object.keys(verifierCanal({ email: "a@gmaill.com", telephone: "0707121234", emailConfirme: false }).erreurs ?? {}), ["email"]);
 
 console.log("\nWhatsApp ivoirien");
 verifier("07 07 12 12 34 → +2250707121234", normaliserWhatsapp("07 07 12 12 34"), "+2250707121234");
@@ -135,6 +146,10 @@ verifier("aboutissement lu sans transtypage",
 verifier("aboutissement mal formé : rien n'est cru",
   lireAboutissement({ reference_publique: 12, inscriptions_physiques: { debut: 3, ouvertes: "oui" } }),
   { reference: null, physiques: null });
+verifier("date d'accueil mal formée : ignorée",
+  lireAboutissement({ inscriptions_physiques: { debut: "1er octobre", ouvertes: false } }).physiques, null);
+verifier("date d'accueil avec heure : ignorée",
+  lireAboutissement({ inscriptions_physiques: { debut: "2026-10-01T08:00:00Z", ouvertes: false } }).physiques, null);
 verifier("suite sur place, guichet ouvert", suiteSurPlace({ debut: "2026-10-01", ouvertes: true }, "fr").cle, "surPlaceOuvert");
 
 console.log("\nVérification : corps relayé à l'école");
@@ -197,6 +212,11 @@ verifier("référent nettoyé sur les autres pages",
   "https://www.klassci.com/x");
 
 console.log(`\n${total - echecs}/${total} vérifications passées`);
+verifier("Vercel : la page de vérification n'est pas mesurée",
+  filtrerMesureVercel({ type: "pageview", url: "https://www.klassci.com/en/verification-email?ecole=a#jeton=s" }), null);
+verifier("Vercel : les autres adresses partent nettoyées",
+  filtrerMesureVercel({ type: "pageview", url: "https://www.klassci.com/x?jeton=s&a=1" }), { type: "pageview", url: "https://www.klassci.com/x?a=1" });
+
 if (echecs > 0) {
   process.exit(1);
 }

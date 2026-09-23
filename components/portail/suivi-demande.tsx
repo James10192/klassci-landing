@@ -6,7 +6,6 @@ import { lireAboutissement, type Physiques } from "@/lib/portail/aboutissement";
 import { lireDemandeVerification, type DemandeVerification } from "@/lib/portail/verification";
 
 import { chargerCreneau, type CreneauAttribue } from "./candidature-ecrans";
-import { VerificationCode } from "./verification-code";
 
 /**
  * Ce qui suit l'envoi d'une demande, commun à la candidature et à la réinscription.
@@ -23,8 +22,12 @@ export type Abouti = { reference: string | null; physiques: Physiques | null; cr
 export type SuiviDemande = {
   verification: DemandeVerification | null;
   abouti: Abouti | null;
-  /** La réponse d'un envoi accepté (2xx) : vérification demandée, ou dossier enregistré. */
-  recevoir: (corps: Record<string, unknown>) => Promise<void>;
+  /**
+   * La réponse d'un envoi accepté (2xx). Rend `true` si elle a été prise en
+   * charge : vérification demandée, ou dossier enregistré (`enregistre`).
+   * `false` laisse le parcours dire ce qu'il sait d'un refus.
+   */
+  recevoir: (corps: Record<string, unknown>, enregistre: boolean) => Promise<boolean>;
   /** Le dossier est enregistré : directement, ou après vérification. */
   conclure: (corps: Record<string, unknown>) => Promise<void>;
   /** Abandonne la vérification en cours, pour corriger l'adresse ou le numéro. */
@@ -58,15 +61,19 @@ export function useSuiviDemande({
   );
 
   const recevoir = useCallback(
-    async (corps: Record<string, unknown>) => {
+    async (corps: Record<string, unknown>, enregistre: boolean) => {
       const demande = lireDemandeVerification(corps);
 
       if (demande !== null) {
         setVerification(demande);
-        return;
+        return true;
       }
 
+      if (!enregistre) return false;
+
       await conclure(corps);
+
+      return true;
     },
     [conclure],
   );
@@ -80,29 +87,3 @@ export function useSuiviDemande({
   return { verification, abouti, recevoir, conclure, abandonnerVerification, reinitialiser };
 }
 
-/**
- * L'écran de vérification, branché sur le suivi d'une demande.
- *
- * `onModifier` est absent en réinscription : l'adresse y vient du dossier de
- * l'école, pas d'une saisie qu'on pourrait corriger.
- */
-export function EtapeVerification({
-  ecole,
-  demande,
-  suivi,
-  onModifier,
-}: {
-  ecole: string;
-  demande: DemandeVerification;
-  suivi: SuiviDemande;
-  onModifier?: () => void;
-}) {
-  return (
-    <VerificationCode
-      ecole={ecole}
-      demande={demande}
-      onVerifie={(corps) => void suivi.conclure(corps)}
-      onModifier={onModifier}
-    />
-  );
-}

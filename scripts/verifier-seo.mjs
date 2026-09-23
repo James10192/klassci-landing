@@ -215,6 +215,18 @@ function controlerSitemapEtRobots() {
  * documentation a sa propre route de cartes (`app/cartes/docs`), parce que Next
  * refuse un `opengraph-image` sous un segment facultatif `[[...slug]]`.
  */
+/**
+ * Pages exemptees de carte de partage, chacune avec sa raison ecrite.
+ *
+ * `verification-email` : page de confirmation d'une adresse, ouverte depuis le
+ * lien recu par e-mail. Elle est en noindex, porte un jeton a usage unique et
+ * ne doit jamais etre partagee : lui dessiner une carte inviterait precisement
+ * a partager ce lien.
+ */
+const SANS_CARTE = new Map([
+  ["verification-email", "noindex, jeton a usage unique, ne doit pas etre partagee"],
+]);
+
 function controlerCartesDePartage() {
   let pages = 0;
   for (const page of fichiers("app/[locale]", /^page\.tsx$/)) {
@@ -230,6 +242,7 @@ function controlerCartesDePartage() {
     }
     if (!/generateMetadata/.test(source)) continue;
     if (/\bredirect\(/.test(source) && !/<[A-Z]/.test(source)) continue;
+    if (SANS_CARTE.has(relatif.split(/[\\/]/).pop())) continue;
 
     pages += 1;
     const carte = join(dossier, "opengraph-image.tsx");

@@ -7,13 +7,13 @@ import { useCallback, useId, useMemo, useRef, useState } from "react";
 import type { EtablissementVisible } from "@/lib/portail/tenants";
 
 import { suiteSurPlace } from "@/lib/portail/aboutissement";
-import { lireDemandeVerification } from "@/lib/portail/verification";
 
 import { Alerte, BoutonPrincipal, Carte, CaseDate, RESSORT, champ, dateIso, dateNaissanceValide, entree } from "./pieces";
 import { ECRANS, type CleEtat, type Etape, type Situation } from "./reinscription-ecrans";
 import { ReinscriptionSucces } from "./reinscription-succes";
 import { classer, ecranDe } from "./reponses";
-import { EtapeVerification, useSuiviDemande } from "./suivi-demande";
+import { useSuiviDemande } from "./suivi-demande";
+import { VerificationCode } from "./verification-code";
 
 /**
  * Le parcours de réinscription, d'un bout à l'autre, sans changer de page.
@@ -182,10 +182,7 @@ export function ReinscriptionFlow({
       const payload = classement.corps;
 
       // Vérification du contact demandée, ou dossier enregistré.
-      if (lireDemandeVerification(payload) !== null || payload.enregistre === true) {
-        await suivi.recevoir(payload);
-        return;
-      }
+      if (await suivi.recevoir(payload, payload.enregistre === true)) return;
 
       // KLASSCI refuse DÉLIBÉRÉMENT de dire pourquoi il ne sert pas un
       // dossier : déjà réinscrit, plus d'année courante, rien à réinscrire —
@@ -218,10 +215,13 @@ export function ReinscriptionFlow({
   if (suivi.verification !== null && etape !== "succes") {
     return (
       <div className="mx-auto w-full max-w-xl">
-        <EtapeVerification ecole={etablissement.code} demande={suivi.verification} suivi={suivi} />
+        <VerificationCode ecole={etablissement.code} demande={suivi.verification}
+                          onVerifie={(corps) => void suivi.conclure(corps)} />
       </div>
     );
   }
+
+  const referenceAboutie = suivi.abouti?.reference ?? null;
 
   return (
     <div className="mx-auto w-full max-w-xl">
@@ -396,8 +396,8 @@ export function ReinscriptionFlow({
               suiteDuParcours={t(`succes.${suite.cle}`, { date: suite.date })}
               reference={suivi.abouti.reference}
               creneau={suivi.abouti.creneau}
-              onChoisirCreneau={suivi.abouti.reference !== null && onChoisirCreneau !== undefined
-                ? () => onChoisirCreneau(suivi.abouti?.reference ?? "", dateNaissance)
+              onChoisirCreneau={referenceAboutie !== null && onChoisirCreneau !== undefined
+                ? () => onChoisirCreneau(referenceAboutie, dateNaissance)
                 : undefined}
               onRecommencer={recommencer}
             />

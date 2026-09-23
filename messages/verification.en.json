@@ -52,7 +52,9 @@
       "renvoyerLien": "Get a new link",
       "lienRenvoye": "A new link has just been sent to you.",
       "accueil": "Back to home",
-      "description": "Confirm your e-mail address so your request can reach the school."
+      "description": "Confirm your e-mail address so your request can reach the school.",
+      "lienTropTot": "A link was just sent. Please wait a minute before asking for another.",
+      "envoiLien": "Sending…"
     },
     "renvoiTropTot": "A code was just sent. Please wait a minute before asking for another."
   }

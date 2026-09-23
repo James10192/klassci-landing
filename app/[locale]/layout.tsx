@@ -5,13 +5,12 @@ import { IBM_Plex_Mono, IBM_Plex_Sans, IBM_Plex_Serif } from "next/font/google";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { ReactNode } from "react";
 
 import { RootProvider } from "fumadocs-ui/provider";
 import { I18nProvider } from "fumadocs-ui/i18n";
 
+import { MesuresVercel } from "@/components/analytics/mesures-vercel";
 import { PostHogProvider } from "@/components/analytics/posthog-provider";
 import { MotionConfigProvider } from "@/components/motion-config-provider";
 import { routing } from "@/i18n/routing";
@@ -219,8 +218,7 @@ export default async function LocaleLayout({
             </I18nProvider>
           </RootProvider>
         </NextIntlClientProvider>
-        <Analytics />
-        <SpeedInsights />
+        <MesuresVercel />
       </body>
     </html>
   );

@@ -1,5 +1,5 @@
 import { normaliserWhatsapp } from "./telephone-whatsapp.ts";
-import { refusServeur } from "./verifier-email.ts";
+import { analyserEmail, emailBloque } from "./verifier-email.ts";
 
 /**
  * Le canal de vérification d'une candidature tient-il, côté serveur ?
@@ -23,18 +23,18 @@ const MESSAGES = {
   whatsapp: "Sans adresse e-mail, indiquez un mobile ivoirien joignable sur WhatsApp (01, 05 ou 07).",
 } as const;
 
-export type Canal = { erreurs: Record<string, string[]> } | { telephone: string };
+export type VerdictCanal = { erreurs: Record<string, string[]> } | { telephone: string };
 
 export function verifierCanal(saisie: {
   email?: string;
   telephone: string;
   /** La personne a-t-elle confirmé son adresse malgré une faute seulement probable ? */
   emailConfirme: boolean;
-}): Canal {
+}): VerdictCanal {
   const email = saisie.email?.trim() ?? "";
 
   if (email !== "") {
-    const refus = refusServeur(email, saisie.emailConfirme);
+    const refus = emailBloque(analyserEmail(email), saisie.emailConfirme);
 
     return refus === null ? { telephone: saisie.telephone } : { erreurs: { email: [MESSAGES[refus]] } };
   }

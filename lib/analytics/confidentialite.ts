@@ -2,10 +2,14 @@
  * Ce que la mesure d'audience ne doit jamais voir.
  *
  * La page `/verification-email` reçoit un jeton de vérification à usage
- * unique. Il vit dans le fragment et la page l'efface aussitôt, mais la mesure
- * ne compte pas sur cet ordre des choses : cette page n'est pas mesurée du
- * tout, et toute adresse envoyée ailleurs est nettoyée de ses paramètres
- * sensibles. Module pur, vérifié par Node.
+ * unique, dans le fragment (ou en paramètre pour un ancien lien), que la page
+ * efface dès son premier rendu. Les trois outils de mesure du site passent par
+ * les filtres de ce module : PostHog (`filtrerEvenement`, branché en
+ * `before_send`), Vercel Analytics et Speed Insights (`filtrerMesureVercel`,
+ * branché en `beforeSend`). Tout évènement de cette page est jeté, et toute
+ * autre adresse part sans fragment ni paramètre sensible. Le serveur, lui,
+ * reçoit encore un ancien `?jeton=` dans ses journaux d'accès : seuls les
+ * nouveaux liens, en fragment, l'évitent. Module pur, vérifié par Node.
  */
 
 const PAGES_NON_MESUREES = /^(?:\/[a-z]{2})?\/verification-email\/?$/;
@@ -62,4 +66,16 @@ export function filtrerEvenement<E extends Evenement>(evenement: E | null): E | 
   }
 
   return evenement;
+}
+
+/**
+ * Filtre `beforeSend` de Vercel Analytics et Speed Insights : leurs évènements
+ * portent l'adresse complète dans `url`.
+ */
+export function filtrerMesureVercel<E extends { url: string }>(evenement: E): E | null {
+  const url = nettoyerUrl(evenement.url);
+
+  if (pageNonMesuree(new URL(url, "https://www.klassci.com").pathname)) return null;
+
+  return { ...evenement, url };
 }

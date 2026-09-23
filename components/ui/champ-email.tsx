@@ -128,7 +128,11 @@ export function ChampEmail({ valeur, onChange, textes, attributs = {}, classes, 
             {suggestion.certitude === "probable" && (
               <button
                 type="button"
-                onClick={() => onChange({ email: valeur.email, confirme: true })}
+                onClick={() => {
+                  onChange({ email: valeur.email, confirme: true });
+                  // Le bouton disparaît avec la suggestion : le focus revient au champ.
+                  champ.current?.focus();
+                }}
                 className={`${BOUTON_TEXTE} text-text-muted hover:text-text`}
               >
                 {t("confirmer")}

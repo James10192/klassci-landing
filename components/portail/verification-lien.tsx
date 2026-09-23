@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Link } from "@/i18n/navigation";
-import { renvoyer, verifier } from "@/lib/portail/verification";
+import { renvoyer, verifier, type ResultatRenvoi } from "@/lib/portail/verification";
 
 import { BoutonPrincipal, Carte, PastilleSucces, entree } from "./pieces";
 
@@ -48,8 +48,11 @@ function prendreJeton(): string {
 export function VerificationLien({ ecole }: { ecole: string | null }) {
   const t = useTranslations("verification.page");
   const [etat, setEtat] = useState<Etat>({ genre: "chargement" });
-  const [renvoi, setRenvoi] = useState<"aucun" | "envoye" | "echec">("aucun");
+  const [renvoi, setRenvoi] = useState<ResultatRenvoi | "aucun" | "enCours">("aucun");
   const jeton = useRef<string | null>(null);
+  // Un seul renvoi à la fois : deux appuis rapides feraient deux e-mails, et le
+  // second répondrait « trop tôt » par-dessus la confirmation du premier.
+  const renvoiEnVol = useRef(false);
 
   const consommer = useCallback(async () => {
     const lu = jeton.current;
@@ -80,9 +83,14 @@ export function VerificationLien({ ecole }: { ecole: string | null }) {
   }, [consommer]);
 
   const demanderLien = async (demandeId: string) => {
-    if (ecole === null) return;
-    setRenvoi((await renvoyer(ecole, "email", demandeId)) === "envoye" ? "envoye" : "echec");
+    if (ecole === null || renvoiEnVol.current) return;
+    renvoiEnVol.current = true;
+    setRenvoi("enCours");
+    setRenvoi(await renvoyer(ecole, "email", demandeId));
+    renvoiEnVol.current = false;
   };
+
+  const messageRenvoi = { aucun: null, enCours: null, envoye: t("lienRenvoye"), tropTot: t("lienTropTot"), indisponible: t("indisponibleTexte") }[renvoi];
 
   if (etat.genre === "chargement") {
     return (
@@ -123,13 +131,19 @@ export function VerificationLien({ ecole }: { ecole: string | null }) {
         </m.div>
       )}
 
-      {etat.genre === "expire" && etat.demandeId !== null && renvoi !== "envoye" && (
-        <m.div {...entree(3)} className="mt-5">
-          <BoutonPrincipal onClick={() => void demanderLien(etat.demandeId ?? "")}>{t("renvoyerLien")}</BoutonPrincipal>
-        </m.div>
-      )}
-      <p role="status" className={`text-center text-sm empty:hidden [&:not(:empty)]:mt-3 ${renvoi === "echec" ? "text-erreur" : "text-text-secondary"}`}>
-        {renvoi === "envoye" ? t("lienRenvoye") : renvoi === "echec" ? t("indisponibleTexte") : null}
+      {etat.genre === "expire" && renvoi !== "envoye" && (() => {
+        const demandeId = etat.demandeId;
+
+        return demandeId === null ? null : (
+          <m.div {...entree(3)} className="mt-5">
+            <BoutonPrincipal onClick={() => void demanderLien(demandeId)} disabled={renvoi === "enCours"} occupe={renvoi === "enCours"}>
+              {renvoi === "enCours" ? t("envoiLien") : t("renvoyerLien")}
+            </BoutonPrincipal>
+          </m.div>
+        );
+      })()}
+      <p role="status" className={`text-center text-sm empty:hidden [&:not(:empty)]:mt-3 ${renvoi === "envoye" ? "text-text-secondary" : "text-erreur"}`}>
+        {messageRenvoi}
       </p>
 
       <p className="mt-5 text-center">

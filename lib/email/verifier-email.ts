@@ -17,8 +17,8 @@ import {
  * Un domaine se lit en deux parties, le nom et l'extension (`gmail` + `com`) :
  *
  * - l'extension ne se corrige QUE par la table explicite (`con` → `com`,
- *   `fe` → `fr`…). `live.ca` ou `yahoo.de` sont de vraies adresses : on ne
- *   remplace jamais un pays valide par un autre ;
+ *   `fe` → `fr`…). `live.ca`, `yahoo.de` ou `orange.cm` (Cameroun) sont de
+ *   vraies adresses : on ne remplace jamais un pays valide par un autre ;
  * - le nom se compare aux messageries de référence DE LA MÊME extension, par
  *   distance d'édition (une inversion de deux lettres compte pour une).
  *
@@ -122,7 +122,8 @@ export function analyserEmail(brut: string): AnalyseEmail {
   const email = brut.trim();
 
   if (email === "") return { statut: "vide" };
-  if (!FORME_EMAIL.test(email)) return { statut: "invalide" };
+  // Un point final (`gmail.com.`) ou double (`gmail..com`) n'est jamais une vraie adresse.
+  if (!FORME_EMAIL.test(email) || email.endsWith(".") || email.includes("..")) return { statut: "invalide" };
 
   const arobase = email.lastIndexOf("@");
   const local = email.slice(0, arobase);
@@ -135,13 +136,6 @@ export function analyserEmail(brut: string): AnalyseEmail {
   return correction === null
     ? { statut: "valide" }
     : { statut: "faute", domaine, suggestion: `${local}@${correction.domaine}`, certitude: correction.certitude };
-}
-
-/** L'adresse corrigée à proposer, ou `null` s'il n'y a rien à proposer. */
-export function suggererEmail(brut: string): string | null {
-  const analyse = analyserEmail(brut);
-
-  return analyse.statut === "faute" ? analyse.suggestion : null;
 }
 
 /**
@@ -159,9 +153,4 @@ export function emailBloque(analyse: AnalyseEmail, probableConfirme: boolean): R
   }
 
   return null;
-}
-
-/** La même règle côté serveur, qui reçoit la confirmation avec l'adresse. */
-export function refusServeur(brut: string, probableConfirme: boolean): RefusEmail | null {
-  return emailBloque(analyserEmail(brut), probableConfirme);
 }
