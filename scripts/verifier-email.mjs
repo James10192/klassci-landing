@@ -211,12 +211,14 @@ verifier("référent nettoyé sur les autres pages",
   filtrerEvenement({ properties: { $current_url: "https://www.klassci.com/", $referrer: "https://www.klassci.com/x?jeton=s" } }).properties.$referrer,
   "https://www.klassci.com/x");
 
-console.log(`\n${total - echecs}/${total} vérifications passées`);
 verifier("Vercel : la page de vérification n'est pas mesurée",
   filtrerMesureVercel({ type: "pageview", url: "https://www.klassci.com/en/verification-email?ecole=a#jeton=s" }), null);
 verifier("Vercel : les autres adresses partent nettoyées",
   filtrerMesureVercel({ type: "pageview", url: "https://www.klassci.com/x?jeton=s&a=1" }), { type: "pageview", url: "https://www.klassci.com/x?a=1" });
+verifier("une adresse illisible ne fait pas planter le filtre",
+  filtrerMesureVercel({ type: "pageview", url: "http://[" }) !== undefined, true);
 
+console.log(`\n${total - echecs}/${total} vérifications passées`);
 if (echecs > 0) {
   process.exit(1);
 }

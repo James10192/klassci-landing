@@ -201,6 +201,18 @@ function controlerSitemapEtRobots() {
 }
 
 /**
+ * Pages exemptees de carte de partage, par chemin relatif, avec leur raison.
+ *
+ * `verification-email` : page de confirmation d'une adresse, ouverte depuis le
+ * lien recu par e-mail. Elle est en noindex, porte un jeton a usage unique et
+ * ne doit jamais etre partagee : lui dessiner une carte inviterait precisement
+ * a partager ce lien.
+ */
+const SANS_CARTE = new Map([
+  ["app/[locale]/verification-email", "noindex, jeton a usage unique, ne doit pas etre partagee"],
+]);
+
+/**
  * Chaque page porte sa carte de partage.
  *
  * Une page sans `opengraph-image.tsx` n'échoue nulle part : elle se construit,
@@ -214,19 +226,9 @@ function controlerSitemapEtRobots() {
  * redirection (`redirect(...)`) ou un 404 (`notFound()` seul). La
  * documentation a sa propre route de cartes (`app/cartes/docs`), parce que Next
  * refuse un `opengraph-image` sous un segment facultatif `[[...slug]]`.
- */
-/**
- * Pages exemptees de carte de partage, chacune avec sa raison ecrite.
  *
- * `verification-email` : page de confirmation d'une adresse, ouverte depuis le
- * lien recu par e-mail. Elle est en noindex, porte un jeton a usage unique et
- * ne doit jamais etre partagee : lui dessiner une carte inviterait precisement
- * a partager ce lien.
+ * Les autres exemptions sont nommées une à une dans SANS_CARTE, avec leur raison.
  */
-const SANS_CARTE = new Map([
-  ["verification-email", "noindex, jeton a usage unique, ne doit pas etre partagee"],
-]);
-
 function controlerCartesDePartage() {
   let pages = 0;
   for (const page of fichiers("app/[locale]", /^page\.tsx$/)) {
@@ -242,7 +244,11 @@ function controlerCartesDePartage() {
     }
     if (!/generateMetadata/.test(source)) continue;
     if (/\bredirect\(/.test(source) && !/<[A-Z]/.test(source)) continue;
-    if (SANS_CARTE.has(relatif.split(/[\\/]/).pop())) continue;
+    const exemption = SANS_CARTE.get(relatif.split(sepChemin).join("/"));
+    if (exemption !== undefined) {
+      ok(`${relatif} exemptee de carte de partage : ${exemption}`);
+      continue;
+    }
 
     pages += 1;
     const carte = join(dossier, "opengraph-image.tsx");

@@ -36,15 +36,13 @@ export function useMessageEtat(
   if (etat === null) return null;
 
   const texte = t(`etats.${etat}.texte`);
-  const debut = physiques?.debut ?? null;
-
-  if (!REFUS_SUR_PLACE.includes(etat) || physiques === null || debut === null) {
+  if (!REFUS_SUR_PLACE.includes(etat) || physiques === null || physiques.debut === null) {
     return { cle: etat, titre: t(`etats.${etat}.titre`), texte };
   }
 
   const constat = physiques.ouvertes
     ? t("etats.surPlaceOuvert")
-    : t("etats.surPlaceDate", { date: dateLisible(debut, locale) });
+    : t("etats.surPlaceDate", { date: dateLisible(physiques.debut, locale) });
 
   return { cle: etat, titre: t(`etats.${etat}.titre`), texte: `${texte} ${constat}` };
 }

@@ -37,7 +37,7 @@ export type CleEtat =
  *
  * Elle était écrite en ternaire imbriqué à quatre niveaux, qui ré-implémentait
  * à la main la règle « code inconnu → indisponible ». Deux écritures de la même
- * règle finissent toujours par diverger — celle-ci avait déjà commencé.
+ * règle finissent toujours par diverger : celle-ci avait déjà commencé.
  */
 export const ECRANS: Partial<Record<Classement["genre"], RegleEcran<CleEtat>>> = {
   ferme: { sansCode: "ferme" },

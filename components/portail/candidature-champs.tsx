@@ -191,7 +191,7 @@ export type ProprietesChamps = {
   messagesDe: (champ: string) => string[] | undefined;
   choix: ChoixPublies;
   /** Un envoi a-t-il déjà été tenté ? Le champ e-mail montre alors ses messages sans attendre. */
-  contact: { tentative: boolean; focaliser: boolean };
+  contact: { tentative: boolean };
 };
 
 export function ChampsCandidature({

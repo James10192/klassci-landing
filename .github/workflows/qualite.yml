@@ -52,6 +52,9 @@ jobs:
       - name: Règle de recherche du sélecteur d'établissement
         run: node --experimental-strip-types scripts/verifier-recherche.mjs
 
+      - name: Saisie d'e-mail et vérification des demandes
+        run: node --experimental-strip-types scripts/verifier-email.mjs
+
       - name: Contrôles SEO sur le dépôt
         run: node scripts/verifier-seo.mjs
 

@@ -20,6 +20,7 @@ import { manquantsCandidature } from "./candidature-manquants";
 import { useMessageEtat } from "./candidature-message-etat";
 import { Alerte, BoutonPrincipal, Carte, Erreurs, dateIso, entree } from "./pieces";
 import { classer } from "./reponses";
+import { ID_CONTACT } from "./champs-contact";
 import { useSuiviDemande } from "./suivi-demande";
 import { VerificationCode } from "./verification-code";
 
@@ -108,16 +109,11 @@ export function CandidatureFlow({
    * seulement s'il faut le montrer.
    */
   const [aTenteEnvoi, setATenteEnvoi] = useState(false);
-  /** Rend la main au champ de contact après « Modifier l'adresse ». */
-  const [refocaliser, setRefocaliser] = useState(false);
+  /** À vrai après « Modifier l'adresse » : le formulaire revenu rend la main au champ du canal. */
+  const aRefocaliser = useRef(false);
   const demande = useRef(0);
   const { form, setForm, consentement, setConsentement } = saisie;
 
-  // `autoFocus` n'agit qu'au montage du champ : une fois le formulaire revenu,
-  // le drapeau retombe, pour ne pas voler le focus à un champ remonté plus tard.
-  useEffect(() => {
-    if (refocaliser) setRefocaliser(false);
-  }, [refocaliser]);
   const dateNaissance = dateIso(form.jour, form.mois, form.annee);
   // La candidature est partie : « Ce n'est pas mon cas » n'a plus de sens sous
   // l'écran de fin, et repasser par l'autre porte ne l'annulerait pas.
@@ -126,6 +122,14 @@ export function CandidatureFlow({
     dateNaissance,
     onAbouti: useCallback(() => onAboutir?.(true), [onAboutir]),
   });
+
+  // Le formulaire vient de remplacer l'écran de vérification : on rend la main
+  // au champ du canal, une seule fois.
+  useEffect(() => {
+    if (!aRefocaliser.current || suivi.verification !== null) return;
+    aRefocaliser.current = false;
+    document.getElementById(form.sans_email ? ID_CONTACT.telephone : ID_CONTACT.email)?.focus();
+  }, [form.sans_email, suivi.verification]);
 
   // `string | boolean` depuis que le formulaire porte un choix binaire
   // (`est_transfert`). Élargir ici plutôt qu'ajouter un second setter : la
@@ -316,10 +320,10 @@ export function CandidatureFlow({
       <VerificationCode
         ecole={etablissement.code}
         demande={suivi.verification}
-        onVerifie={(corps) => void suivi.conclure(corps)}
+        onVerifie={suivi.conclure}
         onModifier={() => {
           suivi.abandonnerVerification();
-          setRefocaliser(true);
+          aRefocaliser.current = true;
         }}
       />
     );
@@ -360,7 +364,7 @@ export function CandidatureFlow({
       </m.div>
 
       <ChampsCandidature form={form} set={set} messagesDe={messagesDe} choix={choix}
-                         contact={{ tentative: aTenteEnvoi, focaliser: refocaliser }} />
+                         contact={{ tentative: aTenteEnvoi }} />
 
       {/* Signalé comme les autres quand il manque : l'alerte parle des « champs
           signalés », et le consentement en est un. Le laisser seul sans marque

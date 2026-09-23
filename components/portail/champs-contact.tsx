@@ -15,22 +15,23 @@ import { Champ, champ } from "./pieces";
  * La case « Je n'ai pas d'adresse e-mail » bascule de l'un à l'autre, et le
  * numéro devient alors un mobile ivoirien obligatoire.
  *
- * `focaliser` rend la main au champ du canal après « Modifier l'adresse » ou
- * « Modifier le numéro » : c'est lui que la personne est revenue corriger.
+ * Les deux champs portent un identifiant fixe (`ID_CONTACT`) : après « Modifier
+ * l'adresse » ou « Modifier le numéro », le parcours rend la main à celui du
+ * canal, puisque c'est lui que la personne est revenue corriger.
  */
+export const ID_CONTACT = { email: "candidature-email", telephone: "candidature-telephone" } as const;
+
 export function ChampsContact({
   form,
   set,
   messagesDe,
   tentative,
-  focaliser,
   longueurs,
 }: {
   form: Formulaire;
   set: (cle: keyof Formulaire) => (valeur: string | boolean) => void;
   messagesDe: (champ: string) => string[] | undefined;
   tentative: boolean;
-  focaliser: boolean;
   longueurs: { telephone: number; email: number };
 }) {
   const t = useTranslations("inscription");
@@ -47,7 +48,7 @@ export function ChampsContact({
         maxLength={longueurs.telephone}
         erreurs={messagesDe("telephone")}
         autoComplete="tel"
-        autoFocus={focaliser && form.sans_email}
+        id={ID_CONTACT.telephone}
       />
 
       {!form.sans_email && (
@@ -59,7 +60,7 @@ export function ChampsContact({
               set("email_confirme")(confirme);
             }}
             textes={{ label: t("formulaire.email") }}
-            attributs={{ maxLength: longueurs.email, required: true, autoFocus: focaliser }}
+            attributs={{ id: ID_CONTACT.email, maxLength: longueurs.email, required: true }}
             classes={{ champ }}
             erreurs={messagesDe("email")}
             forcerMessages={tentative}

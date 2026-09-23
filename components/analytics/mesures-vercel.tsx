@@ -15,7 +15,7 @@ export function MesuresVercel() {
   return (
     <>
       <Analytics beforeSend={filtrerMesureVercel} />
-      <SpeedInsights beforeSend={(evenement) => filtrerMesureVercel(evenement)} />
+      <SpeedInsights beforeSend={filtrerMesureVercel} />
     </>
   );
 }

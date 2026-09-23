@@ -28,7 +28,6 @@ import { etablissementAvecSecret } from "./tenants";
  *    la limitation tout en la croyant en place.
  */
 
-export { CHEMINS, type CheminPublic } from "./chemins.ts";
 
 /** Au-delà, l'instance est considérée injoignable. */
 const DELAI_MAX_MS = 12_000;

@@ -29,7 +29,7 @@ type Proprietes = {
   valeur: SaisieEmail;
   onChange: (valeur: SaisieEmail) => void;
   textes: { label: string; placeholder?: string; aide?: string };
-  attributs?: { id?: string; name?: string; maxLength?: number; required?: boolean; autoFocus?: boolean };
+  attributs?: { id?: string; name?: string; maxLength?: number; required?: boolean };
   /** Classes du formulaire hôte, pour suivre son habillage. */
   classes: { champ: string; label?: string };
   /** Erreurs venues d'ailleurs (serveur, champ requis) : affichées quand le champ n'a rien à dire lui-même. */
@@ -87,7 +87,6 @@ export function ChampEmail({ valeur, onChange, textes, attributs = {}, classes, 
         inputMode="email"
         autoComplete="email"
         autoCapitalize="none"
-        autoFocus={attributs.autoFocus}
         spellCheck={false}
         value={valeur.email}
         placeholder={textes.placeholder}

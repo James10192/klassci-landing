@@ -211,17 +211,18 @@ export function ReinscriptionFlow({
     setAnnee("");
   }, [onAboutir, suivi]);
 
-  // L'adresse vient du dossier de l'école : pas de « Modifier l'adresse » ici.
+  // L'adresse vient du dossier de l'école : pas de « Modifier l'adresse » ici,
+  // mais une sortie (« Faire une autre demande ») et le conseil de contacter l'école.
   if (suivi.verification !== null && etape !== "succes") {
     return (
       <div className="mx-auto w-full max-w-xl">
         <VerificationCode ecole={etablissement.code} demande={suivi.verification}
-                          onVerifie={(corps) => void suivi.conclure(corps)} />
+                          onVerifie={suivi.conclure} onRecommencer={recommencer} />
       </div>
     );
   }
 
-  const referenceAboutie = suivi.abouti?.reference ?? null;
+  const referenceAboutie = suivi.abouti === null ? null : suivi.abouti.reference;
 
   return (
     <div className="mx-auto w-full max-w-xl">

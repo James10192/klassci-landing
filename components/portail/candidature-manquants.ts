@@ -11,7 +11,7 @@ import { dateNaissanceValide } from "./pieces";
  * règle pure, lisible sans rien savoir de l'état d'un composant.
  *
  * Ce qui manque, et non « est-ce complet ». Un booléen ne permettait que de
- * griser le bouton, sans dire lequel des champs requis faisait défaut — et
+ * griser le bouton, sans dire lequel des champs requis faisait défaut, et
  * rien, dans la page, ne le disait non plus. Le bouton reste donc actif, et
  * c'est l'appui qui explique.
  *
@@ -39,7 +39,7 @@ export function manquantsCandidature(form: Formulaire, consentement: boolean): M
         },
     ...contact(form),
     // Sous « voeu », et non sous `voeu_libre` : la contrainte porte sur les
-    // trois champs ensemble — filière OU niveau OU texte libre.
+    // trois champs ensemble : filière OU niveau OU texte libre.
     form.filiere_id === "" && form.niveau_id === "" && form.voeu_libre.trim() === ""
       ? { champ: "voeu", cle: "formulaire.voeuRequis" }
       : null,

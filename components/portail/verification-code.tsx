@@ -48,11 +48,16 @@ export function VerificationCode({
   demande,
   onVerifie,
   onModifier,
+  onRecommencer,
 }: {
   ecole: string;
   demande: DemandeVerification;
-  onVerifie: (corps: Record<string, unknown>) => void;
+  /** Résolue quand l'écran suivant est prêt : l'état occupé dure jusque-là. */
+  onVerifie: (corps: Record<string, unknown>) => Promise<void>;
+  /** Candidature : revenir corriger l'adresse ou le numéro saisis. */
   onModifier?: () => void;
+  /** Réinscription : l'adresse vient du dossier de l'école, on ne peut que recommencer. */
+  onRecommencer?: () => void;
 }) {
   const t = useTranslations("verification");
   const id = useId();
@@ -60,6 +65,9 @@ export function VerificationCode({
   // Un appel à la fois : le sixième chiffre, « Entrée » et le bouton partent
   // parfois dans le même instant, avant que l'état « en cours » ne soit rendu.
   const enVol = useRef(false);
+  // Un code accepté ne repart jamais : le jeton est consommé côté école, et un
+  // second envoi répondrait « code invalide » sous l'écran de réussite.
+  const accepte = useRef(false);
   const [code, setCode] = useState("");
   const [enCours, setEnCours] = useState(false);
   const [erreur, setErreur] = useState<string | null>(null);
@@ -76,7 +84,7 @@ export function VerificationCode({
 
   const valider = useCallback(
     async (saisi: string) => {
-      if (enVol.current) return;
+      if (enVol.current || accepte.current) return;
       if (saisi.length !== 6) {
         setErreur(t("codeIncomplet"));
         return;
@@ -87,13 +95,16 @@ export function VerificationCode({
       setErreur(null);
       setInfo(null);
       const resultat = await verifier(ecole, demande.canal, { demande_id: demande.demandeId, code: saisi });
-      enVol.current = false;
-      setEnCours(false);
 
       if (resultat.genre === "verifie") {
-        onVerifie(resultat.corps);
+        // Pas de retour à l'état libre : l'écran de réussite remplace celui-ci.
+        accepte.current = true;
+        await onVerifie(resultat.corps);
         return;
       }
+
+      enVol.current = false;
+      setEnCours(false);
 
       setCode("");
       champCode.current?.focus();
@@ -184,7 +195,22 @@ export function VerificationCode({
             {email ? t("modifierEmail") : t("modifierTelephone")}
           </button>
         )}
+        {onRecommencer && (
+          <button
+            type="button"
+            onClick={onRecommencer}
+            className="min-h-[44px] text-text-secondary underline underline-offset-2 hover:text-text"
+          >
+            {t("recommencer")}
+          </button>
+        )}
       </m.div>
+
+      {onRecommencer && (
+        <p className="mt-2 text-pretty text-xs leading-relaxed text-text-muted">
+          {email ? t("adresseIncorrecte") : t("numeroIncorrect")}
+        </p>
+      )}
 
       <p className="mt-3 text-pretty text-xs leading-relaxed text-text-muted">
         {email ? t("spam") : t("spamTelephone")}

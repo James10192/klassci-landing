@@ -16,8 +16,6 @@ import type { ChoixPublies, Formulaire } from "./candidature-champs";
 import type { CleEtat } from "./candidature-ecrans";
 import { dateIso } from "./pieces";
 
-export type { Physiques } from "@/lib/portail/aboutissement";
-
 /**
  * Ce que l'école a déjà publié, gardé pour la durée de la page.
  *

@@ -20,6 +20,15 @@ const PARAMETRES_SENSIBLES = ["jeton", "code", "token"];
 /** Propriétés d'évènement PostHog qui portent une adresse. */
 const PROPRIETES_URL = ["$current_url", "$referrer", "$initial_referrer", "$prev_pageview_pathname", "$pathname"];
 
+/** Le chemin d'une adresse absolue ou relative ; l'entrée telle quelle si elle ne se lit pas. */
+function cheminDe(adresse: string): string {
+  try {
+    return new URL(adresse, "https://www.klassci.com").pathname;
+  } catch {
+    return adresse;
+  }
+}
+
 export function pageNonMesuree(chemin: string): boolean {
   return PAGES_NON_MESUREES.test(chemin);
 }
@@ -55,7 +64,7 @@ export function filtrerEvenement<E extends Evenement>(evenement: E | null): E | 
   const chemin = typeof proprietes.$pathname === "string" ? proprietes.$pathname : "";
   const courante = typeof proprietes.$current_url === "string" ? nettoyerUrl(proprietes.$current_url) : "";
 
-  if (pageNonMesuree(chemin) || pageNonMesuree(new URL(courante || "/", "https://www.klassci.com").pathname)) {
+  if (pageNonMesuree(chemin) || pageNonMesuree(cheminDe(courante || "/"))) {
     return null;
   }
 
@@ -75,7 +84,7 @@ export function filtrerEvenement<E extends Evenement>(evenement: E | null): E | 
 export function filtrerMesureVercel<E extends { url: string }>(evenement: E): E | null {
   const url = nettoyerUrl(evenement.url);
 
-  if (pageNonMesuree(new URL(url, "https://www.klassci.com").pathname)) return null;
+  if (pageNonMesuree(cheminDe(url))) return null;
 
   return { ...evenement, url };
 }

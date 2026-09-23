@@ -31,7 +31,7 @@ export function verifierCanal(saisie: {
   /** La personne a-t-elle confirmé son adresse malgré une faute seulement probable ? */
   emailConfirme: boolean;
 }): VerdictCanal {
-  const email = saisie.email?.trim() ?? "";
+  const email = saisie.email === undefined ? "" : saisie.email.trim();
 
   if (email !== "") {
     const refus = emailBloque(analyserEmail(email), saisie.emailConfirme);

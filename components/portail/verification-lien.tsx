@@ -25,16 +25,15 @@ type Etat =
  * lit encore, et on l'efface pareillement. Une fois l'adresse nettoyée, ni
  * l'historique, ni une capture d'écran, ni la mesure d'audience ne le voient.
  */
-function prendreJeton(): string {
+function prendreJeton(): string | null {
   const url = new URL(window.location.href);
-  const jeton =
-    new URLSearchParams(url.hash.slice(1)).get("jeton") ?? url.searchParams.get("jeton") ?? "";
+  const jeton = new URLSearchParams(url.hash.slice(1)).get("jeton") ?? url.searchParams.get("jeton");
 
   url.hash = "";
   url.searchParams.delete("jeton");
   window.history.replaceState(window.history.state, "", `${url.pathname}${url.search}`);
 
-  return jeton.trim();
+  return jeton === null ? null : jeton.trim();
 }
 
 /**
@@ -50,6 +49,8 @@ export function VerificationLien({ ecole }: { ecole: string | null }) {
   const [etat, setEtat] = useState<Etat>({ genre: "chargement" });
   const [renvoi, setRenvoi] = useState<ResultatRenvoi | "aucun" | "enCours">("aucun");
   const jeton = useRef<string | null>(null);
+  // Lu une seule fois : React peut monter deux fois le composant en développement.
+  const dejaLu = useRef(false);
   // Un seul renvoi à la fois : deux appuis rapides feraient deux e-mails, et le
   // second répondrait « trop tôt » par-dessus la confirmation du premier.
   const renvoiEnVol = useRef(false);
@@ -77,7 +78,8 @@ export function VerificationLien({ ecole }: { ecole: string | null }) {
   }, [ecole]);
 
   useEffect(() => {
-    if (jeton.current !== null) return;
+    if (dejaLu.current) return;
+    dejaLu.current = true;
     jeton.current = prendreJeton();
     void consommer();
   }, [consommer]);

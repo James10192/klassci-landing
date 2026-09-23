@@ -56,6 +56,9 @@
       "lienTropTot": "A link was just sent. Please wait a minute before asking for another.",
       "envoiLien": "Sending…"
     },
-    "renvoiTropTot": "A code was just sent. Please wait a minute before asking for another."
+    "renvoiTropTot": "A code was just sent. Please wait a minute before asking for another.",
+    "recommencer": "Make another request",
+    "adresseIncorrecte": "Wrong address? Contact your school: it keeps it up to date in your file.",
+    "numeroIncorrect": "Wrong number? Contact your school: it keeps it up to date in your file."
   }
 }

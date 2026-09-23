@@ -56,6 +56,9 @@
       "lienTropTot": "Un lien vient déjà d’être envoyé. Patientez une minute avant d’en demander un autre.",
       "envoiLien": "Envoi en cours…"
     },
-    "renvoiTropTot": "Un code vient déjà d’être envoyé. Patientez une minute avant d’en demander un autre."
+    "renvoiTropTot": "Un code vient déjà d’être envoyé. Patientez une minute avant d’en demander un autre.",
+    "recommencer": "Faire une autre demande",
+    "adresseIncorrecte": "Adresse incorrecte ? Contactez votre école : c’est elle qui la tient à jour dans votre dossier.",
+    "numeroIncorrect": "Numéro incorrect ? Contactez votre école : c’est elle qui le tient à jour dans votre dossier."
   }
 }

@@ -123,7 +123,7 @@ export function Champ({
   chiffresSeulement = false,
   autoComplete = "off",
   erreurs,
-  autoFocus,
+  id,
 }: {
   label: string;
   value: string;
@@ -142,8 +142,8 @@ export function Champ({
    */
   autoComplete?: string;
   erreurs?: string[];
-  /** Pour rendre la main au bon champ, par exemple après « Modifier le numéro ». */
-  autoFocus?: boolean;
+  /** Pour qu'un parcours puisse rendre la main à ce champ, par exemple après « Modifier le numéro ». */
+  id?: string;
 }) {
   return (
     <label className="block">
@@ -154,7 +154,7 @@ export function Champ({
         inputMode={inputMode}
         maxLength={maxLength}
         autoComplete={autoComplete}
-        autoFocus={autoFocus}
+        id={id}
         onChange={(e) =>
           onChange(chiffresSeulement ? e.target.value.replace(/\D/g, "") : e.target.value)
         }
