@@ -77,6 +77,19 @@ const nextConfig = {
         source: "/api/:path*",
         headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
       },
+      // Le portail d'inscription ne doit pas entrer dans l'index : il dit quels
+      // etablissements sont clients. Les pages portent deja un `noindex` en
+      // balise ; l'en-tete le repete pour les reponses sans HTML — les
+      // redirections de /reinscription notamment. Ni l'un ni l'autre ne
+      // fonctionne si robots.txt interdit l'exploration : voir app/robots.ts.
+      ...["inscription", "reinscription"].flatMap((racine) =>
+        [`/:locale/${racine}`, `/:locale/${racine}/:path*`, `/${racine}`, `/${racine}/:path*`].map(
+          (source) => ({
+            source,
+            headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+          }),
+        ),
+      ),
       {
         source: "/(.*)",
         headers: [
