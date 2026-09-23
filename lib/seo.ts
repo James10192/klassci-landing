@@ -5,13 +5,6 @@ import { SITE_URL } from "@/lib/site-url";
 
 type UniverseKey = "home" | "universite" | "college" | "lms";
 
-const UNIVERSE_IMAGES: Record<UniverseKey, string> = {
-  home: "/img/og/home.png",
-  universite: "/img/og/universite.png",
-  college: "/img/og/college.png",
-  lms: "/img/og/default.png",
-};
-
 interface SeoInput {
   locale: Locale;
   /**
@@ -23,7 +16,6 @@ interface SeoInput {
   title: string;
   description: string;
   path: string;
-  image?: string;
   /** Retire la page des moteurs. Voir l'usage sur le portail de reinscription. */
   noindex?: boolean;
   /**
@@ -50,7 +42,6 @@ export function buildUniverseMetadata({
   title,
   description,
   path,
-  image = key ? UNIVERSE_IMAGES[key] : "/img/og/default.png",
   noindex = false,
   languesDisponibles = routing.locales,
   flux,
@@ -58,7 +49,6 @@ export function buildUniverseMetadata({
   const normalizedPath = path === "/" ? "" : path;
   const localizedPath = `/${locale}${normalizedPath}`;
   const url = new URL(localizedPath, SITE_URL).toString();
-  const imageUrl = new URL(image, SITE_URL).toString();
   const langues: Record<string, string> = {};
   for (const langue of languesDisponibles) {
     langues[langue] = `/${langue}${normalizedPath}`;
@@ -88,29 +78,22 @@ export function buildUniverseMetadata({
       description,
       url,
       locale: locale === "fr" ? "fr_FR" : "en_US",
-      images: [
-        {
-          url: imageUrl,
-          width: 1200,
-          height: 630,
-          alt: title,
-          type: "image/png",
-        },
-      ],
+      // Pas d'`images` ici : chaque page porte un `opengraph-image.tsx`, que
+      // Next pose lui-même dans `og:image` avec ses dimensions et son type.
+      // Une image déclarée ici serait écrasée par ce fichier — ou pire, elle
+      // resterait seule sur une page qui n'en aurait pas, et ce serait une
+      // carte étrangère à la page, ce que ce module a cessé de faire.
     },
     twitter: {
+      // X retombe sur `og:image` quand `twitter:image` est absent.
       card: "summary_large_image",
       title,
       description,
-      images: [imageUrl],
     },
     ...(noindex ? { robots: { index: false, follow: false } } : {}),
     other: {
       "og:whatsapp:title": title,
       "og:whatsapp:description": description,
-      "og:image:secure_url": imageUrl,
-      "og:image:type": "image/png",
-      "twitter:image:alt": title,
       ...(key ? { "klassci:universe": key } : {}),
     },
   };

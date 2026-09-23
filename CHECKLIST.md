@@ -115,8 +115,9 @@ Compress and copy them into `public/img/` of this repo. Use `sharp` for images a
 photos. Replace with real headshots if Marcel can get them, otherwise use a neutral
 KLASSCI-blue monogram (`AB` / `TM`) on `#0453cb` background.
 
-**OG image** (`public/img/og/default.png`, 1200×630): hero screenshot with KLASSCI
-wordmark + tagline, dark KLASSCI blue overlay.
+**OG images**: generated per page (`opengraph-image.tsx` beside each `page.tsx`,
+rendered by `lib/og/carte.tsx`); school cards on the enrolment portal use the
+school's own colours and logo next to KLASSCI's.
 
 ---
 

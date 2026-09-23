@@ -5,6 +5,7 @@ import { setRequestLocale } from "next-intl/server";
 
 import { source } from "@/lib/source";
 import { SITE_URL } from "@/lib/site-url";
+import { cheminCarteDoc } from "@/lib/og/chemins";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildDocGraph } from "@/lib/schema/pages";
 import { routing, type Locale } from "@/i18n/routing";
@@ -63,7 +64,7 @@ export async function generateMetadata({
       locale: locale === "fr" ? "fr_FR" : "en_US",
       images: [
         {
-          url: `${SITE_URL}/img/og/default.png`,
+          url: `${SITE_URL}${cheminCarteDoc(locale, slug)}`,
           width: 1200,
           height: 630,
           alt: page.data.title,
@@ -75,7 +76,6 @@ export async function generateMetadata({
       card: "summary_large_image",
       title: page.data.title,
       description,
-      images: [`${SITE_URL}/img/og/default.png`],
     },
   };
 }

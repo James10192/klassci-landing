@@ -8,44 +8,28 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        // Les routes d'API n'ont rien a faire dans un index.
-        // /login vit sur les sous-domaines des etablissements
-        // (esbtp-yakro.klassci.com/login), pas sur ce site vitrine.
+        // Les routes d'API n'ont rien a faire dans un index, et les explorer
+        // declencherait des appels relayes vers les etablissements.
         //
-        // Le portail d'inscription liste, par construction, quels
-        // etablissements sont clients et quand leur guichet est ouvert. La
-        // page par etablissement repond 404 pour tout le reste precisement
-        // pour que cela reste prive ; indexer la page d'index rendrait la
-        // meme liste accessible par une simple requete `site:`.
+        // C'est le seul Disallow, et c'est voulu. Un Disallow n'empeche pas
+        // l'indexation : il empeche l'exploration. Google ne recupere plus la
+        // page, donc ne lit jamais le `noindex` qu'elle porte — et une adresse
+        // liee depuis le menu finit indexee nue, sans titre ni description.
+        // C'est exactement ce que la Search Console a signale en septembre
+        // 2026 (« Indexee malgre le blocage par le fichier robots.txt ») sur
+        // le portail d'inscription, qui etait ici en Disallow.
         //
-        // Ce fichier est le verrou exterieur, et les deux protections
-        // agissent en serie, pas en parallele : un robot qui respecte un
-        // Disallow ne recupere jamais la page, donc ne lit jamais le
-        // `noindex` qu'elle contient. Le `robots: { index: false }` pose par
-        // buildUniverseMetadata couvre ce qui est malgre tout recupere — un
-        // lien partage, un robot qui ignore ce fichier — pas ce qui est
-        // liste ici.
+        // Le portail liste, par construction, quels etablissements sont
+        // clients et quand leur guichet est ouvert. Il reste hors de l'index,
+        // mais par les bons moyens : la balise `noindex` posee par
+        // buildUniverseMetadata, doublee d'un en-tete `X-Robots-Tag` dans
+        // next.config.mjs, qui couvre aussi les redirections de
+        // /reinscription. Pour que Google les lise, il faut le laisser passer.
         //
-        // Les motifs sont ancres par `$` ou suivis d'une barre oblique. Sans
-        // cet ancrage, `/*/inscription` est un prefixe au sens de la
-        // specification : il interdisait aussi
-        // /fr/docs/secretaire/inscriptions et sa version anglaise — le guide
-        // le plus dense du site, quatre mille mots sur la facon d'inscrire un
-        // etudiant, et precisement la page qui repond a la question que les
-        // secretariats tapent dans un moteur. Elle etait fermee au crawl par
-        // effet de bord.
-        disallow: [
-          "/api/",
-          "/login",
-          "/inscription$",
-          "/inscription/",
-          "/*/inscription$",
-          "/*/inscription/",
-          "/reinscription$",
-          "/reinscription/",
-          "/*/reinscription$",
-          "/*/reinscription/",
-        ],
+        // /login n'existe pas sur ce site vitrine (il vit sur les sous-domaines
+        // des etablissements) : l'adresse repond 404, ce qui la sort de
+        // l'index sans qu'on ait a la bloquer.
+        disallow: ["/api/"],
       },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,

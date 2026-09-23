@@ -53,6 +53,14 @@ const nextConfig = {
 
   experimental: {
     optimizePackageImports: ["framer-motion", "lucide-react", "next-intl"],
+    // Les cartes de partage lisent leurs polices et le logo sur le disque
+    // (lib/og/carte.tsx). La plupart sont construites au déploiement, mais
+    // celles des écoles sont dessinées à la demande : sans cette ligne, la
+    // fonction serverless ne contiendrait ni `assets/og` ni `public/`, et
+    // chaque carte d'école échouerait en production seulement.
+    outputFileTracingIncludes: {
+      "/**/opengraph-image*": ["./assets/og/**", "./public/img/logo-klassci-full.png"],
+    },
   },
 
   async headers() {
@@ -77,6 +85,19 @@ const nextConfig = {
         source: "/api/:path*",
         headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
       },
+      // Le portail d'inscription ne doit pas entrer dans l'index : il dit quels
+      // etablissements sont clients. Les pages portent deja un `noindex` en
+      // balise ; l'en-tete le repete pour les reponses sans HTML — les
+      // redirections de /reinscription notamment. Ni l'un ni l'autre ne
+      // fonctionne si robots.txt interdit l'exploration : voir app/robots.ts.
+      ...["inscription", "reinscription"].flatMap((racine) =>
+        [`/:locale/${racine}`, `/:locale/${racine}/:path*`, `/${racine}`, `/${racine}/:path*`].map(
+          (source) => ({
+            source,
+            headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+          }),
+        ),
+      ),
       {
         source: "/(.*)",
         headers: [

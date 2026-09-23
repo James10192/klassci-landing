@@ -27,15 +27,28 @@ import { buildSoftwareApplication, type Formule } from "./software-application";
 import { buildTechArticle, type EntreeArticle } from "./tech-article";
 import type { JsonLdGraphe } from "./types";
 import { urlPage } from "./urls";
+import { cheminCarteDoc } from "@/lib/og/chemins";
 import { buildWebPage, buildWebSite } from "./website";
 
-/** Les images d'ouverture, aux dimensions reelles des fichiers. */
-const IMAGES = {
-  home: { chemin: "/img/og/home.png", largeur: 1200, hauteur: 630 },
-  universite: { chemin: "/img/og/universite.png", largeur: 1200, hauteur: 630 },
-  college: { chemin: "/img/og/college.png", largeur: 1200, hauteur: 630 },
-  default: { chemin: "/img/og/default.png", largeur: 1200, hauteur: 630 },
-} as const;
+/**
+ * La carte de partage d'une page : celle que dessine son `opengraph-image`.
+ *
+ * L'adresse est celle du fichier de convention Next, sans l'empreinte que Next
+ * ajoute dans la balise `og:image` — la route répond aussi sans elle. Le
+ * graphe et l'aperçu social décrivent ainsi la même image.
+ */
+function carteDe(locale: Locale, chemin: string) {
+  const suffixe = chemin === "/" ? "" : chemin.startsWith("/") ? chemin : `/${chemin}`;
+
+  return { chemin: `/${locale}${suffixe}/opengraph-image`, largeur: 1200, hauteur: 630 } as const;
+}
+
+/** La documentation a sa propre route de cartes : voir `cheminCarteDoc`. */
+function carteDoc(locale: Locale, chemin: string) {
+  const slug = chemin.replace(/^\/docs\/?/, "").split("/").filter(Boolean);
+
+  return { chemin: cheminCarteDoc(locale, slug), largeur: 1200, hauteur: 630 } as const;
+}
 
 /** Les trois noeuds presents sur absolument toutes les pages. */
 async function socle(locale: Locale) {
@@ -64,7 +77,7 @@ export async function buildHomeGraph(
       chemin: "/",
       nom: t("metaTitle"),
       description: t("metaDescription"),
-      image: IMAGES.home,
+      image: carteDe(locale, "/"),
       // Elle oriente vers trois univers : c'est une page de collection, pas
       // une page de contenu.
       type: "CollectionPage",
@@ -188,12 +201,7 @@ export async function buildEditionGraph(
       chemin,
       nom: t("title"),
       description: t("description"),
-      image:
-        edition === "lms"
-          ? IMAGES.default
-          : edition === "college"
-            ? IMAGES.college
-            : IMAGES.universite,
+      image: carteDe(locale, chemin),
       // Le sujet de la page est l'edition du produit, pas l'organisation.
       aPropos: APPLICATION_ID[edition],
       mentions: clients ? [clients] : undefined,
@@ -237,13 +245,13 @@ export async function buildDocGraph(
       chemin: article.chemin,
       nom: article.titre,
       description: article.description ?? "",
-      image: IMAGES.default,
+      image: carteDoc(locale, article.chemin),
       datePublication: article.datePublication,
       dateModification: article.dateModification,
       avecFilAriane: filAriane.length > 0,
     }),
     buildBreadcrumb(locale, article.chemin, filAriane),
-    buildTechArticle({ ...article, locale, image: IMAGES.default }),
+    buildTechArticle({ ...article, locale, image: carteDoc(locale, article.chemin) }),
   );
 }
 
@@ -297,7 +305,7 @@ export async function buildBlogIndexGraph(
       chemin: "/blog",
       nom: titre,
       description,
-      image: IMAGES.default,
+      image: carteDe(locale, "/blog"),
       type: "CollectionPage",
       avecFilAriane: true,
       // La page n'est pas datee par elle-meme : sa fraicheur est celle de son
@@ -347,7 +355,7 @@ export async function buildArticleGraph(
       chemin,
       nom: donnees.title,
       description: donnees.description ?? donnees.resume ?? "",
-      image: IMAGES.default,
+      image: carteDe(locale, chemin),
       datePublication: donnees.date,
       dateModification: donnees.dateRevision ?? donnees.date,
       avecFilAriane: true,
@@ -365,7 +373,7 @@ export async function buildArticleGraph(
         rubrique,
         datePublication: donnees.date,
         dateModification: donnees.dateRevision ?? donnees.date,
-        image: IMAGES.default,
+        image: carteDe(locale, chemin),
         type: "Article",
         auteur: donnees.auteur,
       }),
@@ -422,7 +430,7 @@ export async function buildInstitutionnelGraph(
       chemin: page.chemin,
       nom: page.titre,
       description: page.description,
-      image: IMAGES.default,
+      image: carteDe(locale, page.chemin),
       type: TYPE_INSTITUTIONNEL[page.slug] ?? "WebPage",
       dateModification: page.dateMaj,
       avecFilAriane: true,

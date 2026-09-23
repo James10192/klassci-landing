@@ -41,7 +41,6 @@ export async function generateMetadata({
     description: DESCRIPTION,
     path: "/blog",
     flux: `/${LANGUE_BLOG}/blog/rss.xml`,
-    image: "/img/og/blog.png",
   });
 }
 

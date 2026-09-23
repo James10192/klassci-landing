@@ -40,7 +40,6 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     description: trouve.donnees.description ?? trouve.donnees.resume ?? "",
     path: trouve.chemin,
     flux: `/${LANGUE_BLOG}/blog/rss.xml`,
-    image: "/img/og/blog.png",
     // Le blog n'existe qu'en francais : declarer une version anglaise qui
     // n'existe pas casserait la reciprocite que hreflang exige.
     languesDisponibles: [LANGUE_BLOG],

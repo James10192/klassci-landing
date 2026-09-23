@@ -23,7 +23,7 @@
  */
 
 import { readFileSync, readdirSync, statSync, existsSync } from "node:fs";
-import { join, relative, sep as sepChemin } from "node:path";
+import { dirname, join, relative, sep as sepChemin } from "node:path";
 
 const RACINE = new URL("..", import.meta.url).pathname;
 
@@ -198,6 +198,56 @@ function controlerSitemapEtRobots() {
     alerte("sitemap", "app/sitemap.ts ne declare pas les alternates de langue (hreflang par sitemap)");
   }
   ok("sitemap et robots inspectes");
+}
+
+/**
+ * Chaque page porte sa carte de partage.
+ *
+ * Une page sans `opengraph-image.tsx` n'échoue nulle part : elle se construit,
+ * s'affiche, et c'est seulement le lien collé dans WhatsApp qui arrive sans
+ * image, ou avec celle d'une autre page. C'est ce qu'a vécu le portail
+ * d'inscription, partagé des mois avec la carte de la documentation.
+ *
+ * Chaque carte doit aussi être construite au déploiement : voir plus bas.
+ *
+ * Sont exemptées les pages qui ne rendent rien de partageable : une
+ * redirection (`redirect(...)`) ou un 404 (`notFound()` seul). La
+ * documentation a sa propre route de cartes (`app/cartes/docs`), parce que Next
+ * refuse un `opengraph-image` sous un segment facultatif `[[...slug]]`.
+ */
+function controlerCartesDePartage() {
+  let pages = 0;
+  for (const page of fichiers("app/[locale]", /^page\.tsx$/)) {
+    const dossier = dirname(page);
+    const source = lire(page);
+    const relatif = court(dossier);
+
+    if (relatif.includes("[[...")) {
+      if (!/cheminCarteDoc/.test(source)) {
+        echec("cartes", `${relatif} ne declare pas l'image de la route app/cartes`);
+      }
+      continue;
+    }
+    if (!/generateMetadata/.test(source)) continue;
+    if (/\bredirect\(/.test(source) && !/<[A-Z]/.test(source)) continue;
+
+    pages += 1;
+    const carte = join(dossier, "opengraph-image.tsx");
+    if (!existsSync(carte)) {
+      echec("cartes", `${relatif} n'a pas d'opengraph-image.tsx : un lien partage arriverait sans sa carte`);
+      continue;
+    }
+    // Sans `generateStaticParams`, la carte est dessinee a la demande, dans une
+    // fonction qui n'embarque pas les fichiers que sa page lit : 200 en local,
+    // 500 en production. Seules les cartes d'ecole, qui lisent l'instance de
+    // l'ecole par le reseau, sont a la demande — et elles le declarent par
+    // leur `revalidate`.
+    const sourceCarte = lire(carte);
+    if (!/generateStaticParams/.test(sourceCarte) && !/export const revalidate/.test(sourceCarte)) {
+      echec("cartes", `${relatif}/opengraph-image.tsx n'est ni construite au deploiement ni revalidee`);
+    }
+  }
+  ok(`${pages} pages declarent leur carte de partage`);
 }
 
 function controlerFichiersAttendus() {
@@ -493,6 +543,7 @@ async function principal() {
   controlerAdresseDuSite();
   controlerDonneesStructurees();
   controlerSitemapEtRobots();
+  controlerCartesDePartage();
   controlerFichiersAttendus();
   controlerTextesAlternatifs();
   controlerLiensInternes();
