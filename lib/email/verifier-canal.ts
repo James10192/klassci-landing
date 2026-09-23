@@ -23,7 +23,7 @@ const MESSAGES = {
 export function verifierCanal(corps: Record<string, unknown>): Record<string, string[]> | null {
   const email = corps.email;
 
-  if (typeof email === "string") {
+  if (typeof email === "string" && email.trim() !== "") {
     const refus = refusServeur(email);
 
     return refus === null ? null : { email: [MESSAGES[refus]] };

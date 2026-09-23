@@ -88,6 +88,7 @@ verifier("e-mail correct → rien", verifierCanal({ email: "a@gmail.com", teleph
 const sansEmail = { telephone: "07 07 12 12 34" };
 verifier("sans e-mail, mobile valide → rien", verifierCanal(sansEmail), null);
 verifier("sans e-mail, numéro réécrit au format international", sansEmail.telephone, "+2250707121234");
+verifier("e-mail vide : le téléphone devient le canal", Object.keys(verifierCanal({ email: "", telephone: "27 22 44 55 66" }) ?? {}), ["telephone"]);
 verifier("sans e-mail, fixe refusé", Object.keys(verifierCanal({ telephone: "27 22 44 55 66" }) ?? {}), ["telephone"]);
 
 console.log("\nVérification : lecture des réponses");
