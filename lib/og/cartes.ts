@@ -75,3 +75,16 @@ export async function carteDEcole(
   });
 }
 
+
+/**
+ * Les langues du site, pour les cartes des pages qui n'en déclarent pas.
+ *
+ * Une carte sous `[locale]` est, sans cela, dessinée à la demande en
+ * production — dans une fonction qui ne contient pas les fichiers que sa page
+ * lit sur le disque. C'est ainsi que les cartes des pages institutionnelles et
+ * des articles ont répondu 500 en production, et 200 en local. Construites au
+ * déploiement, elles ne dépendent plus de ce que la fonction embarque.
+ */
+export function parLangue() {
+  return routing.locales.map((locale) => ({ locale }));
+}

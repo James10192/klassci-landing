@@ -208,6 +208,8 @@ function controlerSitemapEtRobots() {
  * image, ou avec celle d'une autre page. C'est ce qu'a vécu le portail
  * d'inscription, partagé des mois avec la carte de la documentation.
  *
+ * Chaque carte doit aussi être construite au déploiement : voir plus bas.
+ *
  * Sont exemptées les pages qui ne rendent rien de partageable : une
  * redirection (`redirect(...)`) ou un 404 (`notFound()` seul). La
  * documentation a sa propre route de cartes (`app/cartes/docs`), parce que Next
@@ -230,8 +232,19 @@ function controlerCartesDePartage() {
     if (/\bredirect\(/.test(source) && !/<[A-Z]/.test(source)) continue;
 
     pages += 1;
-    if (!existsSync(join(dossier, "opengraph-image.tsx"))) {
+    const carte = join(dossier, "opengraph-image.tsx");
+    if (!existsSync(carte)) {
       echec("cartes", `${relatif} n'a pas d'opengraph-image.tsx : un lien partage arriverait sans sa carte`);
+      continue;
+    }
+    // Sans `generateStaticParams`, la carte est dessinee a la demande, dans une
+    // fonction qui n'embarque pas les fichiers que sa page lit : 200 en local,
+    // 500 en production. Seules les cartes d'ecole, qui lisent l'instance de
+    // l'ecole par le reseau, sont a la demande — et elles le declarent par
+    // leur `revalidate`.
+    const sourceCarte = lire(carte);
+    if (!/generateStaticParams/.test(sourceCarte) && !/export const revalidate/.test(sourceCarte)) {
+      echec("cartes", `${relatif}/opengraph-image.tsx n'est ni construite au deploiement ni revalidee`);
     }
   }
   ok(`${pages} pages declarent leur carte de partage`);
