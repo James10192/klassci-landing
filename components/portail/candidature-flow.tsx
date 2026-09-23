@@ -28,7 +28,10 @@ import {
   type Physiques,
   type ReponseChoix,
 } from "./candidature-echanges";
+import { manquantsCandidature } from "./candidature-manquants";
 import { classer } from "./reponses";
+import { VerificationCode } from "./verification-code";
+import { lireDemandeVerification, type DemandeVerification } from "@/lib/portail/verification";
 import {
   Alerte,
   BoutonPrincipal,
@@ -125,6 +128,10 @@ export function CandidatureFlow({
    * seulement s'il faut le montrer.
    */
   const [aTenteEnvoi, setATenteEnvoi] = useState(false);
+  /** L'adresse porte-t-elle une faute non corrigée ? Tenu par le champ e-mail lui-même. */
+  const [emailBloque, setEmailBloque] = useState(false);
+  /** La candidature attend son code : e-mail ou WhatsApp. `null` tant que rien n'est parti. */
+  const [verification, setVerification] = useState<DemandeVerification | null>(null);
   const demande = useRef(0);
   const { form, setForm, consentement, setConsentement } = saisie;
 
@@ -135,47 +142,8 @@ export function CandidatureFlow({
   const set = (cle: keyof Formulaire) => (valeur: string | boolean) =>
     setForm((f) => ({ ...f, [cle]: valeur }));
 
-  /**
-   * Ce qui manque, et non « est-ce complet ».
-   *
-   * Un booléen ne permettait que de griser le bouton, sans dire lequel des six
-   * champs requis faisait défaut — et rien, dans la page, ne le disait non
-   * plus : le formulaire marque les champs FACULTATIFS, mais « Lieu de
-   * naissance », « Ville » ou « Commune » ne portent aucune marque et sont
-   * facultatifs eux aussi, donc l'absence de marque n'apprend rien. Le cas
-   * ordinaire est celui-ci : le candidat tape « 07 » dans la case Année, le
-   * bouton devient gris, aucun message, aucune bordure — et sur un téléphone,
-   * à la rentrée, il abandonne.
-   *
-   * Le bouton reste donc actif, et c'est l'appui qui explique.
-   */
-  const manquants = [
-    form.nom.trim() === "" ? { champ: "nom", cle: "formulaire.requis" } : null,
-    form.prenoms.trim() === "" ? { champ: "prenoms", cle: "formulaire.requis" } : null,
-    // Deux états, deux phrases. « Cette information est nécessaire » sur trois
-    // cases remplies — « 15 / 03 / 07 » — laisse le candidat regarder sa saisie,
-    // la voir complète, et réappuyer : l'impasse exacte que ce bloc existe pour
-    // supprimer, avec une phrase fausse en plus.
-    dateNaissanceValide(form.jour, form.mois, form.annee)
-      ? null
-      : {
-          champ: "date_naissance",
-          cle:
-            form.jour === "" || form.mois === "" || form.annee === ""
-              ? "formulaire.requis"
-              : "formulaire.champInvalide",
-        },
-    form.telephone.trim() === "" ? { champ: "telephone", cle: "formulaire.requis" } : null,
-    // Sous « voeu », et non sous `voeu_libre` : la contrainte porte sur les
-    // trois champs ensemble — filière OU niveau OU texte libre. Accrochée au
-    // troisième, elle affichait « Cette information est nécessaire » juste
-    // sous un libellé qui commence par « Ou », et envoyait décrire à la main
-    // une formation qu'il suffisait de choisir dans la liste au-dessus.
-    form.filiere_id === "" && form.niveau_id === "" && form.voeu_libre.trim() === ""
-      ? { champ: "voeu", cle: "formulaire.voeuRequis" }
-      : null,
-    consentement ? null : { champ: "consentement", cle: "formulaire.requis" },
-  ].filter((m): m is { champ: string; cle: string } => m !== null);
+  // Ce qui manque, recalculé à chaque rendu : voir candidature-manquants.
+  const manquants = manquantsCandidature(form, consentement, emailBloque);
 
   /**
    * Les messages du serveur sont en français, toujours.
@@ -363,6 +331,28 @@ export function CandidatureFlow({
   }, [chargerChoix]);
 
 
+  /**
+   * La candidature est acceptée : directement, ou après vérification du canal.
+   * `corps` est la réponse de l'école, qui peut porter la référence publique.
+   */
+  const conclure = useCallback(async (corps: Record<string, unknown>) => {
+    setPhysiques((corps.inscriptions_physiques as Physiques) ?? null);
+    const referencePublique = typeof corps.reference_publique === "string" ? corps.reference_publique : null;
+    setReference(referencePublique);
+    if (referencePublique) {
+      setCreneau(await chargerCreneau(
+        etablissement.code,
+        referencePublique,
+        `${form.annee}-${form.mois.padStart(2, "0")}-${form.jour.padStart(2, "0")}`,
+      ));
+    }
+    setVerification(null);
+    setEnvoye(true);
+    // La candidature est partie : « Ce n'est pas mon cas » n'a plus de sens
+    // sous cet écran, et repasser par l'autre porte ne l'annulerait pas.
+    onAboutir?.(true);
+  }, [etablissement.code, form.annee, form.jour, form.mois, onAboutir]);
+
   const envoyer = useCallback(async () => {
     if (enCours) return;
 
@@ -406,31 +396,40 @@ export function CandidatureFlow({
         return;
       }
 
-      setPhysiques((classement.corps.inscriptions_physiques as Physiques) ?? null);
-      const referencePublique = typeof classement.corps.reference_publique === "string" ? classement.corps.reference_publique : null;
-      setReference(referencePublique);
-      if (referencePublique) {
-        setCreneau(await chargerCreneau(
-          etablissement.code,
-          referencePublique,
-          `${form.annee}-${form.mois.padStart(2, "0")}-${form.jour.padStart(2, "0")}`,
-        ));
+      // L'école ne traitera la candidature qu'une fois le canal vérifié.
+      const demandeVerification = lireDemandeVerification(classement.corps);
+
+      if (demandeVerification !== null) {
+        setVerification(demandeVerification);
+
+        return;
       }
-      setEnvoye(true);
-      // La candidature est partie : « Ce n'est pas mon cas » n'a plus de sens
-      // sous cet écran, et repasser par l'autre porte ne l'annulerait pas.
-      onAboutir?.(true);
+
+      await conclure(classement.corps);
     } catch {
       setEtat("indisponible");
     } finally {
       setEnCours(false);
     }
-  }, [consentement, enCours, etablissement.code, form, manquants, onAboutir]);
+  }, [conclure, consentement, enCours, etablissement.code, form, manquants]);
 
   if (etat === "ferme" || etat === "nonConfigure") {
     // Pas de « Réessayer » ici : un canal fermé ou mal paramétré ne s'ouvrira
     // pas parce qu'on insiste.
     return <EcranEtat etat={etat} />;
+  }
+
+  // « Modifier l'adresse » revient au formulaire, saisie intacte : la demande
+  // non vérifiée reste sans suite côté école, un nouvel envoi la remplace.
+  if (verification !== null && !envoye) {
+    return (
+      <VerificationCode
+        ecole={etablissement.code}
+        demande={verification}
+        onVerifie={(corps) => void conclure(corps)}
+        onModifier={() => setVerification(null)}
+      />
+    );
   }
 
   if (envoye) {
@@ -467,7 +466,8 @@ export function CandidatureFlow({
         <p className="mt-1.5 text-pretty text-sm text-text-secondary">{t("formulaire.aide")}</p>
       </m.div>
 
-      <ChampsCandidature form={form} set={set} messagesDe={messagesDe} choix={choix} />
+      <ChampsCandidature form={form} set={set} messagesDe={messagesDe} choix={choix}
+                         tentative={aTenteEnvoi} onEmailBloque={setEmailBloque} />
 
       {/* Signalé comme les autres quand il manque : l'alerte parle des « champs
           signalés », et le consentement en est un. Le laisser seul sans marque

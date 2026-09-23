@@ -124,7 +124,7 @@
       "contact": "How to reach you",
       "telephone": "Phone",
       "telephoneAide": "The school will call you back on this number. Ivorian mobile number, for example 07 07 12 12 34.",
-      "email": "Email (optional)",
+      "email": "E-mail address",
       "ville": "City of residence",
       "commune": "District / neighbourhood",
       "voeu": "What you want to study",
@@ -163,7 +163,10 @@
       "chargement": "Sending…",
       "reessayer": "Try again",
       "requis": "This information is required.",
-      "voeuRequis": "Choose a programme, a level, or describe the course you are interested in."
+      "voeuRequis": "Choose a programme, a level, or describe the course you are interested in.",
+      "emailRequis": "Enter your e-mail address, or tick “I don’t have an e-mail address”.",
+      "whatsappInvalide": "This is not an Ivorian mobile number reachable on WhatsApp. Example: +225 07 07 12 12 34.",
+      "whatsappRequis": "Without an e-mail address, this WhatsApp number is needed to receive your code."
     },
     "succes": {
       "titre": "Your application has been sent.",

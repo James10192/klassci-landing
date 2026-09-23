@@ -19,7 +19,10 @@ import {
 import type { Physiques } from "./candidature-echanges";
 import { chargerCreneau, type CreneauAttribue } from "./candidature-ecrans";
 import { ReinscriptionSucces } from "./reinscription-succes";
-import { classer, ecranDe, type Classement, type RegleEcran } from "./reponses";
+import { VerificationCode } from "./verification-code";
+import { lireDemandeVerification, type DemandeVerification } from "@/lib/portail/verification";
+import { ECRANS, type CleEtat, type Etape, type Situation } from "./reinscription-ecrans";
+import { classer, ecranDe } from "./reponses";
 
 /**
  * Le parcours de réinscription, d'un bout à l'autre, sans changer de page.
@@ -29,58 +32,6 @@ import { classer, ecranDe, type Classement, type RegleEcran } from "./reponses";
  * un téléphone, parfois en connexion lente : chaque écran tient sans défiler,
  * chaque champ dit ce qu'il attend, et rien ne se perd si l'envoi échoue.
  */
-
-type Situation = {
-  trouve: boolean;
-  prenom?: string;
-  classe_actuelle?: string | null;
-  annee_cible?: string | null;
-  eligible?: boolean;
-  demande_existante?: boolean;
-};
-
-type Etape = "identification" | "confirmation" | "succes";
-
-type CleEtat =
-  | "dejaDeposee"
-  | "nonEligible"
-  | "introuvable"
-  | "ferme"
-  | "tropDeTentatives"
-  | "affluence"
-  | "identificationBloquee"
-  | "indisponible"
-  | "champsInvalides"
-  | "refus";
-
-/**
- * Ce que chaque genre de réponse donne comme écran, ici.
- *
- * La même table que la candidature, avec le vocabulaire de CE parcours :
- * « année non configurée » et « conflit » n'ont pas de sens pour une
- * réinscription, ils retombent donc sur ce que le visiteur peut comprendre.
- *
- * Elle était écrite en ternaire imbriqué à quatre niveaux, qui ré-implémentait
- * à la main la règle « code inconnu → indisponible ». Deux écritures de la même
- * règle finissent toujours par diverger — celle-ci avait déjà commencé.
- */
-const ECRANS: Partial<Record<Classement["genre"], RegleEcran<CleEtat>>> = {
-  ferme: { sansCode: "ferme" },
-  invalide: { sansCode: "champsInvalides" },
-  tropDeTentatives: {
-    // Trois seaux, trois phrases. Celui d'une adresse dit vrai en parlant de
-    // tentatives ; le plafond de l'établissement se remplit du trafic de tout
-    // le monde ; et le seau du matricule peut avoir été rempli par un TIERS,
-    // avec une fenêtre d'un quart d'heure. Les confondre accuse le visiteur de
-    // ce qu'il n'a pas fait, et lui promet un délai qui n'est pas le bon.
-    codes: {
-      affluence: "affluence",
-      trop_de_tentatives: "tropDeTentatives",
-      identification_bloquee: "identificationBloquee",
-    },
-    sansCode: "tropDeTentatives",
-  },
-};
 
 export function ReinscriptionFlow({
   etablissement,
@@ -115,6 +66,7 @@ export function ReinscriptionFlow({
   const [etat, setEtat] = useState<CleEtat | null>(null);
   const [enCours, setEnCours] = useState(false);
   const [consentement, setConsentement] = useState(false);
+  const [verification, setVerification] = useState<DemandeVerification | null>(null);
 
   // Résolu ici, où l'espace de messages est écrit en dur : c'est la seule
   // façon pour next-intl de vérifier que la clé existe vraiment.
@@ -233,6 +185,19 @@ export function ReinscriptionFlow({
     }
   }, [peutChercher, etablissement.code, matricule, dateISO, interpreter]);
 
+  /** La réinscription est enregistrée : directement, ou après vérification du contact. */
+  const conclure = useCallback(async (payload: Record<string, unknown>) => {
+    setPhysiques((payload.inscriptions_physiques as Physiques) ?? null);
+    const referencePublique = typeof payload.reference_publique === "string" ? payload.reference_publique : null;
+    setReference(referencePublique);
+    if (referencePublique) {
+      setCreneau(await chargerCreneau(etablissement.code, referencePublique, dateISO()));
+    }
+    setVerification(null);
+    setEtape("succes");
+    onAboutir?.(true);
+  }, [etablissement.code, dateISO, onAboutir]);
+
   const confirmer = useCallback(async () => {
     if (!consentement || enCours) return;
 
@@ -258,16 +223,16 @@ export function ReinscriptionFlow({
       }
 
       const payload = classement.corps;
+      // L'école ne traitera la réinscription qu'une fois le contact vérifié.
+      const demandeVerification = lireDemandeVerification(payload);
+
+      if (demandeVerification !== null) {
+        setVerification(demandeVerification);
+        return;
+      }
 
       if (payload.enregistre === true) {
-        setPhysiques((payload.inscriptions_physiques as Physiques) ?? null);
-        const referencePublique = typeof payload.reference_publique === "string" ? payload.reference_publique : null;
-        setReference(referencePublique);
-        if (referencePublique) {
-          setCreneau(await chargerCreneau(etablissement.code, referencePublique, dateISO()));
-        }
-        setEtape("succes");
-        onAboutir?.(true);
+        await conclure(payload);
         return;
       }
 
@@ -283,7 +248,7 @@ export function ReinscriptionFlow({
     } finally {
       setEnCours(false);
     }
-  }, [consentement, enCours, etablissement.code, matricule, dateISO, interpreter, onAboutir]);
+  }, [conclure, consentement, enCours, etablissement.code, matricule, dateISO, interpreter]);
 
   const recommencer = useCallback(() => {
     onAboutir?.(false);
@@ -296,6 +261,16 @@ export function ReinscriptionFlow({
     setMois("");
     setAnnee("");
   }, [onAboutir]);
+
+  // L'adresse vient du dossier de l'école : pas de « Modifier l'adresse » ici.
+  if (verification !== null && etape !== "succes") {
+    return (
+      <div className="mx-auto w-full max-w-xl">
+        <VerificationCode ecole={etablissement.code} demande={verification}
+                          onVerifie={(corps) => void conclure(corps)} />
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto w-full max-w-xl">

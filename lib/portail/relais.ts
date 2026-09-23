@@ -45,6 +45,10 @@ export const CHEMINS = {
   rdvDeplacer: "api/public/rendez-vous/deplacer",
   rdvAnnuler: "api/public/rendez-vous/annuler",
   rdvRetrouver: "api/public/rendez-vous/retrouver",
+  // Chemins annoncés par KLASSCI pour la vérification e-mail / WhatsApp. Le
+  // choix du chemin selon le canal vit dans `verification-relais.ts`, seul.
+  verificationVerifier: "api/portail/email/verifier",
+  verificationRenvoyer: "api/portail/email/renvoyer",
 } as const;
 
 export type CheminPublic = (typeof CHEMINS)[keyof typeof CHEMINS];
@@ -79,6 +83,10 @@ const SEAUX: Record<CheminPublic, { groupe: string; maximum: number }> = {
   [CHEMINS.rdvDeplacer]: { groupe: "rendezvous", maximum: 10 },
   [CHEMINS.rdvAnnuler]: { groupe: "rendezvous", maximum: 10 },
   [CHEMINS.rdvRetrouver]: { groupe: "rendezvous", maximum: 10 },
+  // Un code à six chiffres se devine par essais : son seau est à part, et
+  // étroit. Le renvoi y compte aussi, l'école le limite déjà à un par minute.
+  [CHEMINS.verificationVerifier]: { groupe: "verification", maximum: 10 },
+  [CHEMINS.verificationRenvoyer]: { groupe: "verification", maximum: 10 },
 };
 
 /** Les points d'entrée dont la réponse est la même pour tous les visiteurs. */

@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 
+import { verifierCanal } from "@/lib/email/verifier-canal";
 import { CHEMINS, relayer } from "@/lib/portail/relais";
 
 export const runtime = "nodejs";
@@ -78,6 +79,14 @@ export async function POST(
   // aller-retour signe sur un formulaire manifestement vide.
   if (typeof corps.nom !== "string" || typeof corps.telephone !== "string") {
     return Response.json({ erreur: "champs_manquants" }, { status: 422 });
+  }
+
+  // La même règle que sous le champ, rejouée ici : un navigateur ancien, un
+  // script ou une extension peuvent envoyer sans passer par le formulaire.
+  const canal = verifierCanal(corps);
+
+  if (canal !== null) {
+    return Response.json({ erreur: "champs_invalides", champs: canal }, { status: 422 });
   }
 
   return relayer(params.ecole, CHEMINS.inscriptionSubmit, corps, requete);

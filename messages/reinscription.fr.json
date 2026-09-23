@@ -124,7 +124,7 @@
       "contact": "Pour vous joindre",
       "telephone": "Téléphone",
       "telephoneAide": "C'est par ce numéro que l'établissement vous rappellera. Numéro mobile ivoirien, par exemple 07 07 12 12 34.",
-      "email": "Email (facultatif)",
+      "email": "Adresse e-mail",
       "ville": "Ville de résidence",
       "commune": "Commune / quartier",
       "voeu": "Ce que vous voulez faire",
@@ -163,7 +163,10 @@
       "chargement": "Envoi…",
       "reessayer": "Réessayer",
       "requis": "Cette information est nécessaire.",
-      "voeuRequis": "Indiquez la filière, le niveau, ou décrivez la formation qui vous intéresse."
+      "voeuRequis": "Indiquez la filière, le niveau, ou décrivez la formation qui vous intéresse.",
+      "emailRequis": "Indiquez votre adresse e-mail, ou cochez « Je n’ai pas d’adresse e-mail ».",
+      "whatsappInvalide": "Ce numéro n’est pas un mobile ivoirien joignable sur WhatsApp. Exemple : +225 07 07 12 12 34.",
+      "whatsappRequis": "Sans adresse e-mail, ce numéro WhatsApp est nécessaire pour recevoir votre code."
     },
     "succes": {
       "titre": "Votre candidature est transmise.",

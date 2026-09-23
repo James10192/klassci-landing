@@ -12,6 +12,8 @@
  * deux portes du portail qu'il évite de facturer au seau de débit.
  */
 
+import { normaliserWhatsapp } from "@/lib/email/telephone-whatsapp";
+
 import type { ChoixPublies, Formulaire } from "./candidature-champs";
 import type { CleEtat } from "./candidature-ecrans";
 
@@ -69,7 +71,14 @@ export function refusStable(etat: CleEtat): boolean {
  * de sécurité, et elle doit continuer à nommer ce qu'elle laisse passer.
  */
 export function corpsAEnvoyer(form: Formulaire, consentement: boolean): Record<string, unknown> {
-  const { jour, mois, annee, ...reste } = form;
+  const { jour, mois, annee, sans_email, ...reste } = form;
+
+  // Sans adresse e-mail, le téléphone est le canal de vérification : il part au
+  // format international, et une adresse tapée puis abandonnée ne part pas.
+  if (sans_email) {
+    reste.email = "";
+    reste.telephone = normaliserWhatsapp(reste.telephone) ?? reste.telephone;
+  }
 
   const corps: Record<string, unknown> = {
     date_naissance: `${annee}-${mois.padStart(2, "0")}-${jour.padStart(2, "0")}`,
