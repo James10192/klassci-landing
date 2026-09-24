@@ -49,6 +49,9 @@ export const VISUELS_INSTITUTIONNELS = {
  */
 const VISUELS_ARTICLES: Record<string, Visuel> = {
   "calcul-moyennes-bulletins-cote-divoire": { type: "ecran", fichier: "bulletins.jpg" },
+  "bulletin-scolaire-cote-divoire": { type: "ecran", fichier: "bulletins.jpg" },
+  "carte-scolaire-drena": { type: "ecran", fichier: "inscriptions.jpg" },
+  "comptabilite-scolaire-syscohada": { type: "ecran", fichier: "finance.jpg" },
   "choisir-logiciel-gestion-scolaire-afrique": { type: "ecran", fichier: "tableau-de-bord.jpg", mobile: "tableau-mobile.jpg" },
   "deliberation-jury-lmd-proces-verbal": { type: "ecran", fichier: "resultats.jpg" },
   "eleves-affectes-subvention-etat": { type: "ecran", fichier: "inscriptions.jpg" },
