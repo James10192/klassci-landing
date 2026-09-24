@@ -19,9 +19,17 @@ calcul de moyenne, certificat de scolarité, crédits LMD. **Personne ne publie
 de contenu sourcé sur les textes.** C'est le pari de ce plan, et c'est ce
 qu'un concurrent ne peut pas produire en trois semaines.
 
-Le segment de l'enseignement supérieur est un angle mort complet : le seul
-concurrent frontal identifié ne mentionne ni LMD, ni UE, ni ECUE, ni crédits,
-ni jury.
+Le segment de l'enseignement supérieur reste peu occupé, mais ce n'est plus un
+angle mort complet. La veille de septembre 2026 a trouvé GS2I-CI, qui vend un
+produit « e-LMD » (2e sur « logiciel gestion université lmd »), et un article
+de myscol.com sur le système LMD, 4e sur « système lmd ». Personne ne publie
+encore sur l'UE, l'ECUE, la compensation ou le jury.
+
+**Mesure de septembre 2026** (`docs/seo/veille-2026-09.md`) : « logiciel de
+gestion scolaire » ne fait qu'environ 10 recherches par mois, en Côte d'Ivoire
+comme au Bénin et au Sénégal. Les volumes sont sur « drena » (880), « syscohada »
+(590), « carte scolaire » (320) et, côté familles, « bulletin scolaire »
+(1 600). Aucune page de klassci.com ne se classe encore.
 
 ## La règle de production — non négociable
 
@@ -63,7 +71,9 @@ Deux interdits absolus, qui valent pour tout agent rédacteur :
 | ✅ | P1 | Délibération de jury LMD : procédure et PV | `deliberation-jury-lmd-proces-verbal` | lmd |
 | ☐ | P1 | Compensation LMD : valider un semestre | `compensation-lmd-validation-semestre` | lmd |
 | ✅ | P1 | Élèves affectés : gérer subvention et solde | `eleves-affectes-subvention-etat` | finance |
-| ☐ | P1 | Modèle de bulletin trimestriel à télécharger | `modele-bulletin-trimestriel` | operations |
+| ☐ | P1 | Bulletin scolaire : lire, consulter, modèle trimestriel | `bulletin-scolaire-cote-divoire` | operations |
+| ☐ | P1 | Carte scolaire : ce que la DRENA vérifie | `carte-scolaire-drena` | reglementation |
+| ☐ | P1 | Comptabilité scolaire SYSCOHADA | `comptabilite-scolaire-syscohada` | finance |
 | ☐ | P1 | Prix d'un logiciel scolaire en FCFA | `prix-logiciel-gestion-scolaire-fcfa` | achat |
 | ☐ | P1 | Agrément privé : dossier, délais, pièges | `agrement-etablissement-prive-cote-divoire` | reglementation |
 | ☐ | P1 | Tableau de suivi des frais : modèle Excel | `tableau-suivi-frais-scolarite-excel` | finance |
@@ -77,8 +87,6 @@ Deux interdits absolus, qui valent pour tout agent rédacteur :
 | ☐ | P2 | Emploi du temps : 9 contraintes à poser | `emploi-du-temps-contraintes` | operations |
 | ☐ | P2 | Passer du BTS au LMD : plan en 6 étapes | `passer-du-bts-au-lmd` | lmd |
 | ☐ | P2 | Checklist rentrée : 21 points côté système | `checklist-rentree-directeur` | operations |
-| ☐ | P2 | Comptabilité scolaire SYSCOHADA | `comptabilite-scolaire-syscohada` | finance |
-| ☐ | P2 | Carte scolaire : ce que la DRENA vérifie | `carte-scolaire-drena` | reglementation |
 | ☐ | P2 | Crédits capitalisables : ce que dit la directive | `credits-capitalisables-uemoa` | lmd |
 | ☐ | P3 | Supplément au diplôme : modèle LMD | `supplement-au-diplome-lmd` | lmd |
 | ☐ | P3 | WhatsApp parents : cadre, coûts, limites | `whatsapp-parents-etablissement` | operations |
