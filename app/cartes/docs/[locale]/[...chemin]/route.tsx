@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 
 import { source } from "@/lib/source";
 import { carteKlassci } from "@/lib/og/carte";
-import { langueCarte } from "@/lib/og/cartes";
+import { langueCarte, visuelDoc } from "@/lib/og/cartes";
 
 /**
  * Les cartes de partage de la documentation. Voir `cheminCarteDoc`.
@@ -39,5 +39,6 @@ export async function GET(
     rubrique: "documentation",
     titre: page.data.title,
     description: (page.data as { description?: string }).description ?? "",
+    visuel: visuelDoc(slug.join("/")),
   });
 }

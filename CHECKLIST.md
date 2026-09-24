@@ -119,6 +119,23 @@ KLASSCI-blue monogram (`AB` / `TM`) on `#0453cb` background.
 rendered by `lib/og/carte.tsx`); school cards on the enrolment portal use the
 school's own colours and logo next to KLASSCI's.
 
+Each card shows the page's title and description on the left and a visual on
+the right: the real product screen in a browser frame (with a phone for the
+home page and College), a photo, or a styled document for the legal pages.
+
+- Visuals are light JPEG copies in `assets/og/visuels/` (760 px wide at most).
+  Satori reads neither WebP nor 2 MB screenshots comfortably: prepare a copy
+  there, never point a card at `public/`.
+- The page → visual choice lives in `lib/og/cartes.ts`: `VISUELS` per rubric,
+  `VISUELS_INSTITUTIONNELS`, `VISUELS_ARTICLES` per blog slug, `VISUELS_DOCS`
+  per docs path. A new article or guide that is not listed falls back to its
+  rubric's visual, so publishing never breaks a card; adding it to the table is
+  what makes its card show the matching screen.
+- The LMS has no screen yet and gets a photo, not a mock-up that would suggest
+  a shipped product.
+- Check the rendered PNG, not just the status code:
+  `/fr/<page>/opengraph-image`, `/cartes/docs/<locale>/<path>.png`.
+
 ---
 
 ## Phase 3 — API routes
