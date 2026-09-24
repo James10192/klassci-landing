@@ -1,5 +1,5 @@
 import { loader } from "fumadocs-core/source";
-import { blog, docs, institutionnel } from "@/.source";
+import { blog, docs, institutionnel, pays } from "@/.source";
 import { i18n } from "@/lib/i18n";
 
 // Fumadocs source loader — exposes getPage / getPages / pageTree.
@@ -39,6 +39,13 @@ export const sourceInstitutionnel = loader({
   baseUrl: "/",
   source: institutionnel.toFumadocsSource(),
   i18n,
+});
+
+// Les pages pays. Sans i18n, pour la meme raison que le blog : elles sont
+// ecrites en francais pour des pays francophones, et n'existent pas ailleurs.
+export const sourcePays = loader({
+  baseUrl: "/pays",
+  source: pays.toFumadocsSource(),
 });
 
 /** La langue dans laquelle le blog est publie. */

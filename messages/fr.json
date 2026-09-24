@@ -796,6 +796,14 @@
             "href": "/blog"
           },
           {
+            "label": "KLASSCI en Côte d'Ivoire",
+            "href": "/pays/cote-divoire"
+          },
+          {
+            "label": "KLASSCI au Bénin",
+            "href": "/pays/benin"
+          },
+          {
             "label": "Documentation",
             "href": "/docs"
           },

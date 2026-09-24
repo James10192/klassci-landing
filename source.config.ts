@@ -83,6 +83,31 @@ export const institutionnel = defineDocs({
   },
 });
 
+/**
+ * Les pages pays.
+ *
+ * Une page par pays servi, qui dit ce que KLASSCI fait du cadre de ce pays :
+ * sa tutelle, sa monnaie, ses moyens de paiement, son indicatif, ses textes.
+ * La veille de septembre 2026 a montre qu'un concurrent se classait sur
+ * « logiciel de gestion scolaire <pays> » avec exactement ce type de page.
+ *
+ * Francais seulement, comme le blog : ce sont des pays francophones, et une
+ * version anglaise servie par repli serait du contenu duplique.
+ */
+export const pays = defineDocs({
+  dir: "content/pays",
+  docs: {
+    schema: frontmatterSchema.extend({
+      /** Date de derniere mise a jour, affichee en tete de page. */
+      dateMaj: dateIso,
+      /** Le chapeau affiche sous le titre. */
+      resume: z.string().optional(),
+      /** Le nom du pays tel qu'il s'affiche dans le fil d'Ariane. */
+      nomPays: z.string(),
+    }),
+  },
+});
+
 export default defineConfig({
   mdxOptions: {
     // Order matters: remarkHeading runs first to assign data.hProperties.id

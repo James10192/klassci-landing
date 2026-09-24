@@ -9,6 +9,7 @@ import {
   pageInstitutionnelle,
   pagesPubliables,
 } from "@/lib/institutionnel";
+import { cheminPays, LANGUE_PAYS, PAYS, pagePays } from "@/lib/pays";
 import { LANGUE_BLOG, source } from "@/lib/source";
 import { routing } from "@/i18n/routing";
 import { SITE_URL } from "@/lib/site-url";
@@ -159,5 +160,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
       }),
   );
 
-  return [...vitrine, ...documentation, ...institutionnelles, ...blog];
+  // Les pages pays : francais seulement, donc sans alternates, comme le blog.
+  // Leur date est celle du frontmatter, affichee au lecteur.
+  const pays: MetadataRoute.Sitemap = PAYS.flatMap((slug) => {
+    const page = pagePays(slug);
+    if (!page) return [];
+    const date = new Date(`${page.dateMaj}T00:00:00Z`);
+
+    return [
+      {
+        url: `${SITE_URL}/${LANGUE_PAYS}${cheminPays(slug)}`,
+        lastModified: Number.isNaN(date.getTime()) ? maintenant : date,
+        changeFrequency: "monthly" as const,
+        priority: 0.8,
+      },
+    ];
+  });
+
+  return [...vitrine, ...documentation, ...institutionnelles, ...pays, ...blog];
 }

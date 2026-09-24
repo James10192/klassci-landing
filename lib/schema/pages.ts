@@ -443,3 +443,32 @@ export async function buildInstitutionnelGraph(
     buildBreadcrumb(locale, page.chemin, [{ nom: page.titre }]),
   );
 }
+
+/* -------------------------------------------------------------- pages pays */
+
+/**
+ * Une page pays : une `WebPage` et son fil d'Ariane.
+ *
+ * Deux maillons seulement, comme pour les pages institutionnelles : « Pays »
+ * n'a pas de page d'index, et un maillon sans adresse au milieu du fil serait
+ * rejeté. Le fil affiché à l'écran porte le même dernier libellé.
+ */
+export async function buildPaysGraph(
+  locale: Locale,
+  page: { chemin: string; titre: string; description: string; nomPays: string; dateMaj: string },
+): Promise<JsonLdGraphe> {
+  return graphe(
+    ...(await socle(locale)),
+    buildWebPage({
+      locale,
+      chemin: page.chemin,
+      nom: page.titre,
+      description: page.description,
+      image: carteDe(locale, page.chemin),
+      type: "WebPage",
+      dateModification: page.dateMaj,
+      avecFilAriane: true,
+    }),
+    buildBreadcrumb(locale, page.chemin, [{ nom: page.nomPays }]),
+  );
+}

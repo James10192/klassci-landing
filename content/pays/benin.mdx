@@ -1,0 +1,41 @@
+---
+title: "Logiciel de gestion scolaire au Bénin"
+description: "KLASSCI au Bénin : système LMD UEMOA, relevés au nom de la République du Bénin, MTN MoMo, Moov Money et Celtiis Cash, numéros +229 à dix chiffres, heure de Cotonou."
+dateMaj: "2026-09-24"
+nomPays: "Bénin"
+resume: "KLASSCI est né en Côte d'Ivoire, et le Bénin est le premier pays où il s'installe au-delà. Cette page dit ce qui a été adapté au cadre béninois, sans laisser croire qu'un logiciel ivoirien fonctionne tel quel à Cotonou."
+---
+
+## Un logiciel ivoirien peut-il servir un établissement béninois ?
+
+Oui, à condition d'avoir été adapté, et pas seulement traduit. Le Bénin partage avec la Côte d'Ivoire la monnaie (le franc CFA, XOF) et le cadre LMD de l'UEMOA. Il en diffère sur ce qu'un logiciel ne voit pas forcément : l'indicatif téléphonique, le fuseau horaire, les opérateurs de mobile money, et l'État au nom duquel sortent les relevés de notes.
+
+Chacun de ces points a été traité avant l'ouverture de la première instance béninoise, en 2026. Ils sont détaillés ci-dessous.
+
+## Les numéros béninois sont-ils gérés correctement ?
+
+Oui. Le Bénin est passé de **huit à dix chiffres le 30 novembre 2024**, en ajoutant « 01 » devant les anciens numéros ([ARCEP Bénin](https://arcep.bj/a-partir-de-30-novembre-2024-les-numeros-de-telephone-au-benin-passent-de-08-a-10-chiffres/)). Les numéros mobiles béninois ont donc la même longueur, et souvent le même début, que les numéros ivoiriens.
+
+C'est un piège réel : un logiciel qui ajoute automatiquement +225 enverrait les relances d'une famille de Cotonou à un abonné d'Abidjan. Dans KLASSCI, chaque établissement **déclare son indicatif (+229) et ses préfixes mobiles**. Le logiciel ne devine pas le pays d'un numéro, il applique celui de l'établissement. Un numéro saisi avec son indicatif international est conservé tel quel.
+
+## Quels moyens de paiement mobile sont pris en charge ?
+
+**MTN MoMo, Moov Money et Celtiis Cash**, en plus des espèces, du virement, du chèque et de la carte. Celtiis Cash a été ajouté pour le Bénin. Les autres portefeuilles de la sous-région restent disponibles. Chaque mode est suivi à part au moment de rapprocher la caisse.
+
+## Les relevés de notes portent-ils le bon en-tête ?
+
+Oui. Dans l'édition université, l'en-tête officiel des bulletins et relevés LMD n'est pas écrit dans le code. Le nom de l'État, la devise et le ministère de tutelle sont des **réglages de l'établissement**. Un relevé délivré au Bénin sort donc au nom de la République du Bénin, avec sa devise et son ministère, et non au nom d'un autre État.
+
+Le calcul, lui, suit le système LMD de l'UEMOA commun aux deux pays : UE, ECUE, crédits, compensation et jury. Voir [le système LMD UEMOA](/fr/blog/systeme-lmd-uemoa-credits-ue-ecue).
+
+## Les dates et les heures suivent-elles l'heure de Cotonou ?
+
+Oui. Le Bénin est à **UTC+1**, une heure d'avance sur Abidjan. Le fuseau est posé à la création de l'instance, avant la première inscription. Les horodatages, les encaissements saisis tard le soir et les journaux d'audit portent donc l'heure locale. Un paiement encaissé à 23 h 30 ne glisse pas à la veille.
+
+## Où sont les données ?
+
+Chaque établissement a **sa propre base de données**, séparée de celle des autres. Nos engagements de sécurité et de confidentialité sont sur les pages [sécurité](/fr/securite) et [confidentialité](/fr/confidentialite).
+
+## Par où commencer ?
+
+L'édition [université et grandes écoles](/fr/universite) décrit le produit pour le supérieur, l'édition [collège et lycée](/fr/college) pour le secondaire. Pour comparer KLASSCI à d'autres solutions, notre [guide pour choisir un logiciel de gestion scolaire](/fr/blog/choisir-logiciel-gestion-scolaire-afrique) liste les questions à poser à tout éditeur, nous compris.
