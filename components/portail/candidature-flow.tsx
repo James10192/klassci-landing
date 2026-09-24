@@ -4,6 +4,7 @@ import { m } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useEffect, useRef, useState, type Dispatch, type SetStateAction } from "react";
 
+import { lirePhysiques, suiteSurPlace, type Physiques } from "@/lib/portail/aboutissement";
 import type { EtablissementVisible } from "@/lib/portail/tenants";
 
 import {
@@ -13,30 +14,15 @@ import {
   type Formulaire,
   type Option,
 } from "./candidature-champs";
-import {
-  CandidatureTransmise,
-  chargerCreneau,
-  type CreneauAttribue,
-  EcranEtat,
-  ecranDu,
-  type CleEtat,
-} from "./candidature-ecrans";
-import {
-  DEJA_PUBLIE,
-  corpsAEnvoyer,
-  refusStable,
-  type Physiques,
-  type ReponseChoix,
-} from "./candidature-echanges";
+import { CandidatureTransmise, EcranEtat, ecranDu, type CleEtat } from "./candidature-ecrans";
+import { DEJA_PUBLIE, corpsAEnvoyer, refusStable, type ReponseChoix } from "./candidature-echanges";
+import { manquantsCandidature } from "./candidature-manquants";
+import { useMessageEtat } from "./candidature-message-etat";
+import { Alerte, BoutonPrincipal, Carte, Erreurs, dateIso, entree } from "./pieces";
 import { classer } from "./reponses";
-import {
-  Alerte,
-  BoutonPrincipal,
-  Carte,
-  Erreurs,
-  dateNaissanceValide,
-  entree,
-} from "./pieces";
+import { ID_CONTACT } from "./champs-contact";
+import { useSuiviDemande } from "./suivi-demande";
+import { VerificationCode } from "./verification-code";
 
 /**
  * La candidature d'un NOUVEL étudiant : ce qui se passe autour des champs.
@@ -107,10 +93,8 @@ export function CandidatureFlow({
   // sélecteurs vides, son bouton actif, et laissait partir une candidature
   // sans filière ni nationalité quand /choix avait échoué.
   const [choix, setChoix] = useState<ChoixPublies | null>(null);
-  const [envoye, setEnvoye] = useState(false);
-  const [physiques, setPhysiques] = useState<Physiques | null>(null);
-  const [reference, setReference] = useState<string | null>(null);
-  const [creneau, setCreneau] = useState<CreneauAttribue | null>(null);
+  /** Les dates d'accueil jointes à un refus « déjà accepté » (409), pour le bandeau. */
+  const [physiquesRefus, setPhysiquesRefus] = useState<Physiques | null>(null);
   const [enCours, setEnCours] = useState(false);
   const [etat, setEtat] = useState<CleEtat | null>(null);
   const [champsFautifs, setChampsFautifs] = useState<Record<string, string[]>>({});
@@ -125,8 +109,27 @@ export function CandidatureFlow({
    * seulement s'il faut le montrer.
    */
   const [aTenteEnvoi, setATenteEnvoi] = useState(false);
+  /** À vrai après « Modifier l'adresse » : le formulaire revenu rend la main au champ du canal. */
+  const aRefocaliser = useRef(false);
   const demande = useRef(0);
   const { form, setForm, consentement, setConsentement } = saisie;
+
+  const dateNaissance = dateIso(form.jour, form.mois, form.annee);
+  // La candidature est partie : « Ce n'est pas mon cas » n'a plus de sens sous
+  // l'écran de fin, et repasser par l'autre porte ne l'annulerait pas.
+  const suivi = useSuiviDemande({
+    ecole: etablissement.code,
+    dateNaissance,
+    onAbouti: useCallback(() => onAboutir?.(true), [onAboutir]),
+  });
+
+  // Le formulaire vient de remplacer l'écran de vérification : on rend la main
+  // au champ du canal, une seule fois.
+  useEffect(() => {
+    if (!aRefocaliser.current || suivi.verification !== null) return;
+    aRefocaliser.current = false;
+    document.getElementById(form.sans_email ? ID_CONTACT.telephone : ID_CONTACT.email)?.focus();
+  }, [form.sans_email, suivi.verification]);
 
   // `string | boolean` depuis que le formulaire porte un choix binaire
   // (`est_transfert`). Élargir ici plutôt qu'ajouter un second setter : la
@@ -135,47 +138,8 @@ export function CandidatureFlow({
   const set = (cle: keyof Formulaire) => (valeur: string | boolean) =>
     setForm((f) => ({ ...f, [cle]: valeur }));
 
-  /**
-   * Ce qui manque, et non « est-ce complet ».
-   *
-   * Un booléen ne permettait que de griser le bouton, sans dire lequel des six
-   * champs requis faisait défaut — et rien, dans la page, ne le disait non
-   * plus : le formulaire marque les champs FACULTATIFS, mais « Lieu de
-   * naissance », « Ville » ou « Commune » ne portent aucune marque et sont
-   * facultatifs eux aussi, donc l'absence de marque n'apprend rien. Le cas
-   * ordinaire est celui-ci : le candidat tape « 07 » dans la case Année, le
-   * bouton devient gris, aucun message, aucune bordure — et sur un téléphone,
-   * à la rentrée, il abandonne.
-   *
-   * Le bouton reste donc actif, et c'est l'appui qui explique.
-   */
-  const manquants = [
-    form.nom.trim() === "" ? { champ: "nom", cle: "formulaire.requis" } : null,
-    form.prenoms.trim() === "" ? { champ: "prenoms", cle: "formulaire.requis" } : null,
-    // Deux états, deux phrases. « Cette information est nécessaire » sur trois
-    // cases remplies — « 15 / 03 / 07 » — laisse le candidat regarder sa saisie,
-    // la voir complète, et réappuyer : l'impasse exacte que ce bloc existe pour
-    // supprimer, avec une phrase fausse en plus.
-    dateNaissanceValide(form.jour, form.mois, form.annee)
-      ? null
-      : {
-          champ: "date_naissance",
-          cle:
-            form.jour === "" || form.mois === "" || form.annee === ""
-              ? "formulaire.requis"
-              : "formulaire.champInvalide",
-        },
-    form.telephone.trim() === "" ? { champ: "telephone", cle: "formulaire.requis" } : null,
-    // Sous « voeu », et non sous `voeu_libre` : la contrainte porte sur les
-    // trois champs ensemble — filière OU niveau OU texte libre. Accrochée au
-    // troisième, elle affichait « Cette information est nécessaire » juste
-    // sous un libellé qui commence par « Ou », et envoyait décrire à la main
-    // une formation qu'il suffisait de choisir dans la liste au-dessus.
-    form.filiere_id === "" && form.niveau_id === "" && form.voeu_libre.trim() === ""
-      ? { champ: "voeu", cle: "formulaire.voeuRequis" }
-      : null,
-    consentement ? null : { champ: "consentement", cle: "formulaire.requis" },
-  ].filter((m): m is { champ: string; cle: string } => m !== null);
+  // Ce qui manque, recalculé à chaque rendu : voir candidature-manquants.
+  const manquants = manquantsCandidature(form, consentement);
 
   /**
    * Les messages du serveur sont en français, toujours.
@@ -208,80 +172,8 @@ export function CandidatureFlow({
   // le candidat vient de finir.
   const etatAffiche = etat === "incomplet" && manquants.length === 0 ? null : etat;
 
-  /**
-   * Ce qu'on dit au candidat une fois sa candidature transmise.
-   *
-   * Déposer en ligne ne finit rien : les pièces et le paiement se remettent à
-   * l'établissement. Trois cas, et trois phrases différentes — l'école n'a pas
-   * annoncé de date, elle en a annoncé une à venir, ou le guichet est ouvert.
-   * Sans cela, la seule chose que la famille pouvait faire était téléphoner
-   * pour demander « je viens quand ? ».
-   */
-  const suiteDuParcours = (() => {
-    if (physiques === null || physiques.debut === null) {
-      return t("succes.surPlace");
-    }
-
-    if (physiques.ouvertes) {
-      return t("succes.surPlaceOuvert");
-    }
-
-    return t("succes.surPlaceDate", {
-      date: new Intl.DateTimeFormat(locale, {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      }).format(new Date(`${physiques.debut}T00:00:00`)),
-    });
-  })();
-
-  /**
-   * La même information que `suiteDuParcours`, énoncée et non prescrite.
-   *
-   * Un constat se lit juste pour les deux lecteurs d'un refus ; un impératif,
-   * non.
-   */
-  const dateSurPlace =
-    physiques !== null && physiques.debut !== null && !physiques.ouvertes
-      ? t("etats.surPlaceDate", {
-          date: new Intl.DateTimeFormat(locale, {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-          }).format(new Date(`${physiques.debut}T00:00:00`)),
-        })
-      : t("etats.surPlaceOuvert");
-
-  /**
-   * Les deux refus qui envoient SUR PLACE, et qui méritent donc la date.
-   *
-   * Ils s'adressent à quelqu'un dont le dossier est déjà accepté — l'audience
-   * exacte de cette date. Le serveur la joint à ces deux réponses-là et à
-   * aucune autre ; la liste est ici pour que l'ajout d'un troisième se voie.
-   */
-  const REFUS_SUR_PLACE: readonly CleEtat[] = ["dejaTraitee", "accepteePourUnAutre"];
-
-  const messageEtat = etatAffiche
-    ? {
-        cle: etatAffiche,
-        titre: t(`etats.${etatAffiche}.titre`),
-        // La phrase de suite n'est ajoutée que si l'école a annoncé une date :
-        // sinon elle répéterait « présentez-vous sur place », déjà dit au-dessus.
-        // La date, mais SANS l'impératif de l'écran de confirmation.
-        //
-        // Là-bas, le lecteur est sans ambiguïté le titulaire du dossier, et
-        // « rendez-vous à l'établissement avec vos pièces » lui est adressé.
-        // Ici, ces deux refus parlent à deux personnes : celle dont c'est le
-        // dossier, et le cadet qui emprunte le téléphone du foyer. Ajouter
-        // l'impératif enverrait le second se déplacer pour rien, trois mots
-        // après lui avoir dit d'utiliser un autre numéro — le déplacement
-        // même que ces refus existent pour éviter.
-        texte:
-          REFUS_SUR_PLACE.includes(etatAffiche) && physiques !== null && physiques.debut !== null
-            ? `${t(`etats.${etatAffiche}.texte`)} ${dateSurPlace}`
-            : t(`etats.${etatAffiche}.texte`),
-      }
-    : null;
+  const suite = suiteSurPlace(suivi.abouti?.physiques ?? null, locale);
+  const messageEtat = useMessageEtat(etatAffiche, physiquesRefus);
 
 
   /**
@@ -398,7 +290,7 @@ export function CandidatureFlow({
         // elle, la famille se déplace le jour même quand le guichet ouvre dans
         // trois semaines.
         if (classement.genre === "conflit" && classement.corps) {
-          setPhysiques((classement.corps.inscriptions_physiques as Physiques) ?? null);
+          setPhysiquesRefus(lirePhysiques(classement.corps.inscriptions_physiques));
         }
 
         setEtat(ecranDu(classement));
@@ -406,26 +298,14 @@ export function CandidatureFlow({
         return;
       }
 
-      setPhysiques((classement.corps.inscriptions_physiques as Physiques) ?? null);
-      const referencePublique = typeof classement.corps.reference_publique === "string" ? classement.corps.reference_publique : null;
-      setReference(referencePublique);
-      if (referencePublique) {
-        setCreneau(await chargerCreneau(
-          etablissement.code,
-          referencePublique,
-          `${form.annee}-${form.mois.padStart(2, "0")}-${form.jour.padStart(2, "0")}`,
-        ));
-      }
-      setEnvoye(true);
-      // La candidature est partie : « Ce n'est pas mon cas » n'a plus de sens
-      // sous cet écran, et repasser par l'autre porte ne l'annulerait pas.
-      onAboutir?.(true);
+      // Vérification du contact demandée, ou dossier enregistré.
+      await suivi.recevoir(classement.corps, true);
     } catch {
       setEtat("indisponible");
     } finally {
       setEnCours(false);
     }
-  }, [consentement, enCours, etablissement.code, form, manquants, onAboutir]);
+  }, [consentement, enCours, etablissement.code, form, manquants, suivi]);
 
   if (etat === "ferme" || etat === "nonConfigure") {
     // Pas de « Réessayer » ici : un canal fermé ou mal paramétré ne s'ouvrira
@@ -433,14 +313,30 @@ export function CandidatureFlow({
     return <EcranEtat etat={etat} />;
   }
 
-  if (envoye) {
+  // « Modifier l'adresse » revient au formulaire, saisie intacte : la demande
+  // non vérifiée reste sans suite côté école, un nouvel envoi la remplace.
+  if (suivi.verification !== null && suivi.abouti === null) {
+    return (
+      <VerificationCode
+        ecole={etablissement.code}
+        demande={suivi.verification}
+        onVerifie={suivi.conclure}
+        onModifier={() => {
+          suivi.abandonnerVerification();
+          aRefocaliser.current = true;
+        }}
+      />
+    );
+  }
+
+  if (suivi.abouti !== null) {
+    const { reference, creneau } = suivi.abouti;
+
     return (
       <CandidatureTransmise
-        suiteDuParcours={suiteDuParcours}
+        suiteDuParcours={t(`succes.${suite.cle}`, { date: suite.date })}
         reference={reference ?? undefined}
-        onChoisirCreneau={reference && onChoisirCreneau
-          ? () => onChoisirCreneau(reference, `${form.annee}-${form.mois.padStart(2, "0")}-${form.jour.padStart(2, "0")}`)
-          : undefined}
+        onChoisirCreneau={reference && onChoisirCreneau ? () => onChoisirCreneau(reference, dateNaissance) : undefined}
         creneau={creneau}
       />
     );
@@ -467,7 +363,8 @@ export function CandidatureFlow({
         <p className="mt-1.5 text-pretty text-sm text-text-secondary">{t("formulaire.aide")}</p>
       </m.div>
 
-      <ChampsCandidature form={form} set={set} messagesDe={messagesDe} choix={choix} />
+      <ChampsCandidature form={form} set={set} messagesDe={messagesDe} choix={choix}
+                         contact={{ tentative: aTenteEnvoi }} />
 
       {/* Signalé comme les autres quand il manque : l'alerte parle des « champs
           signalés », et le consentement en est un. Le laisser seul sans marque

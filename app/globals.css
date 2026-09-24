@@ -95,6 +95,8 @@ html.dark {
 
   --border: #dadde2;
   --border-strong: #c5c9d0;
+  /* Erreurs de saisie : 5,9:1 sur blanc, lisible en petit corps. */
+  --erreur: #b91c1c;
 
   --nav-bg: rgba(246, 244, 240, 0.85);
 
@@ -136,6 +138,7 @@ html.dark {
 
   --border: #363b44;
   --border-strong: #4b5263;
+  --erreur: #f87171;
 
   --nav-bg: rgba(26, 29, 35, 0.85);
 

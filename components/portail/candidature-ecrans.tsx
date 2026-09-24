@@ -4,7 +4,7 @@ import { m } from "framer-motion";
 import { useTranslations } from "next-intl";
 
 import { CHAMPS_MONTRABLES } from "./candidature-champs";
-import { BoutonPrincipal, Carte, RESSORT, entree } from "./pieces";
+import { BoutonPrincipal, Carte, PastilleSucces, entree } from "./pieces";
 import { ecranDe, type Classement, type CodeRefusCandidature, type RegleEcran } from "./reponses";
 
 /**
@@ -248,17 +248,7 @@ export function CandidatureTransmise({
 
   return (
     <Carte>
-      <m.div
-        initial={{ scale: 0.25, opacity: 0, filter: "blur(4px)" }}
-        animate={{ scale: 1, opacity: 1, filter: "blur(0px)" }}
-        transition={RESSORT}
-        className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-accent-light"
-      >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2}
-             strokeLinecap="round" strokeLinejoin="round" className="h-7 w-7 text-accent" aria-hidden="true">
-          <path d="M20 6 9 17l-5-5" />
-        </svg>
-      </m.div>
+      <PastilleSucces />
       <m.h2 {...entree(1)} className="mt-5 text-balance text-center text-xl font-semibold tracking-tight">
         {t("succes.titre")}
       </m.h2>

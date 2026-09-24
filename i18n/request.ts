@@ -12,12 +12,13 @@ export default getRequestConfig(async ({ requestLocale }) => {
   // `<locale>.json`, and each edition (welcome splash, collège, lms) ships its
   // own file so the flagship JSON stays untouched. They merge into one flat
   // catalogue for next-intl.
-  const [base, welcome, college, lms, reinscription] = await Promise.all([
+  const [base, welcome, college, lms, reinscription, verification] = await Promise.all([
     import(`../messages/${locale}.json`),
     import(`../messages/welcome.${locale}.json`),
     import(`../messages/college.${locale}.json`),
     import(`../messages/lms.${locale}.json`),
     import(`../messages/reinscription.${locale}.json`),
+    import(`../messages/verification.${locale}.json`),
   ]);
 
   return {
@@ -28,6 +29,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
       ...college.default,
       ...lms.default,
       ...reinscription.default,
+      ...verification.default,
     },
   };
 });

@@ -6,6 +6,7 @@ import { NextResponse, type NextRequest } from "next/server";
 
 import { debitDepasse, lectureEnCache, retenirLecture } from "./amortisseur";
 import { preparerAppel } from "./signature";
+import { CHEMINS, type CheminPublic } from "./chemins.ts";
 import { etablissementAvecSecret } from "./tenants";
 
 /**
@@ -27,27 +28,6 @@ import { etablissementAvecSecret } from "./tenants";
  *    la limitation tout en la croyant en place.
  */
 
-/**
- * Les points d'entrée publics de KLASSCI, côté instance.
- *
- * Deux canaux : la réinscription identifie un dossier existant, la candidature
- * n'identifie personne. Ils partagent ce relais, la signature et le registre —
- * mais pas leur protection, qui diffère par nature.
- */
-export const CHEMINS = {
-  reinscriptionLookup: "api/public/reinscription/lookup",
-  reinscriptionSubmit: "api/public/reinscription/submit",
-  inscriptionChoix: "api/public/inscription/choix",
-  inscriptionSubmit: "api/public/inscription/submit",
-  rdvCreneaux: "api/public/rendez-vous/creneaux",
-  rdvReserver: "api/public/rendez-vous/reserver",
-  rdvConsulter: "api/public/rendez-vous/consulter",
-  rdvDeplacer: "api/public/rendez-vous/deplacer",
-  rdvAnnuler: "api/public/rendez-vous/annuler",
-  rdvRetrouver: "api/public/rendez-vous/retrouver",
-} as const;
-
-export type CheminPublic = (typeof CHEMINS)[keyof typeof CHEMINS];
 
 /** Au-delà, l'instance est considérée injoignable. */
 const DELAI_MAX_MS = 12_000;
@@ -79,6 +59,10 @@ const SEAUX: Record<CheminPublic, { groupe: string; maximum: number }> = {
   [CHEMINS.rdvDeplacer]: { groupe: "rendezvous", maximum: 10 },
   [CHEMINS.rdvAnnuler]: { groupe: "rendezvous", maximum: 10 },
   [CHEMINS.rdvRetrouver]: { groupe: "rendezvous", maximum: 10 },
+  // Un code à six chiffres se devine par essais : son seau est à part, et
+  // étroit. Le renvoi y compte aussi, l'école le limite déjà à un par minute.
+  [CHEMINS.verificationVerifier]: { groupe: "verification", maximum: 10 },
+  [CHEMINS.verificationRenvoyer]: { groupe: "verification", maximum: 10 },
 };
 
 /** Les points d'entrée dont la réponse est la même pour tous les visiteurs. */

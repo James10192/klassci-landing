@@ -1,6 +1,8 @@
 import { NextRequest } from "next/server";
 
-import { CHEMINS, relayer } from "@/lib/portail/relais";
+import { verifierCanal } from "@/lib/email/verifier-canal";
+import { CHEMINS } from "@/lib/portail/chemins";
+import { relayer } from "@/lib/portail/relais";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -79,6 +81,21 @@ export async function POST(
   if (typeof corps.nom !== "string" || typeof corps.telephone !== "string") {
     return Response.json({ erreur: "champs_manquants" }, { status: 422 });
   }
+
+  // La même règle que sous le champ, rejouée ici : un navigateur ancien, un
+  // script ou une extension peuvent envoyer sans passer par le formulaire.
+  // `email_confirme` n'est PAS relayé : il ne sert qu'à cette règle.
+  const canal = verifierCanal({
+    email: typeof corps.email === "string" ? corps.email : undefined,
+    telephone: corps.telephone,
+    emailConfirme: source.email_confirme === true,
+  });
+
+  if ("erreurs" in canal) {
+    return Response.json({ erreur: "champs_invalides", champs: canal.erreurs }, { status: 422 });
+  }
+
+  corps.telephone = canal.telephone;
 
   return relayer(params.ecole, CHEMINS.inscriptionSubmit, corps, requete);
 }

@@ -61,6 +61,28 @@ export function dateNaissanceValide(jour: string, mois: string, annee: string): 
   return borne(jour, 1, 31) && borne(mois, 1, 12) && borne(annee, 1900, new Date().getFullYear());
 }
 
+/** Les trois cases d'une date, en ISO : `2007-03-05`. La seule écriture de cet assemblage. */
+export function dateIso(jour: string, mois: string, annee: string): string {
+  return `${annee}-${mois.padStart(2, "0")}-${jour.padStart(2, "0")}`;
+}
+
+/** La coche d'un écran de réussite, la même sur chaque fin de parcours. */
+export function PastilleSucces({ className = "" }: { className?: string }) {
+  return (
+    <m.div
+      initial={{ scale: 0.25, opacity: 0, filter: "blur(4px)" }}
+      animate={{ scale: 1, opacity: 1, filter: "blur(0px)" }}
+      transition={RESSORT}
+      className={`mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-accent-light ${className}`}
+    >
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2}
+           strokeLinecap="round" strokeLinejoin="round" className="h-7 w-7 text-accent" aria-hidden="true">
+        <path d="M20 6 9 17l-5-5" />
+      </svg>
+    </m.div>
+  );
+}
+
 /** Rayon concentrique : la carte à 20px, les champs internes à 12px pour 8px de marge. */
 export function Carte({ children }: { children: React.ReactNode }) {
   return (
@@ -87,7 +109,7 @@ export function Section({ titre }: { titre: string }) {
 export function Erreurs({ messages }: { messages?: string[] }) {
   if (!messages?.length) return null;
 
-  return <p className="mt-1 text-xs text-[#b91c1c]">{messages[0]}</p>;
+  return <p className="mt-1 text-xs text-erreur">{messages[0]}</p>;
 }
 
 export function Champ({
@@ -101,6 +123,7 @@ export function Champ({
   chiffresSeulement = false,
   autoComplete = "off",
   erreurs,
+  id,
 }: {
   label: string;
   value: string;
@@ -119,6 +142,8 @@ export function Champ({
    */
   autoComplete?: string;
   erreurs?: string[];
+  /** Pour qu'un parcours puisse rendre la main à ce champ, par exemple après « Modifier le numéro ». */
+  id?: string;
 }) {
   return (
     <label className="block">
@@ -129,6 +154,7 @@ export function Champ({
         inputMode={inputMode}
         maxLength={maxLength}
         autoComplete={autoComplete}
+        id={id}
         onChange={(e) =>
           onChange(chiffresSeulement ? e.target.value.replace(/\D/g, "") : e.target.value)
         }

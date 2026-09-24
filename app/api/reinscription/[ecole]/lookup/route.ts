@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 
-import { CHEMINS, relayer } from "@/lib/portail/relais";
+import { CHEMINS } from "@/lib/portail/chemins";
+import { relayer } from "@/lib/portail/relais";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";

@@ -1,0 +1,63 @@
+{
+  "email": {
+    "suggestion": "Vouliez-vous dire {suggestion} ?",
+    "appliquer": "Corriger en {suggestion}",
+    "confirmer": "Non, mon adresse est correcte",
+    "factice": "Le domaine {domaine} ne reçoit pas de courrier. Indiquez une adresse que vous consultez vraiment.",
+    "invalide": "Cette adresse e-mail est incomplète. Exemple : prenom.nom@gmail.com",
+    "aCorriger": "Choisissez la correction proposée, ou confirmez que votre adresse est correcte."
+  },
+  "canal": {
+    "sansEmail": "Je n’ai pas d’adresse e-mail",
+    "sansEmailAide": "Nous vous enverrons alors un code de vérification par WhatsApp.",
+    "whatsapp": "Numéro WhatsApp",
+    "whatsappAide": "Numéro mobile ivoirien (01, 05 ou 07), par exemple +225 07 07 12 12 34. Vous y recevrez un code par WhatsApp."
+  },
+  "verification": {
+    "titreEmail": "Vérifiez votre adresse e-mail",
+    "titreTelephone": "Vérifiez votre numéro WhatsApp",
+    "texteEmail": "Votre demande a bien été transmise à l’établissement. Pour confirmer que {destination} est bien votre adresse, saisissez le code à 6 chiffres que nous venons d’y envoyer : l’école saura qu’elle peut vous écrire.",
+    "texteTelephone": "Votre demande a bien été transmise à l’établissement. Pour confirmer que le {destination} est bien votre numéro WhatsApp, saisissez le code à 6 chiffres que nous venons d’y envoyer : l’école saura qu’elle peut vous joindre.",
+    "code": "Code de vérification",
+    "codeAide": "Six chiffres. Vous pouvez aussi cliquer sur le lien reçu.",
+    "codeIncomplet": "Le code comporte 6 chiffres.",
+    "valider": "Valider le code",
+    "validation": "Vérification…",
+    "renvoyer": "Renvoyer le code",
+    "renvoyerDans": "Renvoyer le code dans {secondes} s",
+    "renvoye": "Un nouveau code vient d’être envoyé.",
+    "renvoiImpossible": "Le code n’a pas pu être renvoyé. Réessayez dans un instant.",
+    "modifierEmail": "Modifier l’adresse",
+    "modifierTelephone": "Modifier le numéro",
+    "spam": "Rien reçu ? Regardez dans le dossier Spam ou Courrier indésirable, puis renvoyez le code.",
+    "spamTelephone": "Rien reçu ? Vérifiez que ce numéro utilise bien WhatsApp, puis renvoyez le code.",
+    "motifs": {
+      "code_invalide": "Ce code ne correspond pas. Vérifiez les 6 chiffres reçus.",
+      "expire": "Ce code a expiré. Demandez-en un nouveau.",
+      "trop_de_tentatives": "Trop d’essais avec un code faux. Demandez un nouveau code.",
+      "inconnu": "La vérification n’a pas abouti. Réessayez dans un instant."
+    },
+    "page": {
+      "titre": "Vérification de votre adresse e-mail",
+      "chargement": "Vérification de votre lien en cours…",
+      "succesTitre": "Adresse confirmée",
+      "succesTexte": "Votre adresse e-mail est confirmée : l’établissement sait qu’il peut vous écrire. Votre demande lui avait déjà été transmise. Vous pouvez fermer cette page.",
+      "expireTitre": "Ce lien a expiré",
+      "expireTexte": "Pour des raisons de sécurité, un lien de vérification n’est valable que peu de temps. Demandez un nouveau lien.",
+      "erreurTitre": "Ce lien ne fonctionne pas",
+      "erreurTexte": "Il est incomplet, déjà utilisé ou mal copié. Ouvrez de nouveau le lien reçu par e-mail, ou saisissez le code sur la page où vous avez fait votre demande.",
+      "indisponibleTexte": "Nous n’arrivons pas à joindre l’établissement pour le moment. Réessayez dans quelques minutes.",
+      "reessayer": "Réessayer",
+      "renvoyerLien": "Recevoir un nouveau lien",
+      "lienRenvoye": "Un nouveau lien vient de vous être envoyé.",
+      "accueil": "Retour à l’accueil",
+      "description": "Confirmez votre adresse e-mail pour que l’établissement sache qu’il peut vous écrire.",
+      "lienTropTot": "Un lien vient déjà d’être envoyé. Patientez une minute avant d’en demander un autre.",
+      "envoiLien": "Envoi en cours…"
+    },
+    "renvoiTropTot": "Un code vient déjà d’être envoyé. Patientez une minute avant d’en demander un autre.",
+    "recommencer": "Faire une autre demande",
+    "adresseIncorrecte": "Adresse incorrecte ? Contactez votre école : c’est elle qui la tient à jour dans votre dossier.",
+    "numeroIncorrect": "Numéro incorrect ? Contactez votre école : c’est elle qui le tient à jour dans votre dossier."
+  }
+}

@@ -6,19 +6,14 @@ import { useCallback, useId, useMemo, useRef, useState } from "react";
 
 import type { EtablissementVisible } from "@/lib/portail/tenants";
 
-import {
-  Alerte,
-  BoutonPrincipal,
-  Carte,
-  CaseDate,
-  RESSORT,
-  champ,
-  dateNaissanceValide,
-  entree,
-} from "./pieces";
-import type { Physiques } from "./candidature-echanges";
-import { chargerCreneau, type CreneauAttribue } from "./candidature-ecrans";
-import { classer, ecranDe, type Classement, type RegleEcran } from "./reponses";
+import { suiteSurPlace } from "@/lib/portail/aboutissement";
+
+import { Alerte, BoutonPrincipal, Carte, CaseDate, RESSORT, champ, dateIso, dateNaissanceValide, entree } from "./pieces";
+import { ECRANS, type CleEtat, type Etape, type Situation } from "./reinscription-ecrans";
+import { ReinscriptionSucces } from "./reinscription-succes";
+import { classer, ecranDe } from "./reponses";
+import { useSuiviDemande } from "./suivi-demande";
+import { VerificationCode } from "./verification-code";
 
 /**
  * Le parcours de réinscription, d'un bout à l'autre, sans changer de page.
@@ -28,58 +23,6 @@ import { classer, ecranDe, type Classement, type RegleEcran } from "./reponses";
  * un téléphone, parfois en connexion lente : chaque écran tient sans défiler,
  * chaque champ dit ce qu'il attend, et rien ne se perd si l'envoi échoue.
  */
-
-type Situation = {
-  trouve: boolean;
-  prenom?: string;
-  classe_actuelle?: string | null;
-  annee_cible?: string | null;
-  eligible?: boolean;
-  demande_existante?: boolean;
-};
-
-type Etape = "identification" | "confirmation" | "succes";
-
-type CleEtat =
-  | "dejaDeposee"
-  | "nonEligible"
-  | "introuvable"
-  | "ferme"
-  | "tropDeTentatives"
-  | "affluence"
-  | "identificationBloquee"
-  | "indisponible"
-  | "champsInvalides"
-  | "refus";
-
-/**
- * Ce que chaque genre de réponse donne comme écran, ici.
- *
- * La même table que la candidature, avec le vocabulaire de CE parcours :
- * « année non configurée » et « conflit » n'ont pas de sens pour une
- * réinscription, ils retombent donc sur ce que le visiteur peut comprendre.
- *
- * Elle était écrite en ternaire imbriqué à quatre niveaux, qui ré-implémentait
- * à la main la règle « code inconnu → indisponible ». Deux écritures de la même
- * règle finissent toujours par diverger — celle-ci avait déjà commencé.
- */
-const ECRANS: Partial<Record<Classement["genre"], RegleEcran<CleEtat>>> = {
-  ferme: { sansCode: "ferme" },
-  invalide: { sansCode: "champsInvalides" },
-  tropDeTentatives: {
-    // Trois seaux, trois phrases. Celui d'une adresse dit vrai en parlant de
-    // tentatives ; le plafond de l'établissement se remplit du trafic de tout
-    // le monde ; et le seau du matricule peut avoir été rempli par un TIERS,
-    // avec une fenêtre d'un quart d'heure. Les confondre accuse le visiteur de
-    // ce qu'il n'a pas fait, et lui promet un délai qui n'est pas le bon.
-    codes: {
-      affluence: "affluence",
-      trop_de_tentatives: "tropDeTentatives",
-      identification_bloquee: "identificationBloquee",
-    },
-    sansCode: "tropDeTentatives",
-  },
-};
 
 export function ReinscriptionFlow({
   etablissement,
@@ -103,9 +46,6 @@ export function ReinscriptionFlow({
   const idBase = useId();
 
   const [etape, setEtape] = useState<Etape>("identification");
-  const [physiques, setPhysiques] = useState<Physiques | null>(null);
-  const [reference, setReference] = useState<string | null>(null);
-  const [creneau, setCreneau] = useState<CreneauAttribue | null>(null);
   const [matricule, setMatricule] = useState("");
   const [jour, setJour] = useState("");
   const [mois, setMois] = useState("");
@@ -114,32 +54,18 @@ export function ReinscriptionFlow({
   const [etat, setEtat] = useState<CleEtat | null>(null);
   const [enCours, setEnCours] = useState(false);
   const [consentement, setConsentement] = useState(false);
+  const dateNaissance = dateIso(jour, mois, annee);
+  const suivi = useSuiviDemande({
+    ecole: etablissement.code,
+    dateNaissance,
+    onAbouti: useCallback(() => {
+      setEtape("succes");
+      onAboutir?.(true);
+    }, [onAboutir]),
+  });
 
-  // Résolu ici, où l'espace de messages est écrit en dur : c'est la seule
-  // façon pour next-intl de vérifier que la clé existe vraiment.
-  /**
-   * Ce qui se passe après la demande.
-   *
-   * Trois cas, comme pour une candidature : l'école n'a pas annoncé de date,
-   * elle en a annoncé une à venir, ou le guichet est ouvert.
-   */
-  const suiteDuParcours = (() => {
-    if (physiques === null || physiques.debut === null) {
-      return t("succes.surPlace");
-    }
-
-    if (physiques.ouvertes) {
-      return t("succes.surPlaceOuvert");
-    }
-
-    return t("succes.surPlaceDate", {
-      date: new Intl.DateTimeFormat(locale, {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      }).format(new Date(`${physiques.debut}T00:00:00`)),
-    });
-  })();
+  // Ce qui reste à faire sur place : même règle que pour une candidature.
+  const suite = suiteSurPlace(suivi.abouti?.physiques ?? null, locale);
 
   const messageEtat = etat
     ? { cle: etat, titre: t(`etats.${etat}.titre`), texte: t(`etats.${etat}.texte`) }
@@ -155,10 +81,6 @@ export function ReinscriptionFlow({
 
   const peutChercher = matricule.trim().length > 0 && dateComplete && !enCours;
 
-  const dateISO = useCallback(
-    () => `${annee}-${mois.padStart(2, "0")}-${jour.padStart(2, "0")}`,
-    [annee, mois, jour],
-  );
 
   /**
    * Traduit la réponse du relais en un état d'écran.
@@ -199,7 +121,7 @@ export function ReinscriptionFlow({
       const reponse = await fetch(`/api/reinscription/${etablissement.code}/lookup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ matricule: matricule.trim(), dateNaissance: dateISO() }),
+        body: JSON.stringify({ matricule: matricule.trim(), dateNaissance: dateNaissance }),
       });
 
       const corps = await interpreter(reponse);
@@ -230,7 +152,8 @@ export function ReinscriptionFlow({
     } finally {
       setEnCours(false);
     }
-  }, [peutChercher, etablissement.code, matricule, dateISO, interpreter]);
+  }, [peutChercher, etablissement.code, matricule, dateNaissance, interpreter]);
+
 
   const confirmer = useCallback(async () => {
     if (!consentement || enCours) return;
@@ -244,7 +167,7 @@ export function ReinscriptionFlow({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           matricule: matricule.trim(),
-          dateNaissance: dateISO(),
+          dateNaissance: dateNaissance,
           consentement: true,
         }),
       });
@@ -258,17 +181,8 @@ export function ReinscriptionFlow({
 
       const payload = classement.corps;
 
-      if (payload.enregistre === true) {
-        setPhysiques((payload.inscriptions_physiques as Physiques) ?? null);
-        const referencePublique = typeof payload.reference_publique === "string" ? payload.reference_publique : null;
-        setReference(referencePublique);
-        if (referencePublique) {
-          setCreneau(await chargerCreneau(etablissement.code, referencePublique, dateISO()));
-        }
-        setEtape("succes");
-        onAboutir?.(true);
-        return;
-      }
+      // Vérification du contact demandée, ou dossier enregistré.
+      if (await suivi.recevoir(payload, payload.enregistre === true)) return;
 
       // KLASSCI refuse DÉLIBÉRÉMENT de dire pourquoi il ne sert pas un
       // dossier : déjà réinscrit, plus d'année courante, rien à réinscrire —
@@ -282,10 +196,11 @@ export function ReinscriptionFlow({
     } finally {
       setEnCours(false);
     }
-  }, [consentement, enCours, etablissement.code, matricule, dateISO, interpreter, onAboutir]);
+  }, [consentement, enCours, etablissement.code, matricule, dateNaissance, interpreter, suivi]);
 
   const recommencer = useCallback(() => {
     onAboutir?.(false);
+    suivi.reinitialiser();
     setEtape("identification");
     setSituation(null);
     setEtat(null);
@@ -294,7 +209,20 @@ export function ReinscriptionFlow({
     setJour("");
     setMois("");
     setAnnee("");
-  }, [onAboutir]);
+  }, [onAboutir, suivi]);
+
+  // L'adresse vient du dossier de l'école : pas de « Modifier l'adresse » ici,
+  // mais une sortie (« Faire une autre demande ») et le conseil de contacter l'école.
+  if (suivi.verification !== null && etape !== "succes") {
+    return (
+      <div className="mx-auto w-full max-w-xl">
+        <VerificationCode ecole={etablissement.code} demande={suivi.verification}
+                          onVerifie={suivi.conclure} onRecommencer={recommencer} />
+      </div>
+    );
+  }
+
+  const referenceAboutie = suivi.abouti === null ? null : suivi.abouti.reference;
 
   return (
     <div className="mx-auto w-full max-w-xl">
@@ -457,7 +385,7 @@ export function ReinscriptionFlow({
           </m.div>
         )}
 
-        {etape === "succes" && (
+        {etape === "succes" && suivi.abouti !== null && (
           <m.div
             key="succes"
             initial={{ opacity: 0, y: 8 }}
@@ -465,95 +393,15 @@ export function ReinscriptionFlow({
             exit={{ opacity: 0, y: -8 }}
             transition={RESSORT}
           >
-            <Carte>
-              <m.div
-                initial={{ scale: 0.25, opacity: 0, filter: "blur(4px)" }}
-                animate={{ scale: 1, opacity: 1, filter: "blur(0px)" }}
-                transition={RESSORT}
-                className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-accent-light"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2.2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="h-7 w-7 text-accent"
-                  aria-hidden="true"
-                >
-                  <path d="M20 6 9 17l-5-5" />
-                </svg>
-              </m.div>
-
-              <m.h2
-                {...entree(1)}
-                className="mt-5 text-balance text-center text-xl font-semibold tracking-tight text-text"
-              >
-                {t("succes.titre")}
-              </m.h2>
-              <m.p
-                {...entree(2)}
-                className="mt-2 text-pretty text-center text-sm leading-relaxed text-text-secondary"
-              >
-                {t("succes.texte")}
-              </m.p>
-              {/* Ce qui reste à faire, et il en reste. La phrase précédente
-                  disait « aucune démarche supplémentaire n'est nécessaire » :
-                  c'était faux, les frais se règlent au guichet. */}
-              <m.p
-                {...entree(2)}
-                className="mt-2 text-pretty text-center text-sm leading-relaxed text-text-secondary"
-              >
-                {suiteDuParcours}
-              </m.p>
-              {reference !== null && (
-                <m.p {...entree(3)} className="mt-4 text-center text-sm font-semibold tracking-wide">
-                  {t("succes.reference", { reference })}
-                </m.p>
-              )}
-              {creneau !== null && creneau.date !== "" && (
-                <m.p {...entree(4)} className="mt-4 text-center text-sm font-semibold tracking-wide">
-                  {t("succes.creneau", {
-                    jour: creneau.date,
-                    debut: creneau.heure_debut,
-                    fin: creneau.heure_fin,
-                  })}
-                </m.p>
-              )}
-              {creneau !== null && (
-                <m.p {...entree(5)} className="mt-2 text-pretty text-center text-sm leading-relaxed text-text-secondary">
-                  {t("succes.mail")}
-                </m.p>
-              )}
-              {reference !== null && onChoisirCreneau !== undefined && (
-                <m.p {...entree(6)} className="mt-4 text-center">
-                  <button
-                    type="button"
-                    onClick={() => onChoisirCreneau(reference, dateISO())}
-                    className="inline-flex min-h-[44px] items-center rounded-xl bg-accent px-4 text-sm font-semibold text-white"
-                  >
-                    {t("succes.rdv")}
-                  </button>
-                </m.p>
-              )}
-              <m.p
-                {...entree(5)}
-                className="mt-4 rounded-xl bg-bg-alt p-3 text-pretty text-center text-xs leading-relaxed text-text-muted"
-              >
-                {t("succes.rappel")}
-              </m.p>
-
-              <m.div {...entree(4)} className="mt-5 text-center">
-                <button
-                  type="button"
-                  onClick={recommencer}
-                  className="min-h-[40px] px-3 text-sm text-accent underline-offset-4 transition-colors duration-200 hover:underline"
-                >
-                  {t("succes.action")}
-                </button>
-              </m.div>
-            </Carte>
+            <ReinscriptionSucces
+              suiteDuParcours={t(`succes.${suite.cle}`, { date: suite.date })}
+              reference={suivi.abouti.reference}
+              creneau={suivi.abouti.creneau}
+              onChoisirCreneau={referenceAboutie !== null && onChoisirCreneau !== undefined
+                ? () => onChoisirCreneau(referenceAboutie, dateNaissance)
+                : undefined}
+              onRecommencer={recommencer}
+            />
           </m.div>
         )}
       </AnimatePresence>

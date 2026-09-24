@@ -13,6 +13,7 @@ import {
   Section,
   entree,
 } from "./pieces";
+import { ChampsContact } from "./champs-contact";
 
 /**
  * Les champs de la candidature, et rien d'autre.
@@ -55,6 +56,16 @@ export type Formulaire = {
   nationalite: string;
   telephone: string;
   email: string;
+  /**
+   * « Je n'ai pas d'adresse e-mail » : le téléphone devient alors le canal de
+   * vérification, par WhatsApp. Jamais envoyé tel quel à l'école.
+   */
+  sans_email: boolean;
+  /**
+   * L'adresse telle quelle a été confirmée malgré une faute seulement probable
+   * (« Non, mon adresse est correcte »). Retombe à `false` dès qu'on la retape.
+   */
+  email_confirme: boolean;
   ville: string;
   commune: string;
   filiere_id: string;
@@ -82,7 +93,7 @@ export type Formulaire = {
 export const FORMULAIRE_VIDE: Formulaire = {
   nom: "", prenoms: "", jour: "", mois: "", annee: "",
   lieu_naissance: "", sexe: "", nationalite: "",
-  telephone: "", email: "", ville: "", commune: "",
+  telephone: "", email: "", sans_email: false, email_confirme: false, ville: "", commune: "",
   filiere_id: "", niveau_id: "", voeu_libre: "",
   serie_bac: "", etablissement_origine: "", annee_bac: "", affectation_status: "",
   est_transfert: false,
@@ -179,6 +190,8 @@ export type ProprietesChamps = {
   /** Les messages d'erreur du serveur pour un champ, déjà localisés. */
   messagesDe: (champ: string) => string[] | undefined;
   choix: ChoixPublies;
+  /** Un envoi a-t-il déjà été tenté ? Le champ e-mail montre alors ses messages sans attendre. */
+  contact: { tentative: boolean };
 };
 
 export function ChampsCandidature({
@@ -186,6 +199,7 @@ export function ChampsCandidature({
   set,
   messagesDe,
   choix: { filieres, niveaux, affectations, liens_tuteur, nationalites },
+  contact,
 }: ProprietesChamps) {
   const t = useTranslations("inscription");
 
@@ -238,14 +252,8 @@ export function ChampsCandidature({
 
       <m.div {...entree(2)}>
         <Section titre={t("formulaire.contact")} />
-        <Champ label={t("formulaire.telephone")} value={form.telephone} onChange={set("telephone")}
-               aide={t("formulaire.telephoneAide")} inputMode="tel"
-               maxLength={LONGUEURS.telephone} erreurs={messagesDe("telephone")} autoComplete="tel" />
-        <div className="mt-3">
-          <Champ label={t("formulaire.email")} value={form.email} onChange={set("email")}
-                 type="email" inputMode="email" maxLength={LONGUEURS.email}
-                 erreurs={messagesDe("email")} autoComplete="email" />
-        </div>
+        <ChampsContact form={form} set={set} messagesDe={messagesDe} {...contact}
+                       longueurs={{ telephone: LONGUEURS.telephone, email: LONGUEURS.email }} />
         <div className="mt-3 grid gap-3 sm:grid-cols-2">
           <Champ label={t("formulaire.ville")} value={form.ville} onChange={set("ville")}
                  maxLength={LONGUEURS.ville} erreurs={messagesDe("ville")} autoComplete="address-level2" />
