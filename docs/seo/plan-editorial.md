@@ -71,9 +71,9 @@ Deux interdits absolus, qui valent pour tout agent rédacteur :
 | ✅ | P1 | Délibération de jury LMD : procédure et PV | `deliberation-jury-lmd-proces-verbal` | lmd |
 | ☐ | P1 | Compensation LMD : valider un semestre | `compensation-lmd-validation-semestre` | lmd |
 | ✅ | P1 | Élèves affectés : gérer subvention et solde | `eleves-affectes-subvention-etat` | finance |
-| ☐ | P1 | Bulletin scolaire : lire, consulter, modèle trimestriel | `bulletin-scolaire-cote-divoire` | operations |
+| ✅ | P1 | Bulletin scolaire : lire, consulter, modèle trimestriel | `bulletin-scolaire-cote-divoire` | operations |
 | ☐ | P1 | Carte scolaire : ce que la DRENA vérifie | `carte-scolaire-drena` | reglementation |
-| ☐ | P1 | Comptabilité scolaire SYSCOHADA | `comptabilite-scolaire-syscohada` | finance |
+| ✅ | P1 | Comptabilité scolaire SYSCOHADA | `comptabilite-scolaire-syscohada` | finance |
 | ☐ | P1 | Prix d'un logiciel scolaire en FCFA | `prix-logiciel-gestion-scolaire-fcfa` | achat |
 | ☐ | P1 | Agrément privé : dossier, délais, pièges | `agrement-etablissement-prive-cote-divoire` | reglementation |
 | ☐ | P1 | Tableau de suivi des frais : modèle Excel | `tableau-suivi-frais-scolarite-excel` | finance |
