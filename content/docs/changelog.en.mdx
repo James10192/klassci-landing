@@ -102,6 +102,14 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 - **LMD curricula: entering hours no longer resets credits to zero** — a timetable line created by typing hours now takes the element's credits as set for the displayed track, instead of 0, which skewed the track's credit total. Removing the last line of an element, which would take it out of the LMD, now asks for a second confirmation and suggests using the pencil to move it to another track instead.
 
+- **LMD curricula: a course unit's page shows each track separately** — a unit shared by two tracks now has one tab per track, with its own course elements, credits and teaching hours. It used to merge both curricula into a single table and compared credits with the unit's own record rather than the track's.
+
+- **LMD curricula: a deleted planning line no longer blocks its re-creation** — typing hours again for an element whose line had been deleted used to fail. The line is now restored from scratch, without bringing back the previous hours, teacher or notes.
+
+- **LMD curricula: an element's coefficient is 1 from the start** — the field showed a greyed-out 1 that was never saved. It is now prefilled, and takes the chosen subject's coefficient when an existing subject is attached.
+
+- **The LMD planning states which year it covers** — the current academic year is shown at the top, and only its lines are listed. The Track filter on the course units page becomes a searchable list showing each track's code and name.
+
 - **The group portal updates as soon as a payment is validated or cancelled** — when a school validates or cancels a payment, it notifies the group portal so the founder's view reflects the new receipt straight away, instead of waiting a few minutes for the next refresh. On production instances this notice was in fact never sent. It goes out again, and if the school isn't linked to the portal, the problem is now logged instead of going unnoticed.
 
 - **Changing the grading scale or the weight of an already-graded assessment now recalculates averages** — the grades themselves did not change, so nothing triggered a recalculation, and the stored average, computed with the old scale or weight, **took precedence** on screen and on the report card. Moving an assignment from weight 1 to 3, with 10/20 on it and 20/20 on the other, left 15 instead of 12.5. Both the assessment page and the quick edit from the grade grid now recalculate. **The grading scale can no longer go below a grade already entered**: entry already rejected a grade above the scale, but lowering the scale afterwards bypassed the rule — an 18 brought down to a scale of 10 would have given 36 out of 20. A recalculation that fails is reported, without suggesting the change was not saved. Report cards already generated keep their official average until they are regenerated.
