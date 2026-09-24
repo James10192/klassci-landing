@@ -127,6 +127,35 @@ function chargerRessources() {
   return ressources;
 }
 
+/* ─────────────────────────────── Visuels ─────────────────────────────── */
+
+/**
+ * Ce que la carte montre à droite du titre : l'écran réel du produit, une
+ * photo, ou une page de document pour les textes légaux.
+ *
+ * Les fichiers sont des copies allégées rangées dans `assets/og/visuels/`
+ * (JPEG, 760 px de large au plus) : Satori ne lit ni le WebP ni les captures
+ * de 2 Mo sans ralentir la construction. Une nouvelle capture s'y prépare à
+ * part, jamais en pointant vers `public/`.
+ */
+export type Visuel =
+  | { type: "ecran"; fichier: string; mobile?: string }
+  | { type: "photo"; fichier: string }
+  | { type: "document"; mention?: string };
+
+const visuelsLus = new Map<string, Promise<string>>();
+
+function lireVisuel(fichier: string): Promise<string> {
+  let lu = visuelsLus.get(fichier);
+  if (!lu) {
+    lu = readFile(join(process.cwd(), "assets", "og", "visuels", fichier)).then(
+      (octets) => `data:image/jpeg;base64,${octets.toString("base64")}`,
+    );
+    visuelsLus.set(fichier, lu);
+  }
+  return lu;
+}
+
 /* ──────────────────────────────── Textes ──────────────────────────────── */
 
 /** Coupe au mot, sans dépasser, et le dit par une ellipse. */
@@ -137,7 +166,7 @@ function couper(texte: string, maximum: number): string {
   const coupe = net.slice(0, maximum - 1);
   const espace = coupe.lastIndexOf(" ");
 
-  return `${(espace > maximum * 0.6 ? coupe.slice(0, espace) : coupe).replace(/[\s,;:—–-]+$/, "")}…`;
+  return `${(espace > maximum * 0.6 ? coupe.slice(0, espace) : coupe).replace(/[\s.,;:—–-]+$/, "")}…`;
 }
 
 /** Plus le titre est long, plus il est petit : il doit tenir en trois lignes. */
@@ -146,6 +175,14 @@ function tailleTitre(titre: string): number {
   if (titre.length <= 52) return 64;
   if (titre.length <= 80) return 54;
   return 46;
+}
+
+/** La même règle pour une colonne de texte réduite de moitié par le visuel. */
+function tailleTitreEtroit(titre: string): number {
+  if (titre.length <= 22) return 64;
+  if (titre.length <= 40) return 54;
+  if (titre.length <= 64) return 46;
+  return 40;
 }
 
 /**
@@ -222,6 +259,163 @@ function Domaine({ texte }: { texte: string }) {
   );
 }
 
+/** Une capture d'écran dans un cadre de navigateur, qui déborde à droite. */
+function CadreEcran({ ecran, mobile }: { ecran: string; mobile: string | null }) {
+  return (
+    <div style={{ display: "flex", position: "absolute", top: 138, left: 640, width: 620, height: 376 }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          width: 620,
+          borderRadius: 18,
+          overflow: "hidden",
+          background: "#ffffff",
+          border: "1px solid #dbe3ef",
+          boxShadow: "0 30px 60px rgba(11, 42, 107, 0.22)",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 8, height: 36, padding: "0 16px", background: "#eef2f8" }}>
+          {["#ff5f57", "#febc2e", "#28c840"].map((c) => (
+            <div key={c} style={{ display: "flex", width: 11, height: 11, borderRadius: 6, background: c }} />
+          ))}
+          <div
+            style={{
+              display: "flex",
+              marginLeft: 16,
+              padding: "3px 14px",
+              borderRadius: 8,
+              background: "#ffffff",
+              fontFamily: "Plex Mono",
+              fontSize: 14,
+              color: GRIS,
+            }}
+          >
+            klassci.com
+          </div>
+        </div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={ecran} alt="" width={620} height={340} style={{ objectFit: "cover", objectPosition: "0 0" }} />
+      </div>
+      {mobile ? (
+        <div
+          style={{
+            display: "flex",
+            position: "absolute",
+            left: -6,
+            top: 104,
+            width: 150,
+            height: 292,
+            padding: 7,
+            borderRadius: 26,
+            background: ENCRE,
+            boxShadow: "0 24px 50px rgba(15, 23, 42, 0.35)",
+          }}
+        >
+          <div style={{ display: "flex", width: 136, height: 278, borderRadius: 20, overflow: "hidden" }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={mobile} alt="" width={136} height={278} style={{ objectFit: "cover", objectPosition: "0 0" }} />
+          </div>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function CadrePhoto({ photo }: { photo: string }) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        position: "absolute",
+        top: 132,
+        left: 660,
+        width: 480,
+        height: 404,
+        borderRadius: 24,
+        overflow: "hidden",
+        boxShadow: "0 30px 60px rgba(11, 42, 107, 0.22)",
+        border: `6px solid #ffffff`,
+      }}
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={photo} alt="" width={468} height={392} style={{ objectFit: "cover" }} />
+    </div>
+  );
+}
+
+/** Une page de document stylisée, pour les textes légaux. */
+function CadreDocument({ logo, mention }: { logo: string; mention?: string }) {
+  const lignes = [300, 340, 260, 320, 190, 330, 280];
+  return (
+    <div
+      style={{
+        display: "flex",
+        position: "absolute",
+        top: 120,
+        left: 700,
+        width: 400,
+        height: 430,
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          position: "absolute",
+          top: 22,
+          left: 26,
+          width: 360,
+          height: 400,
+          borderRadius: 18,
+          background: "#e6edf8",
+        }}
+      />
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: 360,
+          height: 400,
+          padding: "34px 30px",
+          gap: 16,
+          borderRadius: 18,
+          background: "#ffffff",
+          border: "1px solid #dbe3ef",
+          boxShadow: "0 30px 60px rgba(11, 42, 107, 0.18)",
+        }}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={logo} alt="" width={131} height={50} />
+        <div style={{ display: "flex", width: 60, height: 5, borderRadius: 3, background: ORANGE, marginTop: 6 }} />
+        {lignes.map((l, i) => (
+          <div key={i} style={{ display: "flex", width: l * 0.88, height: 9, borderRadius: 5, background: i === 0 ? "#c7d4ea" : "#e5ebf4" }} />
+        ))}
+        {mention ? (
+          <div
+            style={{
+              display: "flex",
+              alignSelf: "flex-start",
+              marginTop: 10,
+              padding: "8px 14px",
+              borderRadius: 10,
+              background: "rgba(4, 83, 203, 0.08)",
+              border: `1px solid rgba(4, 83, 203, 0.3)`,
+              color: BLEU,
+              fontFamily: "Plex Mono",
+              fontSize: 16,
+            }}
+          >
+            {mention}
+          </div>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
 /* ─────────────────────────────── Les cartes ─────────────────────────────── */
 
 /**
@@ -233,20 +427,44 @@ export async function carteKlassci({
   rubrique,
   titre,
   description,
+  visuel,
 }: {
   locale: Locale;
   rubrique: Rubrique;
   titre: string;
   description: string;
+  visuel?: Visuel;
 }): Promise<ImageResponse> {
-  const { polices, logo } = await chargerRessources();
-  const titreCourt = couper(titre, 110);
-  const descriptionCourte = couper(description, 170);
+  const [{ polices, logo }, image, mobile] = await Promise.all([
+    chargerRessources(),
+    visuel && visuel.type !== "document" ? lireVisuel(visuel.fichier) : Promise.resolve(null),
+    visuel?.type === "ecran" && visuel.mobile ? lireVisuel(visuel.mobile) : Promise.resolve(null),
+  ]);
+  const etroit = Boolean(visuel);
+  const titreCourt = couper(titre, etroit ? 80 : 110);
+  const descriptionCourte = couper(description, etroit ? 130 : 170);
 
   return new ImageResponse(
     (
-      <div style={{ display: "flex", width: "100%", height: "100%", background: FOND }}>
+      <div style={{ display: "flex", position: "relative", width: "100%", height: "100%", background: FOND, overflow: "hidden" }}>
+        {etroit ? (
+          <div
+            style={{
+              display: "flex",
+              position: "absolute",
+              top: -200,
+              right: -220,
+              width: 760,
+              height: 760,
+              borderRadius: 380,
+              background: "radial-gradient(circle, rgba(4, 83, 203, 0.14) 0%, rgba(4, 83, 203, 0) 70%)",
+            }}
+          />
+        ) : null}
         <BarreMarque />
+        {visuel?.type === "ecran" && image ? <CadreEcran ecran={image} mobile={mobile} /> : null}
+        {visuel?.type === "photo" && image ? <CadrePhoto photo={image} /> : null}
+        {visuel?.type === "document" ? <CadreDocument logo={logo} mention={visuel.mention} /> : null}
         <div
           style={{
             display: "flex",
@@ -261,12 +479,22 @@ export async function carteKlassci({
             <Pastille texte={RUBRIQUES[locale][rubrique]} />
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", flex: 1, justifyContent: "center" }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              flex: 1,
+              justifyContent: "center",
+              width: etroit ? 520 : "100%",
+              maxWidth: etroit ? 520 : undefined,
+            }}
+          >
             <div
               style={{
                 display: "flex",
+                width: "100%",
                 fontFamily: "Plex Serif",
-                fontSize: tailleTitre(titreCourt),
+                fontSize: etroit ? tailleTitreEtroit(titreCourt) : tailleTitre(titreCourt),
                 lineHeight: 1.1,
                 color: BLEU_NUIT,
                 letterSpacing: -1,
@@ -278,12 +506,13 @@ export async function carteKlassci({
               <div
                 style={{
                   display: "flex",
-                  marginTop: 24,
+                  width: "100%",
+                  marginTop: etroit ? 20 : 24,
                   fontFamily: "Plex Sans",
-                  fontSize: 28,
+                  fontSize: etroit ? 23 : 28,
                   lineHeight: 1.4,
                   color: GRIS,
-                  maxWidth: 980,
+                  maxWidth: etroit ? 520 : 980,
                 }}
               >
                 {descriptionCourte}
@@ -295,8 +524,14 @@ export async function carteKlassci({
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
               <div style={{ display: "flex", width: 44, height: 6, borderRadius: 3, background: BLEU }} />
               <div style={{ display: "flex", width: 18, height: 6, borderRadius: 3, background: ORANGE }} />
+              {etroit ? (
+                <div style={{ display: "flex", marginLeft: 14, fontFamily: "Plex Mono", fontSize: 24, color: ENCRE }}>
+                  klassci.com
+                </div>
+              ) : null}
             </div>
-            <Domaine texte="klassci.com" />
+            {/* Avec un visuel, le cartouche passerait dessus : l'adresse se lit alors à gauche. */}
+            {etroit ? null : <Domaine texte="klassci.com" />}
           </div>
         </div>
       </div>

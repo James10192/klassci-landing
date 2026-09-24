@@ -1,4 +1,4 @@
-import { carteDePage } from "@/lib/og/cartes";
+import { VISUELS_INSTITUTIONNELS, carteDePage } from "@/lib/og/cartes";
 
 import { generateMetadata } from "./page";
 
@@ -9,5 +9,5 @@ export const alt = "KLASSCI";
 export { generateStaticParams } from "./page";
 
 export default function Image({ params }: { params: { locale: string } }) {
-  return carteDePage(generateMetadata, params, "institutionnel");
+  return carteDePage(generateMetadata, params, "institutionnel", VISUELS_INSTITUTIONNELS.mentionsLegales);
 }
