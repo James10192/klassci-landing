@@ -19,7 +19,7 @@ import { normaliserWhatsapp } from "../lib/email/telephone-whatsapp.ts";
 import { verifierCanal } from "../lib/email/verifier-canal.ts";
 import { analyserEmail, distanceEdition, emailBloque } from "../lib/email/verifier-email.ts";
 import { lireAboutissement, suiteSurPlace } from "../lib/portail/aboutissement.ts";
-import { lireDemandeVerification, lireMotif, nettoyerCode, renvoyer, verifier as verifierCode } from "../lib/portail/verification.ts";
+import { lireDemandeVerification, lireMotif, nettoyerCode, renvoyer, suiteReponse, verifier as verifierCode } from "../lib/portail/verification.ts";
 import { preparerVerification } from "../lib/portail/verification-relais.ts";
 
 /**
@@ -143,6 +143,21 @@ verifier("statut téléphone lu",
   { canal: "telephone", demandeId: "d2", destination: "+225 07 ** ** 34" });
 verifier("réponse d'enregistrement classique : pas de vérification", lireDemandeVerification({ enregistre: true }), null);
 verifier("statut sans demande_id : ignoré", lireDemandeVerification({ statut: "verification_email_requise", email_masque: "x" }), null);
+console.log("\nRéponse de création : vérification désactivée (défaut) ou activée par l'école");
+verifier("candidature sans vérification → écran de réussite habituel",
+  suiteReponse({ enregistre: true, reference_publique: "C-12" }, true), { genre: "abouti" });
+verifier("réinscription enregistrée sans vérification → écran de réussite habituel",
+  suiteReponse({ enregistre: true }, true), { genre: "abouti" });
+verifier("réinscription non enregistrée → le parcours dit le refus",
+  suiteReponse({ enregistre: false }, false), { genre: "nonTraitee" });
+verifier("vérification e-mail demandée → écran de code",
+  suiteReponse({ statut: "verification_email_requise", demande_id: "d1", email_masque: "k***@gmail.com", reference_publique: "C-12" }, true),
+  { genre: "verification", demande: { canal: "email", demandeId: "d1", destination: "k***@gmail.com" } });
+verifier("vérification WhatsApp demandée en réinscription → écran de code",
+  suiteReponse({ statut: "verification_telephone_requise", demande_id: "d2", telephone_masque: "+225 07 ** ** 34" }, false).genre, "verification");
+verifier("statut de vérification sans demande_id → écran de réussite habituel",
+  suiteReponse({ statut: "verification_email_requise", email_masque: "x" }, true), { genre: "abouti" });
+
 verifier("motif connu", lireMotif({ verifie: false, motif: "expire" }), "expire");
 verifier("motif inconnu → null", lireMotif({ motif: "autre" }), null);
 verifier("code collé avec espaces", nettoyerCode(" 123 456 "), "123456");

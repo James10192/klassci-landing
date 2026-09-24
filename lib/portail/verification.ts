@@ -1,13 +1,14 @@
 import { estObjet } from "./aboutissement.ts";
 
 /**
- * La vérification d'une demande avant qu'elle n'atteigne l'école.
+ * La vérification du contact d'une demande, quand l'école l'a activée.
  *
- * Une candidature ou une réinscription n'est plus traitée à la réception :
- * KLASSCI répond d'abord qu'il faut confirmer le canal de contact, par un code
- * à six chiffres envoyé à l'adresse e-mail, ou par WhatsApp pour qui n'en a
- * pas. Une adresse mal tapée ne produit plus une candidature qu'aucune
- * convocation ne pourra atteindre.
+ * C'est un réglage de chaque école (`inscriptions.portail.verification_contact`),
+ * désactivé par défaut. Activé, la demande est transmise à l'école comme
+ * d'habitude, marquée « contact non vérifié », et KLASSCI demande de confirmer
+ * le canal : un code à six chiffres envoyé à l'adresse e-mail, ou par WhatsApp
+ * pour qui n'en a pas. L'école sait alors qu'une convocation atteindra bien la
+ * famille. La détection des fautes de frappe, elle, s'applique toujours.
  *
  * Module sans React : le parcours, la page `/verification-email` et leurs
  * tests en lisent les mêmes fonctions.
@@ -132,4 +133,29 @@ export async function renvoyer(ecole: string, canal: Canal, demandeId: string): 
   } catch {
     return "indisponible";
   }
+}
+
+export type SuiteReponse =
+  | { genre: "verification"; demande: DemandeVerification }
+  | { genre: "abouti" }
+  | { genre: "nonTraitee" };
+
+/**
+ * Ce qu'on fait d'une réponse d'envoi acceptée (2xx).
+ *
+ * La vérification du contact est un réglage de chaque école, désactivé par
+ * défaut. Le chemin ordinaire est donc l'écran de réussite habituel : l'écran
+ * de code n'apparaît QUE si la réponse porte `verification_*_requise` avec son
+ * `demande_id`. Même dans ce cas, la demande est déjà chez l'école ; le code
+ * confirme seulement le contact.
+ *
+ * `enregistre` : la réponse dit-elle que la demande est enregistrée ? Toujours
+ * vrai pour une candidature acceptée ; la réinscription le lit dans le corps.
+ */
+export function suiteReponse(corps: Record<string, unknown>, enregistre: boolean): SuiteReponse {
+  const demande = lireDemandeVerification(corps);
+
+  if (demande !== null) return { genre: "verification", demande };
+
+  return enregistre ? { genre: "abouti" } : { genre: "nonTraitee" };
 }

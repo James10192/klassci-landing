@@ -16,8 +16,8 @@
   "verification": {
     "titreEmail": "Check your e-mail address",
     "titreTelephone": "Check your WhatsApp number",
-    "texteEmail": "We sent a 6-digit code to {destination}. Your request will only reach the school once it is verified.",
-    "texteTelephone": "We sent a 6-digit code on WhatsApp to {destination}. Your request will only reach the school once it is verified.",
+    "texteEmail": "Your request has been sent to the school. To confirm that {destination} is your address, enter the 6-digit code we just sent there: the school will know it can write to you.",
+    "texteTelephone": "Your request has been sent to the school. To confirm that {destination} is your WhatsApp number, enter the 6-digit code we just sent there: the school will know it can reach you.",
     "code": "Verification code",
     "codeAide": "Six digits. You can also click the link you received.",
     "codeIncomplet": "The code has 6 digits.",
@@ -40,9 +40,8 @@
     "page": {
       "titre": "E-mail verification",
       "chargement": "Checking your link…",
-      "succesTitre": "Application confirmed",
-      "succesTexte": "Your address is verified and your request has been sent to the school. You can close this page.",
-      "succesReinscription": "Re-enrolment confirmed",
+      "succesTitre": "Address confirmed",
+      "succesTexte": "Your e-mail address is confirmed: the school knows it can write to you. Your request had already been sent. You can close this page.",
       "expireTitre": "This link has expired",
       "expireTexte": "For security reasons, a verification link is only valid for a short time. Request a new link.",
       "erreurTitre": "This link does not work",
@@ -52,7 +51,7 @@
       "renvoyerLien": "Get a new link",
       "lienRenvoye": "A new link has just been sent to you.",
       "accueil": "Back to home",
-      "description": "Confirm your e-mail address so your request can reach the school.",
+      "description": "Confirm your e-mail address so the school knows it can write to you.",
       "lienTropTot": "A link was just sent. Please wait a minute before asking for another.",
       "envoiLien": "Sending…"
     },

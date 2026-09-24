@@ -34,8 +34,9 @@ const MESSAGE_RENVOI: Record<ResultatRenvoi, { ton: "info" | "erreur"; cle: stri
 /**
  * « Vérifiez votre adresse e-mail », ou votre numéro WhatsApp.
  *
- * La demande est déjà chez l'école, mais elle n'y sera traitée qu'une fois ce
- * code saisi. Le même écran sert les deux canaux et les deux parcours
+ * N'apparaît que si l'école a activé la vérification du contact. La demande est
+ * déjà chez elle, marquée « contact non vérifié » ; ce code le confirme. Le
+ * même écran sert les deux canaux et les deux parcours
  * (candidature, réinscription) : seuls le titre, la destination masquée et le
  * conseil de la dernière ligne changent.
  *

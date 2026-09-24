@@ -1,9 +1,9 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 import { lireAboutissement, type Physiques } from "@/lib/portail/aboutissement";
-import { lireDemandeVerification, type DemandeVerification } from "@/lib/portail/verification";
+import { suiteReponse, type DemandeVerification } from "@/lib/portail/verification";
 
 import { chargerCreneau, type CreneauAttribue } from "./candidature-ecrans";
 
@@ -47,10 +47,13 @@ export function useSuiviDemande({
 }): SuiviDemande {
   const [verification, setVerification] = useState<DemandeVerification | null>(null);
   const [abouti, setAbouti] = useState<Abouti | null>(null);
+  // La réponse de création, gardée pendant la vérification : la demande est
+  // déjà chez l'école et c'est elle qui porte la référence publique.
+  const creation = useRef<Record<string, unknown>>({});
 
   const conclure = useCallback(
     async (corps: Record<string, unknown>) => {
-      const { reference, physiques } = lireAboutissement(corps);
+      const { reference, physiques } = lireAboutissement({ ...creation.current, ...corps });
       const creneau = reference === null ? null : await chargerCreneau(ecole, reference, dateNaissance);
 
       setVerification(null);
@@ -62,14 +65,15 @@ export function useSuiviDemande({
 
   const recevoir = useCallback(
     async (corps: Record<string, unknown>, enregistre: boolean) => {
-      const demande = lireDemandeVerification(corps);
+      const suite = suiteReponse(corps, enregistre);
 
-      if (demande !== null) {
-        setVerification(demande);
+      if (suite.genre === "nonTraitee") return false;
+
+      if (suite.genre === "verification") {
+        creation.current = corps;
+        setVerification(suite.demande);
         return true;
       }
-
-      if (!enregistre) return false;
 
       await conclure(corps);
 
@@ -80,6 +84,7 @@ export function useSuiviDemande({
 
   const abandonnerVerification = useCallback(() => setVerification(null), []);
   const reinitialiser = useCallback(() => {
+    creation.current = {};
     setVerification(null);
     setAbouti(null);
   }, []);

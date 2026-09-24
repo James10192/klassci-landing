@@ -11,7 +11,7 @@ import { BoutonPrincipal, Carte, PastilleSucces, entree } from "./pieces";
 
 type Etat =
   | { genre: "chargement" }
-  | { genre: "succes"; reinscription: boolean }
+  | { genre: "succes" }
   | { genre: "expire"; demandeId: string | null }
   | { genre: "erreur" }
   | { genre: "indisponible" };
@@ -67,7 +67,7 @@ export function VerificationLien({ ecole }: { ecole: string | null }) {
     const resultat = await verifier(ecole, "email", { jeton: lu });
 
     if (resultat.genre === "verifie") {
-      setEtat({ genre: "succes", reinscription: resultat.corps.type === "reinscription" });
+      setEtat({ genre: "succes" });
     } else if (resultat.genre === "refuse" && resultat.motif === "expire") {
       setEtat({ genre: "expire", demandeId: resultat.demandeId });
     } else if (resultat.genre === "refuse") {
@@ -107,7 +107,7 @@ export function VerificationLien({ ecole }: { ecole: string | null }) {
 
   const textes = {
     succes: {
-      titre: etat.genre === "succes" && etat.reinscription ? t("succesReinscription") : t("succesTitre"),
+      titre: t("succesTitre"),
       texte: t("succesTexte"),
     },
     expire: { titre: t("expireTitre"), texte: t("expireTexte") },

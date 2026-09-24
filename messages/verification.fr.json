@@ -16,8 +16,8 @@
   "verification": {
     "titreEmail": "Vérifiez votre adresse e-mail",
     "titreTelephone": "Vérifiez votre numéro WhatsApp",
-    "texteEmail": "Nous avons envoyé un code à 6 chiffres à {destination}. Votre demande ne sera transmise à l’établissement qu’après cette vérification.",
-    "texteTelephone": "Nous avons envoyé un code à 6 chiffres par WhatsApp au {destination}. Votre demande ne sera transmise à l’établissement qu’après cette vérification.",
+    "texteEmail": "Votre demande a bien été transmise à l’établissement. Pour confirmer que {destination} est bien votre adresse, saisissez le code à 6 chiffres que nous venons d’y envoyer : l’école saura qu’elle peut vous écrire.",
+    "texteTelephone": "Votre demande a bien été transmise à l’établissement. Pour confirmer que le {destination} est bien votre numéro WhatsApp, saisissez le code à 6 chiffres que nous venons d’y envoyer : l’école saura qu’elle peut vous joindre.",
     "code": "Code de vérification",
     "codeAide": "Six chiffres. Vous pouvez aussi cliquer sur le lien reçu.",
     "codeIncomplet": "Le code comporte 6 chiffres.",
@@ -40,9 +40,8 @@
     "page": {
       "titre": "Vérification de votre adresse e-mail",
       "chargement": "Vérification de votre lien en cours…",
-      "succesTitre": "Candidature confirmée",
-      "succesTexte": "Votre adresse est vérifiée et votre demande a été transmise à l’établissement. Vous pouvez fermer cette page.",
-      "succesReinscription": "Réinscription confirmée",
+      "succesTitre": "Adresse confirmée",
+      "succesTexte": "Votre adresse e-mail est confirmée : l’établissement sait qu’il peut vous écrire. Votre demande lui avait déjà été transmise. Vous pouvez fermer cette page.",
       "expireTitre": "Ce lien a expiré",
       "expireTexte": "Pour des raisons de sécurité, un lien de vérification n’est valable que peu de temps. Demandez un nouveau lien.",
       "erreurTitre": "Ce lien ne fonctionne pas",
@@ -52,7 +51,7 @@
       "renvoyerLien": "Recevoir un nouveau lien",
       "lienRenvoye": "Un nouveau lien vient de vous être envoyé.",
       "accueil": "Retour à l’accueil",
-      "description": "Confirmez votre adresse e-mail pour que votre demande soit transmise à l’établissement.",
+      "description": "Confirmez votre adresse e-mail pour que l’établissement sache qu’il peut vous écrire.",
       "lienTropTot": "Un lien vient déjà d’être envoyé. Patientez une minute avant d’en demander un autre.",
       "envoiLien": "Envoi en cours…"
     },
