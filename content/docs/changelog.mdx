@@ -15,6 +15,20 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 
 ### Ajouts
 
+- **Émargement des enseignants plus souple, réglé par chaque école** — l'avance autorisée avant le cours, la limite « présent », la limite « en retard » et la fenêtre de l'émargement de fin se règlent dans les paramètres. Au-delà du retard toléré, l'école choisit entre l'absence enregistrée et le retard accepté avec un motif que la coordination voit. Les valeurs livrées reproduisent le fonctionnement actuel.
+
+- **Prolonger un cours sans créer de conflit** — depuis la gestion de sa séance, l'enseignant demande quelques minutes de plus avec un motif. La coordination décide après un contrôle automatique du temps ajouté : cours suivant de la classe, salle, autres cours de l'enseignant. Un créneau occupé ne peut pas être accordé et la raison est affichée. Accordée, la prolongation déplace l'heure de fin de ce seul cours, émargement de fin compris ; chacun est prévenu.
+
+- **L'enseignant qui n'a pas le code peut le demander** — un lien sous chaque cours du jour prévient d'un coup toutes les personnes qui génèrent les codes, avec la matière, la classe et l'heure. Le code se saisit directement dans la ligne du cours, en minuscules ou en majuscules.
+
+- **Examens : de l'examen à la saisie des notes, avec un vrai anonymat** — « Ouvrir la feuille de notes » crée l'évaluation de l'examen et ouvre sa saisie. Un examen anonyme attribue un numéro à chaque copie, dans un ordre tiré au sort, et la saisie affiche les numéros au lieu des noms ; lever l'anonymat est un droit à part, daté et nominatif. Une fois les notes verrouillées, elles ne se modifient plus.
+
+- **Jury : reprendre la composition du dernier jury** — à la création, président, assesseurs et secrétaire du dernier jury du même parcours ou de la même classe sont repris, chacun restant modifiable.
+
+- **Disponibilités : ouvrir la semaine en un clic** — un enseignant tout juste créé n'est plus à cocher case par case : un bouton rend disponibles toutes les heures du lundi au vendredi, puis on retouche les exceptions. Depuis l'ajout d'une séance, l'administration peut aussi rendre un enseignant disponible sur le créneau voulu, ou programmer quand même en connaissance de cause.
+
+- **Paie : payer les heures réellement faites** — au choix de l'école, la durée prévue des séances faites ou la durée depuis l'émargement de début jusqu'à la fin prévue, prolongations accordées comprises. Un enseignant sans taux horaire apparaît dans l'état de paie avec « Taux horaire manquant — Renseigner ».
+
 - **Les listes se chargent au fil du défilement, partout** — inscriptions, candidatures en ligne, demandes de réinscription, relances, journal de caisse, bulletins, corbeille, journal d'audit, enseignants, examens, séances de cours, annonces, présences, jurys et bulletins LMD, et une vingtaine d'autres écrans. Plus de numéros de page : la suite arrive quand on atteint le bas, avec les filtres et le tri en cours, et un compteur dit combien de lignes sont affichées sur combien. Un bouton « Charger la suite » reste là pour le clavier ou après une coupure de réseau. Une ligne saisie pendant qu'on fait défiler n'en fait ni répéter ni sauter une autre.
 
 - **Retrouver le rendez-vous d'une famille, quel que soit le jour** — une famille qui appelle sans connaître la date se retrouve par son nom, son téléphone (avec ou sans espaces), la référence de son dossier ou le matricule de l'élève. Chaque résultat donne le jour, l'heure, le statut et les rendez-vous déjà manqués, avec un accès direct au dossier. La recherche s'ouvre depuis le planning et l'accueil du jour ; quand l'accueil ne trouve personne ce jour-là, il propose de chercher tous les jours.
@@ -57,6 +71,14 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 - **Chaque matière sait à quel semestre elle est prévue** — la même page permet maintenant de dire, matière par matière, si elle est prévue au premier semestre, au second, ou aux deux. Un bouton « Valider les semestres » enregistre la réponse pour la filière et le niveau : « toutes les matières aux deux semestres » est une réponse en soi, et elle est reconnue comme telle. Tant qu'aucun semestre n'est validé pour ce couple, rien ne change dans vos bulletins. Une fois validés, ils sont lus : le bulletin d'un semestre ne fait plus figurer les matières prévues à l'autre, et le suivi des notes n'en attend plus de notes.
 
 ### Améliorations
+
+- **Moins d'allers-retours entre les écrans** — après la création d'un enseignant : associer ses matières, ses disponibilités, son taux horaire, programmer une séance. Depuis un jury publié : ses bulletins. Depuis le rapport d'émargement : la paie du mois. Depuis la fiche d'un enseignant : ses fiches de paie. Depuis la fiche d'une matière : sa planification. Le menu enseignant gagne « Mes cours du jour » et « Mes disponibilités ».
+
+- **Un seul rappel à la fois, jamais pendant un changement de mot de passe** — les fenêtres de rappel ne s'empilent plus, la fenêtre des identifiants d'un compte créé passe devant toutes les autres, et les nouveautés ne sont montrées qu'aux personnes concernées.
+
+- **Saisie des notes LMD plus sûre** — la virgule est acceptée (« 12,5 »), une note hors barème est refusée sur place au lieu d'entrer dans la moyenne, et un bouton « Valider mes notes » les rend officielles d'un coup. Les semestres 3 à 10 apparaissent dans le pilotage académique.
+
+- **Écrans refaits aux couleurs KLASSCI** — années universitaires, émargements, disponibilités et accueil des enseignants, rapport d'émargement ; sélecteurs avec recherche sur les écrans LMD ; fiche enseignant et jury lisibles sur téléphone.
 
 - **Chercher partout avec Ctrl K** — Ctrl K (⌘ K sur Mac, ou le champ de recherche du menu sur téléphone) ouvre une recherche au centre de l'écran. Elle trouve plus d'une centaine de pages de l'application, même avec des mots courants (« encaisser », « reçu », « caisse »), et les fiches : étudiants, paiements, classes, filières, matières, enseignants. Les flèches parcourent les résultats, Entrée ouvre, Échap vide puis ferme. Chacun ne voit que ce que son compte peut ouvrir, et les recherches récentes ne gardent que des pages, jamais de noms ni de montants.
 
@@ -116,6 +138,14 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 - **Modifier la composition d'une classe demande un droit** — changer les matières d'une classe, y ajouter ou en retirer des élèves n'exigeait aucune permission particulière.
 
 ### Corrections
+
+- **Jury : plus de décision automatique sans quorum, ni de décision sur un dossier incomplet** — un dossier sans moyenne est signalé incomplet au lieu d'être déféré. La date et les observations saisies à la création d'un jury sont désormais enregistrées.
+
+- **Rattrapage et bulletins** — une session de rattrapage exige sa session d'origine et ne se publie pas sans examen ; un bulletin sans aucune note ne peut plus être publié.
+
+- **Paie** — un bulletin au net négatif ne peut plus être enregistré ni validé, et la fiche de paie imprime lisiblement le net à payer.
+
+- **Ajout de séance** — l'enseignant qu'on vient d'associer à une matière apparaît et est sélectionné sans recharger la page ; les heures s'affichent « 7h46 » et non plus avec des décimales.
 
 - **Encaisser sur téléphone : le montant proposé ne s'additionne plus à la saisie** — le reste dû était proposé d'office, et les chiffres tapés s'y ajoutaient : 120 000 FCFA proposés, puis 25 000 tapés, donnaient 12 000 025 000 FCFA. Le premier chiffre tapé remplace désormais le montant proposé, et la confirmation d'un montant inhabituel s'affiche au-dessus du clavier.
 - **Téléphone : les deux boutons du bas ne touchent plus le bord de l'écran** (encaissement, relances).

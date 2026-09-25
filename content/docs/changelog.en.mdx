@@ -15,6 +15,20 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ### Added
 
+- **Teacher sign-in rules set by each school** — how early a teacher may sign in, the "present" and "late" limits and the end-of-class window are now settings. Past the late limit, the school chooses between recording an absence and accepting the lateness with a reason the coordination can see. Shipped values match the current behaviour.
+
+- **Extend a class without creating a conflict** — from the class session screen, the teacher asks for a few more minutes with a reason. The coordination decides after an automatic check of the added time: the class's next session, the room, the teacher's other classes. An occupied slot cannot be granted and the reason is shown. Once granted, only that class's end time moves, end-of-class sign-in included, and everyone is notified.
+
+- **A teacher without the code can ask for it** — a link under each of today's classes notifies everyone who generates codes, with the subject, class and time. The code is typed directly on the class line, in upper or lower case.
+
+- **Exams: from the exam to grade entry, with real anonymity** — "Open the grade sheet" creates the exam's assessment and opens grade entry. An anonymous exam gives each script a number in a shuffled order, and grade entry shows numbers instead of names; lifting anonymity is a separate, dated and named permission. Once grades are locked, they can no longer be changed.
+
+- **Juries: reuse the last jury's members** — on creation, the chair, assessors and secretary of the last jury for the same programme or class are carried over, each still editable.
+
+- **Availability: open the whole week in one click** — a newly created teacher no longer needs every slot ticked one by one: one button makes every hour Monday to Friday available, then you adjust the exceptions. When adding a class session, staff can also make the teacher available on the chosen slot, or schedule anyway knowingly.
+
+- **Payroll: pay the hours actually worked** — each school chooses between the planned length of sessions held and the time from start-of-class sign-in to the planned end, granted extensions included. A teacher with no hourly rate appears in the payroll with "Hourly rate missing — Fill in".
+
 - **Lists load as you scroll, everywhere** — enrolments, online applications, re-enrolment requests, payment reminders, cash journal, report cards, recycle bin, audit log, teachers, exams, class sessions, announcements, attendance, LMD juries and report cards, and some twenty other screens. No more page numbers: the next rows arrive when you reach the bottom, with the current filters and sort, and a counter shows how many rows are displayed out of how many. A "Load more" button remains for keyboard use or after a network drop. A row entered while you scroll neither repeats nor skips another.
 
 - **Find a family's appointment, whatever the day** — a family calling without knowing the date is found by name, phone number (with or without spaces), application reference or the student's ID number. Each result gives the day, time, status and any missed appointments, with a direct link to the file. The search opens from the planning and from today's reception desk; when the desk finds no one that day, it offers to search every day.
@@ -57,6 +71,14 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 - **Every subject now knows which semester it is scheduled for** — the same page lets you state, subject by subject, whether it runs in the first semester, the second, or both. A "Confirm semesters" button records the answer for that programme and level: "all subjects in both semesters" is an answer in itself, and is recognised as such. Until semesters are confirmed for a pair, nothing changes in your report cards. Once confirmed, they are read: a semester's report card no longer lists subjects scheduled for the other one, and grade tracking no longer expects marks for them.
 
 ### Improved
+
+- **Fewer round trips between screens** — after creating a teacher: link subjects, availability, hourly rate, schedule a session. From a published jury: its report cards. From the sign-in report: that month's payroll. From a teacher's page: their payslips. From a subject's page: its planning. The teacher menu gains "Today's classes" and "My availability".
+
+- **One reminder at a time, never during a password change** — reminder windows no longer stack, the new-account credentials window comes before all others, and what's-new is only shown to the people it concerns.
+
+- **Safer LMD grade entry** — commas are accepted ("12,5"), an out-of-range grade is rejected on the spot instead of entering the average, and a "Validate my grades" button makes them official in one go. Semesters 3 to 10 appear in academic monitoring.
+
+- **Screens redone in KLASSCI colours** — academic years, sign-ins, teacher availability and home, sign-in report; searchable pickers on LMD screens; teacher page and jury readable on phones.
 
 - **Search everything with Ctrl K** — Ctrl K (⌘ K on Mac, or the search field in the menu on phones) opens a search in the middle of the screen. It finds more than a hundred pages of the application, even with everyday words ("cash in", "receipt"), and records: students, payments, classes, programmes, subjects, teachers. Arrow keys move through results, Enter opens, Escape clears then closes. Everyone only sees what their account can open, and recent searches keep pages only, never names or amounts.
 
@@ -116,6 +138,14 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 - **Changing a class roster now requires a permission** — changing a class's subjects, adding students to it or removing them required no particular permission.
 
 ### Fixed
+
+- **Juries: no automatic decision without quorum, and none on an incomplete record** — a record with no average is flagged incomplete instead of being referred. The date and notes entered when creating a jury are now saved.
+
+- **Resits and report cards** — a resit session requires its original session and cannot be published without an exam; a report card with no grade can no longer be published.
+
+- **Payroll** — a payslip with a negative net can no longer be saved or validated, and the payslip clearly prints the net pay.
+
+- **Adding a class session** — a teacher just linked to a subject appears and is selected without reloading the page; hours display as "7h46" rather than with decimals.
 
 - **Taking a payment on a phone: the suggested amount no longer adds up with what you type** — the balance was suggested up front, and typed digits were appended to it: 120,000 FCFA suggested, then 25,000 typed, gave 12,000,025,000 FCFA. The first digit typed now replaces the suggested amount, and the confirmation for an unusual amount appears above the keypad.
 - **Phone: the two bottom buttons no longer touch the screen edges** (payments, reminders).
