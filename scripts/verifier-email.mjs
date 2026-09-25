@@ -60,7 +60,9 @@ for (const [fautif, voulu] of Object.entries(CORRECTIONS_CONNUES)) {
 }
 verifier("la liste canonique compte 28 fautes", Object.keys(CORRECTIONS_CONNUES).length, 28);
 // Relevée sur des réservations de l'ESBTP Abidjan : le L est voisin du M sur le clavier.
-verifier("glail.com est une faute connue de gmail.com", suggererEmail("k.yao@glail.com"), "k.yao@gmail.com");
+// À une lettre de gmail, elle était déjà suggérée comme faute probable : ce qui change, c'est la certitude.
+verifier("glail.com est une faute certaine, plus seulement probable", analyserEmail("k.yao@glail.com").certitude, "certaine");
+verifier("glail.com reste bloquée même confirmée", emailBloque(analyserEmail("k.yao@glail.com"), true), "faute_de_frappe");
 verifier("une faute connue est certaine", analyserEmail("awa@gmail.con").certitude, "certaine");
 verifier("le domaine se compare sans casse, la partie locale est gardée", suggererEmail("Kone.Awa@GMAIL.CON"), "Kone.Awa@gmail.com");
 verifier("les espaces autour sont ignorés", suggererEmail("  awa@gmial.com "), "awa@gmail.com");
