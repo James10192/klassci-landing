@@ -418,3 +418,40 @@ html.dark .gradient-text {
     display: none;
   }
 }
+
+/* ===== Journal des versions (/docs/changelog) : frise, pastilles, cartes ===== */
+.journal-versions { position: relative; padding-left: 1.75rem; }
+.journal-versions::before {
+  content: ""; position: absolute; left: 0.45rem; top: 0.5rem; bottom: 0;
+  width: 2px; background: linear-gradient(to bottom, rgba(4,83,203,.35), rgba(4,83,203,.08));
+  border-radius: 2px;
+}
+.journal-versions .jv-mois {
+  position: relative; margin-top: 3rem; font-size: 1.6rem; letter-spacing: -0.02em;
+}
+.journal-versions .jv-mois:first-of-type { margin-top: 1.5rem; }
+.journal-versions .jv-point {
+  position: absolute; left: -1.75rem; top: 50%; translate: 0 -50%;
+  width: 1.05rem; height: 1.05rem; border-radius: 999px;
+  background: #0453cb; box-shadow: 0 0 0 4px rgba(4,83,203,.15), 0 0 0 7px var(--color-fd-background, #fff);
+}
+.journal-versions .jv-rubrique { margin-top: 1.6rem; margin-bottom: .8rem; }
+.journal-versions > ul { list-style: none; padding-left: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: .75rem; }
+.journal-versions > ul > li {
+  margin: 0; min-width: 0; overflow-wrap: anywhere; padding: 1rem 1.15rem; border-radius: 14px;
+  border: 1px solid var(--color-fd-border, #e2e8f0);
+  background: var(--color-fd-card, #fff);
+  box-shadow: 0 1px 3px rgba(15,23,42,.04), 0 1px 2px rgba(15,23,42,.05);
+  transition: box-shadow .2s ease, border-color .2s ease;
+}
+.journal-versions > ul > li:hover { border-color: rgba(4,83,203,.3); box-shadow: 0 8px 26px rgba(4,83,203,.08); }
+.journal-versions > ul > li > strong:first-child,
+.journal-versions > ul > li > p:first-child > strong:first-child { font-size: 1.02rem; color: var(--color-fd-foreground); }
+.journal-versions > ul > li::marker { content: ""; }
+@media (max-width: 640px) {
+  .journal-versions { padding-left: 1.25rem; }
+  .journal-versions .jv-point { left: -1.25rem; width: .85rem; height: .85rem; }
+  .journal-versions::before { left: .33rem; }
+}
+.journal-versions > ul > li > :first-child { margin-top: 0; }
+.journal-versions > ul > li > :last-child { margin-bottom: 0; }
