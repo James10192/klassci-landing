@@ -58,6 +58,7 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 
 ### Améliorations
 
+- **Écran d'encaissement refait, au bureau comme sur téléphone** — au bureau, quatre étapes numérotées (étudiant, inscription, versement, mode de paiement) et, à droite, un panneau qui reste visible avec le reste à payer frais par frais et le bouton d'enregistrement. Sur téléphone, le pas-à-pas occupe tout l'écran, le récapitulatif s'affiche avant le choix du mode, les modes sont présentés en tuiles, et le nom de l'étudiant n'est plus coupé. Dans « Ma caisse », les coupures se comptent ligne par ligne. Les suggestions de montant fixes (25 000 et 50 000 FCFA), identiques pour toutes les écoles, sont remplacées par « Tout le reste » et « La moitié ».
 - **Accueil du jour : le dossier de chaque famille en un clic** — le lien « Dossier » figure désormais sur toutes les lignes, pas seulement sur les rendez-vous manqués.
 
 - **Un frais réservé à une catégorie d'étudiants n'est plus facturé quand on ignore dans laquelle il se trouve** — un frais réservé aux nouveaux arrivants était appliqué dès lors que le dossier ne portait pas la mention « ancien », y compris quand la case n'avait simplement pas été remplie. Les deux sens demandent désormais une réponse explicite. Le choix est assumé : mieux vaut oublier un frais que d'en encaisser un à tort, car un frais oublié se réclame encore, alors qu'un versement déjà reçu ne peut plus être retiré sans le laisser sans affectation.
@@ -104,6 +105,8 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 
 ### Corrections
 
+- **Encaisser sur téléphone : le montant proposé ne s'additionne plus à la saisie** — le reste dû était proposé d'office, et les chiffres tapés s'y ajoutaient : 120 000 FCFA proposés, puis 25 000 tapés, donnaient 12 000 025 000 FCFA. Le premier chiffre tapé remplace désormais le montant proposé, et la confirmation d'un montant inhabituel s'affiche au-dessus du clavier.
+- **Téléphone : les deux boutons du bas ne touchent plus le bord de l'écran** (encaissement, relances).
 - **Rejeter une demande libère son créneau de rendez-vous** — une candidature ou une demande de réinscription rejetée gardait sa réservation, et la place restait prise. Le créneau redevient disponible pour une autre famille.
 
 - **Des compteurs qui disent vrai** — plusieurs écrans comptaient seulement les lignes de la première page : les coordinateurs actifs, les bulletins LMD publiés et leur moyenne, les présences enregistrées. Ils portent désormais sur l'ensemble, et ceux des jurys et des sessions de rattrapage suivent les filtres de classe, de parcours et de semestre. Sur la messagerie de l'étudiant, marquer un message comme lu ne fait plus baisser le nombre total de messages.
