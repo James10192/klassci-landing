@@ -58,6 +58,7 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ### Improved
 
+- **Payment screen redesigned, on desktop and phone** — on desktop, four numbered steps (student, enrolment, payment, payment method) and, on the right, a panel that stays in view with the balance fee by fee and the save button. On phones, the step-by-step flow takes the whole screen, the summary comes before the payment method, methods are shown as tiles, and the student's name is no longer cut off. In "My cash desk", notes and coins are counted row by row. The fixed amount suggestions (25,000 and 50,000 FCFA), the same for every school, are replaced by "Everything left" and "Half".
 - **Today's reception desk: each family's file in one click** — the "File" link now appears on every row, not only on missed appointments.
 
 - **A fee restricted to one group of students is no longer charged when the group is unknown** — a fee reserved for newcomers applied whenever a record did not carry the "returning student" mark, including when the box had simply been left blank. Both directions now require an explicit answer. The trade-off is deliberate: better to miss a fee than to collect one wrongly, since a missed fee can still be claimed, whereas money already received cannot be removed without leaving it unallocated.
@@ -104,6 +105,8 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ### Fixed
 
+- **Taking a payment on a phone: the suggested amount no longer adds up with what you type** — the balance was suggested up front, and typed digits were appended to it: 120,000 FCFA suggested, then 25,000 typed, gave 12,000,025,000 FCFA. The first digit typed now replaces the suggested amount, and the confirmation for an unusual amount appears above the keypad.
+- **Phone: the two bottom buttons no longer touch the screen edges** (payments, reminders).
 - **Rejecting a request frees its appointment slot** — a rejected application or re-enrolment request kept its booking, so the slot stayed taken. It is now available again for another family.
 
 - **Counters that tell the truth** — several screens only counted the rows of the first page: active coordinators, published LMD report cards and their average, recorded attendance. They now cover everything, and the jury and resit-session counters follow the class, programme and semester filters. In the student inbox, marking a message as read no longer lowers the total number of messages.
