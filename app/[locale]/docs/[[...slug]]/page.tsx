@@ -10,6 +10,7 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { buildDocGraph } from "@/lib/schema/pages";
 import { routing, type Locale } from "@/i18n/routing";
 import { getMDXComponents } from "@/mdx-components";
+import { composantsJournal } from "@/components/docs/journal-versions";
 
 interface PageParams {
   params: Promise<{ locale: string; slug?: string[] }>;
@@ -108,6 +109,8 @@ export default async function DocPage({ params }: PageParams) {
     ? (locale as Locale)
     : routing.defaultLocale;
   const segments = slug ?? [];
+  // Le journal des versions a son propre habillage (frise, pastilles, cartes).
+  const estJournal = segments.length === 1 && segments[0] === "changelog";
   const cheminDoc = `/docs${segments.length ? `/${segments.join("/")}` : ""}`;
 
   // Le fil d'Ariane reprend ce que Fumadocs affiche deja dans la barre
@@ -141,7 +144,13 @@ export default async function DocPage({ params }: PageParams) {
         <DocsDescription>{data.description}</DocsDescription>
       ) : null}
       <DocsBody>
-        <MDX components={getMDXComponents()} />
+        {estJournal ? (
+          <div className="journal-versions">
+            <MDX components={getMDXComponents(composantsJournal)} />
+          </div>
+        ) : (
+          <MDX components={getMDXComponents()} />
+        )}
       </DocsBody>
     </DocsPage>
   );

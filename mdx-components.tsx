@@ -1,5 +1,6 @@
 import defaultMdxComponents from "fumadocs-ui/mdx";
 import type { MDXComponents } from "mdx/types";
+import { AvantApres, BeforeAfter } from "@/components/docs/avant-apres";
 import {
   Check,
   Eye,
@@ -64,6 +65,8 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
   return {
     ...defaultMdxComponents,
     Icon,
+    AvantApres,
+    BeforeAfter,
     ...components,
   };
 }
