@@ -15,6 +15,12 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 
 ### Ajouts
 
+- **Les listes se chargent au fil du défilement, partout** — inscriptions, candidatures en ligne, demandes de réinscription, relances, journal de caisse, bulletins, corbeille, journal d'audit, enseignants, examens, séances de cours, annonces, présences, jurys et bulletins LMD, et une vingtaine d'autres écrans. Plus de numéros de page : la suite arrive quand on atteint le bas, avec les filtres et le tri en cours, et un compteur dit combien de lignes sont affichées sur combien. Un bouton « Charger la suite » reste là pour le clavier ou après une coupure de réseau. Une ligne saisie pendant qu'on fait défiler n'en fait ni répéter ni sauter une autre.
+
+- **Retrouver le rendez-vous d'une famille, quel que soit le jour** — une famille qui appelle sans connaître la date se retrouve par son nom, son téléphone (avec ou sans espaces), la référence de son dossier ou le matricule de l'élève. Chaque résultat donne le jour, l'heure, le statut et les rendez-vous déjà manqués, avec un accès direct au dossier. La recherche s'ouvre depuis le planning et l'accueil du jour ; quand l'accueil ne trouve personne ce jour-là, il propose de chercher tous les jours.
+
+- **Agir sur tout un filtre en une fois** — quand toutes les inscriptions affichées sont cochées, la barre propose de sélectionner toutes celles du filtre. Valider, annuler, exporter ou recalculer les frais porte alors sur l'ensemble, sans avoir à tout faire défiler.
+
 - **Le relevé de notes LMD peut prendre la présentation officielle du ministère** — en-tête à deux colonnes avec les emblèmes, semestres en marge, mention et décision portées unité d'enseignement par unité d'enseignement, cumul des crédits sur l'année. Un réglage de l'établissement choisit entre cette présentation et celle de l'application ; les écoles qui impriment déjà la seconde ne voient rien changer. Le choix est figé au moment où le relevé est émis : une école qui bascule plus tard ne modifie pas la présentation des relevés qu'elle a déjà signés et remis. La décision s'accorde au genre de l'étudiante — « Admise » — et une décision absente ne se remplace jamais par une conclusion inventée.
 
 - **La fiche d'inscription porte enfin tout le dossier** — état civil complet, coordonnées, scolarité avec le parcours jusqu'au domaine, parents et tuteurs avec leur lien et leur profession, et la liste des pièces avec ce qui reste à apporter. Une page pleine par exemplaire, et une signature pour le parent ou le tuteur. N'y figurent pas, délibérément : les identifiants du compte, les motifs internes de refus d'une pièce et les commentaires de caisse — ce sont des notes de service, pas des informations destinées à la famille qui emporte le papier.
@@ -51,6 +57,8 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 - **Chaque matière sait à quel semestre elle est prévue** — la même page permet maintenant de dire, matière par matière, si elle est prévue au premier semestre, au second, ou aux deux. Un bouton « Valider les semestres » enregistre la réponse pour la filière et le niveau : « toutes les matières aux deux semestres » est une réponse en soi, et elle est reconnue comme telle. Tant qu'aucun semestre n'est validé pour ce couple, rien ne change dans vos bulletins. Une fois validés, ils sont lus : le bulletin d'un semestre ne fait plus figurer les matières prévues à l'autre, et le suivi des notes n'en attend plus de notes.
 
 ### Améliorations
+
+- **Accueil du jour : le dossier de chaque famille en un clic** — le lien « Dossier » figure désormais sur toutes les lignes, pas seulement sur les rendez-vous manqués.
 
 - **Un frais réservé à une catégorie d'étudiants n'est plus facturé quand on ignore dans laquelle il se trouve** — un frais réservé aux nouveaux arrivants était appliqué dès lors que le dossier ne portait pas la mention « ancien », y compris quand la case n'avait simplement pas été remplie. Les deux sens demandent désormais une réponse explicite. Le choix est assumé : mieux vaut oublier un frais que d'en encaisser un à tort, car un frais oublié se réclame encore, alors qu'un versement déjà reçu ne peut plus être retiré sans le laisser sans affectation.
 
@@ -95,6 +103,12 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 - **Modifier la composition d'une classe demande un droit** — changer les matières d'une classe, y ajouter ou en retirer des élèves n'exigeait aucune permission particulière.
 
 ### Corrections
+
+- **Rejeter une demande libère son créneau de rendez-vous** — une candidature ou une demande de réinscription rejetée gardait sa réservation, et la place restait prise. Le créneau redevient disponible pour une autre famille.
+
+- **Des compteurs qui disent vrai** — plusieurs écrans comptaient seulement les lignes de la première page : les coordinateurs actifs, les bulletins LMD publiés et leur moyenne, les présences enregistrées. Ils portent désormais sur l'ensemble. Sur la messagerie de l'étudiant, marquer un message comme lu ne fait plus baisser le nombre total de messages.
+
+- **La liste des étudiants se charge enfin en entier sur téléphone** — la grille de fiches s'arrêtait aux trente premiers étudiants.
 
 - **Maquettes LMD : une même UE partagée entre deux parcours se gère enfin proprement** — un élément constitutif (ECUE) réservé à un parcours n'apparaît plus chez l'autre. Modifier un ECUE pour le réserver à un autre parcours le déplace, au lieu de le copier ; une case permet de le garder dans les deux si c'est voulu. Retirer la version commune d'un ECUE ne la fait plus revenir. Une étiquette « Commun + réservé » signale les ECUE en double, avec le geste pour les corriger.
 
