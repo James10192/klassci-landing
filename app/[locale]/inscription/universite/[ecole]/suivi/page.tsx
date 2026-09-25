@@ -3,8 +3,7 @@ import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { PortailHabillage } from "@/components/portail/portail-habillage";
-import { Carte } from "@/components/portail/pieces";
-import { RendezVousFlow } from "@/components/portail/rendez-vous-flow";
+import { SuiviDossierPage } from "@/components/portail/suivi-dossier-page";
 import { Link } from "@/i18n/navigation";
 import { routing, type Locale } from "@/i18n/routing";
 import { etablissementsOuverts } from "@/lib/portail/tenants";
@@ -30,21 +29,18 @@ export async function generateMetadata({
   return buildUniverseMetadata({
     locale: safeLocale,
     noindex: true,
-    title: etablissement ? `${t("rdv.titre")} — ${etablissement.libelle}` : t("rdv.titre"),
-    description: t("rdv.aide"),
-    path: `/inscription/universite/${ecole}/rendez-vous`,
+    title: etablissement ? `${t("suivi.titre")} — ${etablissement.libelle}` : t("suivi.titre"),
+    description: t("suivi.aide"),
+    path: `/inscription/universite/${ecole}/suivi`,
   });
 }
 
-export default async function RendezVousPage({
+export default async function SuiviDossierRoute({
   params,
-  searchParams,
 }: {
   params: Promise<{ locale: string; ecole: string }>;
-  searchParams: { ref?: string };
 }) {
   const { locale, ecole } = await params;
-  const ref = searchParams.ref;
   setRequestLocale(locale);
 
   const etablissement = trouver(ecole);
@@ -53,14 +49,15 @@ export default async function RendezVousPage({
   }
 
   const identite = await identiteEtablissement(etablissement.code);
-  const t = await getTranslations({ locale, namespace: "inscription.rdv" });
+  const t = await getTranslations({ locale, namespace: "inscription.suivi" });
+  const tRdv = await getTranslations({ locale, namespace: "inscription.rdv" });
 
   return (
     <PortailHabillage
       locale={locale}
       etablissement={etablissement}
       identite={identite}
-      eyebrow={t("eyebrow")}
+      eyebrow={tRdv("eyebrow")}
       titre={t("titre")}
       sousTitre={t("aide")}
       pied={
@@ -69,20 +66,12 @@ export default async function RendezVousPage({
             href={`/inscription/universite/${etablissement.code}`}
             className="inline-flex min-h-[40px] items-center px-3 text-sm text-text-muted underline-offset-4 transition-colors duration-200 hover:text-text hover:underline"
           >
-            {t("retour")}
-          </Link>
-          <Link
-            href={`/inscription/universite/${etablissement.code}/suivi`}
-            className="inline-flex min-h-[40px] items-center px-3 text-sm text-accent underline-offset-4 transition-colors duration-200 hover:underline"
-          >
-            {t("suivi")}
+            {tRdv("retour")}
           </Link>
         </p>
       }
     >
-      <Carte>
-        <RendezVousFlow etablissement={etablissement} referenceInitiale={ref} sansTitre />
-      </Carte>
+      <SuiviDossierPage etablissement={etablissement} />
     </PortailHabillage>
   );
 }

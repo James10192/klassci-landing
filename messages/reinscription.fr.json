@@ -81,6 +81,9 @@
         "titre": "Ce dossier est momentanément bloqué.",
         "texte": "Trop d'essais infructueux ont été faits sur ce dossier. Réessayez plus tard, ou rapprochez-vous de votre établissement."
       }
+    },
+    "suivi": {
+      "action": "Suivre ma demande et recevoir ma convocation"
     }
   },
   "inscription": {
@@ -103,7 +106,11 @@
         "titre": "Déjà étudiant ici",
         "texte": "Vous étiez inscrit cette année et vous vous réinscrivez. Munissez-vous de votre matricule."
       },
-      "retour": "Ce n'est pas mon cas"
+      "retour": "Ce n'est pas mon cas",
+      "suivi": {
+        "titre": "Suivre mon dossier",
+        "texte": "Vous avez déjà déposé une demande : voyez où elle en est, confirmez votre adresse e-mail et recevez votre convocation."
+      }
     },
     "formulaire": {
       "titre": "Votre candidature",
@@ -206,7 +213,8 @@
         "trop_tot": "Ce créneau est trop proche pour être réservé.",
         "ferme": "Ce créneau n'est plus ouvert.",
         "indisponible": "Service momentanément indisponible."
-      }
+      },
+      "suivi": "Référence oubliée ou convocation à recevoir ? Suivre mon dossier"
     },
     "etats": {
       "ferme": {
@@ -302,6 +310,72 @@
         "Aucune information financière ne transite par cette page, ni dans un sens ni dans l'autre.",
         "Votre demande n'est pas une inscription : c'est l'établissement qui décide et qui vous répond."
       ]
+    },
+    "suivi": {
+      "titre": "Suivre mon dossier",
+      "aide": "Retrouvez votre demande, confirmez l'adresse qui recevra votre convocation, et recevez-la par e-mail.",
+      "identifiant": "Référence du dossier ou matricule",
+      "identifiantExemple": "Ex. ABCD-1234, ou votre matricule",
+      "naissance": "Date de naissance",
+      "jour": "Jour",
+      "mois": "Mois",
+      "annee": "Année",
+      "email": "Adresse e-mail",
+      "action": "Voir mon dossier",
+      "annuler": "Annuler",
+      "autre": "Suivre un autre dossier",
+      "dossierInscription": "Votre inscription",
+      "dossierReinscription": "Votre réinscription",
+      "reference": "Référence : {reference}",
+      "etat": "Où en est votre dossier",
+      "verifie": "Adresse confirmée. Si un rendez-vous vous attend, la convocation part maintenant.",
+      "contact": {
+        "titre": "Adresse de convocation",
+        "verifie": "confirmée",
+        "nonVerifie": "pas encore confirmée",
+        "aucun": "Aucune adresse e-mail valide dans votre dossier : ajoutez-en une pour recevoir votre convocation.",
+        "retenue": "Votre convocation attend que vous confirmiez cette adresse avec le code reçu.",
+        "verifier": "Confirmer cette adresse",
+        "ajouter": "Ajouter une adresse e-mail",
+        "modifier": "Utiliser une autre adresse",
+        "envoyerCode": "Recevoir un code de confirmation",
+        "enregistrer": "Enregistrer cette adresse"
+      },
+      "rdv": {
+        "titre": "Rendez-vous au guichet",
+        "creneau": "Le {date}, de {debut} à {fin}",
+        "recevoir": "Recevoir ma convocation par e-mail",
+        "modifier": "Voir ou modifier mon rendez-vous",
+        "choisir": "Choisir mon rendez-vous",
+        "aucun": "Pas de rendez-vous pour l'instant. L'établissement vous contactera."
+      },
+      "oubli": {
+        "lien": "Référence oubliée ? Recevez-la par e-mail",
+        "titre": "Référence oubliée",
+        "aide": "Indiquez l'adresse e-mail donnée pour votre dossier et votre date de naissance. Votre référence vous sera envoyée à cette adresse.",
+        "action": "M'envoyer ma référence",
+        "envoye": "Si un dossier correspond à cette adresse, votre référence vient de vous être envoyée. Pensez à regarder dans les courriers indésirables.",
+        "retour": "J'ai ma référence"
+      },
+      "codes": {
+        "enregistre": "Adresse enregistrée. Si un rendez-vous vous attend, la convocation part maintenant.",
+        "deja_verifie": "Cette adresse est déjà confirmée.",
+        "verification_inactive": "Votre établissement ne demande pas de confirmation : l'adresse est prise en compte telle quelle.",
+        "envoi_impossible": "Le code n'a pas pu partir. Réessayez dans quelques minutes ou contactez votre établissement.",
+        "dossier_clos": "Ce dossier est clos : contactez directement votre établissement.",
+        "email_invalide": "Cette adresse ne peut pas recevoir de courrier. Vérifiez-la.",
+        "envoyee": "Votre convocation vient de partir par e-mail, avec son PDF.",
+        "sans_rendez_vous": "Vous n'avez pas encore de rendez-vous.",
+        "rendez_vous_passe": "Ce rendez-vous est déjà passé.",
+        "contact_a_confirmer": "Confirmez d'abord votre adresse e-mail.",
+        "sans_email": "Ajoutez d'abord une adresse e-mail valide.",
+        "trop_de_demandes": "La convocation vous a déjà été envoyée plusieurs fois aujourd'hui. Regardez dans les courriers indésirables."
+      },
+      "erreurs": {
+        "introuvable": "Aucun dossier ne correspond. Vérifiez la référence (ou le matricule) et la date de naissance.",
+        "trop": "Trop d'essais. Patientez quelques minutes.",
+        "indisponible": "Service momentanément indisponible."
+      }
     }
   }
 }

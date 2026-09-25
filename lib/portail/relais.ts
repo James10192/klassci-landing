@@ -63,6 +63,12 @@ const SEAUX: Record<CheminPublic, { groupe: string; maximum: number }> = {
   // étroit. Le renvoi y compte aussi, l'école le limite déjà à un par minute.
   [CHEMINS.verificationVerifier]: { groupe: "verification", maximum: 10 },
   [CHEMINS.verificationRenvoyer]: { groupe: "verification", maximum: 10 },
+  // Le suivi identifie un dossier : meme etroitesse que la reinscription.
+  [CHEMINS.suiviConsulter]: { groupe: "suivi", maximum: 10 },
+  [CHEMINS.suiviEmail]: { groupe: "suivi", maximum: 10 },
+  [CHEMINS.suiviVerifier]: { groupe: "suivi", maximum: 10 },
+  [CHEMINS.suiviConvocation]: { groupe: "suivi", maximum: 10 },
+  [CHEMINS.suiviReferenceOubliee]: { groupe: "suivi-reference", maximum: 5 },
 };
 
 /** Les points d'entrée dont la réponse est la même pour tous les visiteurs. */

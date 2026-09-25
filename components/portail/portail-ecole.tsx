@@ -11,6 +11,7 @@ import { FORMULAIRE_VIDE, type Formulaire } from "./candidature-champs";
 import { CandidatureFlow } from "./candidature-flow";
 import { ReinscriptionFlow } from "./reinscription-flow";
 import { RendezVousFlow } from "./rendez-vous-flow";
+import { SuiviDossierFlow } from "./suivi-dossier-flow";
 
 /**
  * Le choix qui ouvre le portail d'une école : nouveau, ou déjà étudiant ?
@@ -25,7 +26,7 @@ import { RendezVousFlow } from "./rendez-vous-flow";
  * se tromper de porte et revenir, ce qui arrive plus souvent qu'on ne croit.
  */
 
-type Parcours = "choix" | "nouveau" | "ancien";
+type Parcours = "choix" | "nouveau" | "ancien" | "suivi";
 
 export function PortailEcole({
   etablissement,
@@ -55,6 +56,16 @@ export function PortailEcole({
   const [rdvNaissance, setRdvNaissance] = useState("");
   const tRdv = useTranslations("inscription.rdv");
 
+  // Suivi d'une demande deja deposee : on y arrive par sa porte, ou depuis la
+  // reinscription quand le dossier est deja enregistre (matricule deja saisi).
+  const [suiviInitial, setSuiviInitial] = useState<{ identifiant: string; naissance: string } | null>(null);
+
+  function ouvrirSuivi(identifiant: string, dateNaissance: string) {
+    setSuiviInitial({ identifiant, naissance: dateNaissance });
+    setVue("form");
+    setParcours("suivi");
+  }
+
   function ouvrirRdv(reference: string, dateNaissance: string) {
     setRdvRef(reference);
     setRdvNaissance(dateNaissance);
@@ -81,6 +92,11 @@ export function PortailEcole({
                   texte={t("ancien.texte")}
                   onClick={() => { setVue("form"); setParcours("ancien"); }}
                 />
+                <Porte
+                  titre={t("suivi.titre")}
+                  texte={t("suivi.texte")}
+                  onClick={() => { setSuiviInitial(null); setVue("form"); setParcours("suivi"); }}
+                />
               </div>
             </div>
           </m.div>
@@ -90,7 +106,17 @@ export function PortailEcole({
           <m.div key={parcours} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }} transition={RESSORT}>
             <div hidden={vue !== "form"}>
-              {parcours === "nouveau" ? (
+              {parcours === "suivi" ? (
+                <Carte>
+                  <SuiviDossierFlow
+                    key={suiviInitial?.identifiant ?? "vide"}
+                    etablissement={etablissement}
+                    identifiantInitial={suiviInitial?.identifiant}
+                    naissanceInitiale={suiviInitial?.naissance}
+                    onOuvrirRdv={ouvrirRdv}
+                  />
+                </Carte>
+              ) : parcours === "nouveau" ? (
                 <CandidatureFlow
                   etablissement={etablissement}
                   saisie={{ form, setForm, consentement, setConsentement }}
@@ -102,6 +128,7 @@ export function PortailEcole({
                   etablissement={etablissement}
                   onAboutir={setAbouti}
                   onChoisirCreneau={ouvrirRdv}
+                  onSuivre={ouvrirSuivi}
                 />
               )}
             </div>

@@ -81,6 +81,9 @@
         "titre": "This record is temporarily locked.",
         "texte": "Too many unsuccessful attempts were made on this record. Try again later, or contact your school."
       }
+    },
+    "suivi": {
+      "action": "Track my request and get my notice"
     }
   },
   "inscription": {
@@ -103,7 +106,11 @@
         "titre": "Already a student here",
         "texte": "You were enrolled this year and are re-enrolling. Have your student number to hand."
       },
-      "retour": "That's not me"
+      "retour": "That's not me",
+      "suivi": {
+        "titre": "Track my application",
+        "texte": "You already submitted a request: see where it stands, confirm your email and get your notice."
+      }
     },
     "formulaire": {
       "titre": "Your application",
@@ -206,7 +213,8 @@
         "trop_tot": "That slot is too soon to book.",
         "ferme": "That slot is no longer open.",
         "indisponible": "Service temporarily unavailable."
-      }
+      },
+      "suivi": "Lost your reference or need your notice? Track my application"
     },
     "etats": {
       "ferme": {
@@ -302,6 +310,72 @@
         "No financial information passes through this page, in either direction.",
         "Your request is not an enrolment: the school decides, and the school replies."
       ]
+    },
+    "suivi": {
+      "titre": "Track my application",
+      "aide": "Find your request, confirm the address that will receive your notice, and get it by email.",
+      "identifiant": "Application reference or student ID",
+      "identifiantExemple": "e.g. ABCD-1234, or your student ID",
+      "naissance": "Date of birth",
+      "jour": "Day",
+      "mois": "Month",
+      "annee": "Year",
+      "email": "Email address",
+      "action": "View my application",
+      "annuler": "Cancel",
+      "autre": "Track another application",
+      "dossierInscription": "Your enrolment",
+      "dossierReinscription": "Your re-enrolment",
+      "reference": "Reference: {reference}",
+      "etat": "Application status",
+      "verifie": "Address confirmed. If an appointment is waiting, your notice is being sent now.",
+      "contact": {
+        "titre": "Notice address",
+        "verifie": "confirmed",
+        "nonVerifie": "not confirmed yet",
+        "aucun": "No valid email address on file: add one to receive your notice.",
+        "retenue": "Your notice is waiting for you to confirm this address with the code you received.",
+        "verifier": "Confirm this address",
+        "ajouter": "Add an email address",
+        "modifier": "Use another address",
+        "envoyerCode": "Get a confirmation code",
+        "enregistrer": "Save this address"
+      },
+      "rdv": {
+        "titre": "Desk appointment",
+        "creneau": "On {date}, from {debut} to {fin}",
+        "recevoir": "Email me my notice",
+        "modifier": "View or change my appointment",
+        "choisir": "Book my appointment",
+        "aucun": "No appointment yet. The school will contact you."
+      },
+      "oubli": {
+        "lien": "Forgot your reference? Get it by email",
+        "titre": "Forgotten reference",
+        "aide": "Enter the email address given for your application and your date of birth. Your reference will be sent to that address.",
+        "action": "Send me my reference",
+        "envoye": "If an application matches this address, your reference has just been sent. Check your spam folder too.",
+        "retour": "I have my reference"
+      },
+      "codes": {
+        "enregistre": "Address saved. If an appointment is waiting, your notice is being sent now.",
+        "deja_verifie": "This address is already confirmed.",
+        "verification_inactive": "Your school does not require confirmation: the address is used as is.",
+        "envoi_impossible": "The code could not be sent. Try again in a few minutes or contact your school.",
+        "dossier_clos": "This application is closed: contact your school directly.",
+        "email_invalide": "This address cannot receive mail. Please check it.",
+        "envoyee": "Your notice has just been emailed, with its PDF.",
+        "sans_rendez_vous": "You don't have an appointment yet.",
+        "rendez_vous_passe": "This appointment has already passed.",
+        "contact_a_confirmer": "Confirm your email address first.",
+        "sans_email": "Add a valid email address first.",
+        "trop_de_demandes": "Your notice was already sent several times today. Check your spam folder."
+      },
+      "erreurs": {
+        "introuvable": "No application matches. Check the reference (or student ID) and the date of birth.",
+        "trop": "Too many attempts. Please wait a few minutes.",
+        "indisponible": "Service temporarily unavailable."
+      }
     }
   }
 }

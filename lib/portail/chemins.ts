@@ -25,6 +25,13 @@ export const CHEMINS = {
   // `verification-relais.ts`, et nulle part ailleurs.
   verificationVerifier: "api/portail/email/verifier",
   verificationRenvoyer: "api/portail/email/renvoyer",
+  // Suivi d'un dossier deja depose : situation, adresse, convocation,
+  // reference oubliee (envoyee par e-mail, jamais affichee).
+  suiviConsulter: "api/public/suivi/consulter",
+  suiviEmail: "api/public/suivi/email",
+  suiviVerifier: "api/public/suivi/verifier",
+  suiviConvocation: "api/public/suivi/convocation",
+  suiviReferenceOubliee: "api/public/suivi/reference-oubliee",
 } as const;
 
 export type CheminPublic = (typeof CHEMINS)[keyof typeof CHEMINS];

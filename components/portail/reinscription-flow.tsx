@@ -28,6 +28,7 @@ export function ReinscriptionFlow({
   etablissement,
   onAboutir,
   onChoisirCreneau,
+  onSuivre,
 }: {
   etablissement: EtablissementVisible;
   /**
@@ -40,6 +41,8 @@ export function ReinscriptionFlow({
    */
   onAboutir?: (abouti: boolean) => void;
   onChoisirCreneau?: (reference: string, dateNaissance: string) => void;
+  /** Demande deja enregistree : suivre le dossier (adresse, convocation). */
+  onSuivre?: (identifiant: string, dateNaissance: string) => void;
 }) {
   const t = useTranslations("reinscription");
   const locale = useLocale();
@@ -312,6 +315,13 @@ export function ReinscriptionFlow({
               </m.div>
 
               <Alerte etat={messageEtat} />
+              {etat === "dejaDeposee" && onSuivre && (
+                <div className="mt-3">
+                  <BoutonPrincipal onClick={() => onSuivre(matricule.trim(), dateNaissance)}>
+                    {t("suivi.action")}
+                  </BoutonPrincipal>
+                </div>
+              )}
 
               <m.div {...entree(3)} className="mt-6">
                 <BoutonPrincipal onClick={chercher} disabled={!peutChercher} occupe={enCours}>
