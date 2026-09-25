@@ -26,7 +26,7 @@ import { preparerVerification } from "../lib/portail/verification-relais.ts";
  * Empreinte du fichier de données, partagée avec KLASSCIv2 : SHA-256 du JSON
  * compact, clés dans l'ordre du fichier. Si elle change ici, elle change là-bas.
  */
-const EMPREINTE_DONNEES = "021ecd8807b450edfa1ab7aa5ce331b79d30157e17c6a2d06a790770ea110439";
+const EMPREINTE_DONNEES = "eef55ca82163b43e1245db191cc4322894a0ec5c3feaaf215c987eff1517ee22";
 
 /** La suggestion proposée sous le champ, ou `null`. */
 function suggererEmail(brut) {
@@ -58,7 +58,9 @@ console.log("\nSuggestion : fautes connues");
 for (const [fautif, voulu] of Object.entries(CORRECTIONS_CONNUES)) {
   verifier(`k.yao@${fautif} → k.yao@${voulu}`, suggererEmail(`k.yao@${fautif}`), `k.yao@${voulu}`);
 }
-verifier("la liste canonique compte 27 fautes", Object.keys(CORRECTIONS_CONNUES).length, 27);
+verifier("la liste canonique compte 28 fautes", Object.keys(CORRECTIONS_CONNUES).length, 28);
+// Relevée sur des réservations de l'ESBTP Abidjan : le L est voisin du M sur le clavier.
+verifier("glail.com est une faute connue de gmail.com", suggererEmail("k.yao@glail.com"), "k.yao@gmail.com");
 verifier("une faute connue est certaine", analyserEmail("awa@gmail.con").certitude, "certaine");
 verifier("le domaine se compare sans casse, la partie locale est gardée", suggererEmail("Kone.Awa@GMAIL.CON"), "Kone.Awa@gmail.com");
 verifier("les espaces autour sont ignorés", suggererEmail("  awa@gmial.com "), "awa@gmail.com");
