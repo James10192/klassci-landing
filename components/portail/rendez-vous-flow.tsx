@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { champ, dateIso, dateNaissanceValide } from "./pieces";
 
@@ -44,6 +44,23 @@ function decouperNaissance(iso?: string): { jour: string; mois: string; annee: s
   return { annee: morceaux[1], mois: String(Number(morceaux[2])), jour: String(Number(morceaux[3])) };
 }
 
+function formaterDate(iso: string, locale: string): string {
+  const morceaux = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
+  if (morceaux === null) return iso;
+
+  const date = new Date(Date.UTC(Number(morceaux[1]), Number(morceaux[2]) - 1, Number(morceaux[3])));
+  return new Intl.DateTimeFormat(locale, {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(date);
+}
+
+function formaterHeure(heure: string): string {
+  return /^\d{2}:\d{2}/.test(heure) ? heure.slice(0, 5) : heure;
+}
+
 export function RendezVousFlow({
   etablissement,
   referenceInitiale,
@@ -55,6 +72,7 @@ export function RendezVousFlow({
   naissanceInitiale?: string;
   sansTitre?: boolean;
 }) {
+  const locale = useLocale();
   const t = useTranslations("inscription.rdv");
   const naissanceConnue = decouperNaissance(naissanceInitiale);
   const connu = Boolean(referenceInitiale && naissanceInitiale && dateNaissanceValide(naissanceConnue.jour, naissanceConnue.mois, naissanceConnue.annee));
@@ -277,7 +295,7 @@ export function RendezVousFlow({
         <div className="mt-6 rounded-xl bg-bg-alt p-4">
           <p className="text-sm font-semibold">{t("confirme")}</p>
           <p className="mt-1 text-sm text-text-secondary">
-            {reservation.date} · {reservation.heure_debut} – {reservation.heure_fin}
+            {formaterDate(reservation.date, locale)} · {formaterHeure(reservation.heure_debut)} – {formaterHeure(reservation.heure_fin)}
           </p>
 
           {reservation.convocation?.canal && (
@@ -328,7 +346,7 @@ export function RendezVousFlow({
           {creneaux.map((c) => (
             <li key={c.id} className="flex items-center justify-between gap-3 rounded-xl border border-border px-3 py-2">
               <span className="text-sm">
-                {c.date} · {c.heure_debut} – {c.heure_fin}
+                {formaterDate(c.date, locale)} · {formaterHeure(c.heure_debut)} – {formaterHeure(c.heure_fin)}
               </span>
               {c.etat === "disponible" ? (
                 <button
