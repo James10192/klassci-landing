@@ -44,7 +44,7 @@ async function snapshot(page, name) {
   return state;
 }
 
-// Nouvelle candidature : on attend explicitement la vraie réponse /choix et le rendu du formulaire.
+// Nouvelle candidature : vraie requête vers production, aucun stub réseau.
 {
   const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
   observe(page, "new");
@@ -57,42 +57,36 @@ async function snapshot(page, name) {
     await clickMatching(page, /nouvel étudiant/i, 0);
     const choicesResponse = await choices;
     report.choices = { status: choicesResponse.status(), body: (await choicesResponse.text()).slice(0, 5000) };
-    console.log("CHOICES", JSON.stringify(report.choices));
 
     await page.getByLabel(/^Nom$/i).waitFor({ state: "visible", timeout: 20000 });
     await snapshot(page, "02-nouvelle-inscription-formulaire-live");
 
     await page.getByLabel(/^Nom$/i).fill("TEST DEPLOIEMENT");
-    await page.getByLabel(/Pr[eé]nom/i).fill("Validation Live");
+    await page.getByLabel(/^Prénoms$/i).fill("Validation Live");
     await page.getByLabel(/^Jour$/i).fill("15");
     await page.getByLabel(/^Mois$/i).fill("07");
-    await page.getByLabel(/^Ann[eé]e$/i).fill("2002");
-    await page.getByLabel(/^T[eé]l[eé]phone/i).fill("0595459843");
-    await page.getByLabel(/E-?mail|Courriel/i).fill("contact@klassci.com");
+    await page.getByLabel(/^Année$/i).fill("2002");
+    await page.getByLabel(/^Téléphone/i).first().fill("2732797523");
+    await page.getByLabel(/^Adresse e-mail$/i).fill("contact@klassci.com");
 
-    const filiere = page.getByLabel(/Fili[eè]re/i).first();
-    if (await filiere.count()) {
-      const vals = await filiere.locator("option").evaluateAll((opts) => opts.map((o) => o.value).filter(Boolean));
-      if (vals.length) await filiere.selectOption(vals[0]);
-    }
+    const filiere = page.getByLabel(/Filière/i).first();
+    const filiereValues = await filiere.locator("option").evaluateAll((opts) => opts.map((o) => o.value).filter(Boolean));
+    if (filiereValues.length) await filiere.selectOption(filiereValues[0]);
+
     const niveau = page.getByLabel(/Niveau/i).first();
-    if (await niveau.count()) {
-      const vals = await niveau.locator("option").evaluateAll((opts) => opts.map((o) => o.value).filter(Boolean));
-      if (vals.length) await niveau.selectOption(vals[0]);
-    }
-    const freeWish = page.getByLabel(/formation.*souhait|v[œo]u.*libre|autre formation/i).first();
-    if (await freeWish.count()) await freeWish.fill("BTS Informatique de Gestion");
+    const niveauValues = await niveau.locator("option").evaluateAll((opts) => opts.map((o) => o.value).filter(Boolean));
+    if (niveauValues.length) await niveau.selectOption(niveauValues[0]);
 
-    const consent = page.locator('main input[type="checkbox"]:visible').last();
+    const consent = page.getByLabel(/J'autorise la transmission de ces informations à l'établissement/i);
     await consent.check();
     await snapshot(page, "03-nouvelle-inscription-remplie-live");
 
     const submit = page.waitForResponse((r) => r.url().includes("/api/inscription/presentation/submit") && r.request().method() === "POST", { timeout: 30000 });
-    await clickMatching(page, /envoyer ma candidature|envoyer.*demande|soumettre/i, 0);
+    await clickMatching(page, /envoyer ma candidature/i, 0);
     const submitResponse = await submit;
     report.newApplication = { status: submitResponse.status(), body: (await submitResponse.text()).slice(0, 5000) };
     console.log("SUBMIT", JSON.stringify(report.newApplication));
-    await page.waitForTimeout(1600);
+    await page.waitForTimeout(1800);
     await snapshot(page, "04-nouvelle-inscription-apres-envoi-live");
   } catch (error) {
     report.newApplication = { ...(report.newApplication ?? {}), error: String(error?.stack ?? error) };
@@ -103,7 +97,7 @@ async function snapshot(page, name) {
   }
 }
 
-// Réinscription : vrai lookup de l'étudiant démo, mais pas de soumission finale vers ses contacts synthétiques.
+// Réinscription : vrai lookup sur le dossier démo, sans déclencher de notification vers ses contacts synthétiques.
 {
   const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
   observe(page, "reinscription");
@@ -117,7 +111,7 @@ async function snapshot(page, name) {
     await page.getByLabel(/Matricule/i).fill("DEMO90001");
     await page.getByLabel(/^Jour$/i).fill("25");
     await page.getByLabel(/^Mois$/i).fill("08");
-    await page.getByLabel(/^Ann[eé]e$/i).fill("2005");
+    await page.getByLabel(/^Année$/i).fill("2005");
 
     const lookup = page.waitForResponse((r) => r.url().includes("/api/reinscription/presentation/lookup") && r.request().method() === "POST", { timeout: 30000 });
     await clickMatching(page, /retrouver mon dossier/i, 0);
@@ -134,7 +128,7 @@ async function snapshot(page, name) {
   }
 }
 
-// Route rendez-vous réelle : confirme aussi que la migration backend est effectivement active.
+// Route rendez-vous réelle : confirme aussi que le backend déployé répond après migration.
 {
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   observe(page, "rdv");
