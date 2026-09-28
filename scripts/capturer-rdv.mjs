@@ -63,6 +63,15 @@ async function remplirIdentite(page) {
   await inputs.nth(3).fill("2002");
 }
 
+async function consulter(page) {
+  // Le portail contient aussi des boutons de navigation dans l'habillage.
+  // Le bouton principal du flux RDV est le seul bouton pleine largeur.
+  const bouton = page.locator("button.w-full");
+  await bouton.waitFor({ state: "visible" });
+  await bouton.click();
+  await page.getByRole("button", { name: /Renvoyer la convocation/i }).waitFor({ state: "visible" });
+}
+
 // 1. Écran d'entrée + créneaux, desktop.
 {
   const page = await preparerPage({ width: 1440, height: 1000 });
@@ -76,8 +85,7 @@ async function remplirIdentite(page) {
   const page = await preparerPage({ width: 1440, height: 1000 }, "email", false);
   await page.goto(BASE, { waitUntil: "networkidle" });
   await remplirIdentite(page);
-  await page.locator("button").first().click();
-  await page.waitForTimeout(250);
+  await consulter(page);
   await page.screenshot({ path: `${DOSSIER}/rdv-presentation-02-confirme-email-desktop.png`, fullPage: true });
   await page.close();
 }
@@ -87,8 +95,7 @@ async function remplirIdentite(page) {
   const page = await preparerPage({ width: 390, height: 844 }, "whatsapp", true);
   await page.goto(BASE, { waitUntil: "networkidle" });
   await remplirIdentite(page);
-  await page.locator("button").first().click();
-  await page.waitForTimeout(250);
+  await consulter(page);
   await page.screenshot({ path: `${DOSSIER}/rdv-presentation-03-whatsapp-mobile.png`, fullPage: true });
   await page.close();
 }
@@ -98,9 +105,9 @@ async function remplirIdentite(page) {
   const page = await preparerPage({ width: 1440, height: 1000 }, "whatsapp", true);
   await page.goto(BASE, { waitUntil: "networkidle" });
   await remplirIdentite(page);
-  await page.locator("button").first().click();
+  await consulter(page);
   await page.getByRole("button", { name: /Renvoyer la convocation/i }).click();
-  await page.waitForTimeout(250);
+  await page.getByText(/Aucun nouveau rendez-vous n.a été créé/i).waitFor({ state: "visible" });
   await page.screenshot({ path: `${DOSSIER}/rdv-presentation-04-renvoi-desktop.png`, fullPage: true });
   await page.close();
 }
