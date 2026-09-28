@@ -66,7 +66,7 @@ async function snapshot(page, name) {
     await page.getByLabel(/^Jour$/i).fill("15");
     await page.getByLabel(/^Mois$/i).fill("07");
     await page.getByLabel(/^Année$/i).fill("2002");
-    await page.getByLabel(/^Téléphone/i).first().fill("2732797523");
+    await page.getByLabel(/^Téléphone/i).first().fill("0595459843");
     await page.getByLabel(/^Adresse e-mail$/i).fill("contact@klassci.com");
 
     const filiere = page.getByLabel(/Filière/i).first();
