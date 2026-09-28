@@ -56,6 +56,7 @@ const SEAUX: Record<CheminPublic, { groupe: string; maximum: number }> = {
   [CHEMINS.rdvCreneaux]: { groupe: "rendezvous-catalogue", maximum: 30 },
   [CHEMINS.rdvReserver]: { groupe: "rendezvous", maximum: 10 },
   [CHEMINS.rdvConsulter]: { groupe: "rendezvous", maximum: 10 },
+  [CHEMINS.rdvRenvoyer]: { groupe: "rendezvous", maximum: 10 },
   [CHEMINS.rdvDeplacer]: { groupe: "rendezvous", maximum: 10 },
   [CHEMINS.rdvAnnuler]: { groupe: "rendezvous", maximum: 10 },
   [CHEMINS.rdvRetrouver]: { groupe: "rendezvous", maximum: 10 },
