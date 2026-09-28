@@ -10,6 +10,7 @@ const ACTIONS: Record<string, CheminPublic> = {
   creneaux: CHEMINS.rdvCreneaux,
   reserver: CHEMINS.rdvReserver,
   consulter: CHEMINS.rdvConsulter,
+  renvoyer: CHEMINS.rdvRenvoyer,
   deplacer: CHEMINS.rdvDeplacer,
   annuler: CHEMINS.rdvAnnuler,
   retrouver: CHEMINS.rdvRetrouver,
