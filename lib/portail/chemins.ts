@@ -16,6 +16,7 @@ export const CHEMINS = {
   rdvCreneaux: "api/public/rendez-vous/creneaux",
   rdvReserver: "api/public/rendez-vous/reserver",
   rdvConsulter: "api/public/rendez-vous/consulter",
+  rdvRenvoyer: "api/public/rendez-vous/renvoyer",
   rdvDeplacer: "api/public/rendez-vous/deplacer",
   rdvAnnuler: "api/public/rendez-vous/annuler",
   rdvRetrouver: "api/public/rendez-vous/retrouver",

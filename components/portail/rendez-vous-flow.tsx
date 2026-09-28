@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { champ, dateIso, dateNaissanceValide } from "./pieces";
 
@@ -15,11 +15,25 @@ type Creneau = {
   etat: "disponible" | "complet";
 };
 
+type Convocation = {
+  statut: string | null;
+  canal: "email" | "whatsapp" | null;
+  destination: string | null;
+  message_id: string | null;
+  tentatives: number;
+  fallback_utilise: boolean;
+  envoyee_at: string | null;
+  delivree_at: string | null;
+  erreur: string | null;
+};
+
 type Reservation = {
   date: string;
   heure_debut: string;
   heure_fin: string;
   statut: string;
+  convocation_url?: string;
+  convocation?: Convocation;
 };
 
 function decouperNaissance(iso?: string): { jour: string; mois: string; annee: string } {
@@ -28,6 +42,23 @@ function decouperNaissance(iso?: string): { jour: string; mois: string; annee: s
     return { jour: "", mois: "", annee: "" };
   }
   return { annee: morceaux[1], mois: String(Number(morceaux[2])), jour: String(Number(morceaux[3])) };
+}
+
+function formaterDate(iso: string, locale: string): string {
+  const morceaux = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
+  if (morceaux === null) return iso;
+
+  const date = new Date(Date.UTC(Number(morceaux[1]), Number(morceaux[2]) - 1, Number(morceaux[3])));
+  return new Intl.DateTimeFormat(locale, {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(date);
+}
+
+function formaterHeure(heure: string): string {
+  return /^\d{2}:\d{2}/.test(heure) ? heure.slice(0, 5) : heure;
 }
 
 export function RendezVousFlow({
@@ -41,6 +72,7 @@ export function RendezVousFlow({
   naissanceInitiale?: string;
   sansTitre?: boolean;
 }) {
+  const locale = useLocale();
   const t = useTranslations("inscription.rdv");
   const naissanceConnue = decouperNaissance(naissanceInitiale);
   const connu = Boolean(referenceInitiale && naissanceInitiale && dateNaissanceValide(naissanceConnue.jour, naissanceConnue.mois, naissanceConnue.annee));
@@ -53,6 +85,7 @@ export function RendezVousFlow({
   const [reservation, setReservation] = useState<Reservation | null>(null);
   const [peutModifier, setPeutModifier] = useState(false);
   const [enCours, setEnCours] = useState(false);
+  const [renvoiOk, setRenvoiOk] = useState(false);
   const [erreur, setErreur] = useState<string | null>(null);
 
   const naissance = dateIso(jour, mois, annee);
@@ -81,6 +114,7 @@ export function RendezVousFlow({
     if (!naissanceOk || reference.trim() === "" || enCours) return;
     setEnCours(true);
     setErreur(null);
+    setRenvoiOk(false);
     try {
       const reponse = await fetch(`/api/rendez-vous/${etablissement.code}/consulter`, {
         method: "POST",
@@ -128,6 +162,7 @@ export function RendezVousFlow({
     if (!naissanceOk || reference.trim() === "" || enCours) return;
     setEnCours(true);
     setErreur(null);
+    setRenvoiOk(false);
     try {
       const reponse = await fetch(`/api/rendez-vous/${etablissement.code}/reserver`, {
         method: "POST",
@@ -155,9 +190,35 @@ export function RendezVousFlow({
     }
   }
 
+  async function renvoyerConvocation() {
+    if (!naissanceOk || reference.trim() === "" || enCours || reservation === null) return;
+    setEnCours(true);
+    setErreur(null);
+    setRenvoiOk(false);
+    try {
+      const reponse = await fetch(`/api/rendez-vous/${etablissement.code}/renvoyer`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reference: reference.trim(), date_naissance: naissance }),
+      });
+      const corps = await reponse.json().catch(() => null);
+      if (reponse.ok && corps?.reservation) {
+        setReservation(corps.reservation);
+        setRenvoiOk(true);
+        return;
+      }
+      setErreur(typeof corps?.code === "string" ? corps.code : "indisponible");
+    } catch {
+      setErreur("indisponible");
+    } finally {
+      setEnCours(false);
+    }
+  }
+
   async function annuler() {
     if (!naissanceOk || reference.trim() === "" || enCours) return;
     setEnCours(true);
+    setRenvoiOk(false);
     try {
       const reponse = await fetch(`/api/rendez-vous/${etablissement.code}/annuler`, {
         method: "POST",
@@ -234,8 +295,44 @@ export function RendezVousFlow({
         <div className="mt-6 rounded-xl bg-bg-alt p-4">
           <p className="text-sm font-semibold">{t("confirme")}</p>
           <p className="mt-1 text-sm text-text-secondary">
-            {reservation.date} · {reservation.heure_debut} – {reservation.heure_fin}
+            {formaterDate(reservation.date, locale)} · {formaterHeure(reservation.heure_debut)} – {formaterHeure(reservation.heure_fin)}
           </p>
+
+          {reservation.convocation?.canal && (
+            <p className="mt-2 text-xs text-text-muted">
+              Convocation {reservation.convocation.statut?.toLowerCase() ?? "programmée"} par {reservation.convocation.canal === "whatsapp" ? "WhatsApp" : "e-mail"}
+              {reservation.convocation.destination ? ` · ${reservation.convocation.destination}` : ""}
+              {reservation.convocation.fallback_utilise ? " · canal de secours utilisé" : ""}
+            </p>
+          )}
+
+          <div className="mt-4 flex flex-wrap gap-2">
+            {reservation.convocation_url && (
+              <a
+                href={reservation.convocation_url}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex min-h-[40px] items-center rounded-lg bg-accent px-3 py-2 text-sm font-semibold text-white"
+              >
+                Télécharger la convocation PDF
+              </a>
+            )}
+            <button
+              type="button"
+              onClick={() => void renvoyerConvocation()}
+              disabled={enCours}
+              className="min-h-[40px] rounded-lg border border-border px-3 py-2 text-sm font-medium text-text-primary disabled:opacity-50"
+            >
+              {enCours ? "Envoi…" : "Renvoyer la convocation"}
+            </button>
+          </div>
+
+          {renvoiOk && (
+            <p className="mt-2 text-xs text-text-secondary">
+              La convocation a été remise dans la file d’envoi. Aucun nouveau rendez-vous n’a été créé.
+            </p>
+          )}
+
           {peutModifier && (
             <button type="button" onClick={() => void annuler()} className="mt-3 text-sm text-accent underline">
               {t("annuler")}
@@ -249,7 +346,7 @@ export function RendezVousFlow({
           {creneaux.map((c) => (
             <li key={c.id} className="flex items-center justify-between gap-3 rounded-xl border border-border px-3 py-2">
               <span className="text-sm">
-                {c.date} · {c.heure_debut} – {c.heure_fin}
+                {formaterDate(c.date, locale)} · {formaterHeure(c.heure_debut)} – {formaterHeure(c.heure_fin)}
               </span>
               {c.etat === "disponible" ? (
                 <button

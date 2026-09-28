@@ -31,7 +31,7 @@ function BandeauIdentite({
   // dernier endroit où dire qu'un dossier déposé ici n'arrive dans aucune école.
   const etiquette =
     demonstration && etiquetteDemonstration !== undefined ? (
-      <span className="ml-2 inline-block shrink-0 rounded-md bg-amber-100 px-1.5 py-0.5 align-middle text-[11px] font-semibold uppercase tracking-wide text-amber-800">
+      <span className="mt-1 inline-block shrink-0 rounded-md bg-amber-100 px-1.5 py-0.5 align-middle text-[11px] font-semibold uppercase tracking-wide text-amber-800 sm:ml-2 sm:mt-0">
         {etiquetteDemonstration}
       </span>
     ) : null;
@@ -57,9 +57,9 @@ function BandeauIdentite({
       style={{ backgroundColor: fond, color: encre }}
     >
       <Marque logo={identite.logo} nom={nom} taille={compact ? "liste" : "bandeau"} />
-      <span className="min-w-0">
-        <span className="block truncate text-[15px] font-semibold leading-tight">
-          {nom}
+      <span className="min-w-0 flex-1">
+        <span className="flex min-w-0 flex-col items-start sm:flex-row sm:items-center">
+          <span className="block max-w-full truncate text-[15px] font-semibold leading-tight">{nom}</span>
           {etiquette}
         </span>
         {!compact && !demonstration && identite.identite.entete !== "" && (
