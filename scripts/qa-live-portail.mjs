@@ -3,6 +3,8 @@ import { mkdir, writeFile } from "node:fs/promises";
 
 const BASE = "https://www.klassci.com/fr/inscription/universite/presentation";
 const OUT = ".playwright-live";
+const TEST_EMAIL = "djedjelipatrick@gmail.com";
+const TEST_PHONE = "0141540178";
 await mkdir(OUT, { recursive: true });
 
 const browser = await chromium.launch({ headless: true });
@@ -36,6 +38,13 @@ async function cliquerPorte(page, regex) {
   return textes[idx];
 }
 
+async function lireReponse(reponse) {
+  const texte = await reponse.text();
+  let corps = texte;
+  try { corps = JSON.parse(texte); } catch {}
+  return { status: reponse.status(), ok: reponse.ok(), corps };
+}
+
 // --- Réinscription réelle sur un étudiant démo de la promotion précédente ---
 {
   const page = await ouvrir();
@@ -56,8 +65,15 @@ async function cliquerPorte(page, regex) {
     const textes = await actions.allTextContents();
     const idx = textes.findIndex((t) => /(retrouver|continuer|vérifier|rechercher|voir)/i.test(t));
     if (idx === -1) throw new Error(`Action identification introuvable: ${JSON.stringify(textes)}`);
+
+    const lookupPromise = page.waitForResponse(
+      (r) => r.url().includes("/api/reinscription/presentation/lookup") && r.request().method() === "POST",
+      { timeout: 45000 },
+    );
     await actions.nth(idx).click();
-    await page.waitForTimeout(1800);
+    const lookup = await lookupPromise;
+    rapport.reinscription.lookup = await lireReponse(lookup);
+    await page.waitForTimeout(800);
     await capture(page, "11-reinscription-confirmation-live");
 
     const checkbox = page.locator('main input[type="checkbox"]:visible').first();
@@ -67,8 +83,14 @@ async function cliquerPorte(page, regex) {
       const textes2 = await boutons2.allTextContents();
       const idx2 = textes2.findIndex((t) => /(confirmer|réinscri|envoyer)/i.test(t));
       if (idx2 >= 0) {
+        const submitPromise = page.waitForResponse(
+          (r) => r.url().includes("/api/reinscription/presentation/submit") && r.request().method() === "POST",
+          { timeout: 45000 },
+        );
         await boutons2.nth(idx2).click();
-        await page.waitForTimeout(2200);
+        const submit = await submitPromise;
+        rapport.reinscription.submit = await lireReponse(submit);
+        await page.waitForTimeout(1000);
         await capture(page, "12-reinscription-apres-envoi-live");
         rapport.reinscription.envoi = true;
       } else {
@@ -83,18 +105,26 @@ async function cliquerPorte(page, regex) {
     rapport.reinscription.texte_final = (await page.locator("main").innerText()).slice(0, 5000);
   } catch (e) {
     rapport.reinscription.erreur = String(e);
+    rapport.reinscription.texte_final = (await page.locator("main").innerText()).slice(0, 5000).catch(() => "");
     await capture(page, "19-reinscription-erreur-live");
   } finally {
     await page.close();
   }
 }
 
-// --- Nouvelle candidature réelle sur presentation ---
+// --- Nouvelle candidature réelle sur presentation, avec les contacts de test validés ---
 {
   const page = await ouvrir();
   try {
-    rapport.candidature.porte = await cliquerPorte(page, /(nouveau|candidat|bachelier)/i);
-    await page.waitForTimeout(1500);
+    rapport.candidature.porte = await cliquerPorte(page, /(nouvel|nouveau|nouvelle|candidat|bachelier)/i);
+
+    const choix = await page.waitForResponse(
+      (r) => r.url().includes("/api/inscription/presentation/choix") && r.request().method() === "POST",
+      { timeout: 45000 },
+    ).catch(() => null);
+    if (choix) rapport.candidature.choix = await lireReponse(choix);
+
+    await page.waitForTimeout(700);
     await capture(page, "20-candidature-formulaire-live");
 
     const nom = page.locator('input[autocomplete="family-name"]');
@@ -103,19 +133,17 @@ async function cliquerPorte(page, regex) {
     await prenoms.fill(`PORTAIL ${horodatage().slice(-6)}`);
 
     const dateInputs = page.locator('input[placeholder="15"], input[placeholder="03"], input[placeholder="2007"]');
-    if (await dateInputs.count() >= 3) {
+    if ((await dateInputs.count()) >= 3) {
       await dateInputs.nth(0).fill("12");
       await dateInputs.nth(1).fill("04");
       await dateInputs.nth(2).fill("2004");
     }
 
     const tel = page.locator('input[type="tel"]:visible').first();
-    if (await tel.count()) await tel.fill("0700001234");
+    if (await tel.count()) await tel.fill(TEST_PHONE);
 
     const email = page.locator('input[type="email"]:visible').first();
-    if (await email.count()) {
-      await email.fill(`djedjelipatrick+klassci-e2e-${Date.now()}@gmail.com`);
-    }
+    if (await email.count()) await email.fill(TEST_EMAIL);
 
     const filiere = page.getByLabel(/fili[eè]re/i).first();
     if (await filiere.count()) {
@@ -136,14 +164,21 @@ async function cliquerPorte(page, regex) {
     const textes = await boutons.allTextContents();
     const idx = textes.findIndex((t) => /(envoyer|candidature|déposer|transmettre)/i.test(t));
     if (idx === -1) throw new Error(`Bouton envoi candidature introuvable: ${JSON.stringify(textes)}`);
-    await boutons.nth(idx).click();
-    await page.waitForTimeout(2600);
-    await capture(page, "22-candidature-apres-envoi-live");
 
-    rapport.candidature.envoi = true;
+    const submitPromise = page.waitForResponse(
+      (r) => r.url().includes("/api/inscription/presentation/submit") && r.request().method() === "POST",
+      { timeout: 45000 },
+    );
+    await boutons.nth(idx).click();
+    const submit = await submitPromise;
+    rapport.candidature.submit = await lireReponse(submit);
+    rapport.candidature.envoi = submit.ok();
+    await page.waitForTimeout(1000);
+    await capture(page, "22-candidature-apres-envoi-live");
     rapport.candidature.texte_final = (await page.locator("main").innerText()).slice(0, 5000);
   } catch (e) {
     rapport.candidature.erreur = String(e);
+    rapport.candidature.texte_final = (await page.locator("main").innerText()).slice(0, 5000).catch(() => "");
     await capture(page, "29-candidature-erreur-live");
   } finally {
     await page.close();
