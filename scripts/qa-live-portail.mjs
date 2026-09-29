@@ -106,11 +106,11 @@ async function lireReponse(reponse) {
     await dateInputs.nth(1).fill("04");
     await dateInputs.nth(2).fill("2004");
 
-    const tel = page.getByLabel(/^Téléphone$/i).first();
+    const tel = page.locator("#candidature-telephone");
     if (await tel.count()) await tel.fill(TEST_PHONE);
     else throw new Error("Champ téléphone principal introuvable");
 
-    const email = page.locator('input[type="email"]:visible').first();
+    const email = page.locator("#candidature-email");
     if (await email.count()) await email.fill(TEST_EMAIL);
     else throw new Error("Champ e-mail introuvable");
 
