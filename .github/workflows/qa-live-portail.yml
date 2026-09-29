@@ -1,0 +1,40 @@
+name: QA live portail presentation
+
+on:
+  push:
+    branches:
+      - qa/live-portail-e2e-20260929
+    paths:
+      - '.github/workflows/qa-live-portail.yml'
+      - 'scripts/qa-live-portail.mjs'
+
+permissions:
+  contents: read
+
+jobs:
+  live-e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Installer Chromium
+        run: pnpm exec playwright-core install --with-deps chromium
+      - name: Tester le portail public réel
+        run: node scripts/qa-live-portail.mjs
+      - name: Publier les captures réelles
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qa-live-portail-presentation
+          path: .playwright-live/**
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 7
