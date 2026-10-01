@@ -64,6 +64,10 @@ const SEAUX: Record<CheminPublic, { groupe: string; maximum: number }> = {
   // étroit. Le renvoi y compte aussi, l'école le limite déjà à un par minute.
   [CHEMINS.verificationVerifier]: { groupe: "verification", maximum: 10 },
   [CHEMINS.verificationRenvoyer]: { groupe: "verification", maximum: 10 },
+  // Le suivi d'une vérification inversée ne devine rien : il relit, toutes les
+  // cinq secondes, une demande dont le site connaît déjà l'identifiant. Dans le
+  // seau du code, il le viderait en une minute.
+  [CHEMINS.verificationStatut]: { groupe: "verification-suivi", maximum: 30 },
 };
 
 /** Les points d'entrée dont la réponse est la même pour tous les visiteurs. */

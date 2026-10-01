@@ -19,7 +19,7 @@ import { normaliserWhatsapp } from "../lib/email/telephone-whatsapp.ts";
 import { verifierCanal } from "../lib/email/verifier-canal.ts";
 import { analyserEmail, distanceEdition, emailBloque } from "../lib/email/verifier-email.ts";
 import { lireAboutissement, suiteSurPlace } from "../lib/portail/aboutissement.ts";
-import { lireDemandeVerification, lireMotif, nettoyerCode, renvoyer, suiteReponse, verifier as verifierCode } from "../lib/portail/verification.ts";
+import { lireDemandeVerification, lireLienWhatsapp, lireMotif, nettoyerCode, renvoyer, suiteReponse, suivre, verifier as verifierCode } from "../lib/portail/verification.ts";
 import { preparerVerification } from "../lib/portail/verification-relais.ts";
 
 /**
@@ -145,6 +145,13 @@ verifier("statut e-mail lu",
 verifier("statut téléphone lu",
   lireDemandeVerification({ statut: "verification_telephone_requise", demande_id: "d2", telephone_masque: "+225 07 ** ** 34" }),
   { canal: "telephone", demandeId: "d2", destination: "+225 07 ** ** 34" });
+verifier("vérification inversée : le lien wa.me est lu",
+  lireDemandeVerification({ statut: "verification_telephone_requise", demande_id: "d3", telephone_masque: "+225 07 ** ** 34", lien_whatsapp: "https://wa.me/22541540178?text=Code%20%3A%20123456" }),
+  { canal: "telephone", demandeId: "d3", destination: "+225 07 ** ** 34", lienWhatsapp: "https://wa.me/22541540178?text=Code%20%3A%20123456" });
+verifier("lien qui ne va pas vers wa.me : ignoré, écran de code",
+  lireDemandeVerification({ statut: "verification_telephone_requise", demande_id: "d3", telephone_masque: "x", lien_whatsapp: "https://exemple.com/?text=1" }),
+  { canal: "telephone", demandeId: "d3", destination: "x" });
+verifier("lien javascript: refusé", lireLienWhatsapp("javascript:alert(1)"), null);
 verifier("réponse d'enregistrement classique : pas de vérification", lireDemandeVerification({ enregistre: true }), null);
 verifier("statut sans demande_id : ignoré", lireDemandeVerification({ statut: "verification_email_requise", email_masque: "x" }), null);
 console.log("\nRéponse de création : vérification désactivée (défaut) ou activée par l'école");
@@ -192,6 +199,9 @@ verifier("jeton trop court refusé", preparerVerification("verifier", { jeton: "
 verifier("renvoi", preparerVerification("renvoyer", { demande_id: "abc-1" }),
   { chemin: "api/portail/email/renvoyer", corps: { demande_id: "abc-1", canal: "email" } });
 verifier("action inconnue", preparerVerification("supprimer", { demande_id: "a" }), { erreur: "action_inconnue" });
+verifier("suivi d'une vérification inversée", preparerVerification("statut", { demande_id: "abc-1", canal: "telephone", code: "123456" }),
+  { chemin: "api/portail/email/statut", corps: { demande_id: "abc-1", canal: "telephone" } });
+verifier("suivi refusé pour l'e-mail", preparerVerification("statut", { demande_id: "abc-1" }), { erreur: "corps_invalide" });
 
 console.log("\nVérification : appels réseau (fetch simulé)");
 const appels = [];
@@ -222,6 +232,16 @@ verifier("renvoi accepté (202)", await renvoyer("esbtp", "telephone", "d1"), "e
 verifier("renvoi : canal transmis", appels.at(-1).corps, { demande_id: "d1", canal: "telephone" });
 simuler(429);
 verifier("renvoi trop tôt (429)", await renvoyer("esbtp", "email", "d1"), "tropTot");
+simuler(202, { verifie: false, motif: "en_attente", lien_whatsapp: "https://wa.me/22541540178?text=Code%20%3A%20654321" });
+verifier("suivi : en attente, avec le lien le plus récent", await suivre("esbtp", "d1"),
+  { genre: "enAttente", lien: "https://wa.me/22541540178?text=Code%20%3A%20654321" });
+verifier("suivi : appel au relais, canal téléphone", appels.at(-1), { url: "/api/verification/esbtp/statut", corps: { demande_id: "d1", canal: "telephone" } });
+simuler(200, { verifie: true, type: "candidature" });
+verifier("suivi : vérifié", (await suivre("esbtp", "d1")).genre, "verifie");
+simuler(422, { verifie: false, motif: "expire" });
+verifier("suivi : code périmé", await suivre("esbtp", "d1"), { genre: "refuse", motif: "expire" });
+simuler(503, { verifie: false, motif: "indisponible" });
+verifier("suivi : école injoignable", (await suivre("esbtp", "d1")).genre, "indisponible");
 simuler(503);
 verifier("renvoi en panne", await renvoyer("esbtp", "email", "d1"), "indisponible");
 

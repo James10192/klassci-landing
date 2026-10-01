@@ -58,6 +58,18 @@
     "renvoiTropTot": "Un code vient déjà d’être envoyé. Patientez une minute avant d’en demander un autre.",
     "recommencer": "Faire une autre demande",
     "adresseIncorrecte": "Adresse incorrecte ? Contactez votre école : c’est elle qui la tient à jour dans votre dossier.",
-    "numeroIncorrect": "Numéro incorrect ? Contactez votre école : c’est elle qui le tient à jour dans votre dossier."
+    "numeroIncorrect": "Numéro incorrect ? Contactez votre école : c’est elle qui le tient à jour dans votre dossier.",
+    "inverse": {
+      "titre": "Confirmez votre numéro WhatsApp",
+      "texte": "Votre demande a bien été transmise à l’établissement. Pour confirmer que le {destination} est bien votre numéro, envoyez le message préparé à l’école depuis WhatsApp : il contient déjà votre code.",
+      "ouvrir": "Ouvrir WhatsApp et envoyer le code",
+      "etapes": "WhatsApp s’ouvre avec le message déjà écrit. Appuyez sur Envoyer, sans le modifier, puis revenez sur cette page.",
+      "attente": "En attente de votre message…",
+      "autreTelephone": "Utilisez le téléphone dont le numéro est {destination} : le message doit partir de ce numéro.",
+      "nouveauLien": "Obtenir un nouveau lien",
+      "nouveauLienDans": "Nouveau lien dans {secondes} s",
+      "lienRenouvele": "Un nouveau lien est prêt. Ouvrez WhatsApp de nouveau.",
+      "indisponible": "Nous n’arrivons pas à joindre l’établissement. Nous réessayons…"
+    }
   }
 }

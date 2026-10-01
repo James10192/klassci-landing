@@ -21,7 +21,18 @@ export type DemandeVerification = {
   demandeId: string;
   /** Adresse ou numéro masqués par l'école (`k***@gmail.com`), jamais en clair. */
   destination: string;
+  /**
+   * Vérification WhatsApp inversée : le lien qui ouvre WhatsApp sur le numéro
+   * de l'école, le message et son code déjà écrits. La famille envoie, au lieu
+   * de recevoir un code. Absent : on saisit un code reçu.
+   */
+  lienWhatsapp?: string;
 };
+
+/** Un lien d'envoi WhatsApp de l'école, ou `null` : seul `wa.me` est ouvert, jamais une autre adresse. */
+export function lireLienWhatsapp(valeur: unknown): string | null {
+  return typeof valeur === "string" && /^https:\/\/wa\.me\/\d{6,15}\?text=[^\s]+$/.test(valeur) ? valeur : null;
+}
 
 export type MotifRefus = "code_invalide" | "expire" | "trop_de_tentatives";
 
@@ -48,7 +59,11 @@ export function lireDemandeVerification(corps: Record<string, unknown>): Demande
   }
 
   if (corps.statut === "verification_telephone_requise" && typeof corps.telephone_masque === "string") {
-    return { canal: "telephone", demandeId, destination: corps.telephone_masque };
+    const lienWhatsapp = lireLienWhatsapp(corps.lien_whatsapp);
+
+    return lienWhatsapp === null
+      ? { canal: "telephone", demandeId, destination: corps.telephone_masque }
+      : { canal: "telephone", demandeId, destination: corps.telephone_masque, lienWhatsapp };
   }
 
   return null;
@@ -82,7 +97,7 @@ export type CorpsVerification = { jeton: string } | { demande_id: string; code: 
  * l'instance de l'école. Le canal voyage dans le corps : c'est le relais qui
  * choisit le chemin côté KLASSCI (`verification-relais.ts`).
  */
-async function appeler(ecole: string, action: "verifier" | "renvoyer", corps: Record<string, string>): Promise<Response> {
+async function appeler(ecole: string, action: "verifier" | "renvoyer" | "statut", corps: Record<string, string>): Promise<Response> {
   return fetch(`/api/verification/${encodeURIComponent(ecole)}/${action}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -132,6 +147,33 @@ export async function renvoyer(ecole: string, canal: Canal, demandeId: string): 
     return "indisponible";
   } catch {
     return "indisponible";
+  }
+}
+
+export type ResultatSuivi =
+  | { genre: "verifie"; corps: Record<string, unknown> }
+  /** Le message n'est pas encore arrivé. `lien` : le plus récent, à réafficher. */
+  | { genre: "enAttente"; lien: string | null }
+  | { genre: "refuse"; motif: MotifRefus | null }
+  | { genre: "indisponible" };
+
+/**
+ * Où en est une vérification inversée. Le site la relit toutes les quelques
+ * secondes pendant que la famille envoie le code depuis WhatsApp ; c'est
+ * l'école qui valide, dès que MailPulse a reçu le message.
+ */
+export async function suivre(ecole: string, demandeId: string): Promise<ResultatSuivi> {
+  try {
+    const reponse = await appeler(ecole, "statut", { demande_id: demandeId, canal: "telephone" });
+    const lu = await corpsDe(reponse);
+
+    if (reponse.status === 200 && lu !== null && lu.verifie === true) return { genre: "verifie", corps: lu };
+    if (reponse.status === 202) return { genre: "enAttente", lien: lireLienWhatsapp(lu?.lien_whatsapp) };
+    if (reponse.status === 422 || reponse.status === 400) return { genre: "refuse", motif: lireMotif(lu) };
+
+    return { genre: "indisponible" };
+  } catch {
+    return { genre: "indisponible" };
   }
 }
 

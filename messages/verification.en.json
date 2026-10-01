@@ -58,6 +58,18 @@
     "renvoiTropTot": "A code was just sent. Please wait a minute before asking for another.",
     "recommencer": "Make another request",
     "adresseIncorrecte": "Wrong address? Contact your school: it keeps it up to date in your file.",
-    "numeroIncorrect": "Wrong number? Contact your school: it keeps it up to date in your file."
+    "numeroIncorrect": "Wrong number? Contact your school: it keeps it up to date in your file.",
+    "inverse": {
+      "titre": "Confirm your WhatsApp number",
+      "texte": "Your request has been sent to the school. To confirm that {destination} is your number, send the prepared message to the school from WhatsApp: it already contains your code.",
+      "ouvrir": "Open WhatsApp and send the code",
+      "etapes": "WhatsApp opens with the message already written. Tap Send without changing it, then come back to this page.",
+      "attente": "Waiting for your message…",
+      "autreTelephone": "Use the phone whose number is {destination}: the message must come from that number.",
+      "nouveauLien": "Get a new link",
+      "nouveauLienDans": "New link in {secondes} s",
+      "lienRenouvele": "A new link is ready. Open WhatsApp again.",
+      "indisponible": "We cannot reach the school right now. Retrying…"
+    }
   }
 }

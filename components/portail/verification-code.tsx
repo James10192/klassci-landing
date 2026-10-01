@@ -14,6 +14,7 @@ import {
 } from "@/lib/portail/verification";
 
 import { BoutonPrincipal, Carte, champ, entree } from "./pieces";
+import { VerificationWhatsapp } from "./verification-whatsapp";
 
 const DELAI_RENVOI_S = 60;
 
@@ -44,13 +45,7 @@ const MESSAGE_RENVOI: Record<ResultatRenvoi, { ton: "info" | "erreur"; cle: stri
  * et part tout seul au sixième chiffre. Deux régions annoncées séparément :
  * l'erreur, en alerte, et l'information (« code renvoyé »), en statut poli.
  */
-export function VerificationCode({
-  ecole,
-  demande,
-  onVerifie,
-  onModifier,
-  onRecommencer,
-}: {
+type ProprietesVerification = {
   ecole: string;
   demande: DemandeVerification;
   /** Résolue quand l'écran suivant est prêt : l'état occupé dure jusque-là. */
@@ -59,7 +54,21 @@ export function VerificationCode({
   onModifier?: () => void;
   /** Réinscription : l'adresse vient du dossier de l'école, on ne peut que recommencer. */
   onRecommencer?: () => void;
-}) {
+};
+
+/**
+ * L'écran de vérification : saisie d'un code reçu, ou, si l'école a choisi la
+ * vérification inversée, envoi du code depuis WhatsApp.
+ */
+export function VerificationCode(proprietes: ProprietesVerification) {
+  const { lienWhatsapp } = proprietes.demande;
+
+  return lienWhatsapp !== undefined
+    ? <VerificationWhatsapp {...proprietes} demande={{ ...proprietes.demande, lienWhatsapp }} />
+    : <VerificationParCode {...proprietes} />;
+}
+
+function VerificationParCode({ ecole, demande, onVerifie, onModifier, onRecommencer }: ProprietesVerification) {
   const t = useTranslations("verification");
   const id = useId();
   const champCode = useRef<HTMLInputElement>(null);

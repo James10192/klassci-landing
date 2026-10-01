@@ -26,6 +26,9 @@ export const CHEMINS = {
   // `verification-relais.ts`, et nulle part ailleurs.
   verificationVerifier: "api/portail/email/verifier",
   verificationRenvoyer: "api/portail/email/renvoyer",
+  // Vérification WhatsApp inversée : la famille envoie le code depuis WhatsApp,
+  // le site suit l'avancement.
+  verificationStatut: "api/portail/email/statut",
 } as const;
 
 export type CheminPublic = (typeof CHEMINS)[keyof typeof CHEMINS];
