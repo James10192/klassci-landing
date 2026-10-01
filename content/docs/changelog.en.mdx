@@ -15,6 +15,8 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ### Added
 
+- **Nanan now does what support used to do for you** — thirty-four operations our team used to carry out by hand can now be asked for in one sentence: validate enrolments, move a student to another class, cancel or restore a payment, set fee amounts, create an academic year, programmes or levels, organise a common core, correct a grade after a complaint, move assignments to the other semester, generate missing report cards, import an LMD curriculum, prepare appointment slots and notices, or change the school's settings. Nanan first shows what will change, with the same rights and safeguards as the matching screen, and writes nothing until you click “Validate”.
+
 - **Nanan creates and edits classes** — “add a 60-seat class to every programme and level”, “set first-year classes to 50 seats”: Nanan first shows a before/after table (names, capacities, pairs with no students), copies the subjects of the sibling class, refuses a capacity below the number of enrolled students, and writes nothing until you click “Validate”.
 
 - **Phone confirmation over WhatsApp, the other way round** — on the enrolment portal, families can confirm their number by tapping a button that opens WhatsApp with the code already typed: they send it to the school's number, and the page confirms itself a few seconds later. No message is sent to a stranger, which protects the school's number. Enabled school by school.
@@ -36,6 +38,12 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 - **Re-enrolment already submitted: the appointment in one click** — a student who finds a request already on file goes straight to their appointment and notice instead of a plain message.
 
 ### Fixed
+
+- **A cancelled enrolment can no longer be validated again** — validation could reactivate a cancelled enrolment that still held a payment, and the student's account with it. Enrolling beyond a class's capacity becomes a right assigned from the roles screen; accounts that could already do it keep it.
+
+- **Settings checkboxes are read everywhere** — some options ticked in the settings (conduct grade on report cards, logo on receipts or certificates) were never taken into account. They now are: a school that had ticked the conduct grade will see it on its report cards.
+
+- **Settings: a changed value is always saved** — a code or number starting with zero, or a corrected coefficient, is no longer mistaken for the previous value.
 
 - **The re-enrolment class picker is readable again** — “Select a class…” showed as a grey bar, on the finalisation page and in the student list filters.
 
