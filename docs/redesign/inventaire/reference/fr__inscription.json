@@ -1,0 +1,57 @@
+{
+ "route": "/fr/inscription",
+ "statut": 200,
+ "erreurClient": false,
+ "titre": "Inscription en ligne · KLASSCI",
+ "canonique": "https://www.klassci.com/fr/inscription",
+ "hreflang": [
+  "en",
+  "fr",
+  "x-default"
+ ],
+ "jsonld": [],
+ "titres": [
+  "Rejoignez votre établissement, en ligne.",
+  "Votre établissement"
+ ],
+ "liens": [
+  "#contact",
+  "/fr",
+  "/fr/a-propos",
+  "/fr/blog",
+  "/fr/college",
+  "/fr/confidentialite",
+  "/fr/docs",
+  "/fr/docs/api-reference",
+  "/fr/docs/changelog",
+  "/fr/inscription",
+  "/fr/inscription/universite",
+  "/fr/lms",
+  "/fr/mentions-legales",
+  "/fr/securite",
+  "/fr/universite",
+  "https://college.klassci.com",
+  "https://web.facebook.com/p/African-Digit-Consulting-100092649035928/?_rdc=1&_rdr",
+  "https://www.linkedin.com/company/klassci/",
+  "mailto:contact@klassci.com"
+ ],
+ "champs": [],
+ "blocs": [
+  "Changer le thème",
+  "Rejoignez votre établissement, en ligne.",
+  "Que vous soyez nouveau bachelier ou déjà étudiant chez nous, tout commence ici.",
+  "Choisissez le type d'établissement que vous visez.",
+  "Université et grandes écoles",
+  "BTS, Licence, Master. Les établissements d'enseignement supérieur qui utilisent KLASSCI.",
+  "Collège et lycée",
+  "Le collège et le lycée sont gérés sur KLASSCI College. Vous serez redirigé vers son site.",
+  "Plateforme de gestion scolaire conçue pour les établissements d'enseignement supérieur en Afrique.",
+  "Apprentissage en ligne",
+  "S'inscrire en ligne",
+  "Guides et ressources",
+  "Journal des versions",
+  "Sécurité des données",
+  "Abidjan, Côte d'Ivoire",
+  "© 2026 KLASSCI · AFRICAN DIGIT CONSULTING"
+ ]
+}

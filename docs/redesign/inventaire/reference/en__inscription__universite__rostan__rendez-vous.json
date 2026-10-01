@@ -1,0 +1,57 @@
+{
+ "route": "/en/inscription/universite/rostan/rendez-vous",
+ "statut": 200,
+ "erreurClient": false,
+ "titre": "Appointment at the desk — Institut Supérieur Louis Le Grand · KLASSCI",
+ "canonique": "https://www.klassci.com/en/inscription/universite/rostan/rendez-vous",
+ "hreflang": [
+  "en",
+  "fr",
+  "x-default"
+ ],
+ "jsonld": [],
+ "titres": [
+  "Appointment at the desk",
+  "What we do with your details"
+ ],
+ "liens": [
+  "#contact",
+  "/en",
+  "/en/a-propos",
+  "/en/blog",
+  "/en/college",
+  "/en/confidentialite",
+  "/en/docs",
+  "/en/docs/api-reference",
+  "/en/docs/changelog",
+  "/en/inscription",
+  "/en/inscription/universite/rostan",
+  "/en/lms",
+  "/en/mentions-legales",
+  "/en/securite",
+  "/en/universite",
+  "https://web.facebook.com/p/African-Digit-Consulting-100092649035928/?_rdc=1&_rdr",
+  "https://www.linkedin.com/company/klassci/",
+  "mailto:contact@klassci.com"
+ ],
+ "champs": [],
+ "blocs": [
+  "Appointment at the desk",
+  "Pick a slot to complete your file on site. Keep your reference.",
+  "Institut Supérieur Louis Le Grand",
+  "See my appointment",
+  "Lost your reference? Enter the phone number or student ID used at submission.",
+  "Find my reference",
+  "No slots available right now.",
+  "What we do with your details",
+  "They are used only to prepare your file and to call you back.",
+  "No financial information passes through this page, in either direction.",
+  "Your request is not an enrolment: the school decides, and the school replies.",
+  "School management platform built for higher-education institutions in Africa.",
+  "University and higher education",
+  "Middle and high school",
+  "Guides and resources",
+  "Abidjan, Côte d'Ivoire",
+  "© 2026 KLASSCI — AFRICAN DIGIT CONSULTING"
+ ]
+}

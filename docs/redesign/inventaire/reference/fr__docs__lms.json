@@ -1,0 +1,56 @@
+{
+ "route": "/fr/docs/lms",
+ "statut": 200,
+ "erreurClient": false,
+ "titre": "KLASSCI LMS · KLASSCI",
+ "canonique": "https://www.klassci.com/fr/docs/lms",
+ "hreflang": [
+  "en",
+  "fr",
+  "x-default"
+ ],
+ "jsonld": [
+  "Brand",
+  "BreadcrumbList",
+  "Organization",
+  "TechArticle",
+  "WebPage",
+  "WebSite"
+ ],
+ "titres": [
+  "KLASSCI LMS"
+ ],
+ "liens": [
+  "/",
+  "/fr/blog",
+  "/fr/college",
+  "/fr/docs",
+  "/fr/docs/api-reference",
+  "/fr/docs/changelog",
+  "/fr/docs/college",
+  "/fr/docs/comptable/operations",
+  "/fr/docs/concepts",
+  "/fr/docs/getting-started",
+  "/fr/docs/lms",
+  "/fr/docs/modules/frais-comptabilite",
+  "/fr/docs/secretaire/inscriptions",
+  "/fr/docs/superadmin/onboarding",
+  "/fr/docs/universite",
+  "/fr/universite"
+ ],
+ "champs": [],
+ "blocs": [
+  "Quickstart 60 minutes",
+  "Super-administrateur — installation initiale",
+  "Secrétaire — créer une nouvelle inscription",
+  "Comptable — opérations quotidiennes",
+  "Frais & Comptabilité",
+  "API Reference — KLASSCI LMS",
+  "Universite et grandes ecoles",
+  "College et lycee",
+  "Guides et ressources",
+  "Point d'entrée de la documentation dédiée à l'apprentissage numérique.",
+  "Cette section accueillera la documentation du futur espace d'apprentissage KLASSCI : cours, ressources, devoirs et évaluations.",
+  "Produit en préparation. La documentation détaillée suivra la livraison."
+ ]
+}

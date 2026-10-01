@@ -1,0 +1,47 @@
+{
+ "route": "/en/verification-email",
+ "statut": 200,
+ "erreurClient": false,
+ "titre": "E-mail verification · KLASSCI",
+ "canonique": "https://www.klassci.com/en/verification-email",
+ "hreflang": [
+  "en",
+  "fr",
+  "x-default"
+ ],
+ "jsonld": [],
+ "titres": [
+  "This link does not work"
+ ],
+ "liens": [
+  "#contact",
+  "/en",
+  "/en/a-propos",
+  "/en/blog",
+  "/en/college",
+  "/en/confidentialite",
+  "/en/docs",
+  "/en/docs/api-reference",
+  "/en/docs/changelog",
+  "/en/inscription",
+  "/en/lms",
+  "/en/mentions-legales",
+  "/en/securite",
+  "/en/universite",
+  "https://web.facebook.com/p/African-Digit-Consulting-100092649035928/?_rdc=1&_rdr",
+  "https://www.linkedin.com/company/klassci/",
+  "mailto:contact@klassci.com"
+ ],
+ "champs": [],
+ "blocs": [
+  "This link does not work",
+  "It is incomplete, already used or badly copied. Open the link from your e-mail again, or enter the code on the page where you made your request.",
+  "Back to home",
+  "School management platform built for higher-education institutions in Africa.",
+  "University and higher education",
+  "Middle and high school",
+  "Guides and resources",
+  "Abidjan, Côte d'Ivoire",
+  "© 2026 KLASSCI — AFRICAN DIGIT CONSULTING"
+ ]
+}

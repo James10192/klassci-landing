@@ -1,0 +1,52 @@
+{
+ "route": "/en/inscription",
+ "statut": 200,
+ "erreurClient": false,
+ "titre": "Online enrolment · KLASSCI",
+ "canonique": "https://www.klassci.com/en/inscription",
+ "hreflang": [
+  "en",
+  "fr",
+  "x-default"
+ ],
+ "jsonld": [],
+ "titres": [
+  "Join your school, online.",
+  "Your school"
+ ],
+ "liens": [
+  "#contact",
+  "/en",
+  "/en/a-propos",
+  "/en/blog",
+  "/en/college",
+  "/en/confidentialite",
+  "/en/docs",
+  "/en/docs/api-reference",
+  "/en/docs/changelog",
+  "/en/inscription",
+  "/en/inscription/universite",
+  "/en/lms",
+  "/en/mentions-legales",
+  "/en/securite",
+  "/en/universite",
+  "https://college.klassci.com",
+  "https://web.facebook.com/p/African-Digit-Consulting-100092649035928/?_rdc=1&_rdr",
+  "https://www.linkedin.com/company/klassci/",
+  "mailto:contact@klassci.com"
+ ],
+ "champs": [],
+ "blocs": [
+  "Join your school, online.",
+  "Whether you are a new school-leaver or already a student here, it starts here.",
+  "Choose the kind of school you are applying to.",
+  "University and higher education",
+  "BTS, Bachelor, Master. Higher-education institutions running on KLASSCI.",
+  "Secondary education runs on KLASSCI College. You will be taken to its site.",
+  "School management platform built for higher-education institutions in Africa.",
+  "Middle and high school",
+  "Guides and resources",
+  "Abidjan, Côte d'Ivoire",
+  "© 2026 KLASSCI — AFRICAN DIGIT CONSULTING"
+ ]
+}

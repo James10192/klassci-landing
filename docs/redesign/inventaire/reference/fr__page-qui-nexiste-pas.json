@@ -1,0 +1,54 @@
+{
+ "route": "/fr/page-qui-nexiste-pas",
+ "statut": 404,
+ "erreurClient": false,
+ "titre": "KLASSCI, gestion scolaire repensée.",
+ "canonique": "https://www.klassci.com/fr",
+ "hreflang": [
+  "en",
+  "fr",
+  "x-default"
+ ],
+ "jsonld": [],
+ "titres": [
+  "Cette page n'existe pas"
+ ],
+ "liens": [
+  "#contact",
+  "/fr",
+  "/fr/a-propos",
+  "/fr/blog",
+  "/fr/college",
+  "/fr/confidentialite",
+  "/fr/docs",
+  "/fr/docs/api-reference",
+  "/fr/docs/changelog",
+  "/fr/inscription",
+  "/fr/lms",
+  "/fr/mentions-legales",
+  "/fr/securite",
+  "/fr/universite",
+  "https://web.facebook.com/p/African-Digit-Consulting-100092649035928/?_rdc=1&_rdr",
+  "https://www.linkedin.com/company/klassci/",
+  "mailto:contact@klassci.com"
+ ],
+ "champs": [],
+ "blocs": [
+  "Cette page n'existe pas",
+  "L'adresse demandee n'existe plus, ou n'a jamais existe. Voici par ou reprendre.",
+  "Grandes ecoles et universites, BTS et LMD.",
+  "Colleges et lycees, de l'inscription au bulletin.",
+  "Prise en main, roles, modules, API.",
+  "Choisir l'edition adaptee a votre etablissement.",
+  "Plateforme de gestion scolaire conçue pour les établissements d'enseignement supérieur en Afrique.",
+  "Université et grandes écoles",
+  "Collège et lycée",
+  "Apprentissage en ligne",
+  "S'inscrire en ligne",
+  "Guides et ressources",
+  "Journal des versions",
+  "Sécurité des données",
+  "Abidjan, Côte d'Ivoire",
+  "© 2026 KLASSCI · AFRICAN DIGIT CONSULTING"
+ ]
+}

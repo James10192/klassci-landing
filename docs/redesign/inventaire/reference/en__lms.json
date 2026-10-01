@@ -1,0 +1,65 @@
+{
+ "route": "/en/lms",
+ "statut": 200,
+ "erreurClient": false,
+ "titre": "KLASSCI LMS, learning space in preparation",
+ "canonique": "https://www.klassci.com/en/lms",
+ "hreflang": [
+  "en",
+  "fr",
+  "x-default"
+ ],
+ "jsonld": [
+  "Brand",
+  "BreadcrumbList",
+  "Organization",
+  "SoftwareApplication+WebApplication",
+  "WebPage",
+  "WebSite"
+ ],
+ "titres": [
+  "Digital learning is coming to KLASSCI.",
+  "Structured courses",
+  "Assignments and assessments",
+  "Connected to the SIS"
+ ],
+ "liens": [
+  "#contact",
+  "/en",
+  "/en/a-propos",
+  "/en/blog",
+  "/en/college",
+  "/en/confidentialite",
+  "/en/docs",
+  "/en/docs/api-reference",
+  "/en/docs/changelog",
+  "/en/docs/lms",
+  "/en/inscription",
+  "/en/lms",
+  "/en/mentions-legales",
+  "/en/securite",
+  "/en/universite",
+  "https://web.facebook.com/p/African-Digit-Consulting-100092649035928/?_rdc=1&_rdr",
+  "https://www.linkedin.com/company/klassci/",
+  "mailto:contact@klassci.com",
+  "mailto:contact@klassci.com?subject=KLASSCI%20LMS"
+ ],
+ "champs": [],
+ "blocs": [
+  "University & Grandes écoles",
+  "College & High school",
+  "Digital learning is coming to KLASSCI.",
+  "The LMS will complete the University and College universes with online courses, assignments, resources and assessments.",
+  "Modules, resources and progress by class or cohort.",
+  "Assignments and assessments",
+  "Submissions, grading and feedback in one place.",
+  "Connected to the SIS",
+  "Learners, classes and teachers stay synchronized with KLASSCI.",
+  "School management platform built for higher-education institutions in Africa.",
+  "University and higher education",
+  "Middle and high school",
+  "Guides and resources",
+  "Abidjan, Côte d'Ivoire",
+  "© 2026 KLASSCI — AFRICAN DIGIT CONSULTING"
+ ]
+}

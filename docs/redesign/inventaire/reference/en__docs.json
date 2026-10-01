@@ -1,0 +1,73 @@
+{
+ "route": "/en/docs",
+ "statut": 200,
+ "erreurClient": false,
+ "titre": "KLASSCI documentation · KLASSCI",
+ "canonique": "https://www.klassci.com/en/docs",
+ "hreflang": [
+  "en",
+  "fr",
+  "x-default"
+ ],
+ "jsonld": [
+  "Brand",
+  "BreadcrumbList",
+  "Organization",
+  "TechArticle",
+  "WebPage",
+  "WebSite"
+ ],
+ "titres": [
+  "KLASSCI documentation",
+  "Start here",
+  "60-minute Quickstart",
+  "Core concepts",
+  "By role",
+  "By module",
+  "Need help?",
+  "On this page"
+ ],
+ "liens": [
+  "#by-module",
+  "#by-role",
+  "#need-help",
+  "#start-here",
+  "/en",
+  "/en/college",
+  "/en/docs",
+  "/en/docs/api-reference",
+  "/en/docs/changelog",
+  "/en/docs/college",
+  "/en/docs/comptable/operations",
+  "/en/docs/concepts",
+  "/en/docs/getting-started",
+  "/en/docs/lms",
+  "/en/docs/modules/frais-comptabilite",
+  "/en/docs/secretaire/inscriptions",
+  "/en/docs/superadmin/onboarding",
+  "/en/docs/universite",
+  "/en/universite",
+  "mailto:contact@klassci.com"
+ ],
+ "champs": [],
+ "blocs": [
+  "Super-administrator — initial setup",
+  "Registrar — creating a new enrollment",
+  "Bursar — day-to-day operations",
+  "Fees & Accounting",
+  "API Reference — KLASSCI LMS",
+  "University and higher education",
+  "Middle and high school",
+  "Help center for administrative teams, faculty, and students using KLASSCI.",
+  "Welcome to the KLASSCI documentation. Every guide is organized along two axes: by role (what you do at the school) and by module (the feature you want to master).",
+  "From zero to first student enrolled, in 8 verifiable milestones. The right entry point if you're starting a new tenant.",
+  "Vocabulary, roles, security, MESRS — the background material to understand the platform before or during setup.",
+  "Super-administrator — initial setup — full step-by-step reference for the initial configuration",
+  "Registrar — creating a new enrollment — from the form to final validation: 5 capture sections, enrollment record, validation with or without payment, student record, proof of enrollment",
+  "Bursar — day-to-day operations — record a payment, validate, view and print a financial statement, track enrollments awaiting payment",
+  "Fees & Accounting — full financial configuration reference (categories, MESRS-tiered per-class pricing, optional services, assignments)",
+  "Additional modules (LMD, schedule, grades & report cards, attendance) will be published progressively.",
+  "For any question, write to contact@klassci.com. Our team replies within 24 business hours.",
+  "On this page"
+ ]
+}

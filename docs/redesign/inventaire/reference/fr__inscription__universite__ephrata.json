@@ -1,0 +1,60 @@
+{
+ "route": "/fr/inscription/universite/ephrata",
+ "statut": 200,
+ "erreurClient": false,
+ "titre": "Inscription en ligne — Ephrata · KLASSCI",
+ "canonique": "https://www.klassci.com/fr/inscription/universite/ephrata",
+ "hreflang": [
+  "en",
+  "fr",
+  "x-default"
+ ],
+ "jsonld": [],
+ "titres": [
+  "Rejoignez votre établissement, en ligne.",
+  "Vous êtes…",
+  "Ce que nous faisons de vos informations"
+ ],
+ "liens": [
+  "#contact",
+  "/fr",
+  "/fr/a-propos",
+  "/fr/blog",
+  "/fr/college",
+  "/fr/confidentialite",
+  "/fr/docs",
+  "/fr/docs/api-reference",
+  "/fr/docs/changelog",
+  "/fr/inscription",
+  "/fr/lms",
+  "/fr/mentions-legales",
+  "/fr/securite",
+  "/fr/universite",
+  "https://web.facebook.com/p/African-Digit-Consulting-100092649035928/?_rdc=1&_rdr",
+  "https://www.linkedin.com/company/klassci/",
+  "mailto:contact@klassci.com"
+ ],
+ "champs": [],
+ "blocs": [
+  "Changer le thème",
+  "Rejoignez votre établissement, en ligne.",
+  "Que vous soyez nouveau bachelier ou déjà étudiant chez nous, tout commence ici.",
+  "Vous n'avez jamais été inscrit dans cet établissement. Vous n'avez donc pas encore de matricule : il vous sera attribué à votre inscription.",
+  "Déjà étudiant ici",
+  "Vous étiez inscrit cette année et vous vous réinscrivez. Munissez-vous de votre matricule.",
+  "Ce que nous faisons de vos informations",
+  "Elles servent uniquement à préparer votre dossier et à vous rappeler.",
+  "Aucune information financière ne transite par cette page, ni dans un sens ni dans l'autre.",
+  "Votre demande n'est pas une inscription : c'est l'établissement qui décide et qui vous répond.",
+  "Plateforme de gestion scolaire conçue pour les établissements d'enseignement supérieur en Afrique.",
+  "Université et grandes écoles",
+  "Collège et lycée",
+  "Apprentissage en ligne",
+  "S'inscrire en ligne",
+  "Guides et ressources",
+  "Journal des versions",
+  "Sécurité des données",
+  "Abidjan, Côte d'Ivoire",
+  "© 2026 KLASSCI · AFRICAN DIGIT CONSULTING"
+ ]
+}

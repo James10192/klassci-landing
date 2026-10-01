@@ -1,0 +1,53 @@
+{
+ "route": "/en/docs/lms",
+ "statut": 200,
+ "erreurClient": false,
+ "titre": "KLASSCI LMS · KLASSCI",
+ "canonique": "https://www.klassci.com/en/docs/lms",
+ "hreflang": [
+  "en",
+  "fr",
+  "x-default"
+ ],
+ "jsonld": [
+  "Brand",
+  "BreadcrumbList",
+  "Organization",
+  "TechArticle",
+  "WebPage",
+  "WebSite"
+ ],
+ "titres": [
+  "KLASSCI LMS"
+ ],
+ "liens": [
+  "/en",
+  "/en/college",
+  "/en/docs",
+  "/en/docs/api-reference",
+  "/en/docs/changelog",
+  "/en/docs/college",
+  "/en/docs/comptable/operations",
+  "/en/docs/concepts",
+  "/en/docs/getting-started",
+  "/en/docs/lms",
+  "/en/docs/modules/frais-comptabilite",
+  "/en/docs/secretaire/inscriptions",
+  "/en/docs/superadmin/onboarding",
+  "/en/docs/universite",
+  "/en/universite"
+ ],
+ "champs": [],
+ "blocs": [
+  "Super-administrator — initial setup",
+  "Registrar — creating a new enrollment",
+  "Bursar — day-to-day operations",
+  "Fees & Accounting",
+  "API Reference — KLASSCI LMS",
+  "University and higher education",
+  "Middle and high school",
+  "Entry point for the KLASSCI learning space documentation — courses, resources, assignments and assessments.",
+  "This section will host documentation for the future KLASSCI learning space: courses, resources, assignments and assessments.",
+  "Product in preparation. Detailed documentation will follow delivery."
+ ]
+}

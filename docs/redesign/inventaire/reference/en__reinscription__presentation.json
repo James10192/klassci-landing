@@ -1,0 +1,56 @@
+{
+ "route": "/en/reinscription/presentation",
+ "statut": 200,
+ "erreurClient": false,
+ "titre": "Online enrolment — KLASSCI — Instance de démonstration",
+ "canonique": "https://www.klassci.com/en/inscription/universite/presentation",
+ "hreflang": [
+  "en",
+  "fr",
+  "x-default"
+ ],
+ "jsonld": [],
+ "titres": [
+  "Join your school, online.",
+  "You are…",
+  "What we do with your details"
+ ],
+ "liens": [
+  "#contact",
+  "/en",
+  "/en/a-propos",
+  "/en/blog",
+  "/en/college",
+  "/en/confidentialite",
+  "/en/docs",
+  "/en/docs/api-reference",
+  "/en/docs/changelog",
+  "/en/inscription",
+  "/en/lms",
+  "/en/mentions-legales",
+  "/en/securite",
+  "/en/universite",
+  "https://web.facebook.com/p/African-Digit-Consulting-100092649035928/?_rdc=1&_rdr",
+  "https://www.linkedin.com/company/klassci/",
+  "mailto:contact@klassci.com"
+ ],
+ "champs": [],
+ "blocs": [
+  "Join your school, online.",
+  "Whether you are a new school-leaver or already a student here, it starts here.",
+  "KLASSCI — Instance de démonstration",
+  "You have never been enrolled at this school, so you do not have a student number yet. One will be issued when you enrol.",
+  "Already a student here",
+  "You were enrolled this year and are re-enrolling. Have your student number to hand.",
+  "What we do with your details",
+  "They are used only to prepare your file and to call you back.",
+  "No financial information passes through this page, in either direction.",
+  "Your request is not an enrolment: the school decides, and the school replies.",
+  "School management platform built for higher-education institutions in Africa.",
+  "University and higher education",
+  "Middle and high school",
+  "Guides and resources",
+  "Abidjan, Côte d'Ivoire",
+  "© 2026 KLASSCI — AFRICAN DIGIT CONSULTING"
+ ]
+}

@@ -1,0 +1,56 @@
+{
+ "route": "/fr/docs/college",
+ "statut": 200,
+ "erreurClient": false,
+ "titre": "KLASSCI College · KLASSCI",
+ "canonique": "https://www.klassci.com/fr/docs/college",
+ "hreflang": [
+  "en",
+  "fr",
+  "x-default"
+ ],
+ "jsonld": [
+  "Brand",
+  "BreadcrumbList",
+  "Organization",
+  "TechArticle",
+  "WebPage",
+  "WebSite"
+ ],
+ "titres": [
+  "KLASSCI College"
+ ],
+ "liens": [
+  "/",
+  "/fr/blog",
+  "/fr/college",
+  "/fr/docs",
+  "/fr/docs/api-reference",
+  "/fr/docs/changelog",
+  "/fr/docs/college",
+  "/fr/docs/comptable/operations",
+  "/fr/docs/concepts",
+  "/fr/docs/getting-started",
+  "/fr/docs/lms",
+  "/fr/docs/modules/frais-comptabilite",
+  "/fr/docs/secretaire/inscriptions",
+  "/fr/docs/superadmin/onboarding",
+  "/fr/docs/universite",
+  "/fr/universite"
+ ],
+ "champs": [],
+ "blocs": [
+  "Quickstart 60 minutes",
+  "Super-administrateur — installation initiale",
+  "Secrétaire — créer une nouvelle inscription",
+  "Comptable — opérations quotidiennes",
+  "Frais & Comptabilité",
+  "API Reference — KLASSCI LMS",
+  "Universite et grandes ecoles",
+  "College et lycee",
+  "Guides et ressources",
+  "Point d'entrée de la documentation dédiée aux collèges et lycées.",
+  "Cette section préparera la documentation KLASSCI College : inscriptions, frais sur inscription, bulletins, présences, salles par classe, portails parents, élèves et enseignants.",
+  "La structure est prête, sans rédaction exhaustive pour le moment."
+ ]
+}

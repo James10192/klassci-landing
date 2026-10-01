@@ -1,0 +1,4 @@
+{
+  "description": "Reformulations et déplacements déclarés pendant la refonte. Chaque entrée : id (inventaire), statut (PRESERVED | IMPROVED | MOVED), ancien, nouveau, route (où trouver le nouveau texte). Lu par scripts/verifier-parite-contenu.mjs. Pas de statut DELETED.",
+  "entrees": []
+}

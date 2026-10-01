@@ -1,0 +1,70 @@
+{
+ "route": "/fr/lms",
+ "statut": 200,
+ "erreurClient": false,
+ "titre": "Espace d'apprentissage en ligne, en préparation · KLASSCI",
+ "canonique": "https://www.klassci.com/fr/lms",
+ "hreflang": [
+  "en",
+  "fr",
+  "x-default"
+ ],
+ "jsonld": [
+  "Brand",
+  "BreadcrumbList",
+  "Organization",
+  "SoftwareApplication+WebApplication",
+  "WebPage",
+  "WebSite"
+ ],
+ "titres": [
+  "L'apprentissage numérique arrive dans KLASSCI.",
+  "Cours structurés",
+  "Devoirs et évaluations",
+  "Connecté au SIS"
+ ],
+ "liens": [
+  "#contact",
+  "/fr",
+  "/fr/a-propos",
+  "/fr/blog",
+  "/fr/college",
+  "/fr/confidentialite",
+  "/fr/docs",
+  "/fr/docs/api-reference",
+  "/fr/docs/changelog",
+  "/fr/docs/lms",
+  "/fr/inscription",
+  "/fr/lms",
+  "/fr/mentions-legales",
+  "/fr/securite",
+  "/fr/universite",
+  "https://web.facebook.com/p/African-Digit-Consulting-100092649035928/?_rdc=1&_rdr",
+  "https://www.linkedin.com/company/klassci/",
+  "mailto:contact@klassci.com",
+  "mailto:contact@klassci.com?subject=KLASSCI%20LMS"
+ ],
+ "champs": [],
+ "blocs": [
+  "Université & Grandes écoles",
+  "Collège & Lycée",
+  "Changer le thème",
+  "L'apprentissage numérique arrive dans KLASSCI.",
+  "Le LMS complétera les univers Université et College avec des cours en ligne, devoirs, ressources et évaluations.",
+  "Modules, ressources et progression par classe ou promotion.",
+  "Devoirs et évaluations",
+  "Travaux à rendre, notation et retours centralisés.",
+  "Connecté au SIS",
+  "Les apprenants, classes et enseignants restent synchronisés avec KLASSCI.",
+  "Plateforme de gestion scolaire conçue pour les établissements d'enseignement supérieur en Afrique.",
+  "Université et grandes écoles",
+  "Collège et lycée",
+  "Apprentissage en ligne",
+  "S'inscrire en ligne",
+  "Guides et ressources",
+  "Journal des versions",
+  "Sécurité des données",
+  "Abidjan, Côte d'Ivoire",
+  "© 2026 KLASSCI · AFRICAN DIGIT CONSULTING"
+ ]
+}

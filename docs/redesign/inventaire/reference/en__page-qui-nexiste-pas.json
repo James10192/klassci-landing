@@ -1,0 +1,50 @@
+{
+ "route": "/en/page-qui-nexiste-pas",
+ "statut": 404,
+ "erreurClient": false,
+ "titre": "KLASSCI — School management, reimagined.",
+ "canonique": "https://www.klassci.com/en",
+ "hreflang": [
+  "en",
+  "fr",
+  "x-default"
+ ],
+ "jsonld": [],
+ "titres": [
+  "This page does not exist"
+ ],
+ "liens": [
+  "#contact",
+  "/en",
+  "/en/a-propos",
+  "/en/blog",
+  "/en/college",
+  "/en/confidentialite",
+  "/en/docs",
+  "/en/docs/api-reference",
+  "/en/docs/changelog",
+  "/en/inscription",
+  "/en/lms",
+  "/en/mentions-legales",
+  "/en/securite",
+  "/en/universite",
+  "https://web.facebook.com/p/African-Digit-Consulting-100092649035928/?_rdc=1&_rdr",
+  "https://www.linkedin.com/company/klassci/",
+  "mailto:contact@klassci.com"
+ ],
+ "champs": [],
+ "blocs": [
+  "This page does not exist",
+  "The address you asked for is gone, or never existed. Here is where to pick up.",
+  "Universities and higher-education schools, BTS and LMD.",
+  "Middle and high schools, from enrolment to report card.",
+  "Getting started, roles, modules, API.",
+  "Pick the edition that fits your institution.",
+  "School management platform built for higher-education institutions in Africa.",
+  "University and higher education",
+  "Middle and high school",
+  "Guides and resources",
+  "Abidjan, Côte d'Ivoire",
+  "© 2026 KLASSCI — AFRICAN DIGIT CONSULTING"
+ ]
+}
