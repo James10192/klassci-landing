@@ -15,11 +15,11 @@ import type { Canal } from "./verification.ts";
  * un champ ajouté par l'appelant n'entre jamais dans la charge signée.
  */
 
-type Action = "verifier" | "renvoyer";
+type Action = "verifier" | "renvoyer" | "statut";
 
 const CHEMIN_PAR_CANAL: Record<Canal, Record<Action, CheminPublic>> = {
-  email: { verifier: CHEMINS.verificationVerifier, renvoyer: CHEMINS.verificationRenvoyer },
-  telephone: { verifier: CHEMINS.verificationVerifier, renvoyer: CHEMINS.verificationRenvoyer },
+  email: { verifier: CHEMINS.verificationVerifier, renvoyer: CHEMINS.verificationRenvoyer, statut: CHEMINS.verificationStatut },
+  telephone: { verifier: CHEMINS.verificationVerifier, renvoyer: CHEMINS.verificationRenvoyer, statut: CHEMINS.verificationStatut },
 };
 
 export type AppelVerification =
@@ -42,7 +42,7 @@ function lireCanal(valeur: unknown): Canal | null {
 }
 
 function estAction(action: string): action is Action {
-  return action === "verifier" || action === "renvoyer";
+  return action === "verifier" || action === "renvoyer" || action === "statut";
 }
 
 export function preparerVerification(action: string, recu: unknown): AppelVerification {
@@ -56,6 +56,13 @@ export function preparerVerification(action: string, recu: unknown): AppelVerifi
   if (canal === null) return { erreur: "corps_invalide" };
 
   const chemin = CHEMIN_PAR_CANAL[canal][action];
+
+  // Seule une vérification WhatsApp inversée se suit : l'e-mail se vérifie au code.
+  if (action === "statut") {
+    if (canal !== "telephone" || demandeId === null || !DEMANDE.test(demandeId)) return { erreur: "corps_invalide" };
+
+    return { chemin, corps: { demande_id: demandeId, canal } };
+  }
 
   if (action === "renvoyer") {
     if (demandeId === null || !DEMANDE.test(demandeId)) return { erreur: "corps_invalide" };
