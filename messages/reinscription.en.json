@@ -43,7 +43,8 @@
     "etats": {
       "dejaDeposee": {
         "titre": "Your request is already on file.",
-        "texte": "Your school has received it and is reviewing it. No need to send it again."
+        "texte": "Your school has received it. No need to send it again: find your appointment and notice below.",
+        "action": "See my appointment and notice"
       },
       "nonEligible": {
         "titre": "You are already re-enrolled.",
@@ -103,7 +104,11 @@
         "titre": "Already a student here",
         "texte": "You were enrolled this year and are re-enrolling. Have your student number to hand."
       },
-      "retour": "That's not me"
+      "retour": "That's not me",
+      "suivi": {
+        "titre": "I have already applied",
+        "texte": "Find the date, time and place of your appointment, or get your PDF notice sent again."
+      }
     },
     "formulaire": {
       "titre": "Your application",
@@ -206,7 +211,19 @@
         "trop_tot": "That slot is too soon to book.",
         "ferme": "That slot is no longer open.",
         "indisponible": "Service temporarily unavailable."
-      }
+      },
+      "lieu": "Where to go",
+      "aucunRdv": "Your file is registered, but no appointment is booked yet. Pick a slot below.",
+      "convocation": {
+        "email": "Notice sent by email",
+        "whatsapp": "Notice sent by WhatsApp",
+        "telecharger": "Download the PDF notice",
+        "envoi": "Sending…",
+        "renvoyer": "Send me the notice again",
+        "renvoyee": "Done: your notice is being sent again. Your appointment does not change."
+      },
+      "naissance": "Your date of birth",
+      "parReferenceAide": "Have the reference sent by email or WhatsApp? Use it here."
     },
     "etats": {
       "ferme": {

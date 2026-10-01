@@ -29,6 +29,8 @@ type Convocation = {
 
 type Reservation = {
   date: string;
+  /** Où se présenter : réglé par l'école, absent sur une instance qui ne l'expose pas encore. */
+  lieu?: string | null;
   heure_debut: string;
   heure_fin: string;
   statut: string;
@@ -65,25 +67,36 @@ export function RendezVousFlow({
   etablissement,
   referenceInitiale,
   naissanceInitiale,
+  identifiantInitial,
   sansTitre,
 }: {
   etablissement: Ecole;
   referenceInitiale?: string;
   naissanceInitiale?: string;
+  /**
+   * Matricule (ou téléphone) déjà saisi ailleurs : la réinscription qui
+   * répond « demande déjà enregistrée » l'a en main, et redemander à
+   * l'étudiant ce qu'il vient de taper le renvoyait au formulaire de contact.
+   */
+  identifiantInitial?: string;
   sansTitre?: boolean;
 }) {
   const locale = useLocale();
   const t = useTranslations("inscription.rdv");
   const naissanceConnue = decouperNaissance(naissanceInitiale);
-  const connu = Boolean(referenceInitiale && naissanceInitiale && dateNaissanceValide(naissanceConnue.jour, naissanceConnue.mois, naissanceConnue.annee));
+  const naissanceConnueOk = Boolean(naissanceInitiale && dateNaissanceValide(naissanceConnue.jour, naissanceConnue.mois, naissanceConnue.annee));
+  const connu = Boolean(referenceInitiale) && naissanceConnueOk;
+  const parIdentifiant = !connu && Boolean(identifiantInitial) && naissanceConnueOk;
   const [reference, setReference] = useState(referenceInitiale ?? "");
   const [jour, setJour] = useState(naissanceConnue.jour);
   const [mois, setMois] = useState(naissanceConnue.mois);
   const [annee, setAnnee] = useState(naissanceConnue.annee);
-  const [identifiant, setIdentifiant] = useState("");
+  const [identifiant, setIdentifiant] = useState(identifiantInitial ?? "");
   const [creneaux, setCreneaux] = useState<Creneau[]>([]);
   const [reservation, setReservation] = useState<Reservation | null>(null);
   const [peutModifier, setPeutModifier] = useState(false);
+  /** Dossier retrouvé, mais aucun créneau encore réservé : il faut le dire, sinon la liste seule ne parle pas. */
+  const [sansRdv, setSansRdv] = useState(false);
   const [enCours, setEnCours] = useState(false);
   const [renvoiOk, setRenvoiOk] = useState(false);
   const [erreur, setErreur] = useState<string | null>(null);
@@ -104,14 +117,18 @@ export function RendezVousFlow({
   }, [chargerCreneaux]);
 
   useEffect(() => {
-    if (!connu) return;
-    void consulter();
+    if (connu) {
+      void consulter();
+    } else if (parIdentifiant) {
+      void retrouver();
+    }
     // Premier affichage seulement : la famille arrive déjà identifiée.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [connu]);
+  }, [connu, parIdentifiant]);
 
-  async function consulter() {
-    if (!naissanceOk || reference.trim() === "" || enCours) return;
+  async function consulter(referenceTrouvee?: string, forcer = false) {
+    const cle = (referenceTrouvee ?? reference).trim();
+    if (!naissanceOk || cle === "" || (enCours && !forcer)) return;
     setEnCours(true);
     setErreur(null);
     setRenvoiOk(false);
@@ -119,14 +136,16 @@ export function RendezVousFlow({
       const reponse = await fetch(`/api/rendez-vous/${etablissement.code}/consulter`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reference: reference.trim(), date_naissance: naissance }),
+        body: JSON.stringify({ reference: cle, date_naissance: naissance }),
       });
       const corps = await reponse.json().catch(() => null);
       if (corps?.trouve === true) {
         setReservation(corps.reservation);
         setPeutModifier(Boolean(corps.peut_modifier));
+        setSansRdv(corps.reservation === null || corps.reservation === undefined);
       } else {
         setReservation(null);
+        if (corps?.trouve === false) setErreur("introuvable");
       }
     } catch {
       setErreur("indisponible");
@@ -148,6 +167,10 @@ export function RendezVousFlow({
       const corps = await reponse.json().catch(() => null);
       if (corps?.trouve === true && typeof corps.reference === "string") {
         setReference(corps.reference);
+        // Retrouver la référence ne suffisait pas : il fallait encore cliquer
+        // « Voir mon rendez-vous », et la moitié des familles s'arrêtaient là,
+        // croyant n'avoir rien. On enchaîne.
+        await consulter(corps.reference, true);
       } else {
         setErreur("introuvable");
       }
@@ -176,6 +199,7 @@ export function RendezVousFlow({
       const corps = await reponse.json().catch(() => null);
       if (reponse.status === 201 && corps?.reservation) {
         setReservation(corps.reservation);
+        setSansRdv(false);
         setPeutModifier(true);
         return;
       }
@@ -234,6 +258,49 @@ export function RendezVousFlow({
     }
   }
 
+  const boutonPrincipal =
+    "mt-3 min-h-[44px] w-full rounded-xl bg-accent px-4 text-sm font-semibold text-white disabled:opacity-50";
+  const boutonSecondaire =
+    "mt-2 min-h-[40px] text-sm text-accent underline-offset-4 hover:underline disabled:opacity-50";
+
+  function blocIdentifiant(principal: boolean) {
+    return (
+      <>
+        <label className={`${principal ? "mt-4" : "mt-2"} block text-sm font-medium`}>
+          {t("identifiant")}
+          <input className={champ} value={identifiant} onChange={(e) => setIdentifiant(e.target.value)} autoComplete="off" />
+        </label>
+        <button
+          type="button"
+          onClick={() => void retrouver()}
+          disabled={enCours || !naissanceOk || identifiant.trim() === ""}
+          className={principal ? boutonPrincipal : boutonSecondaire}
+        >
+          {principal ? t("voir") : t("retrouver")}
+        </button>
+      </>
+    );
+  }
+
+  function blocReference(principal: boolean) {
+    return (
+      <>
+        <label className={`${principal ? "mt-4" : "mt-2"} block text-sm font-medium`}>
+          {t("reference")}
+          <input className={champ} value={reference} onChange={(e) => setReference(e.target.value)} autoComplete="off" />
+        </label>
+        <button
+          type="button"
+          onClick={() => void consulter()}
+          disabled={enCours || !naissanceOk || reference.trim() === ""}
+          className={principal ? boutonPrincipal : boutonSecondaire}
+        >
+          {t("voir")}
+        </button>
+      </>
+    );
+  }
+
   return (
     <>
       {!sansTitre && (
@@ -244,42 +311,26 @@ export function RendezVousFlow({
       )}
       {!connu && (
         <>
-          <label className="mt-5 block text-sm font-medium">
-            {t("reference")}
-            <input className={champ} value={reference} onChange={(e) => setReference(e.target.value)} autoComplete="off" />
-          </label>
-
-          <div className="mt-3 grid grid-cols-3 gap-2">
-            <input className={champ} inputMode="numeric" placeholder={t("jour")} value={jour} onChange={(e) => setJour(e.target.value)} />
-            <input className={champ} inputMode="numeric" placeholder={t("mois")} value={mois} onChange={(e) => setMois(e.target.value)} />
-            <input className={champ} inputMode="numeric" placeholder={t("annee")} value={annee} onChange={(e) => setAnnee(e.target.value)} />
+          {/*
+            La date de naissance d'abord : les deux chemins la demandent. Puis
+            celui qu'on a le plus de chances d'avoir en main. Une famille qui
+            revient sans son e-mail a perdu sa référence, mais pas son numéro
+            de téléphone ni son matricule ; celle qui arrive par le lien de la
+            convocation a la référence déjà remplie.
+          */}
+          <p className="mt-5 text-sm font-medium">{t("naissance")}</p>
+          <div className="mt-1 grid grid-cols-3 gap-2">
+            <input className={champ} inputMode="numeric" aria-label={t("jour")} placeholder={t("jour")} value={jour} onChange={(e) => setJour(e.target.value)} />
+            <input className={champ} inputMode="numeric" aria-label={t("mois")} placeholder={t("mois")} value={mois} onChange={(e) => setMois(e.target.value)} />
+            <input className={champ} inputMode="numeric" aria-label={t("annee")} placeholder={t("annee")} value={annee} onChange={(e) => setAnnee(e.target.value)} />
           </div>
 
-          <button
-            type="button"
-            onClick={() => void consulter()}
-            disabled={enCours || !naissanceOk || reference.trim() === ""}
-            className="mt-4 min-h-[44px] w-full rounded-xl bg-accent px-4 text-sm font-semibold text-white disabled:opacity-50"
-          >
-            {t("voir")}
-          </button>
+          {referenceInitiale ? blocReference(true) : blocIdentifiant(true)}
 
-          <p className="mt-4 text-xs text-text-muted">{t("retrouverAide")}</p>
-          <input
-            className={champ}
-            value={identifiant}
-            onChange={(e) => setIdentifiant(e.target.value)}
-            placeholder={t("identifiant")}
-            autoComplete="off"
-          />
-          <button
-            type="button"
-            onClick={() => void retrouver()}
-            disabled={enCours || !naissanceOk || identifiant.trim() === ""}
-            className="mt-2 min-h-[40px] text-sm text-accent underline-offset-4 hover:underline disabled:opacity-50"
-          >
-            {t("retrouver")}
-          </button>
+          <p className="mt-5 border-t border-border pt-4 text-xs text-text-muted">
+            {referenceInitiale ? t("retrouverAide") : t("parReferenceAide")}
+          </p>
+          {referenceInitiale ? blocIdentifiant(false) : blocReference(false)}
         </>
       )}
 
@@ -298,11 +349,23 @@ export function RendezVousFlow({
             {formaterDate(reservation.date, locale)} · {formaterHeure(reservation.heure_debut)} – {formaterHeure(reservation.heure_fin)}
           </p>
 
+          {reservation.lieu && (
+            <p className="mt-3 flex items-start gap-2 text-sm">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 h-4 w-4 shrink-0 text-accent" aria-hidden="true">
+                <path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11z" />
+                <circle cx="12" cy="10" r="2.5" />
+              </svg>
+              <span>
+                <span className="block text-xs text-text-muted">{t("lieu")}</span>
+                <span className="font-medium">{reservation.lieu}</span>
+              </span>
+            </p>
+          )}
+
           {reservation.convocation?.canal && (
             <p className="mt-2 text-xs text-text-muted">
-              Convocation {reservation.convocation.statut?.toLowerCase() ?? "programmée"} par {reservation.convocation.canal === "whatsapp" ? "WhatsApp" : "e-mail"}
+              {t(reservation.convocation.canal === "whatsapp" ? "convocation.whatsapp" : "convocation.email")}
               {reservation.convocation.destination ? ` · ${reservation.convocation.destination}` : ""}
-              {reservation.convocation.fallback_utilise ? " · canal de secours utilisé" : ""}
             </p>
           )}
 
@@ -314,7 +377,7 @@ export function RendezVousFlow({
                 rel="noreferrer"
                 className="inline-flex min-h-[40px] items-center rounded-lg bg-accent px-3 py-2 text-sm font-semibold text-white"
               >
-                Télécharger la convocation PDF
+                {t("convocation.telecharger")}
               </a>
             )}
             <button
@@ -323,13 +386,13 @@ export function RendezVousFlow({
               disabled={enCours}
               className="min-h-[40px] rounded-lg border border-border px-3 py-2 text-sm font-medium text-text-primary disabled:opacity-50"
             >
-              {enCours ? "Envoi…" : "Renvoyer la convocation"}
+              {enCours ? t("convocation.envoi") : t("convocation.renvoyer")}
             </button>
           </div>
 
           {renvoiOk && (
             <p className="mt-2 text-xs text-text-secondary">
-              La convocation a été remise dans la file d’envoi. Aucun nouveau rendez-vous n’a été créé.
+              {t("convocation.renvoyee")}
             </p>
           )}
 
@@ -341,7 +404,12 @@ export function RendezVousFlow({
         </div>
       )}
 
-      {reservation === null && (
+      {reservation === null && sansRdv && (
+        <p className="mt-6 rounded-xl bg-accent-light px-4 py-3 text-sm">{t("aucunRdv")}</p>
+      )}
+
+      {/* Les créneaux n'ont de sens qu'une fois le dossier connu : avant, la liste ne fait qu'encombrer. */}
+      {reservation === null && reference.trim() !== "" && (
         <ul className="mt-6 max-h-[min(20rem,45vh)] space-y-2 overflow-y-auto overscroll-contain pr-1">
           {creneaux.map((c) => (
             <li key={c.id} className="flex items-center justify-between gap-3 rounded-xl border border-border px-3 py-2">
