@@ -145,7 +145,7 @@ export function CollegeQuoteDialog({ open, plan, studentCount, onClose }: Colleg
                 <p className="max-w-xl leading-relaxed text-text-secondary">{t("successText")}</p>
               </div>
             ) : (
-              <AiguillageContact>
+              <AiguillageContact profilInitial="etablissement">
                 <form key={`${plan ?? "none"}-${studentCount}`} method="POST" action={CONTACT_ENDPOINT} onSubmit={submit} className="space-y-5">
                   <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY} />
                   <input type="checkbox" name="botcheck" className="hidden" tabIndex={-1} autoComplete="off" />

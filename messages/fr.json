@@ -660,6 +660,25 @@
     "error": {
       "title": "Erreur d'envoi",
       "text": "Un problème est survenu. Réessayez ou écrivez à contact@klassci.com."
+    },
+    "aiguillage": {
+      "question": "Vous nous écrivez en tant que…",
+      "etablissement": "Établissement",
+      "etablissementAide": "Direction, administration : vous voulez équiper votre école.",
+      "etudiant": "Étudiant ou parent",
+      "etudiantAide": "Inscription, réinscription, rendez-vous, convocation.",
+      "orienteTitre": "Vos démarches se font sur le portail de votre école",
+      "orienteTexte": "KLASSCI fournit le logiciel à votre établissement, mais ne traite aucune inscription. Un message envoyé ici ne parviendra pas à votre école. Passez par son portail :",
+      "inscrire": "M'inscrire (nouvel étudiant)",
+      "reinscrire": "Me réinscrire",
+      "rdv": "Retrouver mon rendez-vous ou ma convocation",
+      "rdvAide": "Choisissez votre école, puis « J'ai déjà fait ma demande ».",
+      "autreQuestion": "Pour toute autre question (frais, pièces, résultats), contactez directement la scolarité de votre établissement.",
+      "changer": "Je me suis trompé, je représente un établissement",
+      "alerteTitre": "Ce message ressemble à une démarche d'étudiant",
+      "alerteTexte": "Si vous cherchez à vous inscrire, vous réinscrire ou retrouver votre convocation, votre école ne recevra pas ce message. Utilisez son portail.",
+      "alerteAller": "Aller au portail d'inscription",
+      "alerteEnvoyer": "Je représente un établissement, envoyer"
     }
   },
   "letter": {

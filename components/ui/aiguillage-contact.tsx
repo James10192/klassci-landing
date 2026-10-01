@@ -1,7 +1,7 @@
 "use client";
 
-import { useLocale } from "next-intl";
-import { useCallback, useRef, useState, type FormEvent, type ReactNode } from "react";
+import { useLocale, useTranslations } from "next-intl";
+import { useCallback, useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 
 import { Link } from "@/i18n/navigation";
 import { track } from "@/lib/analytics/track";
@@ -27,51 +27,6 @@ import { semblePortailEtudiant } from "@/lib/contact-aiguillage";
 
 type Profil = "etablissement" | "etudiant" | null;
 
-const TEXTES = {
-  fr: {
-    question: "Vous nous écrivez en tant que…",
-    etablissement: "Établissement",
-    etablissementAide: "Direction, administration : vous voulez équiper votre école.",
-    etudiant: "Étudiant ou parent",
-    etudiantAide: "Inscription, réinscription, rendez-vous, convocation.",
-    orienteTitre: "Vos démarches se font sur le portail de votre école",
-    orienteTexte:
-      "KLASSCI fournit le logiciel à votre établissement, mais ne traite aucune inscription. Un message envoyé ici ne parviendra pas à votre école. Passez par son portail :",
-    inscrire: "M'inscrire (nouvel étudiant)",
-    reinscrire: "Me réinscrire",
-    rdv: "Retrouver mon rendez-vous ou ma convocation",
-    rdvAide: "Choisissez votre école, puis « J'ai déjà fait ma demande ».",
-    autreQuestion: "Pour toute autre question (frais, pièces, résultats), contactez directement la scolarité de votre établissement.",
-    changer: "Je me suis trompé, je représente un établissement",
-    alerteTitre: "Ce message ressemble à une démarche d'étudiant",
-    alerteTexte:
-      "Si vous cherchez à vous inscrire, vous réinscrire ou retrouver votre convocation, votre école ne recevra pas ce message. Utilisez son portail.",
-    alerteAller: "Aller au portail d'inscription",
-    alerteEnvoyer: "Je représente un établissement, envoyer",
-  },
-  en: {
-    question: "You are writing to us as…",
-    etablissement: "A school",
-    etablissementAide: "Management or administration: you want KLASSCI for your school.",
-    etudiant: "A student or parent",
-    etudiantAide: "Enrolment, re-enrolment, appointment, notice.",
-    orienteTitre: "Your steps are done on your school's portal",
-    orienteTexte:
-      "KLASSCI supplies the software to your school but handles no enrolment. A message sent here will not reach your school. Use its portal:",
-    inscrire: "Enrol (new student)",
-    reinscrire: "Re-enrol",
-    rdv: "Find my appointment or notice",
-    rdvAide: "Pick your school, then “I have already applied”.",
-    autreQuestion: "For any other question (fees, documents, results), contact your school's registrar directly.",
-    changer: "My mistake, I represent a school",
-    alerteTitre: "This message looks like a student request",
-    alerteTexte:
-      "If you are trying to enrol, re-enrol or find your notice, your school will not receive this message. Use its portal.",
-    alerteAller: "Go to the enrolment portal",
-    alerteEnvoyer: "I represent a school, send",
-  },
-} as const;
-
 const PORTAIL = "/inscription/universite";
 
 const CHOIX =
@@ -84,13 +39,34 @@ const LIEN_PORTAIL =
   "flex min-h-11 w-full items-center justify-between gap-3 rounded-lg border border-border bg-bg-card px-4 py-2.5 text-sm font-medium text-text " +
   "transition-colors hover:border-accent hover:text-accent";
 
-export function AiguillageContact({ children }: { children: ReactNode }) {
+export function AiguillageContact({
+  children,
+  profilInitial = null,
+}: {
+  children: ReactNode;
+  /**
+   * Le devis tarifé du collège n'est atteint que depuis la grille des prix :
+   * on y sait déjà qu'on parle à un établissement, et la question n'y ajouterait
+   * qu'une étape. Seule l'alerte à l'envoi y reste.
+   */
+  profilInitial?: Profil;
+}) {
   const locale = (useLocale() === "en" ? "en" : "fr") as "fr" | "en";
-  const t = TEXTES[locale];
-  const [profil, setProfil] = useState<Profil>(null);
+  const t = useTranslations("contact.aiguillage");
+  const [profil, setProfil] = useState<Profil>(profilInitial);
   const [alerte, setAlerte] = useState(false);
   const confirme = useRef(false);
   const formulaire = useRef<HTMLFormElement | null>(null);
+  const refAlerte = useRef<HTMLDivElement | null>(null);
+
+  // Le bouton d'envoi est en bas du formulaire, l'alerte en haut : sur un
+  // téléphone, elle s'affichait hors de l'écran et « Envoyer » semblait ne rien
+  // faire. On l'amène sous les yeux, et le focus avec.
+  useEffect(() => {
+    if (!alerte || refAlerte.current === null) return;
+    refAlerte.current.scrollIntoView({ block: "center", behavior: "smooth" });
+    refAlerte.current.focus({ preventScroll: true });
+  }, [alerte]);
 
   const choisir = useCallback((valeur: Exclude<Profil, null>) => {
     setProfil(valeur);
@@ -124,21 +100,20 @@ export function AiguillageContact({ children }: { children: ReactNode }) {
     <div>
       <fieldset>
         <legend className="mb-3 block text-[0.72rem] font-mono uppercase tracking-[0.08em] text-text-muted">
-          {t.question}
+          {t("question")}
         </legend>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2" role="radiogroup">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           {(["etablissement", "etudiant"] as const).map((valeur) => (
             <button
               key={valeur}
               type="button"
-              role="radio"
-              aria-checked={profil === valeur}
+              aria-pressed={profil === valeur}
               onClick={() => choisir(valeur)}
               className={`${CHOIX} ${profil === valeur ? CHOIX_ACTIF : CHOIX_REPOS}`}
             >
-              <span className="text-sm font-semibold text-text">{t[valeur]}</span>
+              <span className="text-sm font-semibold text-text">{t(valeur)}</span>
               <span className="mt-0.5 text-xs leading-relaxed text-text-secondary">
-                {valeur === "etablissement" ? t.etablissementAide : t.etudiantAide}
+                {valeur === "etablissement" ? t("etablissementAide") : t("etudiantAide")}
               </span>
             </button>
           ))}
@@ -146,31 +121,31 @@ export function AiguillageContact({ children }: { children: ReactNode }) {
       </fieldset>
 
       {profil === "etudiant" && (
-        <div role="status" aria-live="polite" className="mt-6 rounded-lg border border-accent/30 bg-accent-light p-5">
-          <p className="font-semibold text-text">{t.orienteTitre}</p>
-          <p className="mt-1.5 text-sm leading-relaxed text-text-secondary">{t.orienteTexte}</p>
+        <div role="status" aria-live="polite" className="mt-6 rounded-lg border border-accent bg-accent-light p-5">
+          <p className="font-semibold text-text">{t("orienteTitre")}</p>
+          <p className="mt-1.5 text-sm leading-relaxed text-text-secondary">{t("orienteTexte")}</p>
           <div className="mt-4 space-y-2">
             <Link href={PORTAIL} className={LIEN_PORTAIL} onClick={() => track("contact_vers_portail", { cible: "inscription", locale })}>
-              {t.inscrire}<span aria-hidden>→</span>
+              {t("inscrire")}<span aria-hidden>→</span>
             </Link>
             <Link href={PORTAIL} className={LIEN_PORTAIL} onClick={() => track("contact_vers_portail", { cible: "reinscription", locale })}>
-              {t.reinscrire}<span aria-hidden>→</span>
+              {t("reinscrire")}<span aria-hidden>→</span>
             </Link>
             <Link href={PORTAIL} className={LIEN_PORTAIL} onClick={() => track("contact_vers_portail", { cible: "rendez_vous", locale })}>
               <span>
-                <span className="block">{t.rdv}</span>
-                <span className="block text-xs font-normal text-text-muted">{t.rdvAide}</span>
+                <span className="block">{t("rdv")}</span>
+                <span className="block text-xs font-normal text-text-muted">{t("rdvAide")}</span>
               </span>
               <span aria-hidden>→</span>
             </Link>
           </div>
-          <p className="mt-4 text-xs leading-relaxed text-text-muted">{t.autreQuestion}</p>
+          <p className="mt-4 text-xs leading-relaxed text-text-muted">{t("autreQuestion")}</p>
           <button
             type="button"
             onClick={() => choisir("etablissement")}
             className="mt-3 min-h-11 text-sm text-text-muted underline underline-offset-4 hover:text-text"
           >
-            {t.changer}
+            {t("changer")}
           </button>
         </div>
       )}
@@ -178,19 +153,19 @@ export function AiguillageContact({ children }: { children: ReactNode }) {
       {profil === "etablissement" && (
         <div className="mt-6" onSubmitCapture={surEnvoi}>
           {alerte && (
-            <div role="alert" className="mb-5 rounded-lg border border-warning/40 bg-warning/10 p-4">
-              <p className="font-medium text-text">{t.alerteTitre}</p>
-              <p className="mt-1 text-sm text-text-secondary">{t.alerteTexte}</p>
+            <div ref={refAlerte} tabIndex={-1} role="alert" className="mb-5 scroll-mt-24 rounded-lg border border-warning bg-warning/10 p-4 outline-none">
+              <p className="font-medium text-text">{t("alerteTitre")}</p>
+              <p className="mt-1 text-sm text-text-secondary">{t("alerteTexte")}</p>
               <div className="mt-3 flex flex-col gap-2">
                 <Link href={PORTAIL} className="inline-flex min-h-11 w-full items-center justify-center rounded bg-accent px-4 text-sm font-medium text-white">
-                  {t.alerteAller}
+                  {t("alerteAller")}
                 </Link>
                 <button
                   type="button"
                   onClick={envoyerQuandMeme}
                   className="inline-flex min-h-11 w-full items-center justify-center rounded border border-border bg-bg-card px-4 text-sm text-text"
                 >
-                  {t.alerteEnvoyer}
+                  {t("alerteEnvoyer")}
                 </button>
               </div>
             </div>

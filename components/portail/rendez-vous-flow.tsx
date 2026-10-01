@@ -145,9 +145,11 @@ export function RendezVousFlow({
         setSansRdv(corps.reservation === null || corps.reservation === undefined);
       } else {
         setReservation(null);
+        setSansRdv(false);
         if (corps?.trouve === false) setErreur("introuvable");
       }
     } catch {
+      setSansRdv(false);
       setErreur("indisponible");
     } finally {
       setEnCours(false);
@@ -251,6 +253,7 @@ export function RendezVousFlow({
       });
       if (reponse.ok) {
         setReservation(null);
+        setSansRdv(true);
         await chargerCreneaux();
       }
     } finally {
@@ -362,10 +365,18 @@ export function RendezVousFlow({
             </p>
           )}
 
-          {reservation.convocation?.canal && (
-            <p className="mt-2 text-xs text-text-muted">
-              {t(reservation.convocation.canal === "whatsapp" ? "convocation.whatsapp" : "convocation.email")}
+          {/*
+            Le statut décide du message. Afficher « envoyée » pour une
+            convocation en échec faisait croire à la famille qu'elle l'avait
+            reçue : elle ne pensait plus à la renvoyer.
+          */}
+          {reservation.convocation?.canal && (reservation.convocation.statut === "envoyee" || reservation.convocation.statut === "en_attente" || reservation.convocation.statut === "echec") && (
+            <p className={`mt-2 text-xs ${reservation.convocation.statut === "echec" ? "font-medium text-danger" : "text-text-muted"}`}>
+              {t(`convocation.${reservation.convocation.statut}`, {
+                canal: t(reservation.convocation.canal === "whatsapp" ? "convocation.canal.whatsapp" : "convocation.canal.email"),
+              })}
               {reservation.convocation.destination ? ` · ${reservation.convocation.destination}` : ""}
+              {reservation.convocation.fallback_utilise ? ` · ${t("convocation.secours")}` : ""}
             </p>
           )}
 
@@ -409,7 +420,7 @@ export function RendezVousFlow({
       )}
 
       {/* Les créneaux n'ont de sens qu'une fois le dossier connu : avant, la liste ne fait qu'encombrer. */}
-      {reservation === null && reference.trim() !== "" && (
+      {reservation === null && sansRdv && (
         <ul className="mt-6 max-h-[min(20rem,45vh)] space-y-2 overflow-y-auto overscroll-contain pr-1">
           {creneaux.map((c) => (
             <li key={c.id} className="flex items-center justify-between gap-3 rounded-xl border border-border px-3 py-2">

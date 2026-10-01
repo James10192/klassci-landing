@@ -215,12 +215,18 @@
       "lieu": "Where to go",
       "aucunRdv": "Your file is registered, but no appointment is booked yet. Pick a slot below.",
       "convocation": {
-        "email": "Notice sent by email",
-        "whatsapp": "Notice sent by WhatsApp",
         "telecharger": "Download the PDF notice",
         "envoi": "Sending…",
         "renvoyer": "Send me the notice again",
-        "renvoyee": "Done: your notice is being sent again. Your appointment does not change."
+        "renvoyee": "Done: your notice is being sent again. Your appointment does not change.",
+        "envoyee": "Notice sent by {canal}",
+        "en_attente": "Notice being sent by {canal}",
+        "echec": "The notice could not be sent by {canal}. Send it again or download the PDF.",
+        "secours": "backup channel",
+        "canal": {
+          "email": "email",
+          "whatsapp": "WhatsApp"
+        }
       },
       "naissance": "Your date of birth",
       "parReferenceAide": "Have the reference sent by email or WhatsApp? Use it here."

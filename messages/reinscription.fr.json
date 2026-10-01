@@ -215,12 +215,18 @@
       "lieu": "Où vous présenter",
       "aucunRdv": "Votre dossier est bien enregistré, mais aucun rendez-vous n'est encore réservé. Choisissez un créneau ci-dessous.",
       "convocation": {
-        "email": "Convocation envoyée par e-mail",
-        "whatsapp": "Convocation envoyée par WhatsApp",
         "telecharger": "Télécharger la convocation PDF",
         "envoi": "Envoi…",
         "renvoyer": "Me renvoyer la convocation",
-        "renvoyee": "C'est reparti : la convocation vous est renvoyée. Votre rendez-vous ne change pas."
+        "renvoyee": "C'est reparti : la convocation vous est renvoyée. Votre rendez-vous ne change pas.",
+        "envoyee": "Convocation envoyée par {canal}",
+        "en_attente": "Convocation en cours d'envoi par {canal}",
+        "echec": "La convocation n'a pas pu partir par {canal}. Renvoyez-la ou téléchargez le PDF.",
+        "secours": "canal de secours",
+        "canal": {
+          "email": "e-mail",
+          "whatsapp": "WhatsApp"
+        }
       },
       "naissance": "Votre date de naissance",
       "parReferenceAide": "Vous avez la référence reçue par e-mail ou WhatsApp ? Utilisez-la ici."
