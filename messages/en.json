@@ -660,6 +660,25 @@
     "error": {
       "title": "Sending failed",
       "text": "Something went wrong. Please retry, or email contact@klassci.com."
+    },
+    "aiguillage": {
+      "question": "You are writing to us as…",
+      "etablissement": "A school",
+      "etablissementAide": "Management or administration: you want KLASSCI for your school.",
+      "etudiant": "A student or parent",
+      "etudiantAide": "Enrolment, re-enrolment, appointment, notice.",
+      "orienteTitre": "Your steps are done on your school's portal",
+      "orienteTexte": "KLASSCI supplies the software to your school but handles no enrolment. A message sent here will not reach your school. Use its portal:",
+      "inscrire": "Enrol (new student)",
+      "reinscrire": "Re-enrol",
+      "rdv": "Find my appointment or notice",
+      "rdvAide": "Pick your school, then “I have already applied”.",
+      "autreQuestion": "For any other question (fees, documents, results), contact your school's registrar directly.",
+      "changer": "My mistake, I represent a school",
+      "alerteTitre": "This message looks like a student request",
+      "alerteTexte": "If you are trying to enrol, re-enrol or find your notice, your school will not receive this message. Use its portal.",
+      "alerteAller": "Go to the enrolment portal",
+      "alerteEnvoyer": "I represent a school, send"
     }
   },
   "letter": {

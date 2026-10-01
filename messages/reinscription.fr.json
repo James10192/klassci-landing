@@ -43,7 +43,8 @@
     "etats": {
       "dejaDeposee": {
         "titre": "Votre demande est déjà enregistrée.",
-        "texte": "Votre établissement l'a bien reçue et l'examine. Inutile de la renvoyer."
+        "texte": "Votre établissement l'a bien reçue. Inutile de la renvoyer : retrouvez ci-dessous votre rendez-vous et votre convocation.",
+        "action": "Voir mon rendez-vous et ma convocation"
       },
       "nonEligible": {
         "titre": "Votre réinscription est déjà faite.",
@@ -103,7 +104,11 @@
         "titre": "Déjà étudiant ici",
         "texte": "Vous étiez inscrit cette année et vous vous réinscrivez. Munissez-vous de votre matricule."
       },
-      "retour": "Ce n'est pas mon cas"
+      "retour": "Ce n'est pas mon cas",
+      "suivi": {
+        "titre": "J'ai déjà fait ma demande",
+        "texte": "Retrouvez la date, l'heure et le lieu de votre rendez-vous, ou recevez à nouveau votre convocation PDF."
+      }
     },
     "formulaire": {
       "titre": "Votre candidature",
@@ -206,7 +211,25 @@
         "trop_tot": "Ce créneau est trop proche pour être réservé.",
         "ferme": "Ce créneau n'est plus ouvert.",
         "indisponible": "Service momentanément indisponible."
-      }
+      },
+      "lieu": "Où vous présenter",
+      "aucunRdv": "Votre dossier est bien enregistré, mais aucun rendez-vous n'est encore réservé. Choisissez un créneau ci-dessous.",
+      "convocation": {
+        "telecharger": "Télécharger la convocation PDF",
+        "envoi": "Envoi…",
+        "renvoyer": "Me renvoyer la convocation",
+        "renvoyee": "C'est reparti : la convocation vous est renvoyée. Votre rendez-vous ne change pas.",
+        "envoyee": "Convocation envoyée par {canal}",
+        "en_attente": "Convocation en cours d'envoi par {canal}",
+        "echec": "La convocation n'a pas pu partir par {canal}. Renvoyez-la ou téléchargez le PDF.",
+        "secours": "canal de secours",
+        "canal": {
+          "email": "e-mail",
+          "whatsapp": "WhatsApp"
+        }
+      },
+      "naissance": "Votre date de naissance",
+      "parReferenceAide": "Vous avez la référence reçue par e-mail ou WhatsApp ? Utilisez-la ici."
     },
     "etats": {
       "ferme": {

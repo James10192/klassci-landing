@@ -1,5 +1,6 @@
 "use client";
 
+import { AiguillageContact } from "@/components/ui/aiguillage-contact";
 import AlertCircle from "lucide-react/dist/esm/icons/alert-circle";
 import Check from "lucide-react/dist/esm/icons/check";
 import Mail from "lucide-react/dist/esm/icons/mail";
@@ -144,70 +145,72 @@ export function CollegeQuoteDialog({ open, plan, studentCount, onClose }: Colleg
                 <p className="max-w-xl leading-relaxed text-text-secondary">{t("successText")}</p>
               </div>
             ) : (
-              <form key={`${plan ?? "none"}-${studentCount}`} method="POST" action={CONTACT_ENDPOINT} onSubmit={submit} className="space-y-5">
-                <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY} />
-                <input type="checkbox" name="botcheck" className="hidden" tabIndex={-1} autoComplete="off" />
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <Field id="college-quote-name" label={t("name")}>
-                    <input id="college-quote-name" name="name" required maxLength={CONTACT_FIELD_LIMITS.name} autoComplete="name" placeholder={t("namePlaceholder")} className={fieldClass} />
-                  </Field>
-                  <ChampEmailAutonome
-                    textes={{ label: t("email"), placeholder: t("emailPlaceholder") }}
-                    attributs={{ id: "college-quote-email", name: "email", maxLength: CONTACT_FIELD_LIMITS.email, required: true }}
-                    classes={{ champ: fieldClass, label: labelClass }}
-                  />
-                </div>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <Field id="college-quote-school" label={t("school")}>
-                    <input id="college-quote-school" name="school" required maxLength={CONTACT_FIELD_LIMITS.school} autoComplete="organization" placeholder={t("schoolPlaceholder")} className={fieldClass} />
-                  </Field>
-                  <Field id="college-quote-phone" label={t("phone")}>
-                    <input id="college-quote-phone" name="phone" type="tel" maxLength={CONTACT_FIELD_LIMITS.phone} autoComplete="tel" placeholder={t("phonePlaceholder")} className={fieldClass} />
-                  </Field>
-                </div>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <Field id="college-quote-type" label={t("type")}>
-                    <select id="college-quote-type" name="school_type" required defaultValue="college" className={fieldClass}>
-                      {institutionTypes.map((type) => <option key={type.value} value={type.value}>{type.label}</option>)}
+              <AiguillageContact profilInitial="etablissement">
+                <form key={`${plan ?? "none"}-${studentCount}`} method="POST" action={CONTACT_ENDPOINT} onSubmit={submit} className="space-y-5">
+                  <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY} />
+                  <input type="checkbox" name="botcheck" className="hidden" tabIndex={-1} autoComplete="off" />
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <Field id="college-quote-name" label={t("name")}>
+                      <input id="college-quote-name" name="name" required maxLength={CONTACT_FIELD_LIMITS.name} autoComplete="name" placeholder={t("namePlaceholder")} className={fieldClass} />
+                    </Field>
+                    <ChampEmailAutonome
+                      textes={{ label: t("email"), placeholder: t("emailPlaceholder") }}
+                      attributs={{ id: "college-quote-email", name: "email", maxLength: CONTACT_FIELD_LIMITS.email, required: true }}
+                      classes={{ champ: fieldClass, label: labelClass }}
+                    />
+                  </div>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <Field id="college-quote-school" label={t("school")}>
+                      <input id="college-quote-school" name="school" required maxLength={CONTACT_FIELD_LIMITS.school} autoComplete="organization" placeholder={t("schoolPlaceholder")} className={fieldClass} />
+                    </Field>
+                    <Field id="college-quote-phone" label={t("phone")}>
+                      <input id="college-quote-phone" name="phone" type="tel" maxLength={CONTACT_FIELD_LIMITS.phone} autoComplete="tel" placeholder={t("phonePlaceholder")} className={fieldClass} />
+                    </Field>
+                  </div>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <Field id="college-quote-type" label={t("type")}>
+                      <select id="college-quote-type" name="school_type" required defaultValue="college" className={fieldClass}>
+                        {institutionTypes.map((type) => <option key={type.value} value={type.value}>{type.label}</option>)}
+                      </select>
+                    </Field>
+                    <Field id="college-quote-students" label={t("students")}>
+                      <input id="college-quote-students" name="student_count" type="number" min={1} max={50_000} defaultValue={studentCount} required className={fieldClass} />
+                    </Field>
+                  </div>
+                  <Field id="college-quote-plan" label={t("plan")}>
+                    <select id="college-quote-plan" name="plan" defaultValue={plan ?? ""} className={fieldClass}>
+                      <option value="">{t("planDefault")}</option>
+                      {PLAN_KEYS.map((key) => <option key={key} value={key}>{calculator(`plans.${key}`)}</option>)}
                     </select>
                   </Field>
-                  <Field id="college-quote-students" label={t("students")}>
-                    <input id="college-quote-students" name="student_count" type="number" min={1} max={50_000} defaultValue={studentCount} required className={fieldClass} />
+                  <Field id="college-quote-message" label={t("message")}>
+                    <textarea id="college-quote-message" name="message" rows={3} maxLength={CONTACT_FIELD_LIMITS.message} placeholder={t("messagePlaceholder")} className={`${fieldClass} min-h-24 resize-y`} />
                   </Field>
-                </div>
-                <Field id="college-quote-plan" label={t("plan")}>
-                  <select id="college-quote-plan" name="plan" defaultValue={plan ?? ""} className={fieldClass}>
-                    <option value="">{t("planDefault")}</option>
-                    {PLAN_KEYS.map((key) => <option key={key} value={key}>{calculator(`plans.${key}`)}</option>)}
-                  </select>
-                </Field>
-                <Field id="college-quote-message" label={t("message")}>
-                  <textarea id="college-quote-message" name="message" rows={3} maxLength={CONTACT_FIELD_LIMITS.message} placeholder={t("messagePlaceholder")} className={`${fieldClass} min-h-24 resize-y`} />
-                </Field>
 
-                {status === "error" && (
-                  <div id={errorId} role="alert" className="flex items-start gap-3 rounded border border-danger/35 bg-danger/5 p-4 text-sm">
-                    <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-danger" aria-hidden />
-                    <div>
-                      <p className="font-semibold text-text">{t("errorTitle")}</p>
-                      <p className="mt-1 text-text-secondary">{t("errorText")}</p>
+                  {status === "error" && (
+                    <div id={errorId} role="alert" className="flex items-start gap-3 rounded border border-danger/35 bg-danger/5 p-4 text-sm">
+                      <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-danger" aria-hidden />
+                      <div>
+                        <p className="font-semibold text-text">{t("errorTitle")}</p>
+                        <p className="mt-1 text-text-secondary">{t("errorText")}</p>
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
-                <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between">
-                  <p className="order-2 font-mono text-[0.68rem] uppercase tracking-[0.07em] text-text-muted sm:order-1">{t("responseNote")}</p>
-                  <button
-                    type="submit"
-                    disabled={status === "submitting"}
-                    aria-describedby={status === "error" ? errorId : undefined}
-                    className="order-1 inline-flex min-h-11 items-center justify-center gap-2 rounded bg-brand-orange px-5 text-sm font-semibold text-white transition-colors hover:bg-brand-orange-hover disabled:cursor-not-allowed disabled:opacity-60 sm:order-2"
-                  >
-                    {status === "submitting" ? t("submitting") : t("submit")}
-                    {status !== "submitting" && <Send className="h-4 w-4" aria-hidden />}
-                  </button>
-                </div>
-              </form>
+                  <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between">
+                    <p className="order-2 font-mono text-[0.68rem] uppercase tracking-[0.07em] text-text-muted sm:order-1">{t("responseNote")}</p>
+                    <button
+                      type="submit"
+                      disabled={status === "submitting"}
+                      aria-describedby={status === "error" ? errorId : undefined}
+                      className="order-1 inline-flex min-h-11 items-center justify-center gap-2 rounded bg-brand-orange px-5 text-sm font-semibold text-white transition-colors hover:bg-brand-orange-hover disabled:cursor-not-allowed disabled:opacity-60 sm:order-2"
+                    >
+                      {status === "submitting" ? t("submitting") : t("submit")}
+                      {status !== "submitting" && <Send className="h-4 w-4" aria-hidden />}
+                    </button>
+                  </div>
+                </form>
+              </AiguillageContact>
             )}
           </div>
         </div>

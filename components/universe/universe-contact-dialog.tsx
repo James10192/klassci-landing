@@ -1,5 +1,6 @@
 "use client";
 
+import { AiguillageContact } from "@/components/ui/aiguillage-contact";
 import { AlertCircle, Check, Mail, MapPin, Send, X } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useEffect, useId, useRef, type FormEvent, type MouseEvent } from "react";
@@ -176,69 +177,71 @@ export function UniverseContactDialog({ open, onClose }: UniverseContactDialogPr
                 <p className="max-w-xl leading-relaxed text-text-secondary">{success.text}</p>
               </div>
             ) : (
-              <form method="POST" action={CONTACT_ENDPOINT} onSubmit={onSubmit} className="space-y-5">
-                <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY} />
-                <div className="grid gap-4 md:grid-cols-2">
-                  <div>
-                    <label htmlFor="hub-contact-name" className={labelClass}>{form.name.label}</label>
-                    <input id="hub-contact-name" name="name" required maxLength={CONTACT_FIELD_LIMITS.name} autoComplete="name" placeholder={form.name.placeholder} className={fieldClass} />
-                  </div>
-                  <ChampEmailAutonome
-                    textes={{ label: form.email.label, placeholder: form.email.placeholder }}
-                    attributs={{ id: "hub-contact-email", name: "email", maxLength: CONTACT_FIELD_LIMITS.email, required: true }}
-                    classes={{ champ: fieldClass, label: labelClass }}
-                  />
-                </div>
-
-                <div className="grid gap-4 md:grid-cols-2">
-                  <div>
-                    <label htmlFor="hub-contact-school" className={labelClass}>{form.school.label}</label>
-                    <input id="hub-contact-school" name="school" required maxLength={CONTACT_FIELD_LIMITS.school} autoComplete="organization" placeholder={form.school.placeholder} className={fieldClass} />
-                  </div>
-                  <div>
-                    <label htmlFor="hub-contact-phone" className={labelClass}>{form.phone.label}</label>
-                    <input id="hub-contact-phone" name="phone" type="tel" maxLength={CONTACT_FIELD_LIMITS.phone} autoComplete="tel" placeholder={form.phone.placeholder} className={fieldClass} />
-                  </div>
-                </div>
-
-                <div>
-                  <label htmlFor="hub-contact-type" className={labelClass}>{form.type.label}</label>
-                  <select id="hub-contact-type" name="school_type" required defaultValue="" className={fieldClass}>
-                    <option value="" disabled>{form.type.placeholder}</option>
-                    {form.type.options.map((option) => (
-                      <option key={option.value} value={option.value}>{option.label}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label htmlFor="hub-contact-message" className={labelClass}>{form.message.labelOptional}</label>
-                  <textarea id="hub-contact-message" name="message" rows={4} maxLength={CONTACT_FIELD_LIMITS.message} placeholder={form.message.placeholder} className={`${fieldClass} min-h-[112px] resize-y`} />
-                </div>
-
-                {status === "error" && (
-                  <div id={errorBannerId} role="alert" className="flex items-start gap-3 rounded border border-danger/40 bg-danger/5 px-4 py-3 text-sm">
-                    <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-danger" aria-hidden />
+              <AiguillageContact>
+                <form method="POST" action={CONTACT_ENDPOINT} onSubmit={onSubmit} className="space-y-5">
+                  <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY} />
+                  <div className="grid gap-4 md:grid-cols-2">
                     <div>
-                      <p className="font-medium text-text">{error.title}</p>
-                      <p className="text-text-secondary">{error.text}</p>
+                      <label htmlFor="hub-contact-name" className={labelClass}>{form.name.label}</label>
+                      <input id="hub-contact-name" name="name" required maxLength={CONTACT_FIELD_LIMITS.name} autoComplete="name" placeholder={form.name.placeholder} className={fieldClass} />
+                    </div>
+                    <ChampEmailAutonome
+                      textes={{ label: form.email.label, placeholder: form.email.placeholder }}
+                      attributs={{ id: "hub-contact-email", name: "email", maxLength: CONTACT_FIELD_LIMITS.email, required: true }}
+                      classes={{ champ: fieldClass, label: labelClass }}
+                    />
+                  </div>
+
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div>
+                      <label htmlFor="hub-contact-school" className={labelClass}>{form.school.label}</label>
+                      <input id="hub-contact-school" name="school" required maxLength={CONTACT_FIELD_LIMITS.school} autoComplete="organization" placeholder={form.school.placeholder} className={fieldClass} />
+                    </div>
+                    <div>
+                      <label htmlFor="hub-contact-phone" className={labelClass}>{form.phone.label}</label>
+                      <input id="hub-contact-phone" name="phone" type="tel" maxLength={CONTACT_FIELD_LIMITS.phone} autoComplete="tel" placeholder={form.phone.placeholder} className={fieldClass} />
                     </div>
                   </div>
-                )}
 
-                <div className="flex flex-col gap-3 pt-1 md:flex-row md:items-center md:justify-between">
-                  <p className="order-2 font-mono text-[0.72rem] uppercase tracking-[0.08em] text-text-muted md:order-1">{form.responseNote}</p>
-                  <button
-                    type="submit"
-                    disabled={status === "submitting"}
-                    aria-describedby={status === "error" ? errorBannerId : undefined}
-                    className="order-1 inline-flex min-h-11 items-center justify-center gap-2 rounded border border-accent bg-accent px-5 text-sm font-medium text-white transition-all hover:-translate-y-px hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-60 md:order-2"
-                  >
-                    {status === "submitting" ? form.submitting : form.submit}
-                    {status !== "submitting" && <Send className="h-4 w-4" aria-hidden />}
-                  </button>
-                </div>
-              </form>
+                  <div>
+                    <label htmlFor="hub-contact-type" className={labelClass}>{form.type.label}</label>
+                    <select id="hub-contact-type" name="school_type" required defaultValue="" className={fieldClass}>
+                      <option value="" disabled>{form.type.placeholder}</option>
+                      {form.type.options.map((option) => (
+                        <option key={option.value} value={option.value}>{option.label}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label htmlFor="hub-contact-message" className={labelClass}>{form.message.labelOptional}</label>
+                    <textarea id="hub-contact-message" name="message" rows={4} maxLength={CONTACT_FIELD_LIMITS.message} placeholder={form.message.placeholder} className={`${fieldClass} min-h-[112px] resize-y`} />
+                  </div>
+
+                  {status === "error" && (
+                    <div id={errorBannerId} role="alert" className="flex items-start gap-3 rounded border border-danger/40 bg-danger/5 px-4 py-3 text-sm">
+                      <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-danger" aria-hidden />
+                      <div>
+                        <p className="font-medium text-text">{error.title}</p>
+                        <p className="text-text-secondary">{error.text}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="flex flex-col gap-3 pt-1 md:flex-row md:items-center md:justify-between">
+                    <p className="order-2 font-mono text-[0.72rem] uppercase tracking-[0.08em] text-text-muted md:order-1">{form.responseNote}</p>
+                    <button
+                      type="submit"
+                      disabled={status === "submitting"}
+                      aria-describedby={status === "error" ? errorBannerId : undefined}
+                      className="order-1 inline-flex min-h-11 items-center justify-center gap-2 rounded border border-accent bg-accent px-5 text-sm font-medium text-white transition-all hover:-translate-y-px hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-60 md:order-2"
+                    >
+                      {status === "submitting" ? form.submitting : form.submit}
+                      {status !== "submitting" && <Send className="h-4 w-4" aria-hidden />}
+                    </button>
+                  </div>
+                </form>
+              </AiguillageContact>
             )}
           </div>
         </div>
