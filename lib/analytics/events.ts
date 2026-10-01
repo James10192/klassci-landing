@@ -51,6 +51,19 @@ export type AnalyticsEventMap = {
   contact_submit_error: {
     locale: "fr" | "en";
   };
+  /** Le visiteur dit qui il est avant d'écrire : un étudiant est renvoyé au portail. */
+  contact_profil: {
+    profil: "etablissement" | "etudiant";
+    locale: "fr" | "en";
+  };
+  contact_vers_portail: {
+    cible: "inscription" | "reinscription" | "rendez_vous";
+    locale: "fr" | "en";
+  };
+  /** Un « établissement » dont le message parle d'inscription : on a demandé confirmation. */
+  contact_alerte_etudiant: {
+    locale: "fr" | "en";
+  };
   language_switch: {
     from: "fr" | "en";
     to: "fr" | "en";

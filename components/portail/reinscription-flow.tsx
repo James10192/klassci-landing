@@ -28,6 +28,7 @@ export function ReinscriptionFlow({
   etablissement,
   onAboutir,
   onChoisirCreneau,
+  onRetrouverRdv,
 }: {
   etablissement: EtablissementVisible;
   /**
@@ -40,6 +41,12 @@ export function ReinscriptionFlow({
    */
   onAboutir?: (abouti: boolean) => void;
   onChoisirCreneau?: (reference: string, dateNaissance: string) => void;
+  /**
+   * « Demande déjà enregistrée » était une impasse : un message, et rien à
+   * cliquer. L'étudiant, sans sa convocation, finissait sur le formulaire de
+   * contact de KLASSCI. On lui ouvre son rendez-vous avec ce qu'il vient de taper.
+   */
+  onRetrouverRdv?: (identifiant: string, dateNaissance: string) => void;
 }) {
   const t = useTranslations("reinscription");
   const locale = useLocale();
@@ -312,6 +319,16 @@ export function ReinscriptionFlow({
               </m.div>
 
               <Alerte etat={messageEtat} />
+
+              {etat === "dejaDeposee" && onRetrouverRdv !== undefined && (
+                <button
+                  type="button"
+                  onClick={() => onRetrouverRdv(matricule.trim(), dateNaissance)}
+                  className="mt-3 inline-flex min-h-[44px] w-full items-center justify-center rounded-xl border border-accent px-4 text-sm font-semibold text-accent transition-colors duration-200 hover:bg-accent-light"
+                >
+                  {t("etats.dejaDeposee.action")}
+                </button>
+              )}
 
               <m.div {...entree(3)} className="mt-6">
                 <BoutonPrincipal onClick={chercher} disabled={!peutChercher} occupe={enCours}>

@@ -25,7 +25,7 @@ import { RendezVousFlow } from "./rendez-vous-flow";
  * se tromper de porte et revenir, ce qui arrive plus souvent qu'on ne croit.
  */
 
-type Parcours = "choix" | "nouveau" | "ancien";
+type Parcours = "choix" | "nouveau" | "ancien" | "suivi";
 
 export function PortailEcole({
   etablissement,
@@ -53,10 +53,19 @@ export function PortailEcole({
   const [vue, setVue] = useState<"form" | "rdv">("form");
   const [rdvRef, setRdvRef] = useState<string | null>(null);
   const [rdvNaissance, setRdvNaissance] = useState("");
+  const [rdvIdentifiant, setRdvIdentifiant] = useState<string | undefined>(undefined);
   const tRdv = useTranslations("inscription.rdv");
 
   function ouvrirRdv(reference: string, dateNaissance: string) {
     setRdvRef(reference);
+    setRdvIdentifiant(undefined);
+    setRdvNaissance(dateNaissance);
+    setVue("rdv");
+  }
+
+  function retrouverRdv(identifiant: string, dateNaissance: string) {
+    setRdvRef("");
+    setRdvIdentifiant(identifiant);
     setRdvNaissance(dateNaissance);
     setVue("rdv");
   }
@@ -82,11 +91,43 @@ export function PortailEcole({
                   onClick={() => { setVue("form"); setParcours("ancien"); }}
                 />
               </div>
+
+              {/*
+                La troisième porte, plus discrète : ceux qui ont DÉJÀ déposé
+                leur demande. Sans elle, l'étudiant qui cherchait l'heure et
+                le lieu de son passage au guichet redéposait une demande, ou
+                écrivait au formulaire de contact de KLASSCI, qui n'y peut rien.
+              */}
+              <div className="mt-5 border-t border-border pt-5">
+                <Porte
+                  titre={t("suivi.titre")}
+                  texte={t("suivi.texte")}
+                  onClick={() => { setParcours("suivi"); }}
+                />
+              </div>
             </div>
           </m.div>
         )}
 
-        {parcours !== "choix" && (
+        {parcours === "suivi" && (
+          <m.div key="suivi" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }} transition={RESSORT}>
+            <Carte>
+              <RendezVousFlow etablissement={etablissement} />
+            </Carte>
+            <div className="mt-4 text-center">
+              <button
+                type="button"
+                onClick={() => setParcours("choix")}
+                className="min-h-[40px] px-3 text-sm text-text-muted underline-offset-4 transition-colors duration-200 hover:text-text hover:underline"
+              >
+                {t("retour")}
+              </button>
+            </div>
+          </m.div>
+        )}
+
+        {(parcours === "nouveau" || parcours === "ancien") && (
           <m.div key={parcours} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }} transition={RESSORT}>
             <div hidden={vue !== "form"}>
@@ -102,6 +143,7 @@ export function PortailEcole({
                   etablissement={etablissement}
                   onAboutir={setAbouti}
                   onChoisirCreneau={ouvrirRdv}
+                  onRetrouverRdv={retrouverRdv}
                 />
               )}
             </div>
@@ -110,9 +152,11 @@ export function PortailEcole({
               <m.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={RESSORT}>
                 <Carte>
                   <RendezVousFlow
+                    key={rdvIdentifiant ?? rdvRef}
                     etablissement={etablissement}
-                    referenceInitiale={rdvRef}
+                    referenceInitiale={rdvRef || undefined}
                     naissanceInitiale={rdvNaissance}
+                    identifiantInitial={rdvIdentifiant}
                   />
                 </Carte>
               </m.div>
