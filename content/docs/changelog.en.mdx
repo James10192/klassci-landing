@@ -27,6 +27,15 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ### Improved
 
+- **Today's reception: every invited family can be found** — search ignores accents, apostrophes, hyphens and word order (“diabate” finds “Diabaté”, “nguettia” finds “N'Guettia”, “naomie dje” finds “DJE … Naomie”), also searches the student's name and ID when a parent made the booking, and accepts a phone number with or without the country code. One typo per word is forgiven: close spellings appear under a banner, and the Enter key never ticks them for you.
+
+- **Faster “Accept and enrol”** — choose the enrolment year (the previous one, the current one and the next ones), available seats recounted at once for the chosen year, confirmation required when the year has ended, an “All caps” button for the student and the parent, the parent's name split at the first word (undoable), and linking a parent already on file: those with the same phone or name are suggested before a duplicate is created.
+
+- **Available seats counted on the enrolment year** — a class full this year no longer looks full for next year, and enrolling into a year already full is refused, in the dialog as in the full form.
+
+- **The current academic year in the top bar** — a badge on desktop, after the school name on phones, orange once the year has ended as a cue to open the next one.
+
+
 - **New re-enrolment record** — what was owed, paid and left on the year being left, the average and proposed decision, and a clear verdict: allowed, blocked, possible by override, or already done. Each case offers its action (collect a payment, view fees, re-enrol with carried balance, prepare the next year, correct the re-enrolment), plus an “Ask Nanan” button. Staff who cannot see finances read the verdict without the amounts.
 
 - **The tolerated remaining balance for re-enrolment applies everywhere** — the school's threshold applied when saving but not on the record, which blocked as soon as one franc was owed. The record, the list, bulk re-enrolment and Nanan now apply the same threshold.
@@ -36,6 +45,11 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 - **Re-enrolment already submitted: the appointment in one click** — a student who finds a request already on file goes straight to their appointment and notice instead of a plain message.
 
 ### Fixed
+
+- **The school name no longer slips under the bell** — on the student list on phones, a long school name overflowed onto the top-bar icons; it is now neatly truncated.
+
+  <AvantApres avant="/img/changelog/2026-10/barre-telephone-avant.webp" apres="/img/changelog/2026-10/barre-telephone-apres.webp" format="telephone" alt="Top bar on a phone" legende="The school name overflowed under the bell; it is truncated, and the current year follows it." libelleAvant="Before" libelleApres="After" />
+
 
 - **The re-enrolment class picker is readable again** — “Select a class…” showed as a grey bar, on the finalisation page and in the student list filters.
 

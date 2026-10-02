@@ -27,6 +27,15 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 
 ### Améliorations
 
+- **Accueil du jour : chaque famille convoquée se retrouve** — la recherche ignore les accents, les apostrophes, les tirets et l'ordre des mots (« diabate » trouve « Diabaté », « nguettia » trouve « N'Guettia », « naomie dje » trouve « DJE … Naomie »), cherche aussi le nom et le matricule de l'élève quand c'est un parent qui a réservé, et accepte un téléphone avec ou sans indicatif. Une faute de frappe par mot est rattrapée : les orthographes voisines s'affichent sous un bandeau, et la touche Entrée ne les coche jamais à votre place.
+
+- **« Accepter et inscrire » plus rapide** — choix de l'année de l'inscription (la précédente, la courante et les suivantes), places disponibles recomptées aussitôt pour l'année choisie, confirmation demandée si l'année est terminée, bouton « Tout en majuscules » pour l'élève et le parent, nom du parent séparé d'office au premier mot (annulable), et rattachement d'un parent déjà enregistré : ceux qui ont le même téléphone ou le même nom sont proposés avant d'en créer un double.
+
+- **Places disponibles comptées sur l'année de l'inscription** — une classe pleine cette année n'apparaît plus pleine pour l'année suivante, et une inscription sur une année déjà remplie est refusée, dans la fenêtre comme dans le formulaire complet.
+
+- **L'année universitaire courante dans la barre du haut** — une pastille sur ordinateur, à la suite du nom de l'école sur téléphone, orange quand l'année est terminée pour inviter à ouvrir la suivante.
+
+
 - **Nouvelle fiche de réinscription** — le dû, le payé et le reste de l'année quittée, la moyenne et la décision proposée, et un verdict clair : autorisée, bloquée, possible par dérogation, ou déjà faite. Chaque cas propose son action (encaisser, voir les frais, réinscrire avec reliquat, préparer l'année suivante, corriger la réinscription), plus un bouton « Demander à Nanan ». La personne qui ne voit pas les finances lit le verdict sans les montants.
 
 - **Le reste dû toléré pour se réinscrire s'applique partout** — le seuil fixé par l'école valait pour l'enregistrement mais pas pour la fiche, qui bloquait dès un franc dû. La fiche, la liste, la réinscription groupée et Nanan appliquent désormais le même seuil.
@@ -36,6 +45,11 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 - **Réinscription déjà déposée : le rendez-vous en un clic** — l'étudiant qui retrouve une demande déjà enregistrée accède directement à son rendez-vous et à sa convocation, au lieu d'un simple message.
 
 ### Corrections
+
+- **Le nom de l'école ne passe plus sous la cloche** — sur la liste des étudiants au téléphone, un nom d'école long débordait sur les icônes de la barre du haut ; il est maintenant tronqué proprement.
+
+  <AvantApres avant="/img/changelog/2026-10/barre-telephone-avant.webp" apres="/img/changelog/2026-10/barre-telephone-apres.webp" format="telephone" alt="Barre du haut sur téléphone" legende="Le nom de l'école débordait sous la cloche ; il est tronqué, et l'année courante le suit." />
+
 
 - **Le sélecteur de classe de la réinscription redevient lisible** — « Sélectionner une classe… » s'affichait comme une barre grise, sur la page de finalisation comme dans les filtres de la liste des étudiants.
 
