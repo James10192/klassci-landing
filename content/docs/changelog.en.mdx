@@ -15,6 +15,10 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ### Added
 
+- **Repeating status, confirmed by a person** — KLASSCI still infers whether a student is repeating a year from their level the year before, but an authorised person now confirms it: at re-enrolment, on the enrolment record, or in bulk from the list filtered on “repeating status to confirm”. Changing the proposed value requires a reason, a contradiction with the re-enrolment decision is flagged, and the pre-check before generating report cards warns while a status is still unconfirmed. By default the registry, student records office, coordinator and director of studies can confirm.
+
+  <AvantApres avant="/img/changelog/2026-10/redoublant-fiche-avant.webp" apres="/img/changelog/2026-10/redoublant-fiche-apres.webp" alt="Enrolment record, Academic information block" legende="The record shows where the status comes from, flags the contradiction, and is confirmed or corrected in one click." />
+
 - **Nanan creates and edits classes** — “add a 60-seat class to every programme and level”, “set first-year classes to 50 seats”: Nanan first shows a before/after table (names, capacities, pairs with no students), copies the subjects of the sibling class, refuses a capacity below the number of enrolled students, and writes nothing until you click “Validate”.
 
 - **Phone confirmation over WhatsApp, the other way round** — on the enrolment portal, families can confirm their number by tapping a button that opens WhatsApp with the code already typed: they send it to the school's number, and the page confirms itself a few seconds later. No message is sent to a stranger, which protects the school's number. Enabled school by school.
