@@ -15,6 +15,12 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 
 ### Ajouts
 
+- **« Redoublant ? » à chaque inscription** — la question se pose aussi au formulaire « Nouvelle inscription », dans « Accepter et inscrire » d'une candidature et dans « Réinscrire » d'une demande en ligne. Pour un nouvel élève, KLASSCI propose « Non » : l'école répond « Oui » s'il redouble en venant d'un autre établissement, et dit pourquoi.
+
+  ![Formulaire de nouvelle inscription, avant : pas de question sur le redoublement](/img/changelog/2026-10/redoublant-creation-avant.webp)
+
+  ![Formulaire de nouvelle inscription, après : la question « Redoublant ? » et sa proposition](/img/changelog/2026-10/redoublant-creation-apres.webp)
+
 - **Le statut redoublant, confirmé par une personne** — KLASSCI déduit toujours si un élève redouble, d'après son niveau de l'année d'avant, mais une personne habilitée le confirme désormais : à la réinscription, sur la fiche d'inscription, ou en masse depuis la liste filtrée « Statut redoublant à confirmer ». Changer la valeur proposée demande un motif, une contradiction avec la décision de réinscription est signalée, et le contrôle avant génération des bulletins prévient tant qu'un statut reste à confirmer. Par défaut, le secrétariat, la scolarité, le coordinateur et le directeur des études peuvent confirmer.
 
   <AvantApres avant="/img/changelog/2026-10/redoublant-fiche-avant.webp" apres="/img/changelog/2026-10/redoublant-fiche-apres.webp" alt="Fiche d'une inscription, bloc Informations académiques" legende="La fiche dit d'où vient le statut, signale la contradiction, et se confirme ou se corrige en un clic." />
@@ -36,6 +42,14 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 - **Nanan prépare, l'école valide** — valider des inscriptions, annuler un versement par un avoir, corriger une note, créer une évaluation, générer des bulletins, ouvrir une année universitaire : sur simple demande, Nanan prépare l'opération et rien ne change sans un clic sur « Valider ».
 
 ### Améliorations
+
+- **Modifier les classes à la chaîne, sans attendre** — la fenêtre de modification d'une classe s'ouvre aussitôt, se lit plus clairement, et « Enregistrer et modifier la suivante » passe directement à la classe d'après. Ctrl+Entrée enregistre.
+
+  <AvantApres avant="/img/changelog/2026-10/classes-fenetre-avant.webp" apres="/img/changelog/2026-10/classes-fenetre-apres.webp" alt="Fenêtre de modification d'une classe" legende="Une fenêtre plus lisible, et un bouton pour enchaîner sur la classe suivante." />
+
+- **L'étape suivante ne passe plus pour une confirmation** — après une action, KLASSCI indique l'étape suivante sans laisser croire qu'elle est faite : un bandeau discret si elle se fait sur la page ouverte, une fenêtre « Et maintenant ? » qui propose d'ouvrir la page sinon. Les messages ne gardent plus les étapes déjà faites par un collègue, même en validation groupée.
+
+  ![Après la validation d'un paiement, la fenêtre « Et maintenant ? »](/img/changelog/2026-10/etape-suivante-apres.webp)
 
 - **Bas du bulletin BTS mieux occupé** — résultats, statistiques avec les absences et mentions du conseil sur trois colonnes de même largeur, puis la décision du conseil et la signature du directeur côte à côte, à la même hauteur. Une décision encore vide laisse des lignes d'écriture, et la largeur de signature réglée par l'école est respectée. Le bulletin tient toujours sur une page.
 
