@@ -33,6 +33,14 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 
 ### Améliorations
 
+- **Rôles et permissions, écran refait** — les rôles rangés par famille avec ce qu'ils font et les comptes qu'ils gèrent, une recherche dans les permissions, un indicateur « Non enregistré » avant de changer de rôle, et l'enregistrement sans recharger la page. Un bouton contrôle que chaque permission utilisée par l'application existe bien.
+
+  <AvantApres avant="/img/changelog/2026-10/roles-permissions-avant.webp" apres="/img/changelog/2026-10/roles-permissions-apres.webp" alt="Écran Rôles et permissions" legende="Les chiffres du rôle choisi en tête, les rôles rangés par famille, une recherche, et l'enregistrement sans rechargement." />
+
+- **Style des bulletins, écran refait** — les deux modèles de bulletin s'affichent en aperçu côte à côte, avec le modèle actif, la date et l'auteur du dernier changement. Le choix s'enregistre sans recharger la page, et un échec est signalé au lieu d'un faux succès.
+
+  <AvantApres avant="/img/changelog/2026-10/style-bulletins-avant.webp" apres="/img/changelog/2026-10/style-bulletins-apres.webp" alt="Écran Style des bulletins" legende="Deux boutons radio sans aperçu deviennent deux modèles montrés tels qu'ils s'impriment." />
+
 - **Accueil du jour : chaque famille convoquée se retrouve** — la recherche ignore les accents, les apostrophes, les tirets et l'ordre des mots (« diabate » trouve « Diabaté », « nguettia » trouve « N'Guettia », « naomie dje » trouve « DJE … Naomie »), cherche aussi le nom et le matricule de l'élève quand c'est un parent qui a réservé, et accepte un téléphone avec ou sans indicatif. Une faute de frappe par mot est rattrapée : les orthographes voisines s'affichent sous un bandeau, et la touche Entrée ne les coche jamais à votre place.
 
 - **« Accepter et inscrire » plus rapide** — choix de l'année de l'inscription (la précédente, la courante et les suivantes), places disponibles recomptées aussitôt pour l'année choisie, confirmation demandée si l'année est terminée, bouton « Tout en majuscules » pour l'élève et le parent, nom du parent séparé d'office au premier mot (annulable), et rattachement d'un parent déjà enregistré : ceux qui ont le même téléphone ou le même nom sont proposés avant d'en créer un double.
@@ -67,6 +75,10 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 - **Relances : seules les inscriptions actives sont relancées** — une inscription annulée, terminée ou en attente sort de la liste ; l'école peut revenir à l'ancien comportement dans ses paramètres.
 
 ### Corrections
+
+- **Téléphone et tablette : le service technique n'a plus le menu de la caisse** — ce compte était pris pour un caissier ; sa barre propose maintenant l'accueil, l'abonnement, les matricules et les rôles.
+
+- **Rôles : revenir aux permissions par défaut tient dans la durée** — les permissions retirées ne reviennent plus à la mise à jour suivante, et enregistrer un rôle ne lui retire plus l'accès aux écrans qui utilisent encore un ancien nom de permission.
 
 - **Le nom de l'école ne passe plus sous la cloche** — sur la liste des étudiants au téléphone, un nom d'école long débordait sur les icônes de la barre du haut ; il est maintenant tronqué proprement.
 
