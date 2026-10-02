@@ -80,6 +80,8 @@ export type Formulaire = {
   etablissement_sup_origine: string;
   formation_origine: string;
   niveau_atteint_origine: string;
+  /** `null` tant qu'il n'a pas répondu : une absence de réponse n'est pas un « non ». */
+  redouble_niveau_origine: boolean | null;
   annee_derniere_inscription: string;
   motif_transfert: string;
   tuteur_nom: string;
@@ -98,6 +100,7 @@ export const FORMULAIRE_VIDE: Formulaire = {
   serie_bac: "", etablissement_origine: "", annee_bac: "", affectation_status: "",
   est_transfert: false,
   etablissement_sup_origine: "", formation_origine: "", niveau_atteint_origine: "",
+  redouble_niveau_origine: null,
   annee_derniere_inscription: "", motif_transfert: "",
   tuteur_nom: "", tuteur_lien: "", tuteur_telephone: "", tuteur_profession: "",
   message: "",
@@ -355,6 +358,22 @@ export function ChampsCandidature({
               <Champ label={t("formulaire.niveauAtteint")} value={form.niveau_atteint_origine}
                      onChange={set("niveau_atteint_origine")} maxLength={LONGUEURS.niveau_atteint_origine}
                      erreurs={messagesDe("niveau_atteint_origine")} />
+            </div>
+            {/* L'école en tire la réponse proposée à « Redoublant ? » en
+                l'inscrivant : un transféré n'a pas d'année précédente chez
+                elle d'où la déduire. Facultatif : sans réponse, rien n'est
+                supposé. */}
+            <div className="mt-3">
+              <ChoixBinaire
+                label={t("formulaire.redoubleNiveau")}
+                value={form.redouble_niveau_origine}
+                onChange={set("redouble_niveau_origine")}
+                erreurs={messagesDe("redouble_niveau_origine")}
+                options={[
+                  { valeur: false, libelle: t("formulaire.redoubleNon"), aide: t("formulaire.redoubleNonAide") },
+                  { valeur: true, libelle: t("formulaire.redoubleOui"), aide: t("formulaire.redoubleOuiAide") },
+                ]}
+              />
             </div>
             <div className="mt-3 grid gap-3 sm:grid-cols-2">
               <Champ label={t("formulaire.anneeDerniereInscription")}

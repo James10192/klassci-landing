@@ -193,7 +193,8 @@ export function ChoixBinaire({
   label: string;
   /** Deux entrées, dans l'ordre de lecture : le cas courant d'abord. */
   options: [{ valeur: boolean; libelle: string; aide?: string }, { valeur: boolean; libelle: string; aide?: string }];
-  value: boolean;
+  /** `null` : rien n'est encore choisi (question facultative). */
+  value: boolean | null;
   onChange: (v: boolean) => void;
   erreurs?: string[];
 }) {

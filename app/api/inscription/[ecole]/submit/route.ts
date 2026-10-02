@@ -28,7 +28,7 @@ const ENTIERS = ["filiere_id", "niveau_id", "annee_bac", "annee_derniere_inscrip
  * le bloc de transfert quand le drapeau est baissé. Sans elle, un candidat
  * qui coche puis se ravise verrait sa déclaration partir quand même.
  */
-const BOOLEENS = ["est_transfert"] as const;
+const BOOLEENS = ["est_transfert", "redouble_niveau_origine"] as const;
 
 export async function POST(
   requete: NextRequest,
