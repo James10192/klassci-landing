@@ -25,6 +25,12 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 - **Nanan unblocks a re-enrolment held by an unpaid balance** — ask “why is this student’s re-enrolment blocked?”: Nanan shows what is owed and paid fee by fee, flags a pass/repeat decision computed without any grade, and, when the debt does not match reality (student imported from another tool, waiver), prepares an adjustment of the amount owed. Nothing changes until you click “Validate”, a reason is required, and the amount never goes below what has already been paid.
 
+- **Grade claims** — a student challenges a grade from “My grades”, with a reason and a photo of the paper. The teacher gives an opinion, the school decides: the grade is corrected or kept, with a reason, and the student follows the answer in the same place.
+
+- **Help guided by Nanan** — the “Help” button opens a conversation with Nanan: a problem, a “how do I” question, an idea, or following up one's requests. If Nanan cannot solve it, she prepares the support request, page capture included, and the school is notified when support replies.
+
+- **Nanan prepares, the school confirms** — confirming enrolments, recording a payment, correcting a grade, creating an assessment, generating report cards, opening an academic year: on request, Nanan prepares the operation and nothing changes until someone clicks “Confirm”.
+
 ### Improved
 
 - **Today's reception: every invited family can be found** — search ignores accents, apostrophes, hyphens and word order (“diabate” finds “Diabaté”, “nguettia” finds “N'Guettia”, “naomie dje” finds “DJE … Naomie”), also searches the student's name and ID when a parent made the booking, and accepts a phone number with or without the country code. One typo per word is forgiven: close spellings appear under a banner, and the Enter key never ticks them for you.
@@ -46,6 +52,20 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 - **Re-enrolment already submitted: the appointment in one click** — a student who finds a request already on file goes straight to their appointment and notice instead of a plain message.
 
+- **Student results redesigned, faster and colour-coded** — the list loads 50 students at a time as you scroll, opening a class goes from 2–5 seconds to about one second, and the overall average and pass rate turn green, orange or red against thresholds each school sets.
+
+  <AvantApres avant="/img/changelog/2026-10/resultats-bureau-avant.webp" apres="/img/changelog/2026-10/resultats-bureau-apres.webp" alt="Student results page" legende="Key figures move into the header, each with its reference, and the average and pass rate show at a glance whether all is well." libelleAvant="Before" libelleApres="After" />
+
+- **Faster pages everywhere** — stylesheets and scripts kept by the browser instead of being rechecked on every page; student, class and reminder lists, student record and accounting pages made lighter. The reminders list opens about twice as fast, with every figure unchanged.
+
+- **Clearer notifications and messages** — the notifications page first shows what is waiting, then notifications grouped by day, with one-click filters and no reload. In messages, an unread conversation stands out at a glance and the writing options are simpler.
+
+- **Report cards keep generating when you leave the page** — a class's generation and the combined PDF continue in the background, with the number of students left and the estimated time.
+
+- **Emails in the school's colours** — parent notices, activation link, appointment notice and confirmation code share one template, with the school's logo and colours.
+
+- **Reminders: only active enrolments are chased** — a cancelled, finished or pending enrolment leaves the list; the school can switch back in its settings.
+
 ### Fixed
 
 - **The school name no longer slips under the bell** — on the student list on phones, a long school name overflowed onto the top-bar icons; it is now neatly truncated.
@@ -60,6 +80,14 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 - **Linking a teaching unit to its programmes saves again** — removing or adding a programme no longer saved, and creating or editing a unit or an element showed “Network error” although it had been saved.
 
 - **Finding your reference opens the appointment directly** — no second click on “See my appointment”, and a phone number typed “07 07 …” is recognised.
+
+- **A school whose subscription limits are not enforced is no longer shown as “blocked”** — an overrun shows as a simple warning, and a school that really is blocked now sees the page explaining why, instead of “access denied”.
+
+- **Re-enrolment decides on the report card's annual average** — promotion, resit or repeat is judged on the average printed on the report card, not on a different calculation.
+
+- **School certificate: a past year's average is no longer empty** when its grades exist.
+
+- **Student area: an enrolment for next year is recognised** — a student enrolled during the campaign sees “Enrolled for 2026-2027” and their class, instead of “No active enrolment”.
 
 ## September 2026
 

@@ -25,6 +25,12 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 
 - **Nanan débloque une réinscription arrêtée par un impayé** — demandez « pourquoi la réinscription de cet étudiant est bloquée ? » : Nanan affiche ce qui est dû et payé frais par frais, signale une décision de passage calculée sans aucune note, et, si la dette ne correspond pas à la réalité (élève repris d'un autre outil, exonération), prépare l'ajustement du montant dû. Rien ne change avant votre clic « Valider », un motif est obligatoire, et le montant ne descend jamais sous ce qui est déjà payé.
 
+- **Réclamations de notes** — l'élève conteste une note depuis « Mes notes », avec un motif et la photo de sa copie. L'enseignant donne son avis, l'école tranche : la note est corrigée ou maintenue, avec un motif, et l'élève suit la réponse au même endroit.
+
+- **L'aide guidée par Nanan** — le bouton « Aide » ouvre une conversation avec Nanan : un problème, une question « comment faire », une idée, ou le suivi de ses demandes. Si Nanan ne trouve pas, elle prépare la demande au support, capture de la page comprise, et l'école est avertie quand le support répond.
+
+- **Nanan prépare, l'école valide** — valider des inscriptions, enregistrer un versement, corriger une note, créer une évaluation, générer des bulletins, ouvrir une année universitaire : sur simple demande, Nanan prépare l'opération et rien ne change sans un clic sur « Valider ».
+
 ### Améliorations
 
 - **Accueil du jour : chaque famille convoquée se retrouve** — la recherche ignore les accents, les apostrophes, les tirets et l'ordre des mots (« diabate » trouve « Diabaté », « nguettia » trouve « N'Guettia », « naomie dje » trouve « DJE … Naomie »), cherche aussi le nom et le matricule de l'élève quand c'est un parent qui a réservé, et accepte un téléphone avec ou sans indicatif. Une faute de frappe par mot est rattrapée : les orthographes voisines s'affichent sous un bandeau, et la touche Entrée ne les coche jamais à votre place.
@@ -46,6 +52,20 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 
 - **Réinscription déjà déposée : le rendez-vous en un clic** — l'étudiant qui retrouve une demande déjà enregistrée accède directement à son rendez-vous et à sa convocation, au lieu d'un simple message.
 
+- **Résultats des étudiants refaits, plus rapides et en couleur** — la liste se charge 50 élèves à la fois au fil du défilement, l'ouverture d'une classe passe de 2 à 5 secondes à environ une seconde, et la moyenne générale comme le taux de réussite passent au vert, à l'orange ou au rouge selon des repères que chaque école règle.
+
+  <AvantApres avant="/img/changelog/2026-10/resultats-bureau-avant.webp" apres="/img/changelog/2026-10/resultats-bureau-apres.webp" alt="Page Résultats des étudiants" legende="Les chiffres clés passent dans le bandeau, chacun avec son repère, et la moyenne comme la réussite disent d'un coup d'œil si tout va bien." />
+
+- **Des pages plus rapides partout** — feuilles de style et scripts gardés par le navigateur au lieu d'être revérifiés à chaque page ; listes des étudiants, des classes et des relances, fiche étudiant et pages comptables allégées. La liste des relances s'ouvre environ deux fois plus vite, sans changer un chiffre.
+
+- **Notifications et messages plus clairs** — la page des notifications montre d'abord ce qui attend, puis les notifications regroupées par jour, avec des filtres en un clic et sans rechargement. Dans les messages, une conversation non lue se repère d'un coup d'œil et les choix d'écriture sont simplifiés.
+
+- **Les bulletins se génèrent même quand on quitte la page** — la génération d'une classe et le PDF groupé continuent en arrière-plan, avec le nombre d'élèves restants et le temps estimé.
+
+- **Courriels aux couleurs de l'école** — avis aux parents, lien d'activation, convocation et code de confirmation partagent un même gabarit, avec le logo et les couleurs de l'établissement.
+
+- **Relances : seules les inscriptions actives sont relancées** — une inscription annulée, terminée ou en attente sort de la liste ; l'école peut revenir à l'ancien comportement dans ses paramètres.
+
 ### Corrections
 
 - **Le nom de l'école ne passe plus sous la cloche** — sur la liste des étudiants au téléphone, un nom d'école long débordait sur les icônes de la barre du haut ; il est maintenant tronqué proprement.
@@ -60,6 +80,14 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 - **Lier une unité d'enseignement à ses parcours enregistre à nouveau** — retirer ou ajouter un parcours ne s'enregistrait plus, et créer ou modifier une UE ou un ECUE affichait « Erreur réseau » alors que l'enregistrement avait réussi.
 
 - **Retrouver sa référence ouvre directement le rendez-vous** — plus besoin de cliquer une seconde fois sur « Voir mon rendez-vous », et un numéro saisi « 07 07 … » est reconnu.
+
+- **Une école dont l'abonnement n'est pas appliqué n'est plus dite « bloquée »** — un dépassement apparaît en simple avertissement, et une école réellement bloquée voit enfin la page qui explique pourquoi, au lieu d'un « accès refusé ».
+
+- **La réinscription décide sur la moyenne annuelle du bulletin** — passage, rattrapage ou redoublement se jugent sur la moyenne imprimée au bulletin, et non plus sur un calcul différent.
+
+- **Certificat de scolarité : la moyenne d'une année passée n'est plus vide** quand ses notes existent.
+
+- **Espace étudiant : une inscription pour l'année suivante est reconnue** — l'étudiant inscrit pendant la campagne voit « Inscrit pour 2026-2027 » et sa classe, au lieu de « Aucune inscription active ».
 
 ## Septembre 2026
 
