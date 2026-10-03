@@ -98,6 +98,10 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 
 ### Corrections
 
+- **Retirer un ECUE ne le fait plus passer en BTS** — quand on retire un élément constitutif de la dernière maquette qui le contient (Unités d'enseignement LMD), KLASSCI demande ce qu'il devient : le supprimer s'il n'a jamais servi, l'archiver dans le LMD avec son historique s'il a déjà des notes ou des séances, ou, seulement si on le choisit, en faire une matière BTS. Avant, il retombait d'office dans les listes de notes et de bulletins BTS. La question s'affiche dans une fenêtre KLASSCI, et non plus dans une boîte du navigateur que celui-ci pouvait bloquer.
+
+  ![Fenêtre « Dernière maquette » : supprimer impossible pour un élément qui a servi, archiver conseillé](/img/changelog/2026-10/retrait-ecue-apres.webp)
+
 - **Demandes en ligne : le bouton « J'ai joint la famille » se lit en entier** — dans le panneau d'une demande dont le contact n'est pas encore vérifié, le bouton « J'ai joint la famille : confirmer le contact » passe à la ligne au lieu d'être coupé, sur ordinateur comme sur téléphone.
 
   <AvantApres avant="/img/changelog/2026-10/demandes-encart-avant-v2.webp" apres="/img/changelog/2026-10/demandes-encart-apres-v2.webp" alt="Panneau d'une demande en ligne, encart Contact non vérifié" legende="Le bouton de confirmation du contact se lit en entier." />
