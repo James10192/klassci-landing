@@ -591,7 +591,7 @@
     "title": "Demandez une démonstration",
     "intro": "Vous avez des questions ou souhaitez voir KLASSCI en action ? Remplissez le formulaire et notre équipe vous recontactera sous 24h.",
     "info": {
-      "email": "contact@klassci.com",
+      "email": "klassci@africandigitconsulting.com",
       "location": "Abidjan, Côte d'Ivoire",
       "emailLabel": "Email",
       "locationLabel": "Localisation"
@@ -659,7 +659,7 @@
     },
     "error": {
       "title": "Erreur d'envoi",
-      "text": "Un problème est survenu. Réessayez ou écrivez à contact@klassci.com."
+      "text": "Un problème est survenu. Réessayez ou écrivez à klassci@africandigitconsulting.com."
     },
     "aiguillage": {
       "question": "Vous nous écrivez en tant que…",
@@ -853,8 +853,8 @@
         "title": "Contact",
         "links": [
           {
-            "label": "contact@klassci.com",
-            "href": "mailto:contact@klassci.com"
+            "label": "klassci@africandigitconsulting.com",
+            "href": "mailto:klassci@africandigitconsulting.com"
           },
           {
             "label": "Abidjan, Côte d'Ivoire",

@@ -97,7 +97,7 @@ export const DESCRIPTION_EDITEUR: Record<"fr" | "en", string> = {
 };
 
 /** L'adresse de contact, telle que la section Contact et le pied de page l'affichent. */
-export const COURRIEL_CONTACT = "contact@klassci.com";
+export const COURRIEL_CONTACT = "klassci@africandigitconsulting.com";
 
 /**
  * Les huit Etats de l'UEMOA. `areaServed` decrit le marche adresse par un
