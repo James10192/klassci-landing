@@ -39,7 +39,7 @@ export function LmsPage() {
         ]}
         action={({ fermerMenu, contexte }) => (
           <a
-            href="mailto:contact@klassci.com?subject=KLASSCI%20LMS"
+            href="mailto:klassci@africandigitconsulting.com?subject=KLASSCI%20LMS"
             onClick={fermerMenu}
             className={
               contexte === "barre"
@@ -65,7 +65,7 @@ export function LmsPage() {
               {t("subtitle")}
             </p>
             <a
-              href="mailto:contact@klassci.com?subject=KLASSCI%20LMS"
+              href="mailto:klassci@africandigitconsulting.com?subject=KLASSCI%20LMS"
               className="mt-8 inline-flex min-h-11 items-center gap-2 rounded bg-accent px-5 text-sm font-medium text-white hover:bg-accent-hover"
             >
               {t("cta")}

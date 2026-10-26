@@ -128,9 +128,9 @@ export function CollegeQuoteDialog({ open, plan, studentCount, onClose }: Colleg
                 </div>
               </dl>
 
-              <a href="mailto:contact@klassci.com" className="mt-8 inline-flex items-center gap-2 text-sm text-white/75 hover:text-white">
+              <a href="mailto:klassci@africandigitconsulting.com" className="mt-8 inline-flex items-center gap-2 text-sm text-white/75 hover:text-white">
                 <Mail className="h-4 w-4" aria-hidden />
-                contact@klassci.com
+                klassci@africandigitconsulting.com
               </a>
             </div>
           </aside>
