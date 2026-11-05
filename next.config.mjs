@@ -128,6 +128,20 @@ const nextConfig = {
         permanent: true,
       },
       { source: "/changelog", destination: "/fr/docs/changelog", permanent: true },
+      // Les anciens liens d'inscription etaient rendus par des pages
+      // force-dynamic uniquement pour effectuer une redirection. La regler
+      // ici la fait gerer sans reveiller de fonction serveur.
+      // Conserver 307 pour ne pas changer la semantique des anciens liens.
+      {
+        source: "/:locale(fr|en)/reinscription",
+        destination: "/:locale/inscription/universite",
+        permanent: false,
+      },
+      {
+        source: "/:locale(fr|en)/reinscription/:ecole",
+        destination: "/:locale/inscription/universite/:ecole",
+        permanent: false,
+      },
     ];
   },
 };
