@@ -112,9 +112,12 @@ export function RendezVousFlow({
     }
   }, [etablissement.code]);
 
+  // Les creneaux sont utiles seulement apres identification d'un dossier
+  // sans reservation. Les recuperer au chargement declenchait un POST serveur
+  // pour toute ouverture du formulaire, meme sans saisie ni authentification.
   useEffect(() => {
-    void chargerCreneaux();
-  }, [chargerCreneaux]);
+    if (sansRdv) void chargerCreneaux();
+  }, [chargerCreneaux, sansRdv]);
 
   useEffect(() => {
     if (connu) {

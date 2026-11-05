@@ -7,7 +7,9 @@ import { ReinscriptionChrome } from "@/components/portail/reinscription-chrome";
 import { routing, type Locale } from "@/i18n/routing";
 import { buildUniverseMetadata } from "@/lib/seo";
 
-export const dynamic = "force-dynamic";
+// Cette page de choix ne lit aucune donnee liee au visiteur : une seule version
+// par langue peut etre servie depuis le cache, sans reveiller de fonction CPU.
+export const dynamic = "force-static";
 
 export async function generateMetadata({
   params,

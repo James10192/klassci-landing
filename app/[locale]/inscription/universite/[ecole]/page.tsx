@@ -8,7 +8,17 @@ import { etablissementsOuverts } from "@/lib/portail/tenants";
 import { identiteEtablissement } from "@/lib/vitrine/etablissements";
 import { buildUniverseMetadata } from "@/lib/seo";
 
-export const dynamic = "force-dynamic";
+// Ce formulaire affiche uniquement la configuration publique de l'ecole.
+// Les donnees personnelles sont envoyees aux API, jamais prechargees ici.
+// Preconstruire les seules ecoles autorisees evite une execution a chaque visite
+// et refuse les codes inventes sans creer une nouvelle page a la demande.
+export const dynamic = "force-static";
+export const dynamicParams = false;
+export const revalidate = 3600;
+
+export function generateStaticParams() {
+  return etablissementsOuverts().map(({ code }) => ({ ecole: code }));
+}
 
 function trouver(code: string) {
   return etablissementsOuverts().find((etablissement) => etablissement.code === code.toLowerCase());
