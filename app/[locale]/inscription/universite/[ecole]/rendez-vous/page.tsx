@@ -41,10 +41,10 @@ export default async function RendezVousPage({
   searchParams,
 }: {
   params: Promise<{ locale: string; ecole: string }>;
-  searchParams: { ref?: string };
+  searchParams: Promise<{ ref?: string }>;
 }) {
   const { locale, ecole } = await params;
-  const ref = searchParams.ref;
+  const { ref } = await searchParams;
   setRequestLocale(locale);
 
   const etablissement = trouver(ecole);
