@@ -41,7 +41,8 @@
     "posthog-js": "^1.215.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
-    "server-only": "^0.0.1"
+    "server-only": "^0.0.1",
+    "@vercel/functions": "3.10.6"
   },
   "devDependencies": {
     "@types/node": "^22.10.5",
