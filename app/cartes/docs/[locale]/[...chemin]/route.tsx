@@ -24,13 +24,14 @@ export function generateStaticParams() {
 
 export async function GET(
   _requete: Request,
-  { params }: { params: { locale: string; chemin: string[] } },
+  { params }: { params: Promise<{ locale: string; chemin: string[] }> },
 ) {
-  const segments = [...params.chemin];
+  const routeParams = await params;
+  const segments = [...routeParams.chemin];
   segments[segments.length - 1] = segments[segments.length - 1].replace(/\.png$/, "");
   const slug = segments.length === 1 && segments[0] === "index" ? [] : segments;
 
-  const locale = langueCarte(params.locale);
+  const locale = langueCarte(routeParams.locale);
   const page = source.getPage(slug, locale);
   if (!page) notFound();
 
