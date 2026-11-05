@@ -52,12 +52,13 @@ export default async function VerificationEmailPage({
   searchParams,
 }: {
   params: Promise<{ locale: string }>;
-  searchParams: { ecole?: string | string[] };
+  searchParams: Promise<{ ecole?: string | string[] }>;
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const code = typeof searchParams.ecole === "string" ? searchParams.ecole.trim().toLowerCase() : "";
+  const { ecole } = await searchParams;
+  const code = typeof ecole === "string" ? ecole.trim().toLowerCase() : "";
   const etablissement = etablissementsOuverts().find((e) => e.code === code) ?? null;
   const contenu = <VerificationLien ecole={etablissement?.code ?? null} />;
 
