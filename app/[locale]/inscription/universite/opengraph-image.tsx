@@ -8,6 +8,7 @@ export const alt = "KLASSCI";
 // Construite au déploiement : voir `parLangue`.
 export { parLangue as generateStaticParams } from "@/lib/og/cartes";
 
-export default function Image({ params }: { params: { locale: string } }) {
-  return carteDePage(generateMetadata, params, "inscription");
+export default async function Image({ params }: { params: Promise<{ locale: string }> }) {
+  const routeParams = await params;
+  return carteDePage(generateMetadata, routeParams, "inscription");
 }
