@@ -153,3 +153,16 @@ export async function carteDEcole(
 export function parLangue() {
   return routing.locales.map((locale) => ({ locale }));
 }
+
+/**
+ * Preconstruit uniquement les cartes des ecoles servies par le portail.
+ * Evite qu'un crawler puisse provoquer un rendu ImageResponse different pour
+ * chaque code arbitraire sous les URLs d'inscription / rendez-vous.
+ * Les changements d'etablissements sont appliques lors du deploiement.
+ */
+export function parEcole() {
+  const ecoles = etablissementsOuverts();
+  return routing.locales.flatMap((locale) =>
+    ecoles.map(({ code }) => ({ locale, ecole: code })),
+  );
+}
