@@ -1,6 +1,10 @@
 import { carteDEcole } from "@/lib/og/cartes";
 
-export { size, contentType } from "@/lib/og/cartes";
+export { size, contentType, parEcole as generateStaticParams } from "@/lib/og/cartes";
+
+// Aucun nouveau code d'etablissement ne doit declencher une image couteuse
+// en production : seuls ceux connus au build ont une carte de partage.
+export const dynamicParams = false;
 export const alt = "KLASSCI";
 
 // Les couleurs et le logo viennent de l'instance de l'école, relue au plus une
