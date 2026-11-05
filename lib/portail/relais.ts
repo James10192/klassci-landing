@@ -3,6 +3,7 @@ import "server-only";
 import { isIP } from "node:net";
 
 import { NextResponse, type NextRequest } from "next/server";
+import { ipAddress } from "@vercel/functions";
 
 import { debitDepasse, lectureEnCache, retenirLecture } from "./amortisseur";
 import { preparerAppel } from "./signature";
@@ -117,19 +118,18 @@ function indisponible(): NextResponse {
 /**
  * L'adresse du visiteur, telle que la plateforme l'a constatée.
  *
- * `requete.ip` est renseigné par la plateforme et n'est atteignable par aucun
- * en-tête : c'est la seule valeur qu'un appelant ne peut pas choisir. Elle
- * compte, parce que c'est elle qui borne la limitation par adresse côté
- * KLASSCI. Lire un en-tête à sa place laisserait n'importe qui s'attribuer un
- * compteur neuf à chaque requête, et supprimerait donc la borne tout en la
- * laissant croire en place.
+ * Depuis Next.js 15, `NextRequest.ip` n'existe plus. Vercel expose
+ * l'adresse de la plateforme via `ipAddress()`, qui utilise les en-têtes de
+ * proxy réécrits par Vercel à l'entrée (et non un champ du formulaire).
+ * Hors Vercel, le repli x-forwarded-for ne doit être utilisé qu'avec un
+ * mandataire de confiance. À défaut d'adresse valide, le relais refuse.
  *
- * `x-forwarded-for` ne sert que de repli hors plateforme (développement,
- * exécution derrière un mandataire tiers) ; son premier élément est le client
- * d'origine.
+ * Une valeur contrôlée par un appelant permettrait de contourner la limite
+ * par IP ; en production Vercel réécrit l'en-tête x-forwarded-for pour
+ * prévenir ce spoofing.
  */
 function adresseVisiteur(requete: NextRequest): string | null {
-  const brute = requete.ip ?? requete.headers.get("x-forwarded-for")?.split(",")[0] ?? "";
+  const brute = ipAddress(requete) ?? requete.headers.get("x-forwarded-for")?.split(",")[0] ?? "";
 
   const adresse = brute.trim();
 

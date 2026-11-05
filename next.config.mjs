@@ -7,7 +7,6 @@ const withMDX = createMDX();
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
   compress: true,
   productionBrowserSourceMaps: false,
 
@@ -147,8 +146,5 @@ const nextConfig = {
 };
 
 const configuredNext = withNextIntl(withMDX(nextConfig));
-
-// fumadocs-mdx exposes this Next 15+ option, while this project still runs Next 14.
-delete configuredNext.turbopack;
 
 export default configuredNext;

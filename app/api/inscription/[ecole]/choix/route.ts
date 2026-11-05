@@ -15,7 +15,8 @@ export const dynamic = "force-dynamic";
  */
 export async function POST(
   requete: NextRequest,
-  { params }: { params: { ecole: string } },
+  { params }: { params: Promise<{ ecole: string }> },
 ) {
-  return relayer(params.ecole, CHEMINS.inscriptionChoix, {}, requete);
+  const routeParams = await params;
+  return relayer(routeParams.ecole, CHEMINS.inscriptionChoix, {}, requete);
 }

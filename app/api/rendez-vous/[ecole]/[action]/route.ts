@@ -18,16 +18,17 @@ const ACTIONS: Record<string, CheminPublic> = {
 
 export async function POST(
   requete: NextRequest,
-  { params }: { params: { ecole: string; action: string } },
+  { params }: { params: Promise<{ ecole: string; action: string }> },
 ) {
-  const chemin = ACTIONS[params.action];
+  const routeParams = await params;
+  const chemin = ACTIONS[routeParams.action];
 
   if (chemin === undefined) {
     return Response.json({ erreur: "inconnu" }, { status: 404 });
   }
 
-  if (params.action === "creneaux") {
-    return relayer(params.ecole, chemin, {}, requete);
+  if (routeParams.action === "creneaux") {
+    return relayer(routeParams.ecole, chemin, {}, requete);
   }
 
   const recu = await requete.json().catch(() => null);
@@ -39,7 +40,7 @@ export async function POST(
   const source = recu as Record<string, unknown>;
   const corps: Record<string, unknown> = {};
 
-  if (params.action === "retrouver") {
+  if (routeParams.action === "retrouver") {
     if (typeof source.identifiant !== "string" || typeof source.date_naissance !== "string") {
       return Response.json({ erreur: "champs_manquants" }, { status: 422 });
     }
@@ -47,7 +48,7 @@ export async function POST(
     corps.identifiant = source.identifiant.trim();
     corps.date_naissance = source.date_naissance.trim();
 
-    return relayer(params.ecole, chemin, corps, requete);
+    return relayer(routeParams.ecole, chemin, corps, requete);
   }
 
   if (typeof source.reference !== "string" || typeof source.date_naissance !== "string") {
@@ -57,7 +58,7 @@ export async function POST(
   corps.reference = source.reference.trim();
   corps.date_naissance = source.date_naissance.trim();
 
-  if (params.action === "reserver" || params.action === "deplacer") {
+  if (routeParams.action === "reserver" || routeParams.action === "deplacer") {
     const id = typeof source.creneau_id === "number" ? source.creneau_id : Number.parseInt(String(source.creneau_id ?? ""), 10);
 
     if (!Number.isInteger(id) || id < 1) {
@@ -67,5 +68,5 @@ export async function POST(
     corps.creneau_id = id;
   }
 
-  return relayer(params.ecole, chemin, corps, requete);
+  return relayer(routeParams.ecole, chemin, corps, requete);
 }

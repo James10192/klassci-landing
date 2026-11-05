@@ -8,8 +8,9 @@ export const dynamic = "force-dynamic";
 
 export async function POST(
   requete: NextRequest,
-  { params }: { params: { ecole: string } },
+  { params }: { params: Promise<{ ecole: string }> },
 ) {
+  const routeParams = await params;
   const corps = await requete.json().catch(() => null);
 
   if (corps === null || typeof corps !== "object") {
@@ -25,7 +26,7 @@ export async function POST(
   // Corps reconstruit champ par champ : un champ ajoute par l'appelant
   // n'atteint jamais l'ecole, et n'entre donc jamais dans la charge signee.
   return relayer(
-    params.ecole,
+    routeParams.ecole,
     CHEMINS.reinscriptionLookup,
     { matricule: matricule.trim(), date_naissance: dateNaissance.trim() },
     requete,

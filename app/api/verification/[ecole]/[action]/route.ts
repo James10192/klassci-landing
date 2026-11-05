@@ -15,10 +15,11 @@ export const dynamic = "force-dynamic";
  */
 export async function POST(
   requete: NextRequest,
-  { params }: { params: { ecole: string; action: string } },
+  { params }: { params: Promise<{ ecole: string; action: string }> },
 ) {
+  const routeParams = await params;
   const recu = await requete.json().catch(() => null);
-  const appel = preparerVerification(params.action, recu);
+  const appel = preparerVerification(routeParams.action, recu);
 
   if ("erreur" in appel) {
     return Response.json(
@@ -27,5 +28,5 @@ export async function POST(
     );
   }
 
-  return relayer(params.ecole, appel.chemin, appel.corps, requete);
+  return relayer(routeParams.ecole, appel.chemin, appel.corps, requete);
 }

@@ -9,6 +9,7 @@ export const alt = "KLASSCI";
 // fois par heure — la même cadence que la page.
 export const revalidate = 3600;
 
-export default function Image({ params }: { params: { locale: string; ecole: string } }) {
-  return carteDEcole(params, "rendezVous");
+export default async function Image({ params }: { params: Promise<{ locale: string; ecole: string }> }) {
+  const routeParams = await params;
+  return carteDEcole(routeParams, "rendezVous");
 }

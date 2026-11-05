@@ -32,8 +32,9 @@ const BOOLEENS = ["est_transfert", "redouble_niveau_origine"] as const;
 
 export async function POST(
   requete: NextRequest,
-  { params }: { params: { ecole: string } },
+  { params }: { params: Promise<{ ecole: string }> },
 ) {
+  const routeParams = await params;
   const recu = await requete.json().catch(() => null);
 
   if (recu === null || typeof recu !== "object") {
@@ -97,5 +98,5 @@ export async function POST(
 
   corps.telephone = canal.telephone;
 
-  return relayer(params.ecole, CHEMINS.inscriptionSubmit, corps, requete);
+  return relayer(routeParams.ecole, CHEMINS.inscriptionSubmit, corps, requete);
 }
