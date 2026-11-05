@@ -8,9 +8,13 @@ import { etablissementsOuverts } from "@/lib/portail/tenants";
 import { identitesParCode } from "@/lib/vitrine/etablissements";
 import { buildUniverseMetadata } from "@/lib/seo";
 
-// La liste des etablissements servis vient des variables d'environnement :
-// elle change sans redeploiement, donc la page ne se met pas en cache.
-export const dynamic = "force-dynamic";
+// La liste publique vient de la configuration de deploiement, pas du visiteur.
+// La produire une fois, puis la revalider au plus toutes les heures, evite de
+// recalculer les logos et les ecoles sur chaque visite ou passage de robot.
+// Toute modification des variables Vercel prend effet au deploiement suivant.
+// Les soumissions et verifications individuelles restent des routes dynamiques.
+export const dynamic = "force-static";
+export const revalidate = 3600;
 
 export async function generateMetadata({
   params,
