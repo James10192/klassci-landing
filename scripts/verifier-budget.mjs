@@ -109,6 +109,22 @@ async function controlerRendu() {
   if (!existsSync(manifeste)) return;
 
   const donnees = JSON.parse(await readFile(manifeste, "utf8"));
+  // Les pages d'inscription publiques ne doivent plus etre executees a
+  // chaque requete : cela epuisait Fluid Active CPU avec le trafic des bots.
+  // Les mutations de dossiers restent, elles, dans les routes API POST.
+  for (const route of [
+    "/fr/inscription",
+    "/en/inscription",
+    "/fr/inscription/universite",
+    "/en/inscription/universite",
+  ]) {
+    if (donnees.routes?.[route] === undefined) {
+      anomalies.push(`${route} n'est pas preproduite : elle risque de consommer du CPU a chaque visite.`);
+    } else {
+      mesures.push(`${route} preproduite`);
+    }
+  }
+
   const accueil = donnees.routes?.["/fr"];
 
   if (!accueil) {
