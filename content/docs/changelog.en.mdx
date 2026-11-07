@@ -15,9 +15,9 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ### Added
 
-- **The financial situation of each class**: a new accounting page shows, class by class, the expected amount, allocated payments, the balance due and overdue unpaid amounts, with the school total at the top. Filters by year, program, level, class, system and fee category without reloading, class detail, PDF and Excel export.
+- **The financial situation of each class**: a new accounting page shows, class by class, the expected amount, what has been paid with its rate, the balance due and overdue unpaid amounts, with the school total at the top. The three classes with the most overdue amounts are highlighted, the table sorts by balance, overdue, recovery or name, and filters reload on their own. A class window lists its students, late payers first, with links to their record, enrolment or payments for those allowed to open them. PDF and Excel export.
 
-  ![Financial situation of classes: school totals, filters and breakdown by class](/img/changelog/2026-11/situation-classes-apres.webp)
+  ![Financial situation of classes: totals, classes to watch and class-by-class detail](/img/changelog/2026-11/situation-classes-refonte-apres.webp)
 
 - **Correct several of a student's grades at once**: on the student record, bulk entry opens editing directly in the grades table. Change several grades, an absence or a comment, and save everything at once, without one window after another. Each row shows whether the grade is validated or still a draft; a rejected grade keeps what was typed with the reason, and a grade changed meanwhile by a colleague is flagged instead of overwritten. Saving does not officially validate the grades.
 
@@ -34,6 +34,10 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 - **Enrolment report by class**: filtered by year, programme, level and threshold, exported as a PDF with the school's branding.
 
 ### Improved
+
+- **Editing an assessment finds its subject again**: the subject list is the one of the assessment's class (BTS curriculum, or course units in LMD), and the assessment's subject is already selected. A Licence assessment no longer opens without a subject.
+
+  ![Editing a Licence 3 assessment: the "Technical English" unit is already selected](/img/changelog/2026-11/evaluation-matiere-apres.webp)
 
 - **The student page average matches the report card**: on a BTS student's page, the overall average and the year's rank follow the report card calculation (semester weights, attendance mark, annual rank). Until the report card is generated, the average is marked "Provisional".
 

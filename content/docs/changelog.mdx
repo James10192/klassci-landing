@@ -15,9 +15,9 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 
 ### Ajouts
 
-- **La situation financière de chaque classe** : une nouvelle page de la comptabilité montre, classe par classe, le montant attendu, les règlements imputés, le reste à payer et l'échu impayé, avec le total de l'établissement en tête. Filtres par année, filière, niveau, classe, système et catégorie de frais sans rechargement, détail d'une classe, export PDF et Excel.
+- **La situation financière de chaque classe** : une nouvelle page de la comptabilité montre, classe par classe, le montant attendu, le réglé avec son taux, le reste à payer et l'échu impayé, avec le total de l'établissement en tête. Les trois classes au plus gros échu sont mises en avant, le tableau se trie par reste, échu, recouvrement ou nom, et les filtres se rechargent seuls. La fenêtre d'une classe liste ses étudiants, en retard d'abord, avec un lien vers leur fiche, leur inscription ou leurs paiements pour qui y a accès. Export PDF et Excel.
 
-  ![Situation financière des classes : totaux de l'établissement, filtres et répartition par classe](/img/changelog/2026-11/situation-classes-apres.webp)
+  ![Situation financière des classes : totaux, classes à surveiller et détail classe par classe](/img/changelog/2026-11/situation-classes-refonte-apres.webp)
 
 - **Corriger plusieurs notes d'un étudiant d'un coup** : sur la fiche étudiant, la saisie multiple ouvre l'édition directement dans le tableau des notes. On change plusieurs notes, une absence ou un commentaire, et tout s'enregistre en une fois, sans fenêtre successive. Chaque ligne indique si la note est validée ou en brouillon ; une note refusée garde la saisie avec sa raison, et une note modifiée entre-temps par un collègue est signalée au lieu d'être écrasée. Enregistrer ne valide pas officiellement les notes.
 
@@ -34,6 +34,10 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 - **Rapport des effectifs par classe** : filtrable par année, filière, niveau et seuil, exportable en PDF à l'identité de l'établissement.
 
 ### Améliorations
+
+- **Modifier une évaluation retrouve sa matière** : la liste des matières est celle de la classe de l'évaluation (maquette BTS, ou éléments constitutifs en LMD), et la matière de l'évaluation est déjà choisie. Une évaluation de Licence ne s'ouvre plus sans matière.
+
+  ![Modification d'une évaluation de Licence 3 : l'élément « Anglais technique » est déjà choisi](/img/changelog/2026-11/evaluation-matiere-apres.webp)
 
 - **La moyenne de la fiche étudiant, celle du bulletin** : sur la fiche d'un étudiant BTS, la moyenne générale et le rang de l'année suivent le calcul du bulletin (poids des semestres, note d'assiduité, rang annuel). Tant que le bulletin n'est pas généré, la moyenne est marquée « Provisoire ».
 
