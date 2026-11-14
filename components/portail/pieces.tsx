@@ -33,7 +33,7 @@ export function entree(rang: number) {
  * de lui-même au focus et l'écran part de travers.
  */
 export const champ =
-  "mt-2 block w-full rounded-xl border border-border bg-bg px-3.5 py-2.5 text-[16px] text-text " +
+  "mt-2 block w-full min-w-0 rounded-xl border border-border bg-bg px-3.5 py-2.5 text-[16px] text-text " +
   "placeholder:text-text-muted transition-[border-color,box-shadow] duration-200 " +
   "focus:border-accent focus:outline-none focus:ring-4 focus:ring-accent-light";
 

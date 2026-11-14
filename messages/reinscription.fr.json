@@ -6,7 +6,7 @@
       "matricule": {
         "label": "Matricule",
         "placeholder": "Ex. 2024-0413",
-        "aide": "Tel qu'il figure sur votre carte d'étudiant."
+        "aide": "Tel qu'il figure sur votre carte d'étudiant. Les espaces, tirets et majuscules n'ont pas d'importance."
       },
       "naissance": {
         "label": "Date de naissance",
@@ -18,7 +18,7 @@
       "chargement": "Recherche en cours…"
     },
     "confirmation": {
-      "salutation": "Bonjour {prenom}.",
+      "salutation": "Bonjour {nom}.",
       "salutationSansPrenom": "Nous avons retrouvé votre dossier.",
       "classe": "Classe actuelle",
       "annee": "Année visée",
@@ -82,6 +82,16 @@
         "titre": "Ce dossier est momentanément bloqué.",
         "texte": "Trop d'essais infructueux ont été faits sur ce dossier. Réessayez plus tard, ou rapprochez-vous de votre établissement."
       }
+    },
+    "contact": {
+      "titre": "Votre code de confirmation sera envoyé",
+      "parEmail": "par e-mail à {destination}",
+      "parWhatsapp": "par WhatsApp au {destination}",
+      "aucun": "Votre dossier n’a pas encore de contact : indiquez votre adresse e-mail.",
+      "ouvrirAutre": "Ce n’est plus mon adresse : en donner une autre",
+      "emailAutre": "Autre adresse e-mail",
+      "emailSansDossier": "Votre adresse e-mail (recommandé)",
+      "emailAide": "Le code et votre convocation y seront envoyés. L’établissement verra cette adresse sur votre demande."
     }
   },
   "inscription": {
@@ -163,7 +173,8 @@
       "affectationAide": "L'établissement vérifiera. Si vous n'êtes pas sûr, laissez « je ne sais pas ».",
       "tuteur": "Parent ou tuteur",
       "tuteurAide": "Facultatif, mais c'est souvent la personne que l'établissement joint le plus facilement.",
-      "tuteurNom": "Nom et prénoms",
+      "tuteurNom": "Nom du parent ou tuteur",
+      "tuteurPrenoms": "Prénoms",
       "tuteurLien": "Lien avec vous",
       "tuteurTelephone": "Téléphone",
       "tuteurProfession": "Profession",

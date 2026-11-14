@@ -15,6 +15,12 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ### Added
 
+- **LMD report cards: what is missing, said plainly**: before generating a class's report cards, the check window groups problems by cause (no grades entered, grade sheets not prepared, sheets not validated, missing grades), with the number of students concerned and what to do. Ready report cards are generated without waiting for the others. By default, the report card is calculated as soon as grades are entered; a school that wants to require validated sheets turns it on in its settings. Generating a class is followed with a progress bar: you can close the page, and a notification arrives at the end.
+
+  ![LMD report card check: one cause, the number of students concerned and the button to generate the ready report cards](/img/changelog/2026-11/bulletins-lmd-controle-apres.webp)
+
+  ![Generation of a class's LMD report cards followed with a progress bar](/img/changelog/2026-11/bulletins-lmd-generation-apres.webp)
+
 - **The financial situation of each class**: a new accounting page shows, class by class, the expected amount, what has been paid with its rate, the balance due and overdue unpaid amounts, with the school total at the top. The three classes with the most overdue amounts are highlighted, the table sorts by balance, overdue, recovery or name, and filters reload on their own. A class window lists its students, late payers first, with links to their record, enrolment or payments for those allowed to open them. PDF and Excel export.
 
   ![Financial situation of classes: totals, classes to watch and class-by-class detail](/img/changelog/2026-11/situation-classes-refonte-apres.webp)
@@ -53,6 +59,18 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 - **BTS common core: aligned results and ranks**: semester 1 in the common-core class, semester 2 in the specialisation, identical ranks everywhere, and an annual rule and council criterion (including "Both averages") set by the school.
 - **LMD report cards: bulk printing and adjustable layout**: a single PDF for a selection of report cards (up to 400), a more compact header, adjustable fonts and spacing, a "Minimum UE for APC" setting, and several teachers per class taken from the schedule.
 - **Student and parent invitations**: a secure link to create the password, with no temporary code, and the link's status and expiry tracked in the record without ever displaying the link.
+- **Generating a report card from the student record**: the calculation is visible ("Calculating averages…", then "Updating the record…") and the window cannot be closed mid-calculation.
+
+### Fixed
+
+- **Reminders: the right amount, balances from past years included**: the "To remind" column claims what was due to date, plus balances still owed from previous years, detailed under the amount. The year's remaining balance is shown below when it is higher. The same amount appears in reminder messages, the dashboard, exports and the student's record; a student up to date for the year but still owing a past year is no longer listed as "Up to date". In LMD, the fee follows the class's track.
+
+  ![The reminders list, amount to remind and year total side by side](/img/changelog/2026-11/relances-montants-apres.webp)
+
+- **BTS report cards: statistics and rank agree**: the highest, lowest and class averages for semester 1 and semester 2 are calculated the same way as the rank. The top student no longer has an average below the "highest average" printed on their own report card.
+- **LMD report cards: a student in the bin no longer blocks the class**: they are left out of generation, and the check window names each student by name and student number, with a link to their record.
+- **Assessment duration**: calculated from the hours, it is no longer negative.
+- **Report cards and exports with a "/" in the name**: a student number, class or year such as "2025/2026" no longer prevents the PDF or Excel download.
 
 ---
 

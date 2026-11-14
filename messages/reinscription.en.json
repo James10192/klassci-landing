@@ -6,7 +6,7 @@
       "matricule": {
         "label": "Student number",
         "placeholder": "e.g. 2024-0413",
-        "aide": "Exactly as printed on your student card."
+        "aide": "As printed on your student card. Spaces, dashes and capital letters don't matter."
       },
       "naissance": {
         "label": "Date of birth",
@@ -18,7 +18,7 @@
       "chargement": "Searching…"
     },
     "confirmation": {
-      "salutation": "Hello {prenom}.",
+      "salutation": "Hello {nom}.",
       "salutationSansPrenom": "We found your file.",
       "classe": "Current class",
       "annee": "Target year",
@@ -82,6 +82,16 @@
         "titre": "This record is temporarily locked.",
         "texte": "Too many unsuccessful attempts were made on this record. Try again later, or contact your school."
       }
+    },
+    "contact": {
+      "titre": "Your confirmation code will be sent",
+      "parEmail": "by email to {destination}",
+      "parWhatsapp": "on WhatsApp to {destination}",
+      "aucun": "Your file has no contact yet: enter your email address.",
+      "ouvrirAutre": "Not my address any more? Give another one",
+      "emailAutre": "Another email address",
+      "emailSansDossier": "Your email address (recommended)",
+      "emailAide": "The code and your notice will be sent there. The school will see this address on your request."
     }
   },
   "inscription": {
@@ -163,7 +173,8 @@
       "affectationAide": "The school will verify this. If you are unsure, leave “I don't know”.",
       "tuteur": "Parent or guardian",
       "tuteurAide": "Optional, but often the person the school reaches most easily.",
-      "tuteurNom": "Full name",
+      "tuteurNom": "Last name",
+      "tuteurPrenoms": "First name(s)",
       "tuteurLien": "Relationship to you",
       "tuteurTelephone": "Phone",
       "tuteurProfession": "Occupation",

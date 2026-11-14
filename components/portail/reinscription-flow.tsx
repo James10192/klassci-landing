@@ -9,7 +9,8 @@ import type { EtablissementVisible } from "@/lib/portail/tenants";
 import { suiteSurPlace } from "@/lib/portail/aboutissement";
 
 import { Alerte, BoutonPrincipal, Carte, CaseDate, RESSORT, champ, dateIso, dateNaissanceValide, entree } from "./pieces";
-import { ECRANS, type CleEtat, type Etape, type Situation } from "./reinscription-ecrans";
+import { ContactDeConfirmation, type ChoixContact } from "./reinscription-contact";
+import { ECRANS, nomAffiche, type CleEtat, type Etape, type Situation } from "./reinscription-ecrans";
 import { ReinscriptionSucces } from "./reinscription-succes";
 import { classer, ecranDe } from "./reponses";
 import { useSuiviDemande } from "./suivi-demande";
@@ -40,7 +41,7 @@ export function ReinscriptionFlow({
    * autre demande » que cet écran propose déjà.
    */
   onAboutir?: (abouti: boolean) => void;
-  onChoisirCreneau?: (reference: string, dateNaissance: string) => void;
+  onChoisirCreneau?: (reference: string, dateNaissance: string, jeton: string | null) => void;
   /**
    * « Demande déjà enregistrée » était une impasse : un message, et rien à
    * cliquer. L'étudiant, sans sa convocation, finissait sur le formulaire de
@@ -61,6 +62,7 @@ export function ReinscriptionFlow({
   const [etat, setEtat] = useState<CleEtat | null>(null);
   const [enCours, setEnCours] = useState(false);
   const [consentement, setConsentement] = useState(false);
+  const [choixContact, setChoixContact] = useState<ChoixContact>({ canal: null, email: "", autreAdresse: false });
   const dateNaissance = dateIso(jour, mois, annee);
   const suivi = useSuiviDemande({
     ecole: etablissement.code,
@@ -87,6 +89,7 @@ export function ReinscriptionFlow({
   );
 
   const peutChercher = matricule.trim().length > 0 && dateComplete && !enCours;
+  const contactPropose = situation?.verification === true && situation.contacts != null;
 
 
   /**
@@ -176,6 +179,10 @@ export function ReinscriptionFlow({
           matricule: matricule.trim(),
           dateNaissance: dateNaissance,
           consentement: true,
+          // Seulement si l'écran les a proposés : une instance ancienne
+          // n'enverrait de toute façon le code qu'au contact du dossier.
+          ...(contactPropose && choixContact.email.trim() !== "" ? { email: choixContact.email.trim() } : {}),
+          ...(contactPropose && choixContact.canal !== null ? { canal: choixContact.canal } : {}),
         }),
       });
 
@@ -203,7 +210,7 @@ export function ReinscriptionFlow({
     } finally {
       setEnCours(false);
     }
-  }, [consentement, enCours, etablissement.code, matricule, dateNaissance, interpreter, suivi]);
+  }, [consentement, enCours, etablissement.code, matricule, dateNaissance, suivi, contactPropose, choixContact]);
 
   const recommencer = useCallback(() => {
     onAboutir?.(false);
@@ -212,6 +219,7 @@ export function ReinscriptionFlow({
     setSituation(null);
     setEtat(null);
     setConsentement(false);
+    setChoixContact({ canal: null, email: "", autreAdresse: false });
     setMatricule("");
     setJour("");
     setMois("");
@@ -224,11 +232,13 @@ export function ReinscriptionFlow({
     return (
       <div className="mx-auto w-full max-w-xl">
         <VerificationCode ecole={etablissement.code} demande={suivi.verification}
-                          onVerifie={suivi.conclure} onRecommencer={recommencer} />
+                          onVerifie={suivi.conclure} onRecommencer={recommencer}
+                          onChangerDemande={suivi.remplacerVerification} />
       </div>
     );
   }
 
+  const nomComplet = situation === null ? null : nomAffiche(situation);
   const referenceAboutie = suivi.abouti === null ? null : suivi.abouti.reference;
 
   return (
@@ -350,10 +360,10 @@ export function ReinscriptionFlow({
             <Carte>
               <m.h2
                 {...entree(0)}
-                className="text-balance text-xl font-semibold tracking-tight text-text"
+                className="text-balance break-words text-xl font-semibold tracking-tight text-text"
               >
-                {situation.prenom
-                  ? t("confirmation.salutation", { prenom: situation.prenom })
+                {nomComplet !== null
+                  ? t("confirmation.salutation", { nom: nomComplet })
                   : t("confirmation.salutationSansPrenom")}
               </m.h2>
 
@@ -364,6 +374,10 @@ export function ReinscriptionFlow({
                 <Ligne intitule={t("confirmation.classe")} valeur={situation.classe_actuelle} />
                 <Ligne intitule={t("confirmation.annee")} valeur={situation.annee_cible} />
               </m.dl>
+
+              {contactPropose && situation.contacts && (
+                <ContactDeConfirmation contacts={situation.contacts} choix={choixContact} onChange={setChoixContact} />
+              )}
 
               <m.label
                 {...entree(2)}
@@ -415,7 +429,7 @@ export function ReinscriptionFlow({
               reference={suivi.abouti.reference}
               creneau={suivi.abouti.creneau}
               onChoisirCreneau={referenceAboutie !== null && onChoisirCreneau !== undefined
-                ? () => onChoisirCreneau(referenceAboutie, dateNaissance)
+                ? () => onChoisirCreneau(referenceAboutie, dateNaissance, suivi.abouti?.jeton ?? null)
                 : undefined}
               onRecommencer={recommencer}
             />
@@ -433,8 +447,8 @@ function Ligne({ intitule, valeur }: { intitule: string; valeur?: string | null 
 
   return (
     <div className="flex items-baseline justify-between gap-4 px-4 py-3">
-      <dt className="text-sm text-text-muted">{intitule}</dt>
-      <dd className="text-right text-sm font-semibold text-text">{valeur}</dd>
+      <dt className="shrink-0 text-sm text-text-muted">{intitule}</dt>
+      <dd className="min-w-0 break-words text-right text-sm font-semibold text-text">{valeur}</dd>
     </div>
   );
 }

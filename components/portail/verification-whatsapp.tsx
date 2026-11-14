@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { renvoyer, suivre, type DemandeVerification, type ResultatSuivi } from "@/lib/portail/verification";
 
 import { Carte, entree } from "./pieces";
+import { ChangerCanal } from "./verification-canal";
 
 const INTERVALLE_SUIVI_MS = 5000;
 const DELAI_NOUVEAU_LIEN_S = 60;
@@ -32,12 +33,15 @@ export function VerificationWhatsapp({
   onVerifie,
   onModifier,
   onRecommencer,
+  onChangerDemande,
 }: {
   ecole: string;
   demande: DemandeVerification & { lienWhatsapp: string };
   onVerifie: (corps: Record<string, unknown>) => Promise<void>;
   onModifier?: () => void;
   onRecommencer?: () => void;
+  onChangerDemande?: (demande: DemandeVerification) => void;
+  contexte?: "demande" | "acces";
 }) {
   const t = useTranslations("verification");
   const [lien, setLien] = useState(demande.lienWhatsapp);
@@ -122,7 +126,7 @@ export function VerificationWhatsapp({
     <Carte>
       <m.div {...entree(0)}>
         <h2 className="text-balance text-xl font-semibold tracking-tight">{t("inverse.titre")}</h2>
-        <p className="mt-1.5 text-pretty text-sm leading-relaxed text-text-secondary">
+        <p className="mt-1.5 text-pretty break-words text-sm leading-relaxed text-text-secondary">
           {t("inverse.texte", { destination: demande.destination })}
         </p>
       </m.div>
@@ -172,6 +176,8 @@ export function VerificationWhatsapp({
       <p className="mt-3 text-pretty text-xs leading-relaxed text-text-muted">
         {t("inverse.autreTelephone", { destination: demande.destination })}
       </p>
+
+      {onChangerDemande && <ChangerCanal ecole={ecole} demande={demande} onChange={onChangerDemande} />}
     </Carte>
   );
 }

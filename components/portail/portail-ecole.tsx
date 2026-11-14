@@ -54,9 +54,12 @@ export function PortailEcole({
   const [rdvRef, setRdvRef] = useState<string | null>(null);
   const [rdvNaissance, setRdvNaissance] = useState("");
   const [rdvIdentifiant, setRdvIdentifiant] = useState<string | undefined>(undefined);
+  // Rendu par un code réussi au dépôt : le créneau se choisit sans second code.
+  const [rdvJeton, setRdvJeton] = useState<string | null>(null);
   const tRdv = useTranslations("inscription.rdv");
 
-  function ouvrirRdv(reference: string, dateNaissance: string) {
+  function ouvrirRdv(reference: string, dateNaissance: string, jeton: string | null = null) {
+    setRdvJeton(jeton);
     setRdvRef(reference);
     setRdvIdentifiant(undefined);
     setRdvNaissance(dateNaissance);
@@ -64,6 +67,7 @@ export function PortailEcole({
   }
 
   function retrouverRdv(identifiant: string, dateNaissance: string) {
+    setRdvJeton(null);
     setRdvRef("");
     setRdvIdentifiant(identifiant);
     setRdvNaissance(dateNaissance);
@@ -157,6 +161,7 @@ export function PortailEcole({
                     referenceInitiale={rdvRef || undefined}
                     naissanceInitiale={rdvNaissance}
                     identifiantInitial={rdvIdentifiant}
+                    jetonInitial={rdvJeton}
                   />
                 </Carte>
               </m.div>

@@ -70,6 +70,33 @@
       "nouveauLienDans": "Nouveau lien dans {secondes} s",
       "lienRenouvele": "Un nouveau lien est prêt. Ouvrez WhatsApp de nouveau.",
       "indisponible": "Nous n’arrivons pas à joindre l’établissement. Nous réessayons…"
+    },
+    "canalAlternatif": {
+      "ouvrirDepuisWhatsapp": "Je ne reçois rien sur WhatsApp : recevoir le code par e-mail",
+      "ouvrirAutreAdresse": "Ce n’est plus mon adresse : recevoir le code à une autre adresse",
+      "libelleDepuisWhatsapp": "Adresse e-mail (facultatif)",
+      "libelleAutreAdresse": "Nouvelle adresse e-mail",
+      "aideDepuisWhatsapp": "Laissez vide pour utiliser l’adresse de votre dossier. Une nouvelle adresse sera transmise à l’établissement avec votre demande.",
+      "aideAutreAdresse": "Le code y sera envoyé, et votre convocation aussi. L’établissement voit cette adresse sur votre demande.",
+      "envoyer": "Envoyer le code par e-mail",
+      "envoi": "Envoi…",
+      "adresseRequise": "Indiquez la nouvelle adresse.",
+      "indisponible": "Ce changement n’est pas encore possible pour cet établissement. Contactez-le : il mettra votre contact à jour.",
+      "erreurs": {
+        "emailInvalide": "Cette adresse ne peut pas recevoir de message. Vérifiez-la, par exemple prenom.nom@gmail.com.",
+        "canalIndisponible": "Votre dossier n’a pas d’adresse e-mail : indiquez celle que vous consultez.",
+        "tropTot": "Plusieurs codes ont déjà été demandés. Patientez un peu avant de réessayer."
+      }
+    },
+    "acces": {
+      "titre": "Confirmez que c’est bien vous",
+      "texteEmail": "Pour voir votre convocation et choisir votre créneau, saisissez le code à 6 chiffres que nous venons d’envoyer à {destination}.",
+      "texteTelephone": "Pour voir votre convocation et choisir votre créneau, saisissez le code à 6 chiffres que nous venons d’envoyer par WhatsApp au {destination}.",
+      "codeAide": "Six chiffres, valables 15 minutes.",
+      "injoignable": "Votre dossier n’a ni adresse e-mail ni numéro WhatsApp pour vous envoyer un code. Contactez votre établissement : il mettra votre contact à jour.",
+      "indisponible": "Le code n’a pas pu être envoyé. Réessayez dans quelques minutes.",
+      "expire": "Pour votre sécurité, l’accès à votre convocation a expiré. Confirmez de nouveau que c’est bien vous.",
+      "autreCode": "Recommencer"
     }
   }
 }

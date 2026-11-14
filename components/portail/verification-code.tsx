@@ -2,7 +2,7 @@
 
 import { m } from "framer-motion";
 import { useTranslations } from "next-intl";
-import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useId, useRef, useState } from "react";
 
 import {
   nettoyerCode,
@@ -14,6 +14,7 @@ import {
 } from "@/lib/portail/verification";
 
 import { BoutonPrincipal, Carte, champ, entree } from "./pieces";
+import { ChangerCanal } from "./verification-canal";
 import { VerificationWhatsapp } from "./verification-whatsapp";
 
 const DELAI_RENVOI_S = 60;
@@ -54,6 +55,18 @@ type ProprietesVerification = {
   onModifier?: () => void;
   /** Réinscription : l'adresse vient du dossier de l'école, on ne peut que recommencer. */
   onRecommencer?: () => void;
+  /**
+   * Réinscription : le code part sur un autre canal ou à une autre adresse
+   * (`ChangerCanal`). Absent, le lien ne s'affiche pas.
+   */
+  onChangerDemande?: (demande: DemandeVerification) => void;
+  /**
+   * `acces` : le code ouvre une convocation, il ne confirme pas une demande.
+   * Les phrases « votre demande a bien été transmise » y seraient fausses.
+   */
+  contexte?: "demande" | "acces";
+  /** Déjà dans une carte (l'écran du rendez-vous) : pas de seconde carte autour. */
+  nu?: boolean;
 };
 
 /**
@@ -61,14 +74,18 @@ type ProprietesVerification = {
  * vérification inversée, envoi du code depuis WhatsApp.
  */
 export function VerificationCode(proprietes: ProprietesVerification) {
-  const { lienWhatsapp } = proprietes.demande;
+  const { lienWhatsapp, canal, destination } = proprietes.demande;
+  // Un nouveau canal ou une nouvelle adresse, c'est un nouvel écran : le
+  // décompte du renvoi et le code à moitié tapé ne valent plus.
+  const cle = `${canal}:${destination}`;
 
   return lienWhatsapp !== undefined
-    ? <VerificationWhatsapp {...proprietes} demande={{ ...proprietes.demande, lienWhatsapp }} />
-    : <VerificationParCode {...proprietes} />;
+    ? <VerificationWhatsapp key={cle} {...proprietes} demande={{ ...proprietes.demande, lienWhatsapp }} />
+    : <VerificationParCode key={cle} {...proprietes} />;
 }
 
-function VerificationParCode({ ecole, demande, onVerifie, onModifier, onRecommencer }: ProprietesVerification) {
+function VerificationParCode({ ecole, demande, onVerifie, onModifier, onRecommencer, onChangerDemande, contexte = "demande", nu = false }: ProprietesVerification) {
+  const Enveloppe = nu ? Fragment : Carte;
   const t = useTranslations("verification");
   const id = useId();
   const champCode = useRef<HTMLInputElement>(null);
@@ -140,13 +157,15 @@ function VerificationParCode({ ecole, demande, onVerifie, onModifier, onRecommen
   const ids = { aide: `${id}-aide`, erreur: `${id}-erreur`, info: `${id}-info` };
 
   return (
-    <Carte>
+    <Enveloppe>
       <m.div {...entree(0)}>
         <h2 className="text-balance text-xl font-semibold tracking-tight">
-          {email ? t("titreEmail") : t("titreTelephone")}
+          {contexte === "acces" ? t("acces.titre") : email ? t("titreEmail") : t("titreTelephone")}
         </h2>
-        <p className="mt-1.5 text-pretty text-sm leading-relaxed text-text-secondary">
-          {t(email ? "texteEmail" : "texteTelephone", { destination: demande.destination })}
+        <p className="mt-1.5 text-pretty break-words text-sm leading-relaxed text-text-secondary">
+          {contexte === "acces"
+            ? t(email ? "acces.texteEmail" : "acces.texteTelephone", { destination: demande.destination })
+            : t(email ? "texteEmail" : "texteTelephone", { destination: demande.destination })}
         </p>
       </m.div>
 
@@ -170,9 +189,9 @@ function VerificationParCode({ ecole, demande, onVerifie, onModifier, onRecommen
           placeholder="123456"
           aria-invalid={erreur !== null || undefined}
           aria-describedby={`${ids.aide} ${ids.erreur} ${ids.info}`}
-          className={`${champ} text-center text-xl tracking-[0.5em] tabular-nums`}
+          className={`${champ} text-center text-xl tracking-[0.3em] tabular-nums sm:tracking-[0.5em]`}
         />
-        <p id={ids.aide} className="mt-1 text-xs text-text-muted">{t("codeAide")}</p>
+        <p id={ids.aide} className="mt-1 text-xs text-text-muted">{contexte === "acces" ? t("acces.codeAide") : t("codeAide")}</p>
         <p id={ids.erreur} role="alert" className="text-xs text-erreur empty:hidden [&:not(:empty)]:mt-1">
           {erreur}
         </p>
@@ -216,7 +235,11 @@ function VerificationParCode({ ecole, demande, onVerifie, onModifier, onRecommen
         )}
       </m.div>
 
-      {onRecommencer && (
+      {onChangerDemande && (
+        <ChangerCanal ecole={ecole} demande={demande} onChange={onChangerDemande} />
+      )}
+
+      {onRecommencer && !onChangerDemande && (
         <p className="mt-2 text-pretty text-xs leading-relaxed text-text-muted">
           {email ? t("adresseIncorrecte") : t("numeroIncorrect")}
         </p>
@@ -225,6 +248,6 @@ function VerificationParCode({ ecole, demande, onVerifie, onModifier, onRecommen
       <p className="mt-3 text-pretty text-xs leading-relaxed text-text-muted">
         {email ? t("spam") : t("spamTelephone")}
       </p>
-    </Carte>
+    </Enveloppe>
   );
 }

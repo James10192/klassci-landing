@@ -3,7 +3,7 @@
 import { useCallback, useRef, useState } from "react";
 
 import { lireAboutissement, type Physiques } from "@/lib/portail/aboutissement";
-import { suiteReponse, type DemandeVerification } from "@/lib/portail/verification";
+import { lireJetonAcces, suiteReponse, type DemandeVerification } from "@/lib/portail/verification";
 
 import { chargerCreneau, type CreneauAttribue } from "./candidature-ecrans";
 
@@ -17,7 +17,17 @@ import { chargerCreneau, type CreneauAttribue } from "./candidature-ecrans";
  * son côté ; elle ne vit plus qu'ici.
  */
 
-export type Abouti = { reference: string | null; physiques: Physiques | null; creneau: CreneauAttribue | null };
+export type Abouti = {
+  reference: string | null;
+  physiques: Physiques | null;
+  creneau: CreneauAttribue | null;
+  /**
+   * Rendu par l'école quand le contact vient d'être prouvé par code : il
+   * ouvre la convocation de CE dossier sans second code. Gardé en mémoire
+   * seulement, jamais dans le stockage du navigateur.
+   */
+  jeton: string | null;
+};
 
 export type SuiviDemande = {
   verification: DemandeVerification | null;
@@ -32,6 +42,8 @@ export type SuiviDemande = {
   conclure: (corps: Record<string, unknown>) => Promise<void>;
   /** Abandonne la vérification en cours, pour corriger l'adresse ou le numéro. */
   abandonnerVerification: () => void;
+  /** Le code est reparti sur un autre canal ou à une autre adresse (`ChangerCanal`). */
+  remplacerVerification: (demande: DemandeVerification) => void;
   reinitialiser: () => void;
 };
 
@@ -54,10 +66,11 @@ export function useSuiviDemande({
   const conclure = useCallback(
     async (corps: Record<string, unknown>) => {
       const { reference, physiques } = lireAboutissement({ ...creation.current, ...corps });
-      const creneau = reference === null ? null : await chargerCreneau(ecole, reference, dateNaissance);
+      const jeton = lireJetonAcces(corps);
+      const creneau = reference === null ? null : await chargerCreneau(ecole, reference, dateNaissance, jeton);
 
       setVerification(null);
-      setAbouti({ reference, physiques, creneau });
+      setAbouti({ reference, physiques, creneau, jeton });
       onAbouti();
     },
     [dateNaissance, ecole, onAbouti],
@@ -83,12 +96,13 @@ export function useSuiviDemande({
   );
 
   const abandonnerVerification = useCallback(() => setVerification(null), []);
+  const remplacerVerification = useCallback((demande: DemandeVerification) => setVerification(demande), []);
   const reinitialiser = useCallback(() => {
     creation.current = {};
     setVerification(null);
     setAbouti(null);
   }, []);
 
-  return { verification, abouti, recevoir, conclure, abandonnerVerification, reinitialiser };
+  return { verification, abouti, recevoir, conclure, abandonnerVerification, remplacerVerification, reinitialiser };
 }
 

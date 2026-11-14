@@ -3,7 +3,10 @@
 import { useCallback, useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 
+import { lireDemandeVerification, lireJetonAcces, type DemandeVerification } from "@/lib/portail/verification";
+
 import { champ, dateIso, dateNaissanceValide } from "./pieces";
+import { VerificationCode } from "./verification-code";
 
 type Ecole = { code: string; libelle: string };
 
@@ -68,6 +71,7 @@ export function RendezVousFlow({
   referenceInitiale,
   naissanceInitiale,
   identifiantInitial,
+  jetonInitial,
   sansTitre,
 }: {
   etablissement: Ecole;
@@ -79,10 +83,13 @@ export function RendezVousFlow({
    * l'étudiant ce qu'il vient de taper le renvoyait au formulaire de contact.
    */
   identifiantInitial?: string;
+  /** Jeton rendu par le code du dépôt : le créneau se choisit sans second code. */
+  jetonInitial?: string | null;
   sansTitre?: boolean;
 }) {
   const locale = useLocale();
   const t = useTranslations("inscription.rdv");
+  const tAcces = useTranslations("verification.acces");
   const naissanceConnue = decouperNaissance(naissanceInitiale);
   const naissanceConnueOk = Boolean(naissanceInitiale && dateNaissanceValide(naissanceConnue.jour, naissanceConnue.mois, naissanceConnue.annee));
   const connu = Boolean(referenceInitiale) && naissanceConnueOk;
@@ -100,6 +107,15 @@ export function RendezVousFlow({
   const [enCours, setEnCours] = useState(false);
   const [renvoiOk, setRenvoiOk] = useState(false);
   const [erreur, setErreur] = useState<string | null>(null);
+  /**
+   * L'accès prouvé à CE dossier. Quand l'école exige la vérification, rien de
+   * la convocation ne s'affiche ni ne se modifie sans lui : la date de
+   * naissance ne fait plus qu'identifier. En mémoire seulement.
+   */
+  const [jeton, setJeton] = useState<string | null>(jetonInitial ?? null);
+  const [verification, setVerification] = useState<DemandeVerification | null>(null);
+  const avecJeton = (corps: Record<string, unknown>, cle: string | null = jeton) =>
+    cle === null ? corps : { ...corps, jeton_acces: cle };
 
   const naissance = dateIso(jour, mois, annee);
   const naissanceOk = dateNaissanceValide(jour, mois, annee);
@@ -129,7 +145,35 @@ export function RendezVousFlow({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connu, parIdentifiant]);
 
-  async function consulter(referenceTrouvee?: string, forcer = false) {
+  /** L'école a répondu « accès à prouver » : écran de code, ou ce qui l'empêche. Rend vrai si c'est le cas. */
+  function exigeAcces(corps: Record<string, unknown> | null, statutHttp: number): boolean {
+    if (statutHttp === 403 && corps?.code === "verification_requise") {
+      setJeton(null);
+      setReservation(null);
+      setSansRdv(false);
+      setErreur("accesExpire");
+      return true;
+    }
+    if (corps === null || typeof corps.statut !== "string") return false;
+
+    const demande = lireDemandeVerification(corps);
+    if (demande !== null) {
+      setVerification(demande);
+      return true;
+    }
+    if (corps.statut === "contact_injoignable") {
+      setErreur("injoignable");
+      return true;
+    }
+    if (corps.statut === "verification_indisponible" || corps.statut === "verification_requise") {
+      setErreur("codeIndisponible");
+      return true;
+    }
+
+    return false;
+  }
+
+  async function consulter(referenceTrouvee?: string, forcer = false, cleAcces: string | null = jeton) {
     const cle = (referenceTrouvee ?? reference).trim();
     if (!naissanceOk || cle === "" || (enCours && !forcer)) return;
     setEnCours(true);
@@ -139,10 +183,13 @@ export function RendezVousFlow({
       const reponse = await fetch(`/api/rendez-vous/${etablissement.code}/consulter`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reference: cle, date_naissance: naissance }),
+        body: JSON.stringify(avecJeton({ reference: cle, date_naissance: naissance }, cleAcces)),
       });
       const corps = await reponse.json().catch(() => null);
-      if (corps?.trouve === true) {
+      if (exigeAcces(corps, reponse.status)) {
+        setReservation(null);
+        setSansRdv(false);
+      } else if (corps?.trouve === true) {
         setReservation(corps.reservation);
         setPeutModifier(Boolean(corps.peut_modifier));
         setSansRdv(corps.reservation === null || corps.reservation === undefined);
@@ -195,13 +242,14 @@ export function RendezVousFlow({
       const reponse = await fetch(`/api/rendez-vous/${etablissement.code}/reserver`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+        body: JSON.stringify(avecJeton({
           reference: reference.trim(),
           date_naissance: naissance,
           creneau_id: creneauId,
-        }),
+        })),
       });
       const corps = await reponse.json().catch(() => null);
+      if (exigeAcces(corps, reponse.status)) return;
       if (reponse.status === 201 && corps?.reservation) {
         setReservation(corps.reservation);
         setSansRdv(false);
@@ -228,9 +276,10 @@ export function RendezVousFlow({
       const reponse = await fetch(`/api/rendez-vous/${etablissement.code}/renvoyer`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reference: reference.trim(), date_naissance: naissance }),
+        body: JSON.stringify(avecJeton({ reference: reference.trim(), date_naissance: naissance })),
       });
       const corps = await reponse.json().catch(() => null);
+      if (exigeAcces(corps, reponse.status)) return;
       if (reponse.ok && corps?.reservation) {
         setReservation(corps.reservation);
         setRenvoiOk(true);
@@ -252,8 +301,9 @@ export function RendezVousFlow({
       const reponse = await fetch(`/api/rendez-vous/${etablissement.code}/annuler`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reference: reference.trim(), date_naissance: naissance }),
+        body: JSON.stringify(avecJeton({ reference: reference.trim(), date_naissance: naissance })),
       });
+      if (exigeAcces(await reponse.clone().json().catch(() => null), reponse.status)) return;
       if (reponse.ok) {
         setReservation(null);
         setSansRdv(true);
@@ -307,6 +357,25 @@ export function RendezVousFlow({
     );
   }
 
+  if (verification !== null) {
+    return (
+      <VerificationCode
+        nu
+        contexte="acces"
+        ecole={etablissement.code}
+        demande={verification}
+        onVerifie={async (corps) => {
+          const cle = lireJetonAcces(corps);
+          setVerification(null);
+          setJeton(cle);
+          if (typeof corps.reference === "string" && corps.reference !== "") setReference(corps.reference);
+          await consulter(typeof corps.reference === "string" ? corps.reference : undefined, true, cle);
+        }}
+        onRecommencer={() => setVerification(null)}
+      />
+    );
+  }
+
   return (
     <>
       {!sansTitre && (
@@ -344,7 +413,9 @@ export function RendezVousFlow({
         <p className="mt-4 text-sm text-text-secondary">
           {erreur === "introuvable" || erreur === "complet" || erreur === "deja_reserve" || erreur === "trop_tot" || erreur === "ferme"
             ? t(`erreurs.${erreur}`)
-            : t("erreurs.indisponible")}
+            : erreur === "injoignable" || erreur === "codeIndisponible" || erreur === "accesExpire"
+              ? tAcces(erreur === "injoignable" ? "injoignable" : erreur === "accesExpire" ? "expire" : "indisponible")
+              : t("erreurs.indisponible")}
         </p>
       )}
 
@@ -363,7 +434,7 @@ export function RendezVousFlow({
               </svg>
               <span>
                 <span className="block text-xs text-text-muted">{t("lieu")}</span>
-                <span className="font-medium">{reservation.lieu}</span>
+                <span className="break-words font-medium">{reservation.lieu}</span>
               </span>
             </p>
           )}
@@ -374,7 +445,7 @@ export function RendezVousFlow({
             reçue : elle ne pensait plus à la renvoyer.
           */}
           {reservation.convocation?.canal && (reservation.convocation.statut === "envoyee" || reservation.convocation.statut === "en_attente" || reservation.convocation.statut === "echec") && (
-            <p className={`mt-2 text-xs ${reservation.convocation.statut === "echec" ? "font-medium text-danger" : "text-text-muted"}`}>
+            <p className={`mt-2 break-words text-xs ${reservation.convocation.statut === "echec" ? "font-medium text-danger" : "text-text-muted"}`}>
               {t(`convocation.${reservation.convocation.statut}`, {
                 canal: t(reservation.convocation.canal === "whatsapp" ? "convocation.canal.whatsapp" : "convocation.canal.email"),
               })}
@@ -427,7 +498,7 @@ export function RendezVousFlow({
         <ul className="mt-6 max-h-[min(20rem,45vh)] space-y-2 overflow-y-auto overscroll-contain pr-1">
           {creneaux.map((c) => (
             <li key={c.id} className="flex items-center justify-between gap-3 rounded-xl border border-border px-3 py-2">
-              <span className="text-sm">
+              <span className="min-w-0 text-sm">
                 {formaterDate(c.date, locale)} · {formaterHeure(c.heure_debut)} – {formaterHeure(c.heure_fin)}
               </span>
               {c.etat === "disponible" ? (
@@ -435,7 +506,7 @@ export function RendezVousFlow({
                   type="button"
                   onClick={() => void reserver(c.id)}
                   disabled={enCours || !naissanceOk || reference.trim() === ""}
-                  className="rounded-lg bg-accent px-3 py-1.5 text-xs font-semibold text-white disabled:opacity-50"
+                  className="shrink-0 rounded-lg bg-accent px-3 py-1.5 text-xs font-semibold text-white disabled:opacity-50"
                 >
                   {t("choisir")}
                 </button>

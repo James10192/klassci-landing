@@ -12,7 +12,7 @@ const TEXTES = [
   "nom", "prenoms", "date_naissance", "lieu_naissance", "sexe", "nationalite",
   "telephone", "email", "ville", "commune",
   "voeu_libre", "serie_bac", "etablissement_origine", "affectation_status", "message",
-  "tuteur_nom", "tuteur_telephone", "tuteur_lien", "tuteur_profession",
+  "tuteur_nom", "tuteur_prenoms", "tuteur_telephone", "tuteur_lien", "tuteur_profession",
   "etablissement_sup_origine", "formation_origine", "niveau_atteint_origine", "motif_transfert",
 ] as const;
 

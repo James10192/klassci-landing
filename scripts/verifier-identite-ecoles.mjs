@@ -323,7 +323,7 @@ verifier("une école qui répond est servie avec son identité", async () => {
   assert.equal(ecole.ville, "Yamoussoukro");
   assert.equal(
     ecole.logo,
-    `https://esbtp-yakro.klassci.com/api/public/etablissement/logo?v=${LOGO_EMPREINTE}`,
+    `/api/logo/esbtp-yakro?v=${LOGO_EMPREINTE}`,
   );
   assert.equal(ecole.identite.couleurPrincipale, "#8b1d3f");
   assert.equal(ecole.identite.entete, "Ministère de l'Enseignement Supérieur");
@@ -472,7 +472,7 @@ verifier("l'adresse d'un logo porte l'empreinte de son contenu", async () => {
 
   const [ecole] = await etablissementsVitrine();
 
-  assert.equal(new URL(ecole.logo).searchParams.get("v"), LOGO_EMPREINTE);
+  assert.equal(new URL(ecole.logo, "https://www.klassci.com").searchParams.get("v"), LOGO_EMPREINTE);
 });
 
 verifier("… et cette empreinte change quand le logo change", async () => {
@@ -501,7 +501,7 @@ verifier("… et une taille identique ne suffit pas à la figer", async () => {
   });
   const [ecole] = await etablissementsVitrine();
 
-  assert.notEqual(new URL(ecole.logo).searchParams.get("v"), LOGO_EMPREINTE);
+  assert.notEqual(new URL(ecole.logo, "https://www.klassci.com").searchParams.get("v"), LOGO_EMPREINTE);
 });
 
 verifier("une instance muette sur son logo borne le cache à la journée", async () => {
@@ -512,7 +512,7 @@ verifier("une instance muette sur son logo borne le cache à la journée", async
   registre(["esbtp-yakro"], { "esbtp-yakro": identite() }, "", {});
 
   const [ecole] = await etablissementsVitrine();
-  const version = new URL(ecole.logo).searchParams.get("v");
+  const version = new URL(ecole.logo, "https://www.klassci.com").searchParams.get("v");
 
   assert.equal(version, new Date().toISOString().slice(0, 10));
 });

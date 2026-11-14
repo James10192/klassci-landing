@@ -15,6 +15,12 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 
 ### Ajouts
 
+- **Bulletins LMD : ce qui manque, dit clairement** : avant de générer les bulletins d'une classe, la fenêtre de contrôle regroupe les problèmes par cause (aucune note saisie, fiches de notes non préparées, fiches non validées, notes manquantes), avec le nombre d'étudiants concernés et le geste à faire. Les bulletins prêts se génèrent sans attendre les autres. Par défaut, le bulletin se calcule dès que les notes sont saisies ; une école qui veut exiger des fiches validées l'active dans ses paramètres. La génération d'une classe se suit avec une barre de progression : on peut fermer la page, une notification arrive à la fin.
+
+  ![Contrôle avant génération des bulletins LMD : une cause, le nombre d'étudiants concernés et le bouton pour lancer les bulletins prêts](/img/changelog/2026-11/bulletins-lmd-controle-apres.webp)
+
+  ![Génération des bulletins LMD d'une classe suivie avec une barre de progression](/img/changelog/2026-11/bulletins-lmd-generation-apres.webp)
+
 - **La situation financière de chaque classe** : une nouvelle page de la comptabilité montre, classe par classe, le montant attendu, le réglé avec son taux, le reste à payer et l'échu impayé, avec le total de l'établissement en tête. Les trois classes au plus gros échu sont mises en avant, le tableau se trie par reste, échu, recouvrement ou nom, et les filtres se rechargent seuls. La fenêtre d'une classe liste ses étudiants, en retard d'abord, avec un lien vers leur fiche, leur inscription ou leurs paiements pour qui y a accès. Export PDF et Excel.
 
   ![Situation financière des classes : totaux, classes à surveiller et détail classe par classe](/img/changelog/2026-11/situation-classes-refonte-apres.webp)
@@ -53,6 +59,18 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 - **BTS tronc commun : résultats et rangs alignés** : semestre 1 dans la classe de tronc commun, semestre 2 dans la spécialité, rangs identiques partout, règle annuelle et critère du conseil (dont « Les deux moyennes ») réglables par l'école.
 - **Bulletins LMD : impression groupée et mise en page réglable** : un seul PDF pour une sélection de bulletins (jusqu'à 400), en-tête plus compact, polices et espacements réglables, réglage « Minimum UE pour APC », plusieurs professeurs possibles par classe repris du planning.
 - **Invitations des étudiants et des parents** : lien sécurisé pour créer le mot de passe, sans code temporaire, et suivi de l'état et de l'expiration du lien dans le dossier, sans jamais afficher le lien.
+- **Générer un bulletin depuis la fiche étudiant** : le calcul se voit (« Calcul des moyennes… », puis « Mise à jour de la fiche… ») et la fenêtre ne se ferme pas en plein calcul.
+
+### Corrections
+
+- **Relances : le bon montant, reliquats compris** : la colonne « À relancer » réclame ce qui devait être payé à ce jour, plus les reliquats des années précédentes encore dus, détaillés sous le montant. Le reste à payer de l'année s'affiche dessous quand il est plus élevé. Le même montant se retrouve dans les messages de relance, le tableau de bord, les exports et la fiche de l'étudiant ; un étudiant à jour sur l'année mais qui doit encore une ancienne année n'est plus classé « À jour ». En LMD, le tarif suit le parcours de la classe.
+
+  ![La liste des relances, montant à relancer et total de l'année côte à côte](/img/changelog/2026-11/relances-montants-apres.webp)
+
+- **Bulletins BTS : statistiques et rang d'accord** : la plus forte moyenne, la plus faible et la moyenne de classe du semestre 1 et du semestre 2 se calculent comme le rang. Le premier de la classe n'a plus une moyenne inférieure à la « plus forte moyenne » de son propre bulletin.
+- **Bulletins LMD : un étudiant à la corbeille ne bloque plus la classe** : il sort de la génération, et la fenêtre de contrôle nomme chaque étudiant par son nom et son matricule, avec un lien vers sa fiche.
+- **Durée d'une évaluation** : calculée à partir des heures, elle n'est plus négative.
+- **Bulletins et exports avec un « / » dans le nom** : un matricule, une classe ou une année comme « 2025/2026 » n'empêche plus le téléchargement du PDF ou de l'Excel.
 
 ---
 

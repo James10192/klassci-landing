@@ -202,6 +202,16 @@ verifier("action inconnue", preparerVerification("supprimer", { demande_id: "a" 
 verifier("suivi d'une vérification inversée", preparerVerification("statut", { demande_id: "abc-1", canal: "telephone", code: "123456" }),
   { chemin: "api/portail/email/statut", corps: { demande_id: "abc-1", canal: "telephone" } });
 verifier("suivi refusé pour l'e-mail", preparerVerification("statut", { demande_id: "abc-1" }), { erreur: "corps_invalide" });
+verifier("changer de canal : demande, canal et adresse, rien d'autre",
+  preparerVerification("changer-canal", { demande_id: "abc-1", canal: "email", email: " ama@gmail.com ", intrus: "x" }),
+  { chemin: "api/portail/email/changer-canal", corps: { demande_id: "abc-1", canal: "email", email: "ama@gmail.com" } });
+verifier("changer de canal sans adresse : celle du dossier",
+  preparerVerification("changer-canal", { demande_id: "abc-1", canal: "email", email: "" }),
+  { chemin: "api/portail/email/changer-canal", corps: { demande_id: "abc-1", canal: "email" } });
+verifier("changer de canal : une adresse qui n'en est pas une est refusée avant l'école",
+  preparerVerification("changer-canal", { demande_id: "abc-1", canal: "email", email: "pas une adresse" }), { erreur: "corps_invalide" });
+verifier("changer de canal exige la demande",
+  preparerVerification("changer-canal", { canal: "email" }), { erreur: "corps_invalide" });
 
 console.log("\nVérification : appels réseau (fetch simulé)");
 const appels = [];

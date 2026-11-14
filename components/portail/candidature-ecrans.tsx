@@ -206,12 +206,16 @@ export async function chargerCreneau(
   code: string,
   reference: string,
   dateNaissance: string,
+  jeton: string | null = null,
 ): Promise<CreneauAttribue | null> {
   try {
+    // `sans_code` : lire le créneau ne doit jamais envoyer de code à la
+    // famille. Sans jeton, une école qui exige la vérification répond
+    // seulement qu'il en faut un, et l'écran de réussite reste sans créneau.
     const reponse = await fetch(`/api/rendez-vous/${code}/consulter`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ reference, date_naissance: dateNaissance }),
+      body: JSON.stringify({ reference, date_naissance: dateNaissance, sans_code: true, ...(jeton === null ? {} : { jeton_acces: jeton }) }),
     });
     const corps = await reponse.json().catch(() => null);
     const o = corps?.reservation;

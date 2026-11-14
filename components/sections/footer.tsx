@@ -65,7 +65,7 @@ export function Footer() {
         <a
           href={link.href}
           onClick={onLinkClick}
-          className="text-footer-link hover:text-footer-text transition-colors text-[0.875rem]"
+          className="text-footer-link hover:text-footer-text transition-colors text-[0.875rem] [overflow-wrap:anywhere]"
           {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
         >
           {link.label}
@@ -77,7 +77,7 @@ export function Footer() {
       <Link
         href={link.href}
         onClick={onLinkClick}
-        className="text-footer-link hover:text-footer-text transition-colors text-[0.875rem]"
+        className="text-footer-link hover:text-footer-text transition-colors text-[0.875rem] [overflow-wrap:anywhere]"
       >
         {link.label}
       </Link>
