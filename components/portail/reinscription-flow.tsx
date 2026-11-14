@@ -9,7 +9,7 @@ import type { EtablissementVisible } from "@/lib/portail/tenants";
 import { suiteSurPlace } from "@/lib/portail/aboutissement";
 
 import { Alerte, BoutonPrincipal, Carte, CaseDate, RESSORT, champ, dateIso, dateNaissanceValide, entree } from "./pieces";
-import { ECRANS, type CleEtat, type Etape, type Situation } from "./reinscription-ecrans";
+import { ECRANS, nomAffiche, type CleEtat, type Etape, type Situation } from "./reinscription-ecrans";
 import { ReinscriptionSucces } from "./reinscription-succes";
 import { classer, ecranDe } from "./reponses";
 import { useSuiviDemande } from "./suivi-demande";
@@ -229,6 +229,7 @@ export function ReinscriptionFlow({
     );
   }
 
+  const nomComplet = situation === null ? null : nomAffiche(situation);
   const referenceAboutie = suivi.abouti === null ? null : suivi.abouti.reference;
 
   return (
@@ -350,10 +351,10 @@ export function ReinscriptionFlow({
             <Carte>
               <m.h2
                 {...entree(0)}
-                className="text-balance text-xl font-semibold tracking-tight text-text"
+                className="text-balance break-words text-xl font-semibold tracking-tight text-text"
               >
-                {situation.prenom
-                  ? t("confirmation.salutation", { prenom: situation.prenom })
+                {nomComplet !== null
+                  ? t("confirmation.salutation", { nom: nomComplet })
                   : t("confirmation.salutationSansPrenom")}
               </m.h2>
 
@@ -433,8 +434,8 @@ function Ligne({ intitule, valeur }: { intitule: string; valeur?: string | null 
 
   return (
     <div className="flex items-baseline justify-between gap-4 px-4 py-3">
-      <dt className="text-sm text-text-muted">{intitule}</dt>
-      <dd className="text-right text-sm font-semibold text-text">{valeur}</dd>
+      <dt className="shrink-0 text-sm text-text-muted">{intitule}</dt>
+      <dd className="min-w-0 break-words text-right text-sm font-semibold text-text">{valeur}</dd>
     </div>
   );
 }

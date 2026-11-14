@@ -7,7 +7,11 @@ import type { Classement, RegleEcran } from "./reponses";
 
 export type Situation = {
   trouve: boolean;
+  /** Premier prénom seul : ce qu'une instance ancienne renvoie encore. */
   prenom?: string;
+  /** Nom et prénoms complets, renvoyés par les instances à jour. */
+  nom?: string | null;
+  prenoms?: string | null;
   classe_actuelle?: string | null;
   annee_cible?: string | null;
   eligible?: boolean;
@@ -56,3 +60,19 @@ export const ECRANS: Partial<Record<Classement["genre"], RegleEcran<CleEtat>>> =
     sansCode: "tropDeTentatives",
   },
 };
+
+/**
+ * « Bonjour NOM Prénoms » : c'est ce qui permet à l'étudiant de reconnaître
+ * SON dossier, quand deux camarades portent le même prénom. Une instance qui
+ * ne renvoie que le premier prénom garde l'ancien salut ; sans rien, `null`.
+ */
+export function nomAffiche(situation: Situation): string | null {
+  const complet = [situation.nom, situation.prenoms]
+    .map((morceau) => (typeof morceau === "string" ? morceau.trim() : ""))
+    .filter(Boolean)
+    .join(" ");
+
+  if (complet !== "") return complet;
+
+  return situation.prenom?.trim() || null;
+}

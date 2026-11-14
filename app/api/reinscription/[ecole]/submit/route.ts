@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 
 import { CHEMINS } from "@/lib/portail/chemins";
 import { relayer } from "@/lib/portail/relais";
+import { compacter } from "@/lib/portail/matricule";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -32,7 +33,7 @@ export async function POST(
   return relayer(
     routeParams.ecole,
     CHEMINS.reinscriptionSubmit,
-    { matricule: matricule.trim(), date_naissance: dateNaissance.trim(), consentement: true },
+    { matricule: compacter(matricule), date_naissance: dateNaissance.trim(), consentement: true },
     requete,
   );
 }

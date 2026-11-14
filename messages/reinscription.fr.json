@@ -6,7 +6,7 @@
       "matricule": {
         "label": "Matricule",
         "placeholder": "Ex. 2024-0413",
-        "aide": "Tel qu'il figure sur votre carte d'étudiant."
+        "aide": "Tel qu'il figure sur votre carte d'étudiant. Les espaces, tirets et majuscules n'ont pas d'importance."
       },
       "naissance": {
         "label": "Date de naissance",
@@ -18,7 +18,7 @@
       "chargement": "Recherche en cours…"
     },
     "confirmation": {
-      "salutation": "Bonjour {prenom}.",
+      "salutation": "Bonjour {nom}.",
       "salutationSansPrenom": "Nous avons retrouvé votre dossier.",
       "classe": "Classe actuelle",
       "annee": "Année visée",
@@ -163,7 +163,8 @@
       "affectationAide": "L'établissement vérifiera. Si vous n'êtes pas sûr, laissez « je ne sais pas ».",
       "tuteur": "Parent ou tuteur",
       "tuteurAide": "Facultatif, mais c'est souvent la personne que l'établissement joint le plus facilement.",
-      "tuteurNom": "Nom et prénoms",
+      "tuteurNom": "Nom du parent ou tuteur",
+      "tuteurPrenoms": "Prénoms",
       "tuteurLien": "Lien avec vous",
       "tuteurTelephone": "Téléphone",
       "tuteurProfession": "Profession",

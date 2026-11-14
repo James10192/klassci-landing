@@ -85,6 +85,8 @@ export type Formulaire = {
   annee_derniere_inscription: string;
   motif_transfert: string;
   tuteur_nom: string;
+  /** Séparés du nom : KLASSCI crée le parent avec un nom ET des prénoms. */
+  tuteur_prenoms: string;
   tuteur_lien: string;
   tuteur_telephone: string;
   tuteur_profession: string;
@@ -102,7 +104,7 @@ export const FORMULAIRE_VIDE: Formulaire = {
   etablissement_sup_origine: "", formation_origine: "", niveau_atteint_origine: "",
   redouble_niveau_origine: null,
   annee_derniere_inscription: "", motif_transfert: "",
-  tuteur_nom: "", tuteur_lien: "", tuteur_telephone: "", tuteur_profession: "",
+  tuteur_nom: "", tuteur_prenoms: "", tuteur_lien: "", tuteur_telephone: "", tuteur_profession: "",
   message: "",
 };
 
@@ -166,6 +168,7 @@ const LONGUEURS = {
   niveau_atteint_origine: 60,
   motif_transfert: 1000,
   tuteur_nom: 100,
+  tuteur_prenoms: 150,
   tuteur_telephone: 30,
   tuteur_profession: 120,
 } as const;
@@ -394,9 +397,16 @@ export function ChampsCandidature({
         <p className="-mt-1 mb-2 text-pretty text-xs leading-relaxed text-text-muted">
           {t("formulaire.tuteurAide")}
         </p>
+        {/* Nom et prénoms en deux champs : à l'inscription, KLASSCI crée le
+            parent avec les deux, et un seul champ « Nom et prénoms » laissait
+            les prénoms vides, à ressaisir par la scolarité. */}
         <div className="grid gap-3 sm:grid-cols-2">
           <Champ label={t("formulaire.tuteurNom")} value={form.tuteur_nom} onChange={set("tuteur_nom")}
                  maxLength={LONGUEURS.tuteur_nom} erreurs={messagesDe("tuteur_nom")} />
+          <Champ label={t("formulaire.tuteurPrenoms")} value={form.tuteur_prenoms} onChange={set("tuteur_prenoms")}
+                 maxLength={LONGUEURS.tuteur_prenoms} erreurs={messagesDe("tuteur_prenoms")} />
+        </div>
+        <div className="mt-3 grid gap-3 sm:grid-cols-2">
           {/* Masqué si l'école ne publie pas la liste : une liste déroulante
               vide ne se remplit pas, et ce champ est facultatif. Même garde que
               pour l'affectation, juste au-dessus. */}
@@ -405,13 +415,13 @@ export function ChampsCandidature({
                    value={form.tuteur_lien} onChange={set("tuteur_lien")}
                    erreurs={messagesDe("tuteur_lien")} options={liens_tuteur} />
           )}
-        </div>
-        <div className="mt-3 grid gap-3 sm:grid-cols-2">
           {/* Pas d'indice de remplissage sur ce téléphone-ci : le tuteur est une
               autre personne, proposer le numéro du candidat serait à côté. */}
           <Champ label={t("formulaire.tuteurTelephone")} value={form.tuteur_telephone}
                  onChange={set("tuteur_telephone")} inputMode="tel"
                  maxLength={LONGUEURS.tuteur_telephone} erreurs={messagesDe("tuteur_telephone")} />
+        </div>
+        <div className="mt-3 grid gap-3 sm:grid-cols-2">
           <Champ label={t("formulaire.tuteurProfession")} value={form.tuteur_profession}
                  onChange={set("tuteur_profession")} maxLength={LONGUEURS.tuteur_profession}
                  erreurs={messagesDe("tuteur_profession")} />

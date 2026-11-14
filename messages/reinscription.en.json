@@ -6,7 +6,7 @@
       "matricule": {
         "label": "Student number",
         "placeholder": "e.g. 2024-0413",
-        "aide": "Exactly as printed on your student card."
+        "aide": "As printed on your student card. Spaces, dashes and capital letters don't matter."
       },
       "naissance": {
         "label": "Date of birth",
@@ -18,7 +18,7 @@
       "chargement": "Searching…"
     },
     "confirmation": {
-      "salutation": "Hello {prenom}.",
+      "salutation": "Hello {nom}.",
       "salutationSansPrenom": "We found your file.",
       "classe": "Current class",
       "annee": "Target year",
@@ -163,7 +163,8 @@
       "affectationAide": "The school will verify this. If you are unsure, leave “I don't know”.",
       "tuteur": "Parent or guardian",
       "tuteurAide": "Optional, but often the person the school reaches most easily.",
-      "tuteurNom": "Full name",
+      "tuteurNom": "Last name",
+      "tuteurPrenoms": "First name(s)",
       "tuteurLien": "Relationship to you",
       "tuteurTelephone": "Phone",
       "tuteurProfession": "Occupation",
