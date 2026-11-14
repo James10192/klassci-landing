@@ -15,6 +15,8 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 
 ### Ajouts
 
+- **Inscription en ligne : la convocation se protège par un code** : quand l'établissement vérifie les contacts, voir sa convocation ou changer son créneau sur klassci.com demande un code envoyé par e-mail ou WhatsApp au contact du dossier ; la date de naissance seule ne suffit plus. Une famille qui vient de confirmer sa demande choisit son créneau sans second code.
+- **Réinscription : le code par e-mail quand WhatsApp ne passe pas** : avant d'envoyer sa demande, l'étudiant voit où partira son code et choisit l'e-mail ou WhatsApp, ou donne l'adresse qu'il consulte vraiment. Sur l'écran du code, « Je ne reçois rien sur WhatsApp » le renvoie par e-mail. La nouvelle adresse apparaît sur la demande, pour que la scolarité la reporte au dossier si elle le souhaite.
 - **Bulletins LMD : ce qui manque, dit clairement** : avant de générer les bulletins d'une classe, la fenêtre de contrôle regroupe les problèmes par cause (aucune note saisie, fiches de notes non préparées, fiches non validées, notes manquantes), avec le nombre d'étudiants concernés et le geste à faire. Les bulletins prêts se génèrent sans attendre les autres. Par défaut, le bulletin se calcule dès que les notes sont saisies ; une école qui veut exiger des fiches validées l'active dans ses paramètres. La génération d'une classe se suit avec une barre de progression : on peut fermer la page, une notification arrive à la fin.
 
   ![Contrôle avant génération des bulletins LMD : une cause, le nombre d'étudiants concernés et le bouton pour lancer les bulletins prêts](/img/changelog/2026-11/bulletins-lmd-controle-apres.webp)
@@ -41,6 +43,8 @@ Le format suit librement [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/
 
 ### Améliorations
 
+- **Réinscription plus tolérante** : un matricule tapé avec des espaces, des tirets ou en minuscules retrouve quand même le bon dossier, sans jamais proposer celui d'un autre, et l'étudiant est salué par son nom et ses prénoms.
+- **Parent ou tuteur : nom et prénoms à part** : le formulaire d'inscription en ligne les demande séparément, et « Reprendre ce tuteur » remplit les deux champs à l'inscription.
 - **Modifier une évaluation retrouve sa matière** : la liste des matières est celle de la classe de l'évaluation (maquette BTS, ou éléments constitutifs en LMD), et la matière de l'évaluation est déjà choisie. Une évaluation de Licence ne s'ouvre plus sans matière.
 
   ![Modification d'une évaluation de Licence 3 : l'élément « Anglais technique » est déjà choisi](/img/changelog/2026-11/evaluation-matiere-apres.webp)
