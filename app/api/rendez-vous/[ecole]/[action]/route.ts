@@ -6,6 +6,8 @@ import { relayer } from "@/lib/portail/relais";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+const JETON_ACCES = /^[A-Za-z0-9._~-]{16,600}$/;
+
 const ACTIONS: Record<string, CheminPublic> = {
   creneaux: CHEMINS.rdvCreneaux,
   reserver: CHEMINS.rdvReserver,
@@ -57,6 +59,19 @@ export async function POST(
 
   corps.reference = source.reference.trim();
   corps.date_naissance = source.date_naissance.trim();
+
+  // Le jeton rendu par un code réussi : il ouvre la convocation de ce dossier
+  // quand l'école exige la vérification. Même alphabet que les jetons de
+  // vérification ; malformé, il est simplement ignoré et l'école redemandera
+  // un code.
+  if (typeof source.jeton_acces === "string" && JETON_ACCES.test(source.jeton_acces)) {
+    corps.jeton_acces = source.jeton_acces;
+  }
+
+  // Lire le créneau après un dépôt ne doit jamais envoyer de code.
+  if (routeParams.action === "consulter" && source.sans_code === true) {
+    corps.sans_code = true;
+  }
 
   if (routeParams.action === "reserver" || routeParams.action === "deplacer") {
     const id = typeof source.creneau_id === "number" ? source.creneau_id : Number.parseInt(String(source.creneau_id ?? ""), 10);

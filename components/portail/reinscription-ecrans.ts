@@ -1,3 +1,4 @@
+import type { ContactsDossier } from "./reinscription-contact";
 import type { Classement, RegleEcran } from "./reponses";
 
 /**
@@ -16,6 +17,10 @@ export type Situation = {
   annee_cible?: string | null;
   eligible?: boolean;
   demande_existante?: boolean;
+  /** L'école envoie-t-elle un code de confirmation ? Absent : instance ancienne. */
+  verification?: boolean;
+  /** Où le code partirait, masqué. Absent : instance ancienne. */
+  contacts?: ContactsDossier | null;
 };
 
 export type Etape = "identification" | "confirmation" | "succes";

@@ -82,6 +82,16 @@
         "titre": "This record is temporarily locked.",
         "texte": "Too many unsuccessful attempts were made on this record. Try again later, or contact your school."
       }
+    },
+    "contact": {
+      "titre": "Your confirmation code will be sent",
+      "parEmail": "by email to {destination}",
+      "parWhatsapp": "on WhatsApp to {destination}",
+      "aucun": "Your file has no contact yet: enter your email address.",
+      "ouvrirAutre": "Not my address any more? Give another one",
+      "emailAutre": "Another email address",
+      "emailSansDossier": "Your email address (recommended)",
+      "emailAide": "The code and your notice will be sent there. The school will see this address on your request."
     }
   },
   "inscription": {

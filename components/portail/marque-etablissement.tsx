@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { ImageLogo } from "@/components/ui/image-logo";
 
 /**
  * La pastille d'un etablissement : son logo, ou ses initiales.
@@ -75,7 +75,7 @@ export function Marque({
 
   return (
     <span className={`${tuile} ${marge}`}>
-      <Image
+      <ImageLogo
         src={logo}
         // Le nom de l'école, pas une chaîne vide : c'est une image porteuse de
         // sens, la seule marque visuelle qui distingue une ligne de la
@@ -83,11 +83,8 @@ export function Marque({
         alt={nom}
         width={176}
         height={128}
-        // Pas de `sizes` : la tuile a une taille fixe. Present, il ferait
-        // publier les quinze largeurs configurees au lieu de deux (1x, 2x) —
-        // et ces logos-la sont distants, donc les plus chers du site.
-
-        className="h-full w-full object-contain"
+        initiales={initiales(nom)}
+        classeInitiales={`font-mono ${texte} font-semibold text-text-secondary`}
       />
     </span>
   );

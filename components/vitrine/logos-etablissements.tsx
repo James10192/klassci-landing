@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { ImageLogo } from "@/components/ui/image-logo";
 import { getTranslations } from "next-intl/server";
 
 import type { EtablissementVitrine } from "@/lib/vitrine/etablissements";
@@ -92,17 +92,16 @@ function Marque({ vignette }: { vignette: Vignette }) {
 
   return (
     <span className={`${TUILE} p-2.5`}>
-      <Image
+      <ImageLogo
         src={vignette.logo}
         // Vide, à dessein : le nom de l'école est écrit juste en dessous, dans
         // la même carte. L'annoncer deux fois n'aide personne.
         alt=""
         width={208}
         height={160}
-        // Pas de `sizes` : la tuile a une taille fixe. Present, il ferait
-        // publier les quinze largeurs configurees au lieu de deux (1x, 2x).
         loading="lazy"
-        className="h-full w-full object-contain"
+        initiales={initiales(vignette.nom)}
+        classeInitiales="font-mono text-[1.05rem] font-semibold text-text-secondary"
       />
     </span>
   );
@@ -197,10 +196,13 @@ export async function LogosEtablissements({
             <li
               key={vignette.cle}
               aria-hidden={rang >= vignettes.length}
-              className="flex min-w-[220px] flex-shrink-0 flex-col items-center gap-3 rounded-lg border border-border bg-bg-card px-9 py-7 transition-all duration-200 ease-klassci hover:-translate-y-0.5 hover:border-accent hover:shadow-[0_4px_16px_rgba(4,83,203,0.08)]"
+              className="flex min-w-[220px] max-w-full flex-shrink-0 flex-col items-center gap-3 rounded-lg border border-border bg-bg-card px-9 py-7 transition-all duration-200 ease-klassci hover:-translate-y-0.5 hover:border-accent hover:shadow-[0_4px_16px_rgba(4,83,203,0.08)]"
             >
               <Marque vignette={vignette} />
-              <span className="text-center font-sans text-[0.9rem] font-semibold text-text">
+              {/* Bornée : « École Spéciale du Bâtiment et des Travaux Publics »
+                  sur une ligne élargissait sa carte au-delà d'un écran de
+                  téléphone, et la page glissait de côté. */}
+              <span className="max-w-[15rem] text-balance break-words text-center font-sans text-[0.9rem] font-semibold text-text">
                 {vignette.nom}
               </span>
               {vignette.detail !== "" && (

@@ -29,6 +29,9 @@ export const CHEMINS = {
   // Vérification WhatsApp inversée : la famille envoie le code depuis WhatsApp,
   // le site suit l'avancement.
   verificationStatut: "api/portail/email/statut",
+  // Réinscription : recevoir le code par e-mail quand WhatsApp ne passe pas,
+  // ou à une autre adresse que celle du dossier.
+  verificationChangerCanal: "api/portail/email/changer-canal",
 } as const;
 
 export type CheminPublic = (typeof CHEMINS)[keyof typeof CHEMINS];

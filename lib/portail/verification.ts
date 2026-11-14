@@ -74,6 +74,17 @@ export function lireMotif(corps: unknown): MotifRefus | null {
   return estObjet(corps) && estMotif(corps.motif) ? corps.motif : null;
 }
 
+/**
+ * Le jeton d'accès à la convocation, rendu par l'école après un code réussi.
+ * Même alphabet que le relais (`JETON` de `verification-relais.ts`) : ce qui
+ * n'y entre pas ne servirait à rien plus loin.
+ */
+export function lireJetonAcces(corps: unknown): string | null {
+  const jeton = estObjet(corps) ? corps.jeton_acces : null;
+
+  return typeof jeton === "string" && /^[A-Za-z0-9._~-]{16,600}$/.test(jeton) ? jeton : null;
+}
+
 /** Un code saisi ou collé : seuls les chiffres comptent, six au plus. */
 export function nettoyerCode(brut: string): string {
   return brut.replace(/\D/g, "").slice(0, 6);
@@ -97,7 +108,7 @@ export type CorpsVerification = { jeton: string } | { demande_id: string; code: 
  * l'instance de l'école. Le canal voyage dans le corps : c'est le relais qui
  * choisit le chemin côté KLASSCI (`verification-relais.ts`).
  */
-async function appeler(ecole: string, action: "verifier" | "renvoyer" | "statut", corps: Record<string, string>): Promise<Response> {
+async function appeler(ecole: string, action: "verifier" | "renvoyer" | "statut" | "changer-canal", corps: Record<string, string>): Promise<Response> {
   return fetch(`/api/verification/${encodeURIComponent(ecole)}/${action}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -200,4 +211,44 @@ export function suiteReponse(corps: Record<string, unknown>, enregistre: boolean
   if (demande !== null) return { genre: "verification", demande };
 
   return enregistre ? { genre: "abouti" } : { genre: "nonTraitee" };
+}
+
+export type ResultatChangement =
+  | { genre: "envoye"; demande: DemandeVerification }
+  /** L'école ne peut pas écrire à cette adresse (faute de frappe, domaine jetable). */
+  | { genre: "emailInvalide" }
+  /** Le dossier n'a pas ce canal : pas d'e-mail joignable, et aucune adresse donnée. */
+  | { genre: "canalIndisponible" }
+  | { genre: "tropTot" }
+  /** Instance pas encore à jour (404), ou panne : on n'insiste pas, l'école reste joignable. */
+  | { genre: "indisponible" };
+
+/**
+ * « Je ne reçois rien sur WhatsApp » : le code par e-mail, à l'adresse du
+ * dossier ou à celle que la famille donne. La vérification repart sous le même
+ * identifiant de demande, sur le nouveau canal.
+ */
+export async function changerCanal(ecole: string, demandeId: string, canal: Canal, email?: string): Promise<ResultatChangement> {
+  try {
+    const corps: Record<string, string> = { demande_id: demandeId, canal };
+    if (email !== undefined && email.trim() !== "") corps.email = email.trim();
+
+    const reponse = await appeler(ecole, "changer-canal", corps);
+    const lu = await corpsDe(reponse);
+
+    if (reponse.ok && lu !== null) {
+      const demande = lireDemandeVerification(lu);
+
+      return demande === null ? { genre: "indisponible" } : { genre: "envoye", demande };
+    }
+    if (reponse.status === 429) return { genre: "tropTot" };
+    if (reponse.status === 422 && lu?.motif === "email_invalide") return { genre: "emailInvalide" };
+    if (reponse.status === 422 && lu?.motif === "canal_indisponible") return { genre: "canalIndisponible" };
+    // 400 : le relais a refusé l'adresse avant l'école.
+    if (reponse.status === 400 && email !== undefined && email.trim() !== "") return { genre: "emailInvalide" };
+
+    return { genre: "indisponible" };
+  } catch {
+    return { genre: "indisponible" };
+  }
 }

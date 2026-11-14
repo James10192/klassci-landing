@@ -273,18 +273,18 @@ function jourCourant(): string {
 }
 
 /**
- * L'adresse du logo, suffixée de son empreinte.
+ * L'adresse du logo, servie par klassci.com et suffixée de son empreinte.
  *
- * Le suffixe ne quitte jamais le domaine de l'école : `urlLogo` a déjà vérifié
- * l'origine, et ajouter un paramètre ne la change pas.
+ * Plus l'adresse de l'instance : depuis que le site tourne sur son propre
+ * serveur, l'optimiseur d'images ne rapportait plus les logos des écoles. La
+ * route `/api/logo/[ecole]` va les chercher par le même chemin que le relais,
+ * qui lui passe (voir sa documentation). `url` ne sert plus qu'à savoir que
+ * l'école en a un, à son adresse à elle (`urlLogo`).
  */
-function logoVersionne(url: string | null, empreinte: string | null): string | null {
+function logoVersionne(code: string, url: string | null, empreinte: string | null): string | null {
   if (url === null) return null;
 
-  const adresse = new URL(url);
-  adresse.searchParams.set("v", empreinte ?? jourCourant());
-
-  return adresse.toString();
+  return `/api/logo/${encodeURIComponent(code)}?v=${encodeURIComponent(empreinte ?? jourCourant())}`;
 }
 
 async function interroger(
@@ -313,7 +313,7 @@ async function interroger(
 
     // L'empreinte n'est demandée que s'il y a un logo : une école qui n'en a
     // pas configuré ne doit pas coûter un aller-retour de plus.
-    const logoAVersion = logo === null ? null : logoVersionne(logo, await empreinteLogo(logo));
+    const logoAVersion = logo === null ? null : logoVersionne(ecole.code, logo, await empreinteLogo(logo));
 
     return {
       code: ecole.code,

@@ -15,11 +15,11 @@ import type { Canal } from "./verification.ts";
  * un champ ajouté par l'appelant n'entre jamais dans la charge signée.
  */
 
-type Action = "verifier" | "renvoyer" | "statut";
+type Action = "verifier" | "renvoyer" | "statut" | "changer-canal";
 
 const CHEMIN_PAR_CANAL: Record<Canal, Record<Action, CheminPublic>> = {
-  email: { verifier: CHEMINS.verificationVerifier, renvoyer: CHEMINS.verificationRenvoyer, statut: CHEMINS.verificationStatut },
-  telephone: { verifier: CHEMINS.verificationVerifier, renvoyer: CHEMINS.verificationRenvoyer, statut: CHEMINS.verificationStatut },
+  email: { verifier: CHEMINS.verificationVerifier, renvoyer: CHEMINS.verificationRenvoyer, statut: CHEMINS.verificationStatut, "changer-canal": CHEMINS.verificationChangerCanal },
+  telephone: { verifier: CHEMINS.verificationVerifier, renvoyer: CHEMINS.verificationRenvoyer, statut: CHEMINS.verificationStatut, "changer-canal": CHEMINS.verificationChangerCanal },
 };
 
 export type AppelVerification =
@@ -29,6 +29,8 @@ export type AppelVerification =
 const JETON = /^[A-Za-z0-9._~-]{16,512}$/;
 const DEMANDE = /^[A-Za-z0-9-]{1,64}$/;
 const CODE = /^\d{6}$/;
+/** Assez strict pour écarter le bruit, assez large pour ne pas refuser une vraie adresse : l'école tranche. */
+const EMAIL = /^[^\s@]{1,64}@[^\s@]{1,189}\.[^\s@]{2,}$/;
 
 function texte(valeur: unknown): string | null {
   return typeof valeur === "string" ? valeur.trim() : null;
@@ -42,7 +44,7 @@ function lireCanal(valeur: unknown): Canal | null {
 }
 
 function estAction(action: string): action is Action {
-  return action === "verifier" || action === "renvoyer" || action === "statut";
+  return action === "verifier" || action === "renvoyer" || action === "statut" || action === "changer-canal";
 }
 
 export function preparerVerification(action: string, recu: unknown): AppelVerification {
@@ -62,6 +64,19 @@ export function preparerVerification(action: string, recu: unknown): AppelVerifi
     if (canal !== "telephone" || demandeId === null || !DEMANDE.test(demandeId)) return { erreur: "corps_invalide" };
 
     return { chemin, corps: { demande_id: demandeId, canal } };
+  }
+
+  // Le canal voulu, et l'adresse e-mail facultative : rien d'autre ne passe.
+  if (action === "changer-canal") {
+    if (demandeId === null || !DEMANDE.test(demandeId)) return { erreur: "corps_invalide" };
+
+    const email = texte(source.email);
+
+    if (email === null || email === "") return { chemin, corps: { demande_id: demandeId, canal } };
+
+    return email.length <= 254 && EMAIL.test(email)
+      ? { chemin, corps: { demande_id: demandeId, canal, email } }
+      : { erreur: "corps_invalide" };
   }
 
   if (action === "renvoyer") {

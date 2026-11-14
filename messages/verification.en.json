@@ -70,6 +70,33 @@
       "nouveauLienDans": "New link in {secondes} s",
       "lienRenouvele": "A new link is ready. Open WhatsApp again.",
       "indisponible": "We cannot reach the school right now. Retrying…"
+    },
+    "canalAlternatif": {
+      "ouvrirDepuisWhatsapp": "Nothing on WhatsApp? Get the code by email",
+      "ouvrirAutreAdresse": "Not my address any more? Get the code at another address",
+      "libelleDepuisWhatsapp": "Email address (optional)",
+      "libelleAutreAdresse": "New email address",
+      "aideDepuisWhatsapp": "Leave empty to use the address on your file. A new address is passed on to the school with your request.",
+      "aideAutreAdresse": "The code goes there, and so will your notice. The school sees this address on your request.",
+      "envoyer": "Send the code by email",
+      "envoi": "Sending…",
+      "adresseRequise": "Enter the new address.",
+      "indisponible": "This change isn’t available for this school yet. Contact it: it will update your contact details.",
+      "erreurs": {
+        "emailInvalide": "This address can’t receive messages. Check it, for example firstname.lastname@gmail.com.",
+        "canalIndisponible": "Your file has no email address: enter the one you read.",
+        "tropTot": "Several codes have already been requested. Wait a little before trying again."
+      }
+    },
+    "acces": {
+      "titre": "Confirm it’s you",
+      "texteEmail": "To see your notice and choose your time slot, enter the 6-digit code we just sent to {destination}.",
+      "texteTelephone": "To see your notice and choose your time slot, enter the 6-digit code we just sent on WhatsApp to {destination}.",
+      "codeAide": "Six digits, valid for 15 minutes.",
+      "injoignable": "Your file has neither an email address nor a WhatsApp number to send you a code. Contact your school: it will update your contact details.",
+      "indisponible": "The code couldn’t be sent. Try again in a few minutes.",
+      "expire": "For your security, access to your notice has expired. Confirm again that it’s you.",
+      "autreCode": "Start again"
     }
   }
 }

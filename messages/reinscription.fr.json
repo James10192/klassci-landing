@@ -82,6 +82,16 @@
         "titre": "Ce dossier est momentanément bloqué.",
         "texte": "Trop d'essais infructueux ont été faits sur ce dossier. Réessayez plus tard, ou rapprochez-vous de votre établissement."
       }
+    },
+    "contact": {
+      "titre": "Votre code de confirmation sera envoyé",
+      "parEmail": "par e-mail à {destination}",
+      "parWhatsapp": "par WhatsApp au {destination}",
+      "aucun": "Votre dossier n’a pas encore de contact : indiquez votre adresse e-mail.",
+      "ouvrirAutre": "Ce n’est plus mon adresse : en donner une autre",
+      "emailAutre": "Autre adresse e-mail",
+      "emailSansDossier": "Votre adresse e-mail (recommandé)",
+      "emailAide": "Le code et votre convocation y seront envoyés. L’établissement verra cette adresse sur votre demande."
     }
   },
   "inscription": {

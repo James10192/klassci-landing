@@ -62,7 +62,7 @@ export function CandidatureFlow({
    * d'annuler ce qui ne s'annule pas.
    */
    onAboutir?: (abouti: boolean) => void;
-  onChoisirCreneau?: (reference: string, dateNaissance: string) => void;
+  onChoisirCreneau?: (reference: string, dateNaissance: string, jeton: string | null) => void;
   /**
    * La saisie, tenue par le composant du dessus.
    *
@@ -330,13 +330,13 @@ export function CandidatureFlow({
   }
 
   if (suivi.abouti !== null) {
-    const { reference, creneau } = suivi.abouti;
+    const { reference, creneau, jeton } = suivi.abouti;
 
     return (
       <CandidatureTransmise
         suiteDuParcours={t(`succes.${suite.cle}`, { date: suite.date })}
         reference={reference ?? undefined}
-        onChoisirCreneau={reference && onChoisirCreneau ? () => onChoisirCreneau(reference, dateNaissance) : undefined}
+        onChoisirCreneau={reference && onChoisirCreneau ? () => onChoisirCreneau(reference, dateNaissance, jeton) : undefined}
         creneau={creneau}
       />
     );
