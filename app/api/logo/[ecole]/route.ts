@@ -24,7 +24,9 @@ export const runtime = "nodejs";
  */
 
 const TYPES_ACCEPTES = new Set(["image/png", "image/jpeg", "image/webp", "image/gif", "image/avif"]);
-const TAILLE_MAX = 1_000_000;
+// 3 Mo : le logo d'ISLG (PNG avec métadonnées C2PA) pèse 1,29 Mo et était
+// refusé avec un plafond à 1 Mo.
+const TAILLE_MAX = 3_000_000;
 const DELAI_MAX_MS = 8_000;
 const MEMOIRE_MAX = 64;
 

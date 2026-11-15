@@ -193,8 +193,15 @@ function urlLogo(valeur: unknown, base: string): string | null {
 
   try {
     const url = new URL(valeur);
+    const attendue = new URL(base);
 
-    return url.origin === new URL(base).origin ? url.toString() : null;
+    // Même école = même protocole et même nom d'hôte. Le port n'entre pas en
+    // compte : la base peut passer par un relais (`:8443` sur le serveur de
+    // klassci.com) alors que l'instance annonce son logo sur le port standard.
+    // Comparer l'origine complète rejetait alors tous les logos.
+    return url.protocol === attendue.protocol && url.hostname === attendue.hostname
+      ? url.toString()
+      : null;
   } catch {
     return null;
   }
