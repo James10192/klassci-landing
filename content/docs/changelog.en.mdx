@@ -15,6 +15,14 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ### Added
 
+- **Detailed grade transcripts for the jury**: from the jury screen (LMD) or the results page (BTS), a PDF with one page per student: every grade of every assessment, the average of each element and each unit (or each subject) as the report card computes it, then the semester result. A working document to print for the deliberation.
+
+  ![Detailed transcript: each assessment grade next to the report card average](/img/changelog/2026-11/releve-detaille-apres.webp)
+
+- **Excel grade sheet to fill in and re-import**: for a class and a semester, a workbook with one sheet per subject (or per element in LMD), grades already entered carried over, and input checks (0 to 20 or ABS). A subject without an assessment gets an "Exam" column, created on re-import. On re-import, KLASSCI first shows, sheet by sheet, the grades created, changed and the errors, then saves all or nothing. Semesters 3 to 10 (L2, L3, Master) are supported.
+
+  ![Excel grade sheet: download the workbook, then re-import it with a preview](/img/changelog/2026-11/fiche-notes-excel-apres.webp)
+
 - **LMD juries: the minutes are prepared step by step**: the jury screen shows four steps before the minutes (grades validated, jury composed, decisions computed, signatures collected). For each one it says what is missing and takes you in one click to where it is fixed. A jury attached by mistake to a BTS class says so by name, instead of reporting "the cohort is empty". The "Generate minutes" button turns on once everything is green.
 
   ![Preparing the minutes of an LMD jury: four steps, what each one is missing and the button to fix it](/img/changelog/2026-11/jury-preparation-pv-apres.webp)
@@ -53,6 +61,9 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ### Improved
 
+- **Cash desk and receipt: last name before first names**: the student search when collecting a payment shows the last name then first names, sorted alphabetically (last name, then first names). The receipt also prints the last name first.
+
+  ![Student search at the cash desk: last name then first names, alphabetical](/img/changelog/2026-11/encaissement-nom-prenoms-apres.webp)
 - **More forgiving re-enrolment**: a student number typed with spaces, dashes or in lower case still finds the right file, never someone else's, and the student is greeted by full name.
 - **Parent or guardian: last name and first names apart**: the online enrolment form asks for them separately, and "Use this guardian" fills both fields at enrolment.
 - **Editing an assessment finds its subject again**: the subject list is the one of the assessment's class (BTS curriculum, or course units in LMD), and the assessment's subject is already selected. A Licence assessment no longer opens without a subject.
