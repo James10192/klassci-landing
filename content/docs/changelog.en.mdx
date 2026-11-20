@@ -15,6 +15,16 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ### Added
 
+- **LMD juries: the minutes are prepared step by step**: the jury screen shows four steps before the minutes (grades validated, jury composed, decisions computed, signatures collected). For each one it says what is missing and takes you in one click to where it is fixed. A jury attached by mistake to a BTS class says so by name, instead of reporting "the cohort is empty". The "Generate minutes" button turns on once everything is green.
+
+  ![Preparing the minutes of an LMD jury: four steps, what each one is missing and the button to fix it](/img/changelog/2026-11/jury-preparation-pv-apres.webp)
+
+- **Detailed semester deliberation minutes, in PDF and Excel**: the minutes universities kept by hand in Excel now come straight from the jury screen. One row per student with full identity, then for each teaching unit the grade of each element, the unit average, the year obtained and the session (regular or resit), and finally the semester average, credits earned and decision. Below the table: the list of units with their credits, headcounts (enrolled, present, absent, then each decision) and the "place, date" line for signatures. Every value comes from the report cards.
+
+  ![A jury's action bar: official minutes, detailed semester minutes in PDF and Excel, annual minutes](/img/changelog/2026-11/jury-pv-detaille-apres.webp)
+
+- **Nanan knows deliberation juries**: "where does the L2 Law jury stand?", "why is Generate minutes greyed out?", "who hasn't signed?". Nanan answers with the same steps as the jury screen, cites what is missing, names the members who haven't signed and gives the links to the minutes. She only sees the juries the person sees on screen, and never signs or publishes on their behalf.
+
 - **Online enrolment: the appointment notice is protected by a code**: when the school verifies contacts, viewing one's notice or changing one's slot on klassci.com requires a code sent by email or WhatsApp to the contact on file; the date of birth alone is no longer enough. A family that has just confirmed its request picks its slot without a second code.
 - **Re-enrolment: the code by email when WhatsApp doesn't get through**: before sending the request, the student sees where the code will go and chooses email or WhatsApp, or gives the address they actually read. On the code screen, "Nothing on WhatsApp" resends it by email. The new address appears on the request so the office can copy it to the file if it wishes.
 - **LMD report cards: what is missing, said plainly**: before generating a class's report cards, the check window groups problems by cause (no grades entered, grade sheets not prepared, sheets not validated, missing grades), with the number of students concerned and what to do. Ready report cards are generated without waiting for the others. By default, the report card is calculated as soon as grades are entered; a school that wants to require validated sheets turns it on in its settings. Generating a class is followed with a progress bar: you can close the page, and a notification arrives at the end.
